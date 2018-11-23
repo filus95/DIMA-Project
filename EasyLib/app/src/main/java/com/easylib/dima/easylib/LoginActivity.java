@@ -24,4 +24,16 @@ public class LoginActivity extends AppCompatActivity {
 
         //TODO: Make the call to Server
     }
+
+    public void register(View view) {
+        //TODO: call the register activity
+    }
+
+    public void loginFb(View view) {
+        //TODO: call Facebook login API
+    }
+
+    public void loginGoogle(View view) {
+        //TODO: call Google login API
+    }
 }
