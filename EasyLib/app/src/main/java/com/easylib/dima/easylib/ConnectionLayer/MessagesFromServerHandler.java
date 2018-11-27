@@ -23,7 +23,7 @@ public class MessagesFromServerHandler {
     }
 
     private void test() {
-        System.out.print("TEST");
+        System.out.print("TEST\n");
     }
 
     /**

@@ -41,11 +41,10 @@ public class ClientThreadPool implements Runnable {
         try {
             while (!isStopped) {
 
-                System.out.print("Listening...");
+                System.out.print("Listening...\n");
                 message = (String)objectInputStream.readObject();
                 this.threadPool.execute(
                         new SocketClient(objectInputStream,objectOutputStream, message));
-                //break;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

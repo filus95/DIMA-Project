@@ -13,6 +13,7 @@ public class NetworkStarter {
         System.out.print("Here\n");
 
         for ( int i=0; i<3; i++) {
+            sleep(5*1000);
             clientThreadPool.sendMessage("test\n");
         }
     }
