@@ -18,6 +18,7 @@ public class SocketThreadHandler implements Runnable {
     /**
      * Constructor
      *
+     *
      */
     SocketThreadHandler(Socket clientSocket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
         this.objectInputStream = objectInputStream;

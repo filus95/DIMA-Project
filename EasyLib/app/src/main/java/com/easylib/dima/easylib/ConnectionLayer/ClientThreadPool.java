@@ -49,8 +49,8 @@ public class ClientThreadPool implements Runnable {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        this.threadPool.shutdown();
         // close the connection
+        this.threadPool.shutdown();
 
         try {
 
