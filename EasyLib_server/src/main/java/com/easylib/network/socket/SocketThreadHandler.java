@@ -8,7 +8,7 @@ import java.net.Socket;
  * to "ServerDataHandler" class that elaborate the message and call a specific method here for acting the correct operations.
  */
 
-public class SocketThreadHandler implements Runnable {
+public class SocketThreadHandler implements Runnable, ClientConnMethods, LibrarianConnMethods {
 
     private transient ServerDataHandler serverDataHandler;
     private transient ObjectOutputStream objectOutputStream;

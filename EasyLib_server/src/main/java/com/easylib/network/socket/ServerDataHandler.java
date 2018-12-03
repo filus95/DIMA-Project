@@ -13,7 +13,7 @@ import java.util.Map;
  * String received
  */
 
-class ServerDataHandler {
+class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private SocketThreadHandler socketThreadHandler;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
