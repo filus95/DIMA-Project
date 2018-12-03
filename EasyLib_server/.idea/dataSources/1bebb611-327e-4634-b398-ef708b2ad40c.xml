@@ -1373,162 +1373,167 @@
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="334" parent="281" name="event_partecipants_event_id_uindex">
+    <column id="334" parent="281" name="column_3">
+      <Position>3</Position>
+      <DataType>int(11)|0s</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="335" parent="281" name="event_partecipants_event_id_uindex">
       <ColNames>event_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="335" parent="281" name="event_partecipants_partecipant_id_uindex">
+    <index id="336" parent="281" name="event_partecipants_partecipant_id_uindex">
       <ColNames>partecipant_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="336" parent="281" name="PRIMARY">
+    <key id="337" parent="281" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>event_id
 partecipant_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="337" parent="281" name="event_partecipants_event_id_uindex">
+    <key id="338" parent="281" name="event_partecipants_event_id_uindex">
       <ColNames>event_id</ColNames>
       <UnderlyingIndexName>event_partecipants_event_id_uindex</UnderlyingIndexName>
     </key>
-    <key id="338" parent="281" name="event_partecipants_partecipant_id_uindex">
+    <key id="339" parent="281" name="event_partecipants_partecipant_id_uindex">
       <ColNames>partecipant_id</ColNames>
       <UnderlyingIndexName>event_partecipants_partecipant_id_uindex</UnderlyingIndexName>
     </key>
-    <foreign-key id="339" parent="281" name="event_partecipants_events_id_fk">
+    <foreign-key id="340" parent="281" name="event_partecipants_events_id_fk">
       <ColNames>event_id</ColNames>
       <RefSchemaName>library_1</RefSchemaName>
       <RefTableName>events</RefTableName>
       <RefColNames>id</RefColNames>
     </foreign-key>
-    <column id="340" parent="282" name="id">
+    <column id="341" parent="282" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="341" parent="282" name="title">
+    <column id="342" parent="282" name="title">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="342" parent="282" name="description">
+    <column id="343" parent="282" name="description">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="343" parent="282" name="image_link">
+    <column id="344" parent="282" name="image_link">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="344" parent="282" name="seats">
+    <column id="345" parent="282" name="seats">
       <Position>5</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="345" parent="282" name="PRIMARY">
+    <key id="346" parent="282" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="346" parent="283" name="id">
+    <column id="347" parent="283" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="347" parent="283" name="title">
+    <column id="348" parent="283" name="title">
       <Position>2</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="348" parent="283" name="post_date">
+    <column id="349" parent="283" name="post_date">
       <Position>3</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="349" parent="283" name="content">
+    <column id="350" parent="283" name="content">
       <Position>4</Position>
       <DataType>mediumtext|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="350" parent="283" name="image_link">
+    <column id="351" parent="283" name="image_link">
       <Position>5</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="351" parent="283" name="PRIMARY">
+    <key id="352" parent="283" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="352" parent="284" name="reservation_id">
+    <column id="353" parent="284" name="reservation_id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="353" parent="284" name="user_id">
+    <column id="354" parent="284" name="user_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="354" parent="284" name="book_identifier">
+    <column id="355" parent="284" name="book_identifier">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="355" parent="284" name="waiting_position">
+    <column id="356" parent="284" name="waiting_position">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="356" parent="284" name="reservation_date">
+    <column id="357" parent="284" name="reservation_date">
       <Position>5</Position>
       <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="357" parent="284" name="starting_reservation_date">
+    <column id="358" parent="284" name="starting_reservation_date">
       <Position>6</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="358" parent="284" name="ending_reservation_date">
+    <column id="359" parent="284" name="ending_reservation_date">
       <Position>7</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="359" parent="284" name="quantity">
+    <column id="360" parent="284" name="quantity">
       <Position>8</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="360" parent="284" name="PRIMARY">
+    <key id="361" parent="284" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>reservation_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <trigger id="361" parent="284" name="update_waitinglist_position">
+    <trigger id="362" parent="284" name="update_waitinglist_position">
       <SourceTextLength>159</SourceTextLength>
       <Turn>after-row</Turn>
       <Events>D</Events>
