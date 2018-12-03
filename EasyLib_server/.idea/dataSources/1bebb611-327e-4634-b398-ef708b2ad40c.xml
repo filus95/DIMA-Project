@@ -1354,7 +1354,7 @@
       <Events>D</Events>
     </trigger>
     <trigger id="328" parent="280" name="waiting_list_flowing">
-      <SourceTextLength>2000</SourceTextLength>
+      <SourceTextLength>2015</SourceTextLength>
       <Turn>after-row</Turn>
       <Events>D</Events>
     </trigger>
