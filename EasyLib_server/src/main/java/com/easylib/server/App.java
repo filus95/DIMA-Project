@@ -66,7 +66,7 @@ public class App
 //        System.out.print(res);
 
         // TODO: DELETE FROM booksreservations
-
+// ciao
         boolean res = dbms.deleteStatementReservations("1909430188", "15",
                 "library_1.booksreservations");
         System.out.print(res);
