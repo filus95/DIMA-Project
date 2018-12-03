@@ -18,7 +18,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/fb_icon1" />
+        app:srcCompat="@drawable/fb_icon" />
 
     <ImageButton
         android:id="@+id/g_bt"
@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/g_icon1" />
+        app:srcCompat="@drawable/g_icon" />
 
     <ImageButton
         android:id="@+id/login_bt"
