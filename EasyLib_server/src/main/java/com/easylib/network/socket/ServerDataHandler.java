@@ -36,6 +36,20 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         // Add new methods
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
+    //TODO: THE CALLBACKS METHODS ON THE SOCKETTHREADHANDLER CLASS TO SEND BACK THE OUTPUT
+
+
+
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /***
+     * ONLY FOR TESTING
+     */
     private void test_conn() {
         //try {
             //Object res = objectInputStream.readObject();

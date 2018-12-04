@@ -1,5 +1,7 @@
 package com.easylib.server.Database;
 
+import com.easylib.network.socket.Book;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,61 +13,68 @@ public class DatabaseManager {
     private Connection conn = new DatabaseConnection().startConnection();
 
     // todo this can be generalized for any insertion: look down
-    void fillBookDb(Map<String, Object> map) {
-
-        try {
-            StringBuilder columns_name = new StringBuilder();
-            StringBuilder values = new StringBuilder();
-            int lenght = map.size();
-            int count = 0;
-            for (String key: map.keySet()) {
-                if ((count != lenght - 1)) {
-                    columns_name.append(key).append(", ");
-                    values.append("?, ");
-                } else {
-                    columns_name.append(key);
-                    values.append("?");
-                }
-
-                count++;
-            }
-
-//            //todo delete
+//    void insertNewBooks(Map<String, Object> map, String tableName) {
+//        try {
+//            String query = createInsertStatement(map, tableName);
+//
+//           //todo delete
 //            columns_name.append(", ").append("quantity");
-//            values.append(", ?");
-
-            // Query statement construction
-            String query = "INSERT INTO library_1.books("+columns_name+")" + "VALUES ("+values+")";
-            PreparedStatement pstmt = conn.prepareStatement(query);
-
-            count = 1;
-            Object value;
-            for (String key: map.keySet()) {
-                value = map.get(key);
-                pstmt.setObject(count, value);
-                count++;
-            }
-
+//            PreparedStatement pstmt = conn.prepareStatement(query);
+//
+//            int count = 1;
+//            Object value;
+//            for (String key: map.keySet()) {
+//                value = map.get(key);
+//                pstmt.setObject(count, value);
+//                count++;
+//            }
+//
 //            //todo delete
 //            pstmt.setObject(count, count);
+//
+//
+//            pstmt.executeUpdate();
+//            pstmt.close();
+//
+//            //Add e.printStacktrace to debug
+//        } catch (SQLException e) {
+//           e.printStackTrace();
+//        }
+//
+//        try {
+//            conn.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
+//
+    private String createInsertStatement(Map<String, Object> map, String tableName){
+        StringBuilder columns_name = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        int count = 0;
+        int lenght = map.size();
+        for (String key: map.keySet()) {
+            if ((count != lenght - 1)) {
+                columns_name.append(key).append(", ");
+                values.append("?, ");
+            } else {
+                columns_name.append(key);
+                values.append("?");
+            }
 
-
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            //Add e.printStacktrace to debug
-        } catch (SQLException e) {
-           System.out.print("Book already present. Not inserted.\n");
-           //e.printStackTrace();
+            count++;
         }
 
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return  "INSERT INTO "+tableName+" ("+columns_name+")" + "VALUES ("+values+")";
     }
 
+    /**
+     * Construct the map for the bookreservation insertion and call the general insertStatement method that perform
+     * the actual query
+     *
+     * @param values array of values to insert in the DB
+     * @return
+     */
     public boolean insertNewReservation(ArrayList<Object> values){
 
         Map<String, Object> map = new HashMap<>();
@@ -88,29 +97,13 @@ public class DatabaseManager {
         return insertStatement(map, table_name);
     }
 
-    private boolean insertStatement(Map<String, Object> map, String table_name) {
+     boolean insertStatement(Map<String, Object> map, String table_name) {
         try {
-            StringBuilder columns_name = new StringBuilder();
-            StringBuilder values = new StringBuilder();
-            int lenght = map.size();
-            int count = 0;
 
-            for (String key : map.keySet()) {
-                if ((count != lenght - 1)) {
-                    columns_name.append(key).append(", ");
-                    values.append("?, ");
-                } else {
-                    columns_name.append(key);
-                    values.append("?");
-                }
-                count++;
-            }
-
-            // Query statement construction
-            String query = "INSERT INTO"+table_name+"(" + columns_name + ")" + "VALUES (" + values + ")";
+            String query = createInsertStatement(map, table_name);
             PreparedStatement pstmt = conn.prepareStatement(query);
 
-            count = 1;
+            int count = 1;
             Object value;
             for (String key : map.keySet()) {
                 value = map.get(key);
@@ -121,9 +114,7 @@ public class DatabaseManager {
             pstmt.executeUpdate();
             pstmt.close();
 
-            //Add e.printStacktrace to debug
         } catch (SQLException e) {
-//            System.out.print("Book already present. Not inserted.\n");
             e.printStackTrace();
         }
 
@@ -136,29 +127,11 @@ public class DatabaseManager {
         return true;
     }
 
-    public boolean deleteStatementReservations( String book_identifier, String user_id,
-                                                String tableName ){
-        String query = "delete from "+tableName+" where " +
-                tableName+".book_identifier = "+book_identifier+" and " +
-                tableName+".user_id = "+user_id;
-
-        Statement st = null;
-        try {
-            st = conn.createStatement();
-            st.executeUpdate(query);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-
     /**
      * Retrieve books by author
      *
      * @param author
-     * @return
+     * @return it must be casted to the book data type in the calling function
      */
     public ArrayList<Object> queryBooksByAuthor(String author) {
         String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
@@ -167,7 +140,6 @@ public class DatabaseManager {
 
         return getQueryResults(query);
     }
-
 
     /**
      * Retrieve books by title
@@ -195,32 +167,55 @@ public class DatabaseManager {
         return getQueryResults(query);
     }
 
+    /**
+     * Perform a query on the DB
+     *
+     * @param query
+     * @return an array of objects and who receives the result knows the real datatype and cast its content
+     */
     private ArrayList<Object> getQueryResults(String query) {
-        ArrayList<Object> queryResult = new ArrayList<Object>();
-        ArrayList<Object> results = new ArrayList<Object>();
+        ArrayList<Object> results = new ArrayList<>();
 
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()){
-                queryResult.add(rs.getObject("identifier"));
-                queryResult.add(rs.getObject("title"));
-                queryResult.add(rs.getObject("publisher"));
-                queryResult.add(rs.getObject("category_1"));
-                queryResult.add(rs.getObject("author_1"));
-                queryResult.add(rs.getObject("author_2"));
-                queryResult.add(rs.getObject("author_3"));
-                queryResult.add(rs.getObject("author_4"));
+                Book queryResult = new Book();
+                queryResult.setBookId_lib((String) rs.getObject("identifier"));
+                queryResult.setTitle((String) rs.getObject("title"));
+                queryResult.setPublisher((String) rs.getObject("publisher"));
+                queryResult.setCategories((String)rs.getObject("category_1"),
+                        (String)rs.getObject("category_2"),
+                        (String)rs.getObject("category_3"));
+
+                queryResult.setAuthors((String)(rs.getObject("author_1")),
+                        (String)(rs.getObject("author_2")),
+                        (String)(rs.getObject("author_3")),
+                        (String)(rs.getObject("author_4")));
                 results.add(queryResult);
             }
         } catch (SQLException e) {
-            String errorAnswer = "No results founds";
-//          e.printStackTrace();
+          e.printStackTrace();
         }
         return results;
     }
 
+    public boolean deleteStatementReservations( String book_identifier, String user_id,
+                                                String tableName ){
+        String query = "delete from "+tableName+" where " +
+                tableName+".book_identifier = "+book_identifier+" and " +
+                tableName+".user_id = "+user_id;
 
+        Statement st = null;
+        try {
+            st = conn.createStatement();
+            st.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
 

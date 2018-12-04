@@ -17,7 +17,13 @@ public class GoogleBooks {
 
     private static final String KEY_ = "AIzaSyBTjCC4Lcz1SaIfEpLEhuUj6s9uKioINtA";
 
-    public void apiFillDb(String query){
+    /**
+     * It needs to be called outside this class, from the
+     *
+     * @param query
+     * @param tableName
+     */
+    public void apiCall(String query, String tableName){
         //at this url we found a JSON file containing all the articles  of the topic " q=bitcoin " published today "from = date"
         String endpoint = "https://www.googleapis.com/books/v1/volumes?q="+query+
                 "&key="+KEY_;
@@ -28,6 +34,7 @@ public class GoogleBooks {
         URL url;
         HttpURLConnection urlConnection = null;
 
+        // Retrieve the API response and parse it
         try {
             url = new URL(endpoint);
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -35,22 +42,22 @@ public class GoogleBooks {
             try {
                 JSONObject response_json = new JSONObject(response);
 
-                parseResult(response_json);
-                return;
+                parseResult(response_json, tableName);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            return;
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    //This method is used to store the Json file, in a form of string, from the URL giving it back as response
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                // TODO: METHODS TO CREATE SUITED QUERY FOR THE GOOGLE BOOKS EXTERNAL SERVICE //
+
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private String streamToString(InputStream stream) throws IOException{
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(stream));
         String data;
@@ -70,11 +77,11 @@ public class GoogleBooks {
      * fields that we need
      */
 
-    private void parseResult(JSONObject result) {
+    private void parseResult(JSONObject result, String tableName) {
         JSONArray response = null;
         try {
             response = (JSONArray) result.get("items");
-            accessRelevantElements(response);
+            accessRelevantElements(response, tableName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -83,8 +90,9 @@ public class GoogleBooks {
     /**
      * Access to any JSON item retrieved by the API
      * @param items is a JSONArray containing all the items info retrieved with the API
+     * @param tableName
      */
-    private void accessRelevantElements(JSONArray items){
+    private void accessRelevantElements(JSONArray items, String tableName){
         System.out.print("HERE");
         try {
             JSONObject volume_info, item;
@@ -92,8 +100,9 @@ public class GoogleBooks {
             for(int i = 0; i < items.length(); i++){
                 item = (JSONObject) items.get(i);
                 volume_info = (JSONObject) item.get("volumeInfo");
+                // extract the information useful for the DB
                 map = extractRelevantInfo(volume_info);
-                fillDatabase(map);
+                fillDatabase(map, tableName);
             }
         } catch (JSONException e) {
             System.out.print("JSON object malformed");
@@ -102,9 +111,10 @@ public class GoogleBooks {
 
     }
 
-    private void fillDatabase(Map<String, Object> map) {
+    // interface with the DBMS that actually fill the DB
+    private void fillDatabase(Map<String, Object> map, String tableName) {
         DatabaseManager dbManager = new DatabaseManager();
-        dbManager.fillBookDb(map);
+        dbManager.insertStatement(map, tableName);
     }
 
     /**
@@ -226,6 +236,8 @@ public class GoogleBooks {
         }
         return list;
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Write the API REST response into a txt file
      */
@@ -244,6 +256,7 @@ public class GoogleBooks {
         }
     }
 
+    //This method is used to store the Json file, in a form of string, from the URL giving it back as response
 
 
 }
