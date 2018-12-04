@@ -1,4 +1,4 @@
-package com.easylib.network.socket;
+package com.easylib.server.Database.AnswerClasses;
 
 import java.util.ArrayList;
 

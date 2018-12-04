@@ -1,10 +1,9 @@
 package com.easylib.server.Database;
 
-import com.easylib.network.socket.Book;
+import com.easylib.server.Database.AnswerClasses.Book;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -68,6 +67,10 @@ public class DatabaseManager {
         return  "INSERT INTO "+tableName+" ("+columns_name+")" + "VALUES ("+values+")";
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //TODO: Create insertion methods that compose the colums names argument used for the precise table
+
+    // INSERTION
     /**
      * Construct the map for the bookreservation insertion and call the general insertStatement method that perform
      * the actual query
@@ -127,6 +130,10 @@ public class DatabaseManager {
         return true;
     }
 
+    ///////////////////////////////////// RETRIEVING DATA//////////////////////////////////////////////////////////////
+
+
+
     /**
      * Retrieve books by author
      *
@@ -138,7 +145,7 @@ public class DatabaseManager {
                 "from library_1.books where author_1 = '"+author+"'" + "or author_2='"+author+"'"
                 +"or author_3='"+author+"'or author_4='"+author+"'";
 
-        return getQueryResults(query);
+        return getQueryResultsBooks(query);
     }
 
     /**
@@ -151,7 +158,7 @@ public class DatabaseManager {
         String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
                 "from library_1.books where title = '"+title+"'";
 
-        return getQueryResults(query);
+        return getQueryResultsBooks(query);
     }
 
     /**
@@ -164,7 +171,7 @@ public class DatabaseManager {
         String query = "select identifier, title, publisher, category_1, category_2, category_3"+
         "from books where category_1 ='"+category+"' or category_2='"+category+"' or category_3='"+category+"'";
 
-        return getQueryResults(query);
+        return getQueryResultsBooks(query);
     }
 
     /**
@@ -173,7 +180,7 @@ public class DatabaseManager {
      * @param query
      * @return an array of objects and who receives the result knows the real datatype and cast its content
      */
-    private ArrayList<Object> getQueryResults(String query) {
+    private ArrayList<Object> getQueryResultsBooks(String query) {
         ArrayList<Object> results = new ArrayList<>();
 
         try {
@@ -200,6 +207,36 @@ public class DatabaseManager {
         }
         return results;
     }
+
+//    private ArrayList<Object> getQueryResultsReservation(String query) {
+//        ArrayList<Object> results = new ArrayList<>();
+//
+//        try {
+//            Statement st = conn.createStatement();
+//            ResultSet rs = st.executeQuery(query);
+//
+//            while (rs.next()){
+//                Book queryResult = new Book();
+//                queryResult.setBookId_lib((String) rs.getObject("identifier"));
+//                queryResult.setTitle((String) rs.getObject("title"));
+//                queryResult.setPublisher((String) rs.getObject("publisher"));
+//                queryResult.setCategories((String)rs.getObject("category_1"),
+//                        (String)rs.getObject("category_2"),
+//                        (String)rs.getObject("category_3"));
+//
+//                queryResult.setAuthors((String)(rs.getObject("author_1")),
+//                        (String)(rs.getObject("author_2")),
+//                        (String)(rs.getObject("author_3")),
+//                        (String)(rs.getObject("author_4")));
+//                results.add(queryResult);
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return results;
+//    }
+
+    /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
     public boolean deleteStatementReservations( String book_identifier, String user_id,
                                                 String tableName ){
