@@ -277,7 +277,7 @@ public class GoogleBooks {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * Write the API REST response into a txt file
+     * Write the API REST response into a txt file. TODO: change path with operative system sensisitive case
      */
     private void writefile(String text){
 
@@ -293,8 +293,4 @@ public class GoogleBooks {
             System.out.println("Could not create file");
         }
     }
-
-    //This method is used to store the Json file, in a form of string, from the URL giving it back as response
-
-
 }

@@ -1,5 +1,6 @@
 package com.easylib.server;
 
+import com.easylib.server.API.GoogleBooks;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
 
@@ -32,14 +33,15 @@ public class App
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
 
-        String query = "Pirlo";
+        String query = "Maradona";
         DatabaseManager dbms = new DatabaseManager();
+
 //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);
 
 
-//        GoogleBooks gb = new GoogleBooks();
-//        gb.apiFillDb(query.replaceAll("\\s", "+"));
+        GoogleBooks gb = new GoogleBooks();
+        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "library_1.books");
 
         // TODO: ADD INTO booksreservations
 //        java.util.Date dt = new java.util.Date();
@@ -64,9 +66,9 @@ public class App
 
         // TODO: DELETE FROM booksreservations
 // ciao
-        boolean res = dbms.deleteStatementReservations("1909430188", "15",
-                "library_1.booksreservations");
-        System.out.print(res);
+//        boolean res = dbms.deleteStatementReservations("1909430188", "15",
+//                "library_1.booksreservations");
+//        System.out.print(res);
     }
 
     private static Date stringToDate(String s) {
