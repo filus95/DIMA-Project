@@ -2,11 +2,8 @@ package com.easylib.server;
 
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
-import com.easylib.server.Database.GoogleBooks;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

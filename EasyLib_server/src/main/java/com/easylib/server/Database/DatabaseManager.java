@@ -97,7 +97,7 @@ public class DatabaseManager {
         return insertStatement(map, table_name);
     }
 
-     boolean insertStatement(Map<String, Object> map, String table_name) {
+     public boolean insertStatement(Map<String, Object> map, String table_name) {
         try {
 
             String query = createInsertStatement(map, table_name);

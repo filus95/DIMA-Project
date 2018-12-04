@@ -1,5 +1,6 @@
-package com.easylib.server.Database;
+package com.easylib.server.API;
 
+import com.easylib.server.Database.DatabaseManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,17 +17,20 @@ import java.util.Map;
 public class GoogleBooks {
 
     private static final String KEY_ = "AIzaSyBTjCC4Lcz1SaIfEpLEhuUj6s9uKioINtA";
+    private static final String ENDPOINT_ = "https://www.googleapis.com/books/v1/volumes?q=";
 
+
+    //TODO: this fill directly the db, useful?
     /**
      * It needs to be called outside this class, from the
      *
      * @param query
      * @param tableName
      */
-    public void apiCall(String query, String tableName){
+
+    public void apiCallAndFillDB(String query, String tableName){
         //at this url we found a JSON file containing all the articles  of the topic " q=bitcoin " published today "from = date"
-        String endpoint = "https://www.googleapis.com/books/v1/volumes?q="+query+
-                "&key="+KEY_;
+        String endpoint = ENDPOINT_+query+"&key="+KEY_;
         String result1 = "";
 
 
@@ -50,11 +54,45 @@ public class GoogleBooks {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }/**
+
+    //TODO:CODE TO HAVE A RETURN FROM THE API, SEND IT TO THE CLIENT AND LATER DECIDE IF FILLIND THE DB CALLINF THE DBMS
+
+    private Map<String, Object> apiCall(String query){
+        String endpoint = ENDPOINT_+query+"&key="+KEY_;
+        String result1 = "";
+
+
+        //initializing the connection
+        URL url;
+        HttpURLConnection urlConnection = null;
+
+        // Retrieve the API response and parse it
+        try {
+            url = new URL(endpoint);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            String response = streamToString(urlConnection.getInputStream());
+            try {
+                JSONObject response_json = new JSONObject(response);
+
+                parseResult(response_json, tableName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }**/
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                // TODO: METHODS TO CREATE SUITED QUERY FOR THE GOOGLE BOOKS EXTERNAL SERVICE //
+                // TODO: METHOD TO CREATE SUITED QUERY FOR THE GOOGLE BOOKS EXTERNAL SERVICE
+    // THE SERVER DATA HANDLER CREATE THE NEEDED QUERY CREATOR AND CALLS THIS METHOD TO
 
+
+    public void queryCreator(QueryConteiner queryCreator, String tableName){
+        apiCallAndFillDB(queryCreator.createQuery(), tableName);
+    }
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -81,7 +119,7 @@ public class GoogleBooks {
         JSONArray response = null;
         try {
             response = (JSONArray) result.get("items");
-            accessRelevantElements(response, tableName);
+            accessRelevantElementsAndFillDB(response, tableName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -92,7 +130,7 @@ public class GoogleBooks {
      * @param items is a JSONArray containing all the items info retrieved with the API
      * @param tableName
      */
-    private void accessRelevantElements(JSONArray items, String tableName){
+    private void accessRelevantElementsAndFillDB(JSONArray items, String tableName){
         System.out.print("HERE");
         try {
             JSONObject volume_info, item;
