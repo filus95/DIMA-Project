@@ -1,9 +1,12 @@
 package com.easylib.dima.easylib_librarian;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.easylib.dima.easylib_librarian.Main.MainActivity;
 
 public class login extends AppCompatActivity {
 
@@ -21,6 +24,10 @@ public class login extends AppCompatActivity {
         String password = pText.getText().toString();
 
         //TODO: Make the call to Server
+
+        //Just for test
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void loginFb(View view) {
