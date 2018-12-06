@@ -14,7 +14,7 @@ public class NetworkStarter {
 
         for ( int i=0; i<3; i++) {
             sleep(5*1000);
-            clientThreadPool.sendMessage("test\n");
+//            clientThreadPool.sendMessage("test\n");
         }
     }
 }

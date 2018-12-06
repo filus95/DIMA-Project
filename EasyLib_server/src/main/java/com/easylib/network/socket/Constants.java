@@ -4,10 +4,12 @@ package com.easylib.network.socket;
 /**
  *  Constants
  */
-public class Constants {
+class Constants {
 
-    public static final String TERRITORY_CARD = "territoryCard"; //0
-    public static final String TEST_CONN = "test";
+    public static final String QUERY_ON_BOOKS = "query_on_books" ;
+    public static final String GET_LIBRARY_CONN_INFO = "library_conn_info";
+    static final String TEST_CONN = "test";
+    static final String GET_ALL_BOOKS = "get_all_books";
 //    Add communication strings
 
     /**

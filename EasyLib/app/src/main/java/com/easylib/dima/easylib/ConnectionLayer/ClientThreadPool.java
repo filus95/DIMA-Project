@@ -65,16 +65,16 @@ public class ClientThreadPool implements Runnable {
         System.out.println("Server Stopped.") ;
     }
 
-    public void sendMessage(String message){
-        try {
-            objectOutputStream.writeObject("test");
-            objectOutputStream.flush();
-            objectOutputStream.reset();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void sendMessage(String message){
+//        try {
+//            objectOutputStream.writeObject("test");
+//            objectOutputStream.flush();
+//            objectOutputStream.reset();
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     public boolean isStopped() {
         return isStopped;

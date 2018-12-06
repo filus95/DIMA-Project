@@ -130,9 +130,15 @@ public class DatabaseManager {
         return true;
     }
 
-    ///////////////////////////////////// RETRIEVING DATA//////////////////////////////////////////////////////////////
+    ///////////////////////////////////// RETRIEVING DATA FROM LIB DB///////////////////////////////////////////////////
 
 
+    public ArrayList<Book> queryAllBooks(){
+        String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
+                "from library_1.books";
+
+        return getQueryResultsBooks(query);
+    }
 
     /**
      * Retrieve books by author
@@ -140,7 +146,7 @@ public class DatabaseManager {
      * @param author
      * @return it must be casted to the book data type in the calling function
      */
-    public ArrayList<Object> queryBooksByAuthor(String author) {
+    public ArrayList<Book> queryBooksByAuthor(String author) {
         String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
                 "from library_1.books where author_1 = '"+author+"'" + "or author_2='"+author+"'"
                 +"or author_3='"+author+"'or author_4='"+author+"'";
@@ -154,7 +160,7 @@ public class DatabaseManager {
      * @param title
      * @return
      */
-    public ArrayList<Object> queryBooksByTitle(String title) {
+    public ArrayList<Book> queryBooksByTitle(String title) {
         String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
                 "from library_1.books where title = '"+title+"'";
 
@@ -167,9 +173,44 @@ public class DatabaseManager {
      * @param category
      * @return
      */
-    public ArrayList<Object> queryBooksByCategory(String category) {
+    public ArrayList<Book> queryBooksByCategory(String category) {
         String query = "select identifier, title, publisher, category_1, category_2, category_3"+
         "from books where category_1 ='"+category+"' or category_2='"+category+"' or category_3='"+category+"'";
+
+        return getQueryResultsBooks(query);
+    }
+
+    public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author) {
+        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
+                "from books where category_1 ='" + category + "' or category_2='" + category + "' or category_3='"
+                + category + "' and author_1 = '"+author+"'" + "or author_2='"+author+"'" +
+                "or author_3='"+author+"'or author_4='"+author+"'";
+
+        return getQueryResultsBooks(query);
+    }
+
+    public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author) {
+        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
+                "from books where title = '"+title+"' and author_1 = '"+author+"'" + "or author_2='"+author+"'" +
+                "or author_3='"+author+"'or author_4='"+author+"'";
+
+        return getQueryResultsBooks(query);
+    }
+
+    public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category) {
+        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
+                "from books where title = '"+title+"' and category_1 = '"+category+"'" + "or category_2='"+category+"'" +
+                "or category_3='"+category+"'";
+
+
+        return getQueryResultsBooks(query);
+    }
+
+    public ArrayList<Book> queryBooksByAll(String title, String author, String category) {
+        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
+                "from books where title = '"+title+"' and category_1 = '"+category+"'" + "or category_1='"+category+"'" +
+                "or category_1='"+category+"' and and author_1 = '"+author+"'" + "or author_2='"+author+"' or" +
+                " author_3='"+author+"'or author_4='"+author+"'";
 
         return getQueryResultsBooks(query);
     }
@@ -180,8 +221,8 @@ public class DatabaseManager {
      * @param query
      * @return an array of objects and who receives the result knows the real datatype and cast its content
      */
-    private ArrayList<Object> getQueryResultsBooks(String query) {
-        ArrayList<Object> results = new ArrayList<>();
+    private ArrayList<Book> getQueryResultsBooks(String query) {
+        ArrayList<Book> results = new ArrayList<>();
 
         try {
             Statement st = conn.createStatement();
@@ -254,5 +295,32 @@ public class DatabaseManager {
         }
         return true;
     }
+
+
+
+
+    ///////////////////////////////////// RETRIEVING DATA FROM PROPIETARY DB//////////////////////////////////////////////////
+
+    public String getLibInfo(int id_lib) {
+        String query = "select schema_name from proprietary_db.libraries where " +
+                "libraries.id_lib = "+id_lib+"";
+
+        Statement st = null;
+        try {
+            st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(query);
+            String res = null;
+        while (rs.next()){
+            res = rs.getString("schema_name");
+        }
+        return res;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "ERROR";
+        }
+    }
+
+
 }
 

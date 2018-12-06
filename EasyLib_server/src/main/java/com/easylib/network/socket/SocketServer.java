@@ -1,10 +1,14 @@
 package com.easylib.network.socket;
 
+import com.easylib.server.Database.DatabaseConnection;
+import com.easylib.server.Database.DatabaseManager;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -47,6 +51,8 @@ class SocketServer implements Runnable{
             this.runningThread = Thread.currentThread();
         }
         openServerSocket();
+        new DatabaseConnection().startConnection();
+
         while (!isStopped()) {
             Socket clientSocket = null;
             try {
@@ -61,7 +67,7 @@ class SocketServer implements Runnable{
                 this.objectOutputStream = objectOutputStream;
 
                 this.threadPool.execute(
-                        new SocketThreadHandler(clientSocket, objectInputStream, objectOutputStream));
+                        new SocketThreadHandler(objectInputStream, objectOutputStream));
 
                 System.out.print("QUI\n");
 

@@ -1,7 +1,11 @@
 package com.easylib.network.socket;
 
+import com.easylib.server.Database.AnswerClasses.Book;
+
 import java.io.*;
 import java.net.Socket;
+import java.sql.Connection;
+import java.util.ArrayList;
 
 /**
  * This class is created when a connection with a socket client is performed. It receive the messages from the client and pass them
@@ -17,10 +21,9 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
 
     /**
      * Constructor
-     *
-     *
      */
-    SocketThreadHandler(Socket clientSocket, ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream) {
+    SocketThreadHandler(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream)
+    {
         this.objectInputStream = objectInputStream;
         this.objectOutputStream = objectOutputStream;
     }
@@ -45,8 +48,13 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
             e.printStackTrace();
         }
 
-
     }
+
+
+    /////////////////////////////////METHODS TO SEND RESULTS BACK TO THE CLIENT/////////////////////////////////////////
+
+    //////////////////////////////////////METHODS THAT INTERACT WITH THE LIBRARY SERVER/////////////////////////////////
+
     private void sendString(String message){
 
     }
@@ -54,6 +62,24 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
     private void closeSocket(Closeable closeable) {
         try {
             closeable.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void sendBooks(ArrayList<Book> books) {
+        sendViaSocket(books);
+    }
+
+    void sendLibraryConnInfo(String schema_lib) {
+        sendViaSocket(schema_lib);
+    }
+
+    private void sendViaSocket(Object toSend){
+        try {
+            objectOutputStream.writeObject(toSend);
+            objectOutputStream.flush();
+            objectOutputStream.reset();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,5 +112,7 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
         }
     }
 **/
+
+    //////////////////////////////////////METHODS THAT INTERACT WITH THE PROPIETARY SERVER//////////////////////////////
 
 }
