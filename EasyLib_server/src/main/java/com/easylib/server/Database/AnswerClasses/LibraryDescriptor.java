@@ -13,6 +13,7 @@ public class LibraryDescriptor extends Answer {
     private String address;
     private String email;
     private String description;
+    private LibraryContent libraryContent = new LibraryContent();
 
     public int getId_lib() {
         return id_lib;
@@ -90,5 +91,13 @@ public class LibraryDescriptor extends Answer {
 
     public void setSchema_name(String schema_name) {
         this.schema_name = schema_name;
+    }
+
+    public LibraryContent getLibraryContent() {
+        return libraryContent;
+    }
+
+    public void setLibraryContent(LibraryContent libraryContent) {
+        this.libraryContent = libraryContent;
     }
 }

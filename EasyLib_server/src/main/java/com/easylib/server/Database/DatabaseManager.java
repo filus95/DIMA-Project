@@ -395,7 +395,7 @@ public class DatabaseManager {
         String query = "select schema_name from proprietary_db.libraries where " +
                 "libraries.id_lib = "+id_lib+"";
 
-        Statement st = null;
+        Statement st;
         try {
             st = conn.createStatement();
 
@@ -409,6 +409,35 @@ public class DatabaseManager {
             e.printStackTrace();
             return "ERROR";
         }
+    }
+
+    public LibraryDescriptor getLibraryInfo(int id_lib) {
+        String query = "select * from propietary_db.libraries " +
+                "where id_lib = "+id_lib;
+
+        Statement st;
+        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
+        try {
+            st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()){
+                libraryDescriptor.setLib_name(rs.getString("lib_name"));
+                libraryDescriptor.setImage_link(rs.getString("image_link"));
+                libraryDescriptor.setTelephone_number(rs.getString("telephone_number"));
+                libraryDescriptor.setAddress(rs.getString("address"));
+                libraryDescriptor.setEmail(rs.getString("email"));
+                libraryDescriptor.setDescription(rs.getString("description"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            libraryDescriptor = null;
+        }
+        return libraryDescriptor;
+    }
+
+    public LibraryContent getLibraryContent(int id_lib) {
+        return new LibraryContent();
     }
 }
 
