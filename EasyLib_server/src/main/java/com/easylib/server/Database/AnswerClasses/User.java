@@ -6,8 +6,12 @@ import java.util.Map;
 
 public class User extends Answer {
 
-    int user_id;
-    String username;
+    private int user_id;
+    private String username;
+    private String email;
+    private String hashed_pd;
+    private String salt;
+    private String plainPassword;
 
     public int getUser_id() {
         return user_id;
@@ -33,14 +37,38 @@ public class User extends Answer {
         this.email = email;
     }
 
-    String email;
-
     @Override
     public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
         Map<String, Object> map = new HashMap<>();
         map.put(columnsName.get(0), getUsername());
         map.put(columnsName.get(1), getEmail());
+        map.put(columnsName.get(2), getHashed_pd());
+        map.put(columnsName.get(3), getSalt());
 
         return map;
+    }
+
+    public String getHashed_pd() {
+        return hashed_pd;
+    }
+
+    public void setHashed_pd(String hashed_pd) {
+        this.hashed_pd = hashed_pd;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
     }
 }

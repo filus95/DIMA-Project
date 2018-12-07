@@ -4,10 +4,7 @@ import com.easylib.server.Database.AnswerClasses.*;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DatabaseManager {
 
@@ -530,6 +527,64 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return to_ret;
+
+    }
+
+
+    public boolean checkUserExsist(String username) {
+        boolean ret = false;
+        try {
+
+            String sql = "SELECT username FROM propietary_db.users " +
+                    "WHERE username = ?";
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, username);
+            pst.executeQuery();
+            ret = true;
+
+        } catch (SQLException e) {
+            System.out.print("Query Error!");
+            e.printStackTrace();
+            ret = false;
+        }
+        return ret;
+    }
+
+    void addUserAfterPasswordChange(String username ) {
+        PasswordManager pm = new PasswordManager();
+
+        try {
+            String email = "";
+            ResultSet rs = new Database().selectQuery(username);
+
+            if ( rs.next())
+                email = rs.getString("email");
+
+            System.out.print("deleting old row...");
+            deleteOldRow(username);
+            System.out.print("changing forgotten password..");
+            pm.changeForgottenPassword(username, email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean addUser(User user) {
+
+        PasswordManager pm = new PasswordManager();
+        byte[] salt = pm.getNextSalt();byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", user.getUsername());
+        map.put("email", user.getEmail());
+        map.put("hashed_pd", hashPas);
+        map.put("salt", salt);
+        //secondo me non serve a nulla
+
+        String schema_name = "propietary_db";
+        String tableName = "users";
+        return  insertStatement(map, tableName, schema_name);
 
     }
 }
