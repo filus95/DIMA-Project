@@ -6,6 +6,8 @@ package com.easylib.network.socket;
  */
 class Constants {
 
+    static final String INSERT_NEW_LIBRARY = "insert_new_library";
+    static final String REGISTER_USER = "register_user";
     static final String INSERT_WAITING_PERSON = "insert_waiting_person";
     static final String INSERT_NEWS = "insert_news";
     static final String QUERY_ON_BOOKS = "query_on_books" ;

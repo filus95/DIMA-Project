@@ -49,6 +49,8 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.INSERT_EVENT, this::insertEvent);
         map.put(Constants.INSERT_NEWS, this::insertNews);
         map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
+        map.put(Constants.REGISTER_USER, this::registerUser);
+        map.put(Constants.INSERT_NEW_LIBRARY, this::insertLibrary);
         // Add new methods
     }
 
@@ -176,6 +178,31 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         socketHandler.sendViaSocket(res);
     }
 
+    private void registerUser(){
+        boolean res = false;
+        String schema_name = "propietary_db";
+
+        try {
+            User newUser = (User) objectInputStream.readObject();
+            res = dbms.registerUser(newUser, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+    }
+
+    private void insertLibrary(){
+        boolean res = false;
+        String schema_name = "propietary_db";
+
+        try {
+            LibraryDescriptor libDesc = (LibraryDescriptor) objectInputStream.readObject();
+            res = dbms.insertNewLibrary(libDesc, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+    }
     // ONLY FOR TESTING
 
     private void test_conn() {

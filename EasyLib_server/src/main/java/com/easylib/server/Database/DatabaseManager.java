@@ -141,7 +141,7 @@ public class DatabaseManager {
 
     public boolean insertNewWaitingPerson(WaitingPerson wp, String schema_name) {
 
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map;
         ArrayList<String> columnsName = new ArrayList<>();
         columnsName.add("user_id");
         columnsName.add("book_identifier");
@@ -154,6 +154,37 @@ public class DatabaseManager {
         map = wp.getMapAttribute(columnsName);
 
         String table_name = "waitinglist";
+        return insertStatement(map, table_name, schema_name);
+    }
+
+    public boolean registerUser(User newUser, String schema_name) {
+
+        Map<String, Object> map;
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("username");
+        columnsName.add("email");
+
+        map = newUser.getMapAttribute(columnsName);
+
+        String table_name = "users";
+        return insertStatement(map, table_name, schema_name);
+    }
+
+    public boolean insertNewLibrary(LibraryDescriptor libDesc, String schema_name) {
+
+        Map<String, Object> map;
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("lib_name");
+        columnsName.add("schema_name");
+        columnsName.add("image_link");
+        columnsName.add("telephone_number");
+        columnsName.add("address");
+        columnsName.add("email");
+        columnsName.add("description");
+
+        map = libDesc.getMapAttribute(columnsName);
+
+        String table_name = "libraries";
         return insertStatement(map, table_name, schema_name);
 
     }
@@ -357,9 +388,6 @@ public class DatabaseManager {
         }
         return true;
     }
-
-
-
 
     ///////////////////////////////////// RETRIEVING DATA FROM PROPIETARY DB//////////////////////////////////////////////////
 
