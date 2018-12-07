@@ -52,6 +52,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.REGISTER_USER, this::registerUser);
         map.put(Constants.INSERT_NEW_LIBRARY, this::insertLibrary);
         map.put(Constants.GET_LIBRARY_INFO, this::getLibraryInfo);
+        map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
         // Add new methods
     }
 
@@ -104,18 +105,36 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         }
     }
 
+    private void getAllLibraries(){
+        ArrayList<Integer> id_libs = dbms.getAllIdLibs();
+        ArrayList<LibraryDescriptor> libraries = new ArrayList<>();
+
+        for (Integer elem: id_libs){
+            libraries.add(getLibraryDescriptor(elem));
+        }
+
+        socketHandler.sendViaSocket(libraries);
+    }
+
     private void getLibraryInfo(){
         LibraryDescriptor ld = null;
         try {
             int id_lib = (int)objectInputStream.readObject();
-            ld = dbms.getLibraryInfo(id_lib);
-            LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
-            ld.setLibraryContent(lc);
+            ld = getLibraryDescriptor(id_lib);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         socketHandler.sendViaSocket(ld);
     }
+
+    private LibraryDescriptor getLibraryDescriptor(int id_lib){
+        LibraryDescriptor ld = null;
+        ld = dbms.getLibraryInfo(id_lib);
+        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+        ld.setLibraryContent(lc);
+        return ld;
+    }
+
 
     ////////////////////////////////////////////INSERTION METHODS///////////////////////////////////////////////////////
     // Each insertion method get the schema name related to the lib_id since each lib has its own schema, database which

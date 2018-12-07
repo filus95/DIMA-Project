@@ -513,5 +513,24 @@ public class DatabaseManager {
 
         return to_ret;
     }
+
+    public ArrayList<Integer> getAllIdLibs() {
+        String query = "select * from propietary_db.libraries";
+        Statement st;
+        ArrayList<Integer> to_ret = new ArrayList<>();
+        try {
+            st = conn.createStatement();
+
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()){
+                to_ret.add(rs.getInt("id_lib"));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return to_ret;
+
+    }
 }
 

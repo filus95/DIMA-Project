@@ -1,5 +1,6 @@
 package com.easylib.network.socket;
 
+import com.easylib.server.Database.AnswerClasses.Answer;
 import com.easylib.server.Database.AnswerClasses.Book;
 
 import java.io.*;

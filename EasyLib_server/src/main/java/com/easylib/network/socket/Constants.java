@@ -6,6 +6,7 @@ package com.easylib.network.socket;
  */
 class Constants {
 
+    static final String GET_ALL_LIBRARIES = "get_all_libraries";
     static final String GET_LIBRARY_INFO = "get_library_info";
     static final String INSERT_NEW_LIBRARY = "insert_new_library";
     static final String REGISTER_USER = "register_user";
