@@ -17,6 +17,9 @@ public class Book extends Answer {
     private String publishedDate;
     private ArrayList<String> authors;
     private ArrayList<String> categories;
+    private boolean reserved;
+    private boolean waiting_list;
+
 
     public String getBookId_lib() {
         return bookId_lib;
@@ -139,5 +142,21 @@ public class Book extends Answer {
     @Override
     public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
         return null;
+    }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
+    public boolean isWaiting_list() {
+        return waiting_list;
+    }
+
+    public void setWaiting_list(boolean waiting_list) {
+        this.waiting_list = waiting_list;
     }
 }

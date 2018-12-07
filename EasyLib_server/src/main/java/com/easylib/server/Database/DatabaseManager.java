@@ -3,7 +3,9 @@ package com.easylib.server.Database;
 import com.easylib.server.Database.AnswerClasses.*;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -323,23 +325,73 @@ public class DatabaseManager {
 
             while (rs.next()){
                 Book queryResult = new Book();
-                queryResult.setBookId_lib((String) rs.getObject("identifier"));
-                queryResult.setTitle((String) rs.getObject("title"));
-                queryResult.setPublisher((String) rs.getObject("publisher"));
-                queryResult.setCategories((String)rs.getObject("category_1"),
-                        (String)rs.getObject("category_2"),
-                        (String)rs.getObject("category_3"));
+                queryResult.setBookId_lib(rs.getString("identifier"));
+                queryResult.setTitle(rs.getString("title"));
+                queryResult.setPublisher((rs.getString("publisher")));
+                queryResult.setCategories(rs.getString("category_1"),
+                        rs.getString("category_2"),
+                        rs.getString("category_3"));
 
                 queryResult.setAuthors((String)(rs.getObject("author_1")),
-                        (String)(rs.getObject("author_2")),
-                        (String)(rs.getObject("author_3")),
-                        (String)(rs.getObject("author_4")));
+                        (rs.getString("author_2")),
+                        (rs.getString("author_3")),
+                        (rs.getString("author_4")));
+                queryResult.setReserved(rs.getBoolean("reserved"));
+                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
                 results.add(queryResult);
             }
         } catch (SQLException e) {
           e.printStackTrace();
         }
         return results;
+    }
+
+     public ArrayList<News> getAllNews(String schema_name, int limit){
+        ArrayList<News> to_ret = new ArrayList<>();
+        String query = "select * from "+schema_name+".news";
+
+        int count = 0;
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next() && count < limit){
+                News elem = new News();
+                elem.setTitle(rs.getString("title"));
+                elem.setPost_date(new SimpleDateFormat(rs.getString("post_date")));
+                elem.setContent(rs.getString("content"));
+                elem.setImage_link(rs.getString("image_link"));
+                to_ret.add(elem);
+                count++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return to_ret;
+    }
+
+    private ArrayList<Event> getAllEvents(String schema_name, int limit){
+        ArrayList<Event> to_ret = new ArrayList<>();
+        String query = "select * from "+schema_name+".events";
+
+        int count = 0;
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next() && count < limit){
+                Event elem = new Event();
+                elem.setTitle(rs.getString("title"));
+                elem.setDescription(rs.getString("description"));
+                elem.setSeats((Integer.parseInt(rs.getString("seats"))));
+                elem.setImage_link(rs.getString("image_link"));
+                to_ret.add(elem);
+                count++;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return to_ret;
     }
 
 //    private ArrayList<Object> getQueryResultsReservation(String query) {
@@ -423,6 +475,7 @@ public class DatabaseManager {
             ResultSet rs = st.executeQuery(query);
             while (rs.next()){
                 libraryDescriptor.setLib_name(rs.getString("lib_name"));
+                libraryDescriptor.setSchema_name(rs.getString("schema_name"));
                 libraryDescriptor.setImage_link(rs.getString("image_link"));
                 libraryDescriptor.setTelephone_number(rs.getString("telephone_number"));
                 libraryDescriptor.setAddress(rs.getString("address"));
@@ -436,8 +489,29 @@ public class DatabaseManager {
         return libraryDescriptor;
     }
 
-    public LibraryContent getLibraryContent(int id_lib) {
-        return new LibraryContent();
+
+    public LibraryContent getLibraryContent(String schema_name) {
+        ArrayList<Book> books = queryAllBooks(schema_name);
+        books = getNbooks(books, 5);
+        ArrayList<News> news = getAllNews(schema_name, 5);
+        ArrayList<Event> events = getAllEvents(schema_name, 5);
+
+        LibraryContent lc = new LibraryContent();
+        lc.setBooks(books);
+        lc.setEvents(events);
+        lc.setNews(news);
+
+        return lc;
+    }
+
+    private ArrayList<Book> getNbooks(ArrayList<Book> list, int n){
+        Collections.shuffle(list);
+        ArrayList<Book> to_ret = new ArrayList<>();
+
+        for (int i = 0; i < n; i++ )
+            to_ret.add(list.get(i));
+
+        return to_ret;
     }
 }
 

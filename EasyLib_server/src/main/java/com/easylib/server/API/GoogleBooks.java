@@ -1,7 +1,6 @@
 package com.easylib.server.API;
 
 import com.easylib.server.Database.DatabaseManager;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

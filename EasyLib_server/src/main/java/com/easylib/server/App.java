@@ -1,6 +1,7 @@
 package com.easylib.server;
 
 import com.easylib.server.API.GoogleBooks;
+import com.easylib.server.Database.AnswerClasses.News;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
 
@@ -38,11 +39,11 @@ public class App
 
 //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);
-
-
-        GoogleBooks gb = new GoogleBooks();
-        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
-                "library_1");
+        ArrayList<News> x = dbms.getAllNews("library_1", 5);
+        System.out.print(x.size());
+//        GoogleBooks gb = new GoogleBooks();
+//        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
+//                "library_1");
 
         // TODO: ADD INTO booksreservations
 //        java.util.Date dt = new java.util.Date();

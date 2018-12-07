@@ -109,7 +109,8 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         try {
             int id_lib = (int)objectInputStream.readObject();
             ld = dbms.getLibraryInfo(id_lib);
-            LibraryContent lc = dbms.getLibraryContent(id_lib);
+            LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+            ld.setLibraryContent(lc);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
