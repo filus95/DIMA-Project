@@ -75,7 +75,7 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
         sendViaSocket(schema_lib);
     }
 
-    private void sendViaSocket(Object toSend){
+    void sendViaSocket(Object toSend){
         try {
             objectOutputStream.writeObject(toSend);
             objectOutputStream.flush();

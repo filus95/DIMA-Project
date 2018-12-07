@@ -4,6 +4,7 @@ package com.easylib.network.socket; /**
 
 import com.easylib.server.Database.AnswerClasses.Book;
 import com.easylib.server.Database.AnswerClasses.Query;
+import com.easylib.server.Database.AnswerClasses.Reservation;
 import com.easylib.server.Database.DatabaseManager;
 
 import java.io.IOException;
@@ -45,6 +46,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
         map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
+        map.put(Constants.INSERT_RESERVATION, this::insertReservation);
         // Add new methods
     }
 
@@ -55,29 +57,41 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
     //////////////////////////////////////METHODS THAT INTERACT WITH THE LIB DB////////////////////////////////////////////
 
-
     private void getAllBooks(){
-        socketHandler.sendBooks(dbms.queryAllBooks());
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+
+            // extract the schema_name recorded in the DB of libraries related to id_lib
+            String schema_lib = dbms.getSchemaNameLib(id_lib);
+            socketHandler.sendBooks(dbms.queryAllBooks(schema_lib));
+            }
+            catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void bookQuery(){
         try {
             ArrayList<Book> result;
+            // receive the library id that the user want to query
+            int id_lib = (int)objectInputStream.readObject();
+            // extract the schema_name recorded in the DB of libraries related to id_lib
+            String schema_lib = dbms.getSchemaNameLib(id_lib);
             Query query = (Query)objectInputStream.readObject();
             if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
-                result = dbms.queryBooksByTitle(query.getTitle());
+                result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
             else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
-                result = dbms.queryBooksByAuthor(query.getAuthor());
+                result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib);
             else if(query.getTitle()==null && query.getAuthor() == null && query.getCategory() != null)
-                result = dbms.queryBooksByCategory(query.getCategory());
+                result = dbms.queryBooksByCategory(query.getCategory(), schema_lib);
             else if(query.getTitle()!=null && query.getAuthor() != null && query.getCategory() == null)
-                result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor());
+                result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor(), schema_lib);
             else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() != null)
-                result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor());
+                result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor(), schema_lib);
             else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() != null)
-                result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory());
+                result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory(), schema_lib);
             else
-                result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory());
+                result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory(), schema_lib);
 
             socketHandler.sendBooks(result);
         } catch (IOException | ClassNotFoundException e) {
@@ -85,7 +99,20 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         }
     }
 
-     // ONLY FOR TESTING
+    private void insertReservation(){
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+            Reservation reservation = (Reservation)objectInputStream.readObject();
+            boolean res = dbms.insertNewReservation(reservation, schema_name);
+            socketHandler.sendViaSocket(res);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    // ONLY FOR TESTING
 
     private void test_conn() {
         //try {
@@ -101,6 +128,22 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         System.out.print("SENT\n");
     }
 
+    //////////////////////////////////////METHODS THAT INTERACT WITH THE PROPIETARY DB//////////////////////////////////
+
+    private void librayConnInfo() {
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_lib = dbms.getSchemaNameLib(id_lib);
+            socketHandler.sendLibraryConnInfo(schema_lib);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * It overwrite the functional interface with the reference of a specific method in the map according to the string
      * received from SocketPlayerHandler
@@ -115,23 +158,6 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         this.methodsHadler.handle();
     }
 
-
-    //////////////////////////////////////METHODS THAT INTERACT WITH THE PROPIETARY DB//////////////////////////////////
-
-    private void librayConnInfo() {
-        try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_lib = dbms.getLibInfo(id_lib);
-            socketHandler.sendLibraryConnInfo(schema_lib);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     @FunctionalInterface
     private interface MethodsHadler{
         void handle() throws IOException, ClassNotFoundException;

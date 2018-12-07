@@ -1,6 +1,9 @@
 package com.easylib.server.Database.AnswerClasses;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Reservation extends Answer{
     private int reservation_id;
@@ -11,6 +14,21 @@ public class Reservation extends Answer{
     private SimpleDateFormat start_res_date;
     private SimpleDateFormat end_res_date;
     private int quantity;
+
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName){
+        Map<String, Object> map = new HashMap<>();
+        map.put(columnsName.get(0), getUser_id());
+        map.put(columnsName.get(1), getBook_idetifier());
+        map.put(columnsName.get(2), getBook_title());
+        map.put(columnsName.get(3), getReservation_date());
+        map.put(columnsName.get(4), getStart_res_date());
+        map.put(columnsName.get(5), getEnd_res_date());
+        map.put(columnsName.get(6), getQuantity());
+        map.put(columnsName.get(7), getUser_id());
+
+        return map;
+
+    }
 
     public int getReservation_id() {
         return reservation_id;
