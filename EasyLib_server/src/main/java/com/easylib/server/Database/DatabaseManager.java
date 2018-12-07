@@ -9,6 +9,7 @@ import java.util.*;
 public class DatabaseManager {
 
     private Connection conn = new DatabaseConnection().startConnection();
+    PasswordManager pm = new PasswordManager(conn, this);
 
     // todo this can be generalized for any insertion: look down
 //    void insertNewBooks(Map<String, Object> map, String tableName) {
@@ -421,12 +422,23 @@ public class DatabaseManager {
 
     /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
-    public boolean deleteStatementReservations( String book_identifier, String user_id,
-                                                String tableName ){
-        String query = "delete from "+tableName+" where " +
-                tableName+".book_identifier = "+book_identifier+" and " +
-                tableName+".user_id = "+user_id;
+    public boolean deleteStatementReservations( Reservation reservation, String tableName, String schemaName){
+        String query = "delete from "+schemaName+"."+tableName+" where " +
+                tableName+".book_identifier = "+reservation.getBook_idetifier()+" and " +
+                tableName+".user_id = "+reservation.getUser_id();
 
+        return queryExecution(conn, query);
+    }
+
+    public boolean deleteStatementUsers( User user, String tableName, String schemaName){
+        String query = "delete from "+schemaName+"."+tableName+" where " +
+                tableName+".username = "+user.getUsername();
+
+        return queryExecution(conn, query);
+
+    }
+
+    private boolean queryExecution(Connection conn, String query){
         Statement st = null;
         try {
             st = conn.createStatement();
@@ -437,6 +449,7 @@ public class DatabaseManager {
         }
         return true;
     }
+
 
     ///////////////////////////////////// RETRIEVING DATA FROM PROPIETARY DB//////////////////////////////////////////////////
 
@@ -551,28 +564,46 @@ public class DatabaseManager {
         return ret;
     }
 
-    void addUserAfterPasswordChange(String username ) {
-        PasswordManager pm = new PasswordManager();
+    ResultSet queryUser ( User user ){
 
+        ResultSet rs = null;
+        try {
+            String query = "select * from propietary_db.users where propietary_db.users.username =" +
+                    " "+user.getUsername();
+
+            PreparedStatement st = conn.prepareStatement(query);
+            st.setString(1, user.getUsername());
+
+            rs = st.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    public boolean passwordChangeAfterForgot(User user) {
+        boolean res = false;
         try {
             String email = "";
-            ResultSet rs = new Database().selectQuery(username);
+            ResultSet rs = queryUser(user);
 
             if ( rs.next())
                 email = rs.getString("email");
 
             System.out.print("deleting old row...");
-            deleteOldRow(username);
+            String schemaName = "propietary_db";
+            String tableName = "users";
+            deleteStatementUsers(user, tableName, schemaName);
             System.out.print("changing forgotten password..");
-            pm.changeForgottenPassword(username, email);
+            res = pm.changeForgottenPassword(user.getUsername(), email);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return res;
     }
 
     public boolean addUser(User user) {
 
-        PasswordManager pm = new PasswordManager();
         byte[] salt = pm.getNextSalt();byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
 
         Map<String, Object> map = new HashMap<>();
@@ -585,7 +616,17 @@ public class DatabaseManager {
         String schema_name = "propietary_db";
         String tableName = "users";
         return  insertStatement(map, tableName, schema_name);
+    }
 
+    public boolean checkCorrectPassword(User user) {
+        boolean to_ret = false;
+        try {
+            to_ret = pm.isExpectedPassword(user);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.print("QUERY ERROR!");
+        }
+        return to_ret;
     }
 }
 

@@ -4,6 +4,7 @@ package com.easylib.network.socket; /**
 
 import com.easylib.server.Database.AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
+import com.sun.tools.internal.jxc.ap.Const;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -49,10 +50,12 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.INSERT_EVENT, this::insertEvent);
         map.put(Constants.INSERT_NEWS, this::insertNews);
         map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
-        map.put(Constants.REGISTER_USER, this::registerUser);
+        map.put(Constants.REGISTER_USER, this::userRegistration);
         map.put(Constants.INSERT_NEW_LIBRARY, this::insertLibrary);
         map.put(Constants.GET_LIBRARY_INFO, this::getLibraryInfo);
         map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
+        map.put(Constants.USER_LOGIN, this::userLogin);
+        map.put(Constants.PASSWOD_FORGOT, this::passwordForgot);
         // Add new methods
     }
 
@@ -266,15 +269,32 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void userRegistration(){
         try {
             User user = (User) objectInputStream.readObject();
-            if (!dbms.checkUserExsist(user.getUsername())){
+            if (!dbms.checkUserExsist(user.getUsername()))
                 socketHandler.sendViaSocket(dbms.addUser(user));
-            }
+
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
+    private void userLogin(){
+        try {
+            User user = (User) objectInputStream.readObject();
+            socketHandler.sendViaSocket(dbms.checkCorrectPassword(user));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
+    private void passwordForgot(){
+        try {
+            User user = (User) objectInputStream.readObject();
+            socketHandler.sendViaSocket(dbms.passwordChangeAfterForgot(user));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,7 @@
 package com.easylib.server.Database;
 
+import com.easylib.server.Database.AnswerClasses.User;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -10,9 +12,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
-public class PasswordManager {
+class PasswordManager {
 
     /**
      * A utility class to hash passwords and check passwords vs hashed values. It uses a combination of hashing and unique
@@ -24,6 +28,14 @@ public class PasswordManager {
     private static final Random RANDOM = new SecureRandom();
     private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
+    private Connection conn;
+    private DatabaseManager dbms;
+
+    public PasswordManager(Connection conn, DatabaseManager databaseManager) {
+        this.conn = conn;
+        this.dbms = databaseManager;
+    }
+
 
     byte[] generatePassword(String psw, byte[] salt){
         return hash(psw.toCharArray(), salt);
@@ -66,27 +78,22 @@ public class PasswordManager {
      * Returns true if the given password and salt match the hashed value, false otherwise.<br>
      * Note - side effect: the password is destroyed (the char[] is filled with zeros)
      *
-     * @param password     the password to check
-     *
      * @return true if the given password and salt match the hashed value, false otherwise
      */
-    static boolean isExpectedPassword(String username, char[] password) throws SQLException {
+    boolean isExpectedPassword(User user) throws SQLException {
 
-        Database db = new Database();
-        Connection con = db.startConnection();
+        String sql = "SELECT username, salt, hashed_psd FROM propietary_db.users WHERE username = ?";
 
-        String sql = "SELECT username, salt, hashed_psd FROM articles.credentials WHERE username = ?";
-
-        PreparedStatement st = con.prepareStatement(sql);
-        st.setString(1, username);
+        PreparedStatement st = this.conn.prepareStatement(sql);
+        st.setString(1, user.getUsername());
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
             byte[] hash_pass = rs.getBytes("hashed_psd");
             byte[] salt = rs.getBytes("salt");
 
-            byte[] pwdHash = hash(password, salt);
-            Arrays.fill(password, Character.MIN_VALUE);
+            byte[] pwdHash = hash(user.getPlainPassword().toCharArray(), salt);
+            Arrays.fill(user.getPlainPassword().toCharArray(), Character.MIN_VALUE);
 
             //check if the stored hashed password is the same of that one inserted
             for (int i = 0; i < pwdHash.length; i++) {
@@ -98,15 +105,23 @@ public class PasswordManager {
         return true;
     }
 
-    void changeForgottenPassword( String username, String email ){
-        MailClass2 mail = new MailClass2();
+    boolean changeForgottenPassword(String username, String email ){
+        MailClass mail = new MailClass();
         String newPassword = generateRandomPassword(16);
         byte[] salt = getNextSalt();
         byte[] newHashPass = generatePassword( newPassword, salt);
 
-        new UserManager().insert_credentials(username, salt, newHashPass, email);
-        mail.sendMail(email, newPassword);
+        Map<String, Object> map = new HashMap<>();
+        map.put("username", username);
+        map.put("salt", salt);
+        map.put("email", email);
+        map.put("hashed_pd", newHashPass);
 
+        String schemaName = "propietary_db";
+        String tableName = "users";
+        dbms.insertStatement(map, tableName, schemaName);
+        mail.sendMail(email, newPassword);
+        return true;
     }
     /**
      * Generates a random password of a given length, using letters and digits.
