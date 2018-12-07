@@ -1,0 +1,206 @@
+-- we don't know how to generate schema library_1 (class Schema) :(
+create table if not exists books
+(
+  identifier varchar(255) not null
+    primary key,
+  type varchar(255) null,
+  pageCount int null,
+  printType varchar(30) null,
+  readingModes varchar(255) null,
+  imageLinks varchar(1000) null,
+  canonicalVolumeLink varchar(255) null,
+  description mediumtext null,
+  infoLink varchar(1000) null,
+  previewLink varchar(255) null,
+  averageRating float null,
+  publisher varchar(255) null,
+  ratingsCount int null,
+  Id int auto_increment,
+  language varchar(10) null,
+  allowAnonLogging varchar(15) null,
+  maturityRating varchar(100) null,
+  contentVersion varchar(255) null,
+  publishedDate varchar(255) null,
+  panelizationSummary varchar(255) null,
+  subtitle varchar(255) null,
+  title varchar(255) null,
+  author_1 varchar(400) null,
+  author_2 varchar(255) null,
+  author_3 varchar(255) null,
+  author_4 varchar(255) null,
+  category_1 varchar(255) null,
+  category_2 varchar(255) null,
+  category_3 varchar(255) null,
+  quantity int null,
+  reserved tinyint(1) default '0' not null,
+  wating_list tinyint(1) default '0' not null,
+  constraint books_Id_uindex
+  unique (Id)
+)
+;
+
+create table if not exists booksreservations
+(
+  reservation_id int auto_increment,
+  user_id int not null,
+  book_identifier varchar(255) not null,
+  book_title varchar(255) not null,
+  reservation_date datetime not null,
+  starting_reservation_date date not null,
+  ending_reservation_date date not null,
+  quantity int not null,
+  constraint table_name_reservation_id_uindex
+  unique (reservation_id)
+)
+;
+
+alter table booksreservations
+  add primary key (reservation_id)
+;
+
+create trigger update_count_on_delivering
+  after DELETE on booksreservations
+  for each row
+  begin
+    update library_1.books set quantity = quantity + OLD.quantity and
+                                          books.reserved = false
+    where library_1.books.identifier = OLD.book_identifier;
+  end
+;
+
+create trigger update_on_reservation
+  after INSERT on booksreservations
+  for each row
+  BEGIN
+    update library_1.books set quantity = quantity - NEW.quantity and
+                                          books.reserved = true
+
+    where library_1.books.identifier = NEW.book_identifier;
+  end
+;
+
+create trigger waiting_list_flowing
+  after DELETE on booksreservations
+  for each row
+  begin
+
+    declare cond integer;
+    declare user_id integer;
+    declare reservation_date DATETIME;
+    declare start_res_date DATE;
+    declare end_res_date DATE;
+    declare quantity integer;
+
+    set cond = (select waiting_position from library_1.waitinglist where waitinglist.book_identifier =
+                                                                         OLD.book_identifier and waiting_position = 1);
+
+    if cond > 0 then
+
+      set user_id = (select user_id from waitinglist where waitinglist.book_identifier =
+                                                           OLD.book_identifier and waiting_position = 1);
+      set reservation_date = (select waitinglist.reservation_date from waitinglist where waitinglist.book_identifier =
+                                                                                         OLD.book_identifier and waiting_position = 1);
+      set start_res_date = (select waitinglist.user_id from waitinglist where waitinglist.book_identifier =
+                                                                              OLD.book_identifier and waiting_position = 1);
+      set end_res_date = (select waitinglist.ending_reservation_date from waitinglist where waitinglist.book_identifier =
+                                                                                            OLD.book_identifier and waiting_position = 1);
+      set quantity = (select waitinglist.quantity from waitinglist where waitinglist.book_identifier =
+                                                                         OLD.book_identifier and waiting_position = 1);
+
+      insert into booksreservations (user_id, book_identifier, book_title, reservation_date, starting_reservation_date,
+                                     ending_reservation_date, quantity)
+      values (user_id, old.book_identifier, old.book_title, reservation_date, start_res_date,end_res_date, quantity );
+
+      delete from waitinglist where waitinglist.book_identifier = old.book_identifier and
+                                    waiting_position = 1;
+    end if;
+  end
+;
+
+create table if not exists events
+(
+  id int auto_increment
+    primary key,
+  title varchar(255) not null,
+  description varchar(255) not null,
+  image_link varchar(255) null,
+  seats int not null
+)
+;
+
+create table if not exists event_partecipants
+(
+  event_id int not null,
+  partecipant_id int not null,
+  primary key (event_id, partecipant_id),
+  constraint event_partecipants_event_id_uindex
+  unique (event_id),
+  constraint event_partecipants_partecipant_id_uindex
+  unique (partecipant_id),
+  constraint event_partecipants_events_id_fk
+  foreign key (event_id) references events (id)
+)
+;
+
+create table if not exists news
+(
+  id int auto_increment
+    primary key,
+  title varchar(255) not null,
+  post_date datetime not null,
+  content mediumtext not null,
+  image_link varchar(255) not null
+)
+;
+
+create table if not exists ratings
+(
+  id int auto_increment
+    primary key,
+  user_id int not null,
+  book_identifier varchar(255) not null,
+  rating int not null
+)
+;
+
+create table if not exists waitinglist
+(
+  reservation_id int auto_increment
+    primary key,
+  user_id int not null,
+  book_identifier varchar(255) not null,
+  waiting_position int not null,
+  reservation_date datetime not null,
+  starting_reservation_date date not null,
+  ending_reservation_date date not null,
+  quantity int not null
+)
+;
+
+create trigger on_insert_waiting_person
+  before INSERT on waitinglist
+  for each row
+  begin
+    declare var int;
+
+    set var = count((select * from waitinglist where book_identifier = new.book_identifier));
+    set new.waiting_position = var + 1;
+
+    if NEW.waiting_position = 1 then
+      update library_1.books set wating_list = true;
+    end if;
+  end
+;
+
+create trigger update_waitinglist_position
+  after DELETE on waitinglist
+  for each row
+  begin
+    if OLD.waiting_position = 1 then
+      update library_1.books set wating_list = false;
+    end if;
+    update library_1.waitinglist set waiting_position = waiting_position - 1
+    where library_1.waitinglist.book_identifier = OLD.book_identifier;
+  end
+;
+
