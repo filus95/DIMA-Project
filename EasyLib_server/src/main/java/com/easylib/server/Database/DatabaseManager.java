@@ -1,7 +1,6 @@
 package com.easylib.server.Database;
 
-import com.easylib.server.Database.AnswerClasses.Book;
-import com.easylib.server.Database.AnswerClasses.Reservation;
+import com.easylib.server.Database.AnswerClasses.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -92,11 +91,74 @@ public class DatabaseManager {
         // Columns name passed must be in the order of the DB columns
         map = reservInfo.getMapAttribute(columnsName);
 
-        String table_name = " library_1.booksreservations ";
+        String table_name = "booksreservations";
         return insertStatement(map, table_name, schema_name);
     }
 
-     public boolean insertStatement(Map<String, Object> map, String table_name, String schema_name) {
+    public boolean insertNewEventPartecipant(Event_partecipant partecipant, String schema_name){
+
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("event_id");
+        columnsName.add("partecipant_id");
+
+        map = partecipant.getMapAttribute(columnsName);
+
+        String table_name = "event_partecipants";
+        return insertStatement(map, table_name, schema_name);
+    }
+
+
+    public boolean insertNewEvent(Event event, String schema_name) {
+
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("title");
+        columnsName.add("description");
+        columnsName.add("image_link");
+        columnsName.add("seats");
+
+        map = event.getMapAttribute(columnsName);
+
+        String table_name = "events";
+        return insertStatement(map, table_name, schema_name);
+    }
+
+    public boolean insertNews(News news, String schema_name) {
+
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("title");
+        columnsName.add("post_date");
+        columnsName.add("content");
+        columnsName.add("image_link");
+
+        map = news.getMapAttribute(columnsName);
+
+        String table_name = "news";
+        return insertStatement(map, table_name, schema_name);
+    }
+
+    public boolean insertNewWaitingPerson(WaitingPerson wp, String schema_name) {
+
+        Map<String, Object> map = new HashMap<>();
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("user_id");
+        columnsName.add("book_identifier");
+        columnsName.add("waiting_position");
+        columnsName.add("reservation_date");
+        columnsName.add("starting_reservation_date");
+        columnsName.add("ending_reservation_date");
+        columnsName.add("quantity");
+
+        map = wp.getMapAttribute(columnsName);
+
+        String table_name = "waitinglist";
+        return insertStatement(map, table_name, schema_name);
+
+    }
+
+    public boolean insertStatement(Map<String, Object> map, String table_name, String schema_name) {
         boolean res = false;
         try {
 
@@ -320,7 +382,5 @@ public class DatabaseManager {
             return "ERROR";
         }
     }
-
-
 }
 

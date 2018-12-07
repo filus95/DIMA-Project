@@ -1,5 +1,8 @@
 package com.easylib.server.Database.AnswerClasses;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 public class Query extends Answer{
     private String title;
     private String author;
@@ -27,5 +30,10 @@ public class Query extends Answer{
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        return null;
     }
 }

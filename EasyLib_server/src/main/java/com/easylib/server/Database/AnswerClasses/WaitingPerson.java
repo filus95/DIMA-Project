@@ -1,8 +1,12 @@
 package com.easylib.server.Database.AnswerClasses;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Handler;
 
-public class WaitingPerson {
+public class WaitingPerson extends Answer{
     private int reservation_id;
     private int user_id;
     private String book_identifier;
@@ -10,6 +14,15 @@ public class WaitingPerson {
     private SimpleDateFormat reservation_date;
     private SimpleDateFormat start_res_date;
     private SimpleDateFormat end_res_date;
+    int quantity;
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
     public int getReservation_id() {
         return reservation_id;
@@ -65,5 +78,20 @@ public class WaitingPerson {
 
     public void setEnd_res_date(SimpleDateFormat end_res_date) {
         this.end_res_date = end_res_date;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        Map<String,Object> map = new HashMap<>();
+
+        map.put(columnsName.get(0), getUser_id());
+        map.put(columnsName.get(0), getBook_identifier());
+        map.put(columnsName.get(0), getWaiting_pos());
+        map.put(columnsName.get(0), getReservation_date());
+        map.put(columnsName.get(0), getStart_res_date());
+        map.put(columnsName.get(0), getEnd_res_date());
+        map.put(columnsName.get(0), getQuantity());
+
+        return map;
     }
 }

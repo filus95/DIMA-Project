@@ -41,7 +41,8 @@ public class App
 
 
         GoogleBooks gb = new GoogleBooks();
-        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "library_1.books");
+        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
+                "library_1");
 
         // TODO: ADD INTO booksreservations
 //        java.util.Date dt = new java.util.Date();

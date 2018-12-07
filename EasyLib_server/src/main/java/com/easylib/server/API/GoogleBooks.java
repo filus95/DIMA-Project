@@ -1,6 +1,7 @@
 package com.easylib.server.API;
 
 import com.easylib.server.Database.DatabaseManager;
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,7 +29,7 @@ public class GoogleBooks {
      * @param tableName
      */
 
-    public void apiCallAndFillDB(String query, String tableName){
+    public void apiCallAndFillDB(String query, String tableName, String schema_name){
         //at this url we found a JSON file containing all the articles  of the topic " q=bitcoin " published today "from = date"
         String endpoint = ENDPOINT_+query+"&key="+KEY_;
         String result1 = "";
@@ -46,7 +47,7 @@ public class GoogleBooks {
             try {
                 JSONObject response_json = new JSONObject(response);
 
-                parseResult(response_json, tableName);
+                parseResult(response_json, tableName, schema_name);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -90,8 +91,8 @@ public class GoogleBooks {
     // THE SERVER DATA HANDLER CREATE THE NEEDED QUERY CREATOR AND CALLS THIS METHOD TO
 
 
-    public void queryCreator(QueryConteiner queryCreator, String tableName){
-        apiCallAndFillDB(queryCreator.createQuery(), tableName);
+    public void queryCreator(QueryConteiner queryCreator, String tableName, String schema_name){
+        apiCallAndFillDB(queryCreator.createQuery(), tableName,schema_name);
     }
 
 
@@ -115,11 +116,11 @@ public class GoogleBooks {
      * fields that we need
      */
 
-    private void parseResult(JSONObject result, String tableName) {
+    private void parseResult(JSONObject result, String tableName, String schema_name) {
         JSONArray response = null;
         try {
             response = (JSONArray) result.get("items");
-            accessRelevantElementsAndFillDB(response, tableName);
+            accessRelevantElementsAndFillDB(response, tableName, schema_name);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -130,7 +131,7 @@ public class GoogleBooks {
      * @param items is a JSONArray containing all the items info retrieved with the API
      * @param tableName
      */
-    private void accessRelevantElementsAndFillDB(JSONArray items, String tableName){
+    private void accessRelevantElementsAndFillDB(JSONArray items, String tableName, String schema_name){
         System.out.print("HERE");
         try {
             JSONObject volume_info, item;
@@ -140,7 +141,7 @@ public class GoogleBooks {
                 volume_info = (JSONObject) item.get("volumeInfo");
                 // extract the information useful for the DB
                 map = extractRelevantInfo(volume_info);
-                fillDatabase(map, tableName);
+                fillDatabase(map, tableName, schema_name);
             }
         } catch (JSONException e) {
             System.out.print("JSON object malformed");
@@ -150,9 +151,9 @@ public class GoogleBooks {
     }
 
     // interface with the DBMS that actually fill the DB
-    private void fillDatabase(Map<String, Object> map, String tableName) {
+    private void fillDatabase(Map<String, Object> map, String tableName, String schema_name) {
         DatabaseManager dbManager = new DatabaseManager();
-        dbManager.insertStatement(map, tableName);
+        dbManager.insertStatement(map, tableName, schema_name);
     }
 
     /**

@@ -2,9 +2,7 @@ package com.easylib.network.socket; /**
  * Created by raffaelebongo on 21/05/17.
  */
 
-import com.easylib.server.Database.AnswerClasses.Book;
-import com.easylib.server.Database.AnswerClasses.Query;
-import com.easylib.server.Database.AnswerClasses.Reservation;
+import com.easylib.server.Database.AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
 
 import java.io.IOException;
@@ -47,6 +45,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
         map.put(Constants.INSERT_RESERVATION, this::insertReservation);
+        map.put(Constants.INSERT_EVENT_PARTICIPANT, this::insertEventPartecipant);
+        map.put(Constants.INSERT_EVENT, this::insertEvent);
+        map.put(Constants.INSERT_NEWS, this::insertNews);
+        map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
         // Add new methods
     }
 
@@ -99,24 +101,85 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         }
     }
 
+    ////////////////////////////////////////////INSERTION METHODS///////////////////////////////////////////////////////
+    // Each insertion method get the schema name related to the lib_id since each lib has its own schema, database which
+    // contains many tables but with a consistent structure over the different schemas.
+
     private void insertReservation(){
+        boolean res = false;
         try {
             int id_lib = (int)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(id_lib);
+
             Reservation reservation = (Reservation)objectInputStream.readObject();
-            boolean res = dbms.insertNewReservation(reservation, schema_name);
-            socketHandler.sendViaSocket(res);
+            res = dbms.insertNewReservation(reservation, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        socketHandler.sendViaSocket(res);
     }
 
+    private void insertEventPartecipant(){
+        boolean res = false;
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+
+            Event_partecipant partecipant = (Event_partecipant)objectInputStream.readObject();
+            res = dbms.insertNewEventPartecipant(partecipant, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+    }
+
+    private void insertEvent(){
+        boolean res = false;
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+
+            Event event = (Event)objectInputStream.readObject();
+            res = dbms.insertNewEvent(event, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+
+    }
+
+    private void insertNews(){
+        boolean res = false;
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+
+            News news = (News)objectInputStream.readObject();
+            res = dbms.insertNews(news, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+    }
+
+    private void insertWaitingPerson(){
+        boolean res = false;
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+
+            WaitingPerson wp = (WaitingPerson) objectInputStream.readObject();
+            res = dbms.insertNewWaitingPerson(wp, schema_name);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        socketHandler.sendViaSocket(res);
+    }
 
     // ONLY FOR TESTING
 
     private void test_conn() {
-        //try {
-            //Object res = objectInputStream.readObject();
+
         try {
             objectOutputStream.writeObject("test");
             objectOutputStream.flush();

@@ -1,8 +1,11 @@
 package com.easylib.server.Database.AnswerClasses;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class News {
+public class News extends Answer{
     private int id;
     private String title;
     private SimpleDateFormat post_date;
@@ -47,5 +50,16 @@ public class News {
 
     public void setImage_link(String image_link) {
         this.image_link = image_link;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(columnsName.get(0), getTitle());
+        map.put(columnsName.get(1), getPost_date());
+        map.put(columnsName.get(1), getContent());
+        map.put(columnsName.get(1), getImage_link());
+
+        return map;
     }
 }

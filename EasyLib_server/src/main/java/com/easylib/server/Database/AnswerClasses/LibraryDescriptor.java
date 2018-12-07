@@ -1,8 +1,13 @@
 package com.easylib.server.Database.AnswerClasses;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class LibraryDescriptor extends Answer {
     private int id_lib;
     private String lib_name;
+    private String schema_name;
     private String image_link;
     private String telephone_number;
     private String address;
@@ -63,5 +68,27 @@ public class LibraryDescriptor extends Answer {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(columnsName.get(0), getLib_name());
+        map.put(columnsName.get(1), getSchema_name());
+        map.put(columnsName.get(2), getImage_link());
+        map.put(columnsName.get(3), getTelephone_number());
+        map.put(columnsName.get(4), getAddress());
+        map.put(columnsName.get(5), getEmail());
+        map.put(columnsName.get(6), getDescription());
+
+        return map;
+    }
+
+    public String getSchema_name() {
+        return schema_name;
+    }
+
+    public void setSchema_name(String schema_name) {
+        this.schema_name = schema_name;
     }
 }

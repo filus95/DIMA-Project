@@ -1,6 +1,7 @@
 package com.easylib.server.Database.AnswerClasses;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Book extends Answer {
     private String bookId_lib;
@@ -133,5 +134,10 @@ public class Book extends Answer {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        return null;
     }
 }

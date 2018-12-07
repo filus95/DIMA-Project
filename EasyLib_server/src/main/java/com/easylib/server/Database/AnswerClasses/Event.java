@@ -1,6 +1,10 @@
 package com.easylib.server.Database.AnswerClasses;
 
-public class Event {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Event extends Answer{
     private int id;
     private String title;
     private String description;
@@ -45,5 +49,16 @@ public class Event {
 
     public void setSeats(int seats) {
         this.seats = seats;
+    }
+
+    @Override
+    public Map<String, Object> getMapAttribute(ArrayList<String> columnsName) {
+        Map<String, Object> map = new HashMap<>();
+        map.put(columnsName.get(0), getTitle());
+        map.put(columnsName.get(1), getDescription());
+        map.put(columnsName.get(2), getImage_link());
+        map.put(columnsName.get(3), getSeats());
+
+        return map;
     }
 }
