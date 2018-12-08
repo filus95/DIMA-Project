@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib;
+package com.easylib.dima.easylib.Login;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib.Main.MainActivity;
+import com.easylib.dima.easylib.R;
 
 public class Login extends AppCompatActivity {
 
