@@ -1,13 +1,14 @@
 package com.easylib.dima.easylib;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
 
-public class LoginActivity extends AppCompatActivity {
+import com.easylib.dima.easylib.Main.MainActivity;
+
+public class Login extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +24,17 @@ public class LoginActivity extends AppCompatActivity {
         String password = pText.getText().toString();
 
         //TODO: Make the call to Server
-    }
 
-    public void register(View view) {
-        //TODO: call the register activity
+        //Just for test
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void loginFb(View view) {
-        //TODO: call Facebook login API
+        //TODO: call Facebook Login API
     }
 
     public void loginGoogle(View view) {
-        //TODO: call Google login API
+        //TODO: call Google Login API
     }
 }
