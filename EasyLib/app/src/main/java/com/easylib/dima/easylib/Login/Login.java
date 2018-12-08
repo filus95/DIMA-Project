@@ -31,6 +31,10 @@ public class Login extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void register(View view) {
+        //TODO: call register activity
+    }
+
     public void loginFb(View view) {
         //TODO: call Facebook Login API
     }

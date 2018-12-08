@@ -8,10 +8,22 @@
     android:background="@drawable/login_back">
 
     <ImageButton
+        android:id="@+id/reg_bt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/sign_in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
         android:id="@+id/fb_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="15dp"
         android:background="@android:color/transparent"
         android:onClick="loginFb"
         app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +59,7 @@
 
     <EditText
         android:id="@+id/username"
-        android:layout_width="225dp"
+        android:layout_width="210dp"
         android:layout_height="40dp"
         android:layout_marginStart="50dp"
         android:layout_marginTop="8dp"
@@ -67,7 +79,7 @@
 
     <EditText
         android:id="@+id/password"
-        android:layout_width="225dp"
+        android:layout_width="210dp"
         android:layout_height="40dp"
         android:backgroundTint="@android:color/white"
         android:ems="10"
@@ -98,6 +110,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.4" />
 
 </android.support.constraint.ConstraintLayout>
