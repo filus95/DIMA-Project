@@ -32,7 +32,8 @@ public class Login extends AppCompatActivity {
     }
 
     public void register(View view) {
-        //TODO: call register activity
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
     }
 
     public void loginFb(View view) {
