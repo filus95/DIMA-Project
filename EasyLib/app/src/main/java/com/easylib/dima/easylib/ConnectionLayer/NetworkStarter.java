@@ -12,9 +12,9 @@ public class NetworkStarter {
         new Thread(clientThreadPool).start();
         System.out.print("Here\n");
 
-        for ( int i=0; i<3; i++) {
+
             sleep(5*1000);
-//            clientThreadPool.sendMessage("test\n");
-        }
+//            clientThreadPool.login("Filus", "psw", "raff@io.cit");
+
     }
 }

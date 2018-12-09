@@ -51,7 +51,12 @@ public class SocketClient implements Runnable{
     public ObjectOutputStream getObjectOutputStream() {
         return objectOutputStream;
     }
+
 }
+
+
+
+
 
 /**
  * Server Listener

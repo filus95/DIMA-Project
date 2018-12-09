@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
@@ -65,16 +66,42 @@ public class ClientThreadPool implements Runnable {
         System.out.println("Server Stopped.") ;
     }
 
-//    public void sendMessage(String message){
-//        try {
-//            objectOutputStream.writeObject("test");
-//            objectOutputStream.flush();
-//            objectOutputStream.reset();
+
+    // MESSAGE TO SEND TO THE SERVER
+
+
+//    public void login(String username, String password, String email){
+//        sendMessage(Constants.USER_LOGIN);
 //
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+//        User user = new User();
+//        user.setUsername(username);
+//        user.setPlainPassword(password);
+//        user.setEmail(email);
+//        sendViaSocket(user);
+//        System.out.print("SENT");
 //    }
+
+    private void sendViaSocket(Object toSend){
+        try {
+            objectOutputStream.writeObject(toSend);
+            objectOutputStream.flush();
+            objectOutputStream.reset();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+    private void sendMessage(String message){
+        try {
+            objectOutputStream.writeObject(message);
+            objectOutputStream.flush();
+            objectOutputStream.reset();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public boolean isStopped() {
         return isStopped;

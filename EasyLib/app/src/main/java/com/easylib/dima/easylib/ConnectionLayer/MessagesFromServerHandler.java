@@ -1,6 +1,7 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,97 @@ public class MessagesFromServerHandler {
         this.client = client;
 
         map.put(CommunicationConstants.TEST_CONN, this::test);
+        map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
+        map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
+        map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
+        map.put(Constants.INSERT_RESERVATION, this::insertReservation);
+        map.put(Constants.INSERT_EVENT_PARTICIPANT, this::insertEventPartecipant);
+        map.put(Constants.INSERT_EVENT, this::insertEvent);
+        map.put(Constants.INSERT_NEWS, this::insertNews);
+        map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
+        map.put(Constants.REGISTER_USER, this::userRegistration);
+        map.put(Constants.INSERT_NEW_LIBRARY, this::insertLibrary);
+        map.put(Constants.GET_LIBRARY_INFO, this::getLibraryInfo);
+        map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
+        map.put(Constants.USER_LOGIN, this::userLogin);
+        map.put(Constants.PASSWORD_FORGOT, this::passwordForgot);
+        map.put(Constants.INSERT_PREFERENCE, this::insertPreference);
+        map.put(Constants.INSERT_RATING, this::insertRating);
+        map.put(Constants.GET_USER_PREFERENCES, this::getUserPreferences);
+        map.put(Constants.GET_WAITING_LIST_BOOK, this::getWaitingListForAbook);
+        map.put(Constants.GET_NEWS, this::getNews);
+        map.put(Constants.GET_EVENTS, this::getEvents);
+        map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
+    }
+
+    private void bookQuery() {
+    }
+
+    private void insertReservation() {
+    }
+
+    private void insertEventPartecipant() {
+    }
+
+    private void insertEvent() {
+    }
+
+    private void insertNews() {
+    }
+
+    private void insertWaitingPerson() {
+    }
+
+    private void userRegistration() {
+    }
+
+    private void insertLibrary() {
+    }
+
+    private void getLibraryInfo() {
+    }
+
+    private void getAllLibraries() {
+    }
+
+    private void userLogin() {
+        ObjectInputStream inputStream = client.getObjectInputStream();
+        try {
+            boolean res = (boolean) inputStream.readObject();
+            System.out.print(res);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void passwordForgot() {
+    }
+
+    private void insertPreference() {
+    }
+
+    private void insertRating() {
+    }
+
+    private void getUserPreferences() {
+    }
+
+    private void getWaitingListForAbook() {
+    }
+
+    private void getNews() {
+    }
+
+    private void getEvents() {
+    }
+
+    private void getUserReservations() {
+    }
+
+    private void librayConnInfo() {
+    }
+
+    private void getAllBooks() {
     }
 
     private void test() {
