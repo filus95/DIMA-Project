@@ -16,7 +16,7 @@ public class SocketClient implements Runnable{
 
 
     SocketClient(ObjectInputStream objectInputStream, ObjectOutputStream objectOutputStream, String message) {
-        this.messageHandler = new MessagesFromServerHandler(this);
+//        this.messageHandler = new MessagesFromServerHandler();
         this.objectInputStream = objectInputStream;
         this.objectOutputStream = objectOutputStream;
         this.startingMessage = message;

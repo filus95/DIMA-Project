@@ -2,6 +2,7 @@ package com.easylib.dima.easylib.ConnectionLayer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,12 +14,16 @@ import java.util.Map;
 public class MessagesFromServerHandler {
 
     private Map<String, ContextCreator> map;
-    private SocketClient client;
+//    private SocketClient client;
+    private ObjectInputStream objectInputStream;
+    private ObjectOutputStream objectOutputStream;
 
 
-    MessagesFromServerHandler(SocketClient client){
+    MessagesFromServerHandler(ObjectOutputStream outputStream, ObjectInputStream inputStream){
         map = new HashMap<>();
-        this.client = client;
+//        this.client = client;
+        this.objectInputStream = inputStream;
+        this.objectOutputStream = outputStream;
 
         map.put(CommunicationConstants.TEST_CONN, this::test);
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
@@ -63,6 +68,12 @@ public class MessagesFromServerHandler {
     }
 
     private void userRegistration() {
+        try {
+            boolean res = (boolean) objectInputStream.readObject();
+            System.out.print(res);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void insertLibrary() {
@@ -75,9 +86,9 @@ public class MessagesFromServerHandler {
     }
 
     private void userLogin() {
-        ObjectInputStream inputStream = client.getObjectInputStream();
+//        ObjectInputStream inputStream = client.getObjectInputStream();
         try {
-            boolean res = (boolean) inputStream.readObject();
+            boolean res = (boolean) objectInputStream.readObject();
             System.out.print(res);
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -118,12 +129,7 @@ public class MessagesFromServerHandler {
         System.out.print("TEST\n");
     }
 
-    /**
-     * This method calls winnerComunication method on the client
-     */
-    private void winnerComunication() {
-        client.winnerComunication();
-    }
+
 
     /**
      * It overwrite the functional interface with the reference of a specific method in the map according to the string

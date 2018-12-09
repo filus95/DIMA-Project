@@ -13,8 +13,8 @@ public class NetworkStarter {
         System.out.print("Here\n");
 
 
-            sleep(5*1000);
-//            clientThreadPool.login("Filus", "psw", "raff@io.cit");
+        sleep(5*1000);
+        clientThreadPool.login("Fede", "cacca_addosso", "bettix4@io.cit");
 
     }
 }

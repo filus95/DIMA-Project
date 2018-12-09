@@ -3,11 +3,13 @@ package com.easylib.dima.easylib.ConnectionLayer;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import AnswerClasses.User;
+
 
 public class ClientThreadPool implements Runnable {
     private Thread runningThread;
@@ -16,6 +18,7 @@ public class ClientThreadPool implements Runnable {
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
+    private MessagesFromServerHandler messagesFromServerHandler;
 
 
     ClientThreadPool(){
@@ -28,15 +31,17 @@ public class ClientThreadPool implements Runnable {
 
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
             objectInputStream = new ObjectInputStream(socket.getInputStream());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.messagesFromServerHandler = new MessagesFromServerHandler(objectOutputStream, objectInputStream);
     }
 
     public void run(){
-        synchronized(this){
-            this.runningThread = Thread.currentThread();
-        }
+//        synchronized(this){
+//            this.runningThread = Thread.currentThread();
+//        }
 
         String message;
         try {
@@ -44,8 +49,10 @@ public class ClientThreadPool implements Runnable {
 
                 System.out.print("Listening...\n");
                 message = (String)objectInputStream.readObject();
-                this.threadPool.execute(
-                        new SocketClient(objectInputStream,objectOutputStream, message));
+                messagesFromServerHandler.handleMessage(message);
+
+//                this.threadPool.execute(
+//                        new SocketClient(objectInputStream,objectOutputStream, message));
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -70,16 +77,15 @@ public class ClientThreadPool implements Runnable {
     // MESSAGE TO SEND TO THE SERVER
 
 
-//    public void login(String username, String password, String email){
-//        sendMessage(Constants.USER_LOGIN);
-//
-//        User user = new User();
-//        user.setUsername(username);
-//        user.setPlainPassword(password);
-//        user.setEmail(email);
-//        sendViaSocket(user);
-//        System.out.print("SENT");
-//    }
+    public void login(String username, String password, String email){
+        sendMessage(Constants.REGISTER_USER);
+
+        User user = new User();
+        user.setUsername(username);
+        user.setPlainPassword(password);
+        user.setEmail(email);
+        sendViaSocket(user);
+    }
 
     private void sendViaSocket(Object toSend){
         try {
