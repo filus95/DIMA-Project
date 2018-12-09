@@ -95,6 +95,38 @@ public class DatabaseManager {
         return insertStatement(map, Constants.RESERVATIONS_TABLE_NAME, schema_name);
     }
 
+    public ArrayList<Reservation> getReservations(int user_id, String schema_name) {
+        String query = "select * from "+schema_name+"."+Constants.RESERVATIONS_TABLE_NAME+
+                " where user_id = "+user_id;
+
+        return getQueryReservations(query);
+    }
+
+    private ArrayList<Reservation> getQueryReservations(String query) {
+        ArrayList<Reservation> results = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()){
+                Reservation queryResult = new Reservation();
+                queryResult.setUser_id(rs.getInt("user_id"));
+                queryResult.setBook_idetifier(rs.getString("book_identifier"));
+                queryResult.setBook_title(rs.getString("book_title"));
+                queryResult.setReservation_date(rs.getDate("reservation_date"));
+                queryResult.setStart_res_date(rs.getDate("starting_reservation_date"));
+                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date"));
+                queryResult.setQuantity(rs.getInt("quantity"));
+
+                results.add(queryResult);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
     public boolean insertNewEventPartecipant(Event_partecipant partecipant, String schema_name){
 
         Map<String, Object> map = new HashMap<>();
@@ -446,7 +478,7 @@ public class DatabaseManager {
         return to_ret;
     }
 
-    private ArrayList<Event> getAllEvents(String schema_name, int limit){
+    public ArrayList<Event> getAllEvents(String schema_name, int limit){
         ArrayList<Event> to_ret = new ArrayList<>();
         String query = "select * from "+schema_name+".events";
 
@@ -704,5 +736,7 @@ public class DatabaseManager {
         }
         return to_ret;
     }
+
+
 }
 

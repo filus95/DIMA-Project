@@ -1,6 +1,6 @@
 package com.easylib.server.Database.AnswerClasses;
 
-import java.text.SimpleDateFormat;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,9 +10,9 @@ public class Reservation extends Answer{
     private int user_id;
     private String book_idetifier;
     private String book_title;
-    private SimpleDateFormat reservation_date;
-    private SimpleDateFormat start_res_date;
-    private SimpleDateFormat end_res_date;
+    private Date reservation_date;
+    private Date start_res_date;
+    private Date end_res_date;
     private int quantity;
 
     public Map<String, Object> getMapAttribute(ArrayList<String> columnsName){
@@ -62,27 +62,27 @@ public class Reservation extends Answer{
         this.book_title = book_title;
     }
 
-    public SimpleDateFormat getReservation_date() {
+    public Date getReservation_date() {
         return reservation_date;
     }
 
-    public void setReservation_date(SimpleDateFormat reservation_date) {
+    public void setReservation_date(Date reservation_date) {
         this.reservation_date = reservation_date;
     }
 
-    public SimpleDateFormat getStart_res_date() {
+    public Date getStart_res_date() {
         return start_res_date;
     }
 
-    public void setStart_res_date(SimpleDateFormat start_res_date) {
+    public void setStart_res_date(Date start_res_date) {
         this.start_res_date = start_res_date;
     }
 
-    public SimpleDateFormat getEnd_res_date() {
+    public Date getEnd_res_date() {
         return end_res_date;
     }
 
-    public void setEnd_res_date(SimpleDateFormat end_res_date) {
+    public void setEnd_res_date(Date end_res_date) {
         this.end_res_date = end_res_date;
     }
 
