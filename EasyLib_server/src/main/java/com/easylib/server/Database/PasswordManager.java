@@ -1,6 +1,6 @@
 package com.easylib.server.Database;
 
-import com.easylib.server.Database.AnswerClasses.User;
+import AnswerClasses.User;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -82,14 +82,14 @@ class PasswordManager {
      */
     boolean isExpectedPassword(User user) throws SQLException {
 
-        String sql = "SELECT username, salt, hashed_psd FROM propietary_db.users WHERE username = ?";
+        String sql = "SELECT username, salt, hashed_pd FROM propietary_db.users WHERE username = ?";
 
         PreparedStatement st = this.conn.prepareStatement(sql);
         st.setString(1, user.getUsername());
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {
-            byte[] hash_pass = rs.getBytes("hashed_psd");
+            byte[] hash_pass = rs.getBytes("hashed_pd");
             byte[] salt = rs.getBytes("salt");
 
             byte[] pwdHash = hash(user.getPlainPassword().toCharArray(), salt);

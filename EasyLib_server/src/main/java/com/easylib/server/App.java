@@ -1,7 +1,7 @@
 package com.easylib.server;
 
+import AnswerClasses.News;
 import com.easylib.server.API.GoogleBooks;
-import com.easylib.server.Database.AnswerClasses.News;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
 

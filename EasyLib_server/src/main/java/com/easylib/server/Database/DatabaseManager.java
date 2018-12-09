@@ -1,7 +1,7 @@
 package com.easylib.server.Database;
 
+import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
-import com.easylib.server.Database.AnswerClasses.*;
 
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -651,8 +651,10 @@ public class DatabaseManager {
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, username);
-            pst.executeQuery();
-            ret = true;
+            ResultSet rs = pst.executeQuery();
+
+            if ( rs.getFetchSize() > 0 )
+                ret = true;
 
         } catch (SQLException e) {
             System.out.print("Query Error!");
@@ -701,7 +703,8 @@ public class DatabaseManager {
 
     public boolean addUser(User user) {
 
-        byte[] salt = pm.getNextSalt();byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
+        byte[] salt = pm.getNextSalt();
+        byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
 
         Map<String, Object> map = new HashMap<>();
         map.put("username", user.getUsername());

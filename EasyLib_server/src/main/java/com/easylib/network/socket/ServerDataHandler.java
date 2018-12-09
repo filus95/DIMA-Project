@@ -2,7 +2,7 @@ package com.easylib.network.socket; /**
  * Created by raffaelebongo on 21/05/17.
  */
 
-import com.easylib.server.Database.AnswerClasses.*;
+import AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
 
 import java.io.IOException;
@@ -345,8 +345,14 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void userRegistration(){
         try {
             User user = (User) objectInputStream.readObject();
-            if (!dbms.checkUserExsist(user.getUsername()))
+            socketHandler.sendViaSocket(Constants.REGISTER_USER);
+
+            if (!dbms.checkUserExsist(user.getUsername())) {
                 socketHandler.sendViaSocket(dbms.addUser(user));
+
+            }else
+                socketHandler.sendViaSocket(false);
+
 
 
         } catch (IOException | ClassNotFoundException e) {
