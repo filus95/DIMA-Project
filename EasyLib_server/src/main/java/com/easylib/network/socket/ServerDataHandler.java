@@ -53,6 +53,11 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
         map.put(Constants.USER_LOGIN, this::userLogin);
         map.put(Constants.PASSWORD_FORGOT, this::passwordForgot);
+        map.put(Constants.INSERT_PREFERENCE, this::insertPreference);
+        map.put(Constants.INSERT_RATING, this::insertRating);
+        map.put(Constants.GET_USER_PREFERENCES, this::getUserPreferences);
+        map.put(Constants.GET_WAITING_LIST_BOOK, this::getWaitingListForAbook);
+        map.put(Constants.GET_NEWS, this::getNews);
         // Add new methods
     }
 
@@ -197,6 +202,19 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         socketHandler.sendViaSocket(res);
     }
 
+    private void getNews(){
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+
+            int limit = (int)objectInputStream.readObject();
+
+            socketHandler.sendViaSocket(dbms.getAllNews(schema_name, limit));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void insertWaitingPerson(){
         boolean res = false;
         try {
@@ -211,26 +229,25 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         socketHandler.sendViaSocket(res);
     }
 
-    private void registerUser(){
-        boolean res = false;
-        String schema_name = "propietary_db";
-
+    private void getWaitingListForAbook(){
         try {
-            User newUser = (User) objectInputStream.readObject();
-            res = dbms.registerUser(newUser, schema_name);
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+            String book_id = (String)objectInputStream.readObject();
+
+            socketHandler.sendViaSocket(dbms.getWaitingList(book_id, schema_name));
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        socketHandler.sendViaSocket(res);
     }
 
     private void insertLibrary(){
         boolean res = false;
-        String schema_name = "propietary_db";
 
         try {
             LibraryDescriptor libDesc = (LibraryDescriptor) objectInputStream.readObject();
-            res = dbms.insertNewLibrary(libDesc, schema_name);
+            res = dbms.insertNewLibrary(libDesc, Constants.PROPIETARY_DB);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -244,7 +261,28 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
 
+    private void getUserPreferences(){
+
+        try {
+            int user_id = (int)objectInputStream.readObject();
+            socketHandler.sendViaSocket(dbms.getUserPreferences(user_id));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void insertRating(){
+
+        try {
+            int id_lib = (int)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(id_lib);
+            Rating rating = (Rating) objectInputStream.readObject();
+            socketHandler.sendViaSocket(dbms.insertRating(rating, schema_name));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
     // ONLY FOR TESTING
 

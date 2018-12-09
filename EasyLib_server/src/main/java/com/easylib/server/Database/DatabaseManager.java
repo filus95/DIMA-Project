@@ -92,8 +92,7 @@ public class DatabaseManager {
         // Columns name passed must be in the order of the DB columns
         map = reservInfo.getMapAttribute(columnsName);
 
-        String table_name = "booksreservations";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.RESERVATIONS_TABLE_NAME, schema_name);
     }
 
     public boolean insertNewEventPartecipant(Event_partecipant partecipant, String schema_name){
@@ -105,8 +104,7 @@ public class DatabaseManager {
 
         map = partecipant.getMapAttribute(columnsName);
 
-        String table_name = "event_partecipants";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.EVENT_PARTECIPANT_TABLE_NAME, schema_name);
     }
 
 
@@ -121,8 +119,7 @@ public class DatabaseManager {
 
         map = event.getMapAttribute(columnsName);
 
-        String table_name = "events";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.EVENTS_TABLE_NAME, schema_name);
     }
 
     public boolean insertNews(News news, String schema_name) {
@@ -136,8 +133,7 @@ public class DatabaseManager {
 
         map = news.getMapAttribute(columnsName);
 
-        String table_name = "news";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.NEWS_TABLE_NAME, schema_name);
     }
 
     public boolean insertNewWaitingPerson(WaitingPerson wp, String schema_name) {
@@ -154,8 +150,14 @@ public class DatabaseManager {
 
         map = wp.getMapAttribute(columnsName);
 
-        String table_name = "waitinglist";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.WAITING_LIST_TABLE_NAME, schema_name);
+    }
+
+    public ArrayList<WaitingPerson> getWaitingList(String book_id, String schema_name){
+        String query = "select * from "+schema_name+".waitinglist where " +
+                "book_identifier = "+book_id;
+
+        return getQueryResultsWaitingList(query);
     }
 
     public boolean insertPreferences(UserPreferences up){
@@ -165,9 +167,15 @@ public class DatabaseManager {
         columnsName.add("library_3_id");
 
         Map<String, Object> map = up.getMapAttribute(columnsName);
-        String tableName = "users_preferences";
-        return insertStatement(map, tableName, Constants.PROPIETARY_DB);
+        return insertStatement(map, Constants.PREFERENCE_TABLE_NAME, Constants.PROPIETARY_DB);
 
+    }
+
+    public ArrayList<UserPreferences> getUserPreferences(int user_id) {
+        String query = "select * from "+Constants.PROPIETARY_DB+
+                "."+Constants.PREFERENCE_TABLE_NAME+" where user_id = "+user_id;
+
+        return getQueryResultsPreferences(query);
     }
     public boolean registerUser(User newUser, String schema_name) {
 
@@ -178,8 +186,7 @@ public class DatabaseManager {
 
         map = newUser.getMapAttribute(columnsName);
 
-        String table_name = "users";
-        return insertStatement(map, table_name, schema_name);
+        return insertStatement(map, Constants.USERS_TABLE_NAME, schema_name);
     }
 
     public boolean insertNewLibrary(LibraryDescriptor libDesc, String schema_name) {
@@ -196,10 +203,22 @@ public class DatabaseManager {
 
         map = libDesc.getMapAttribute(columnsName);
 
-        String table_name = "libraries";
-        return insertStatement(map, table_name, schema_name);
-
+        return insertStatement(map, Constants.LIBRARIES_TABLE_NAME, schema_name);
     }
+
+    public boolean insertRating(Rating rating, String schema_name) {
+
+        Map<String, Object> map;
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("user_id");
+        columnsName.add("book_identifier");
+        columnsName.add("rating");
+
+        map = rating.getMapAttribute(columnsName);
+
+        return insertStatement(map, Constants.RATINGS_TABLE_NAME, schema_name);
+    }
+
 
     public boolean insertStatement(Map<String, Object> map, String table_name, String schema_name) {
         boolean res = false;
@@ -266,7 +285,7 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByTitle(String title, String schema_lib) {
         String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+".books where title = '"+title+"'";
+                "from "+schema_lib+"."+Constants.BOOKS_TABLE_NAME+" where title = '"+title+"'";
 
         return getQueryResultsBooks(query);
     }
@@ -348,10 +367,57 @@ public class DatabaseManager {
                         (rs.getString("author_4")));
                 queryResult.setReserved(rs.getBoolean("reserved"));
                 queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
+                queryResult.setAverageRating(rs.getFloat("averageRating"));
                 results.add(queryResult);
             }
         } catch (SQLException e) {
           e.printStackTrace();
+        }
+        return results;
+    }
+
+    private ArrayList<UserPreferences> getQueryResultsPreferences(String query) {
+        ArrayList<UserPreferences> results = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()){
+                UserPreferences queryResult = new UserPreferences();
+                queryResult.setId_lib1(rs.getInt("library_1_id"));
+                queryResult.setId_lib2(rs.getInt("library_2_id"));
+                queryResult.setId_lib3((rs.getInt("library_3_id")));
+
+                results.add(queryResult);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    private ArrayList<WaitingPerson> getQueryResultsWaitingList(String query){
+        ArrayList<WaitingPerson> results = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()){
+                WaitingPerson queryResult = new WaitingPerson();
+                queryResult.setBook_identifier(rs.getString("book_identifier"));
+                queryResult.setWaiting_pos(rs.getInt("waiting_position"));
+                queryResult.setReservation_date(rs.getDate("reservation_date"));
+                queryResult.setStart_res_date(rs.getDate("starting_reservation_date"));
+                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date"));
+                queryResult.setUser_id(rs.getInt("user_id"));
+                queryResult.setQuantity(rs.getInt("quantity"));
+
+                results.add(queryResult);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return results;
     }

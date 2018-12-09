@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class UserPreferences extends Answer{
 
-    private int id_lib1;
-    private int id_lib2;
-    private int id_lib3;
+    private Integer id_lib1 = null;
+    private Integer id_lib2 = null;
+    private Integer id_lib3 = null;
 
     public int getId_lib1() {
         return id_lib1;

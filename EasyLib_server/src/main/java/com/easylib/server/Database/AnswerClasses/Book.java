@@ -12,7 +12,7 @@ public class Book extends Answer {
     private String imageLink;
     private String description;
     private String publisher;
-    private String averageRating;
+    private Float averageRating;
     private String langauge;
     private String publishedDate;
     private ArrayList<String> authors;
@@ -77,11 +77,11 @@ public class Book extends Answer {
         this.publisher = publisher;
     }
 
-    public String getAverageRating() {
+    public Float getAverageRating() {
         return averageRating;
     }
 
-    public void setAverageRating(String averageRating) {
+    public void setAverageRating(Float averageRating) {
         this.averageRating = averageRating;
     }
 

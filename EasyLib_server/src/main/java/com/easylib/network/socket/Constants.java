@@ -6,7 +6,11 @@ package com.easylib.network.socket;
  */
 public class Constants {
 
-    // Communication strings
+    static final String GET_NEWS = "get_news";
+    static final String GET_WAITING_LIST_BOOK = "get_waiting_list_book";
+    static final String GET_USER_PREFERENCES = "get_user_preferences";
+    static final String INSERT_RATING = "insert_rating";
+    static final String INSERT_PREFERENCE = "insert_preference";
     static final String PASSWORD_FORGOT = "password_forgot";
     static final String USER_LOGIN = "user_login";
     static final String GET_ALL_LIBRARIES = "get_all_libraries";
@@ -22,10 +26,13 @@ public class Constants {
     static final String INSERT_EVENT = "insert_event";
     static final String TEST_CONN = "test";
     static final String GET_ALL_BOOKS = "get_all_books";
+    // Communication strings
 
     // DB strings
     // Schema names
     public static final String PROPIETARY_DB = "propietary_db";
+    public static final String LIBRARY_1_DB = "library_1";
+
 
     // Table names
     // PROPIETARY_DB
@@ -42,6 +49,5 @@ public class Constants {
     public static final String NEWS_TABLE_NAME = "news";
     public static final String RATINGS_TABLE_NAME = "ratings";
     public static final String WAITING_LIST_TABLE_NAME = "waitinglist";
-
 
 }
