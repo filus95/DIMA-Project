@@ -203,22 +203,11 @@ public class DatabaseManager {
 
     }
 
-    public ArrayList<UserPreferences> getUserPreferences(int user_id) {
+    public ArrayList<Integer> getUserPreferences(int user_id) {
         String query = "select * from "+Constants.PROPIETARY_DB+
                 "."+Constants.PREFERENCE_TABLE_NAME+" where user_id = "+user_id;
 
         return getQueryResultsPreferences(query);
-    }
-    public boolean registerUser(User newUser, String schema_name) {
-
-        Map<String, Object> map;
-        ArrayList<String> columnsName = new ArrayList<>();
-        columnsName.add("username");
-        columnsName.add("email");
-
-        map = newUser.getMapAttribute(columnsName);
-
-        return insertStatement(map, Constants.USERS_TABLE_NAME, schema_name);
     }
 
     public boolean insertNewLibrary(LibraryDescriptor libDesc, String schema_name) {
@@ -408,8 +397,8 @@ public class DatabaseManager {
         return results;
     }
 
-    private ArrayList<UserPreferences> getQueryResultsPreferences(String query) {
-        ArrayList<UserPreferences> results = new ArrayList<>();
+    private ArrayList<Integer> getQueryResultsPreferences(String query) {
+        ArrayList<Integer> results = new ArrayList<>();
 
         try {
             Statement st = conn.createStatement();
@@ -417,11 +406,10 @@ public class DatabaseManager {
 
             while (rs.next()){
                 UserPreferences queryResult = new UserPreferences();
-                queryResult.setId_lib1(rs.getInt("library_1_id"));
-                queryResult.setId_lib2(rs.getInt("library_2_id"));
-                queryResult.setId_lib3((rs.getInt("library_3_id")));
+                results.add(rs.getInt("library_1_id"));
+                results.add(rs.getInt("library_2_id"));
+                results.add(rs.getInt("library_3_id"));
 
-                results.add(queryResult);
             }
         } catch (SQLException e) {
             e.printStackTrace();

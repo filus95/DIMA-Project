@@ -292,7 +292,13 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
         try {
             int user_id = (int)objectInputStream.readObject();
-            socketHandler.sendViaSocket(dbms.getUserPreferences(user_id));
+            ArrayList<Integer> pref_lib_ids = dbms.getUserPreferences(user_id);
+
+            ArrayList<LibraryDescriptor> ld = new ArrayList<>();
+            for ( Integer id : pref_lib_ids)
+                ld.add(getLibraryDescriptor(id));
+
+            socketHandler.sendViaSocket(ld);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
