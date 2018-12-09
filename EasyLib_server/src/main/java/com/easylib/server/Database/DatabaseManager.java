@@ -1,5 +1,6 @@
 package com.easylib.server.Database;
 
+import com.easylib.network.socket.Constants;
 import com.easylib.server.Database.AnswerClasses.*;
 
 import java.sql.*;
@@ -157,6 +158,17 @@ public class DatabaseManager {
         return insertStatement(map, table_name, schema_name);
     }
 
+    public boolean insertPreferences(UserPreferences up){
+        ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("library_1_id");
+        columnsName.add("library_2_id");
+        columnsName.add("library_3_id");
+
+        Map<String, Object> map = up.getMapAttribute(columnsName);
+        String tableName = "users_preferences";
+        return insertStatement(map, tableName, Constants.PROPIETARY_DB);
+
+    }
     public boolean registerUser(User newUser, String schema_name) {
 
         Map<String, Object> map;
@@ -454,7 +466,7 @@ public class DatabaseManager {
     ///////////////////////////////////// RETRIEVING DATA FROM PROPIETARY DB//////////////////////////////////////////////////
 
     public String getSchemaNameLib(int id_lib) {
-        String query = "select schema_name from proprietary_db.libraries where " +
+        String query = "select schema_name from "+Constants.PROPIETARY_DB+".libraries where " +
                 "libraries.id_lib = "+id_lib+"";
 
         Statement st;
@@ -474,7 +486,7 @@ public class DatabaseManager {
     }
 
     public LibraryDescriptor getLibraryInfo(int id_lib) {
-        String query = "select * from propietary_db.libraries " +
+        String query = "select * from "+ Constants.PROPIETARY_DB+".libraries " +
                 "where id_lib = "+id_lib;
 
         Statement st;
@@ -525,7 +537,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Integer> getAllIdLibs() {
-        String query = "select * from propietary_db.libraries";
+        String query = "select * from "+Constants.PROPIETARY_DB+".libraries";
         Statement st;
         ArrayList<Integer> to_ret = new ArrayList<>();
         try {
@@ -548,7 +560,7 @@ public class DatabaseManager {
         boolean ret = false;
         try {
 
-            String sql = "SELECT username FROM propietary_db.users " +
+            String sql = "SELECT username FROM "+Constants.PROPIETARY_DB+".users " +
                     "WHERE username = ?";
 
             PreparedStatement pst = conn.prepareStatement(sql);
@@ -568,7 +580,7 @@ public class DatabaseManager {
 
         ResultSet rs = null;
         try {
-            String query = "select * from propietary_db.users where propietary_db.users.username =" +
+            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.username =" +
                     " "+user.getUsername();
 
             PreparedStatement st = conn.prepareStatement(query);
@@ -591,9 +603,8 @@ public class DatabaseManager {
                 email = rs.getString("email");
 
             System.out.print("deleting old row...");
-            String schemaName = "propietary_db";
             String tableName = "users";
-            deleteStatementUsers(user, tableName, schemaName);
+            deleteStatementUsers(user, tableName, Constants.PROPIETARY_DB);
             System.out.print("changing forgotten password..");
             res = pm.changeForgottenPassword(user.getUsername(), email);
         } catch (SQLException e) {
@@ -613,9 +624,8 @@ public class DatabaseManager {
         map.put("salt", salt);
         //secondo me non serve a nulla
 
-        String schema_name = "propietary_db";
         String tableName = "users";
-        return  insertStatement(map, tableName, schema_name);
+        return  insertStatement(map, tableName, Constants.PROPIETARY_DB);
     }
 
     public boolean checkCorrectPassword(User user) {

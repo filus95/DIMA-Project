@@ -4,16 +4,13 @@ package com.easylib.network.socket; /**
 
 import com.easylib.server.Database.AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
-import com.sun.tools.internal.jxc.ap.Const;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  * This class receive the message from "SocketPlayerHandler" and call a method back on that class according to the
@@ -55,7 +52,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         map.put(Constants.GET_LIBRARY_INFO, this::getLibraryInfo);
         map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
         map.put(Constants.USER_LOGIN, this::userLogin);
-        map.put(Constants.PASSWOD_FORGOT, this::passwordForgot);
+        map.put(Constants.PASSWORD_FORGOT, this::passwordForgot);
         // Add new methods
     }
 
@@ -238,6 +235,16 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
             e.printStackTrace();
         }
         socketHandler.sendViaSocket(res);
+    }
+
+    private void insertPreference(){
+        try {
+            UserPreferences up = (UserPreferences) objectInputStream.readObject();
+            socketHandler.sendViaSocket(dbms.insertPreferences(up));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
     // ONLY FOR TESTING
 

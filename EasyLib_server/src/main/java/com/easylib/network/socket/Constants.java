@@ -4,9 +4,10 @@ package com.easylib.network.socket;
 /**
  *  Constants
  */
-class Constants {
+public class Constants {
 
-    static final String PASSWOD_FORGOT = "password_forgot";
+    // Communication strings
+    static final String PASSWORD_FORGOT = "password_forgot";
     static final String USER_LOGIN = "user_login";
     static final String GET_ALL_LIBRARIES = "get_all_libraries";
     static final String GET_LIBRARY_INFO = "get_library_info";
@@ -21,10 +22,26 @@ class Constants {
     static final String INSERT_EVENT = "insert_event";
     static final String TEST_CONN = "test";
     static final String GET_ALL_BOOKS = "get_all_books";
-//    Add communication strings
 
-    /**
-     * Constrcutor
-     */
-    private Constants(){}
+    // DB strings
+    // Schema names
+    public static final String PROPIETARY_DB = "propietary_db";
+
+    // Table names
+    // PROPIETARY_DB
+    public static final String PREFERENCE_TABLE_NAME = "user_preferences";
+    public static final String USERS_TABLE_NAME = "users";
+    public static final String NOTIFICATION_TABLE_NAME = "notifications";
+    public static final String LIBRARIES_TABLE_NAME = "libraries";
+
+    //LIBRARY DB
+    public static final String BOOKS_TABLE_NAME = "books";
+    public static final String RESERVATIONS_TABLE_NAME = "booksreservations";
+    public static final String EVENT_PARTECIPANT_TABLE_NAME = "event_partecipants";
+    public static final String EVENTS_TABLE_NAME = "events";
+    public static final String NEWS_TABLE_NAME = "news";
+    public static final String RATINGS_TABLE_NAME = "ratings";
+    public static final String WAITING_LIST_TABLE_NAME = "waitinglist";
+
+
 }
