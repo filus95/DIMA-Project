@@ -357,6 +357,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void userLogin(){
         try {
             User user = (User) objectInputStream.readObject();
+            socketHandler.sendViaSocket(Constants.USER_LOGIN);
             socketHandler.sendViaSocket(dbms.checkCorrectPassword(user));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
