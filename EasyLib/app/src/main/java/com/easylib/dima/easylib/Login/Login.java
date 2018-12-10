@@ -28,11 +28,13 @@ public class Login extends AppCompatActivity {
         if( username.length() == 0 || password.length() == 0)
             findViewById(R.id.text_error).setVisibility(View.VISIBLE);
 
-        //TODO: Make the call to Server
+        else {
 
-        //Just for test
-        //Intent intent = new Intent(this, MainActivity.class);
-        //startActivity(intent);
+            //TODO: Make the call to Server
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     public void register(View view) {

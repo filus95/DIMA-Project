@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Main;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,12 @@ import android.widget.FrameLayout;
 
 import com.easylib.dima.easylib.R;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+            implements HomeFragment.OnFragmentInteractionListener,
+            CalendarFragment.OnFragmentInteractionListener,
+            ProfileFragment.OnFragmentInteractionListener,
+            QueueFragment.OnFragmentInteractionListener,
+            ScanFragment.OnFragmentInteractionListener {
 
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
@@ -76,5 +82,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.commit();
+    }
+
+    public void onFragmentInteraction(Uri uri) {
+        //empty
     }
 }
