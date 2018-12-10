@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.R;
@@ -24,11 +25,14 @@ public class Login extends AppCompatActivity {
         EditText pText = (EditText) findViewById(R.id.password);
         String password = pText.getText().toString();
 
+        if( username.length() == 0 || password.length() == 0)
+            findViewById(R.id.text_error).setVisibility(View.VISIBLE);
+
         //TODO: Make the call to Server
 
         //Just for test
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        //Intent intent = new Intent(this, MainActivity.class);
+        //startActivity(intent);
     }
 
     public void register(View view) {

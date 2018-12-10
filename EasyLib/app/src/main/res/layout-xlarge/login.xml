@@ -7,6 +7,21 @@
     tools:context=".login"
     android:background="@drawable/login_back">
 
+    <TextView
+        android:id="@+id/text_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:fontFamily="serif"
+        android:text="Fields not filled up"
+        android:textColor="@color/colorAccent"
+        android:textSize="28sp"
+        android:typeface="normal"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password" />
+
     <ImageButton
         android:id="@+id/reg_bt2"
         android:layout_width="wrap_content"
