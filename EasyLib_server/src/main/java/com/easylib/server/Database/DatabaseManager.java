@@ -123,6 +123,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            results = null;
         }
         return results;
     }
@@ -261,6 +262,7 @@ public class DatabaseManager {
             res = true;
         } catch (SQLException e) {
             e.printStackTrace();
+            res = false;
         }
 
         try {
@@ -393,6 +395,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
           e.printStackTrace();
+          results = null;
         }
         return results;
     }
@@ -413,6 +416,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            results = null;
         }
         return results;
     }
@@ -438,6 +442,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            results = null;
         }
         return results;
     }
@@ -462,6 +467,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            to_ret = null;
         }
         return to_ret;
     }
@@ -486,6 +492,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            to_ret = null;
         }
         return to_ret;
     }
@@ -567,7 +574,7 @@ public class DatabaseManager {
         return res;
         } catch (SQLException e) {
             e.printStackTrace();
-            return "ERROR";
+            return null;
         }
     }
 
@@ -636,6 +643,7 @@ public class DatabaseManager {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            to_ret = null;
         }
         return to_ret;
 
@@ -666,7 +674,7 @@ public class DatabaseManager {
 
     ResultSet queryUser ( User user ){
 
-        ResultSet rs = null;
+        ResultSet rs;
         try {
             String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.username =" +
                     " "+user.getUsername();
@@ -677,6 +685,7 @@ public class DatabaseManager {
             rs = st.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            rs = null;
         }
         return rs;
     }
@@ -697,6 +706,7 @@ public class DatabaseManager {
             res = pm.changeForgottenPassword(user.getUsername(), email);
         } catch (SQLException e) {
             e.printStackTrace();
+            res = false;
         }
         return res;
     }
@@ -718,12 +728,13 @@ public class DatabaseManager {
     }
 
     public boolean checkCorrectPassword(User user) {
-        boolean to_ret = false;
+        boolean to_ret;
         try {
             to_ret = pm.isExpectedPassword(user);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.print("QUERY ERROR!");
+            to_ret = false;
         }
         return to_ret;
     }
