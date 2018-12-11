@@ -24,7 +24,7 @@ public class ClientThreadPool implements Runnable {
     ClientThreadPool(){
         isStopped  = false;
         this.runningThread= null;
-        this.threadPool = Executors.newFixedThreadPool(10);
+//        this.threadPool = Executors.newFixedThreadPool(10);
         try {
             socket = new Socket(CommunicationConstants.SERVER_IP_ADDRESS,
                     Integer.parseInt(CommunicationConstants.SOCKET_PORT));
@@ -58,7 +58,7 @@ public class ClientThreadPool implements Runnable {
             e.printStackTrace();
         }
         // close the connection
-        this.threadPool.shutdown();
+//        this.threadPool.shutdown();
 
         try {
 

@@ -52,18 +52,23 @@ public class MessagesFromServerHandler {
     private void bookQuery() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertReservation() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertEventPartecipant() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertEvent() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertNews() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives fals
     private void insertWaitingPerson() {
     }
 
@@ -76,55 +81,63 @@ public class MessagesFromServerHandler {
         }
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertLibrary() {
     }
 
+    //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo() {
     }
 
+    //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
     private void getAllLibraries() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void userLogin() {
-//        ObjectInputStream inputStream = client.getObjectInputStream();
-        try {
-            boolean res = (boolean) objectInputStream.readObject();
-            System.out.print(res);
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void passwordForgot() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertPreference() {
     }
 
+    //it receives a true boolean from the stream. If something wrong, receives false
     private void insertRating() {
     }
 
+    //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
     private void getUserPreferences() {
     }
 
+    //it receives a WaitingPerson arraylist from the stream. If something wrong, receives null
     private void getWaitingListForAbook() {
     }
 
+    //it receives a News arraylist from the stream. If something wrong, receives null
     private void getNews() {
     }
 
+    //it receives a Event arraylist from the stream. If something wrong, receives null
     private void getEvents() {
     }
 
+    //it receives a Reservation arraylist from the stream. If something wrong, receives null
     private void getUserReservations() {
     }
 
+    //it receives a String from the stream. If something wrong, receives null
     private void librayConnInfo() {
     }
 
+    //it receives a Book arraylist from the stream. If something wrong, receives null
     private void getAllBooks() {
     }
 
+    // test
     private void test() {
         System.out.print("TEST\n");
     }
