@@ -1,10 +1,15 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
+import android.widget.ArrayAdapter;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import AnswerClasses.LibraryDescriptor;
 
 /**
  * Class used to manage the answers coming from the server: we firstly receive a string that
@@ -54,6 +59,7 @@ public class MessagesFromServerHandler {
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertReservation() {
+
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
@@ -87,6 +93,13 @@ public class MessagesFromServerHandler {
 
     //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo() {
+        try {
+            ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>) objectInputStream.readObject();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null

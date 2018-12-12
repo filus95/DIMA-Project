@@ -1,12 +1,13 @@
 package com.easylib.dima.easylib.Login;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.easylib.dima.easylib.ConnectionLayer.NetworkStarter;
 import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.R;
 
@@ -16,6 +17,7 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        new StartNetwork().execute();
     }
 
     public void login(View view) {
@@ -48,5 +50,17 @@ public class Login extends AppCompatActivity {
 
     public void loginGoogle(View view) {
         //TODO: call Google Login API
+    }
+
+    private static class StartNetwork extends AsyncTask<Void, String, Void> {
+        protected Void doInBackground(Void... voids) {
+            NetworkStarter networkStarter = new NetworkStarter();
+            try {
+                networkStarter.startNetwork();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
     }
 }

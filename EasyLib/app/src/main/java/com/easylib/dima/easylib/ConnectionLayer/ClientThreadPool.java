@@ -4,7 +4,10 @@ package com.easylib.dima.easylib.ConnectionLayer;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -21,12 +24,13 @@ public class ClientThreadPool implements Runnable {
     private MessagesFromServerHandler messagesFromServerHandler;
 
 
-    ClientThreadPool(){
+    public ClientThreadPool(){
         isStopped  = false;
         this.runningThread= null;
 //        this.threadPool = Executors.newFixedThreadPool(10);
         try {
-            socket = new Socket(CommunicationConstants.SERVER_IP_ADDRESS,
+
+            socket = new Socket("10.169.212.234",
                     Integer.parseInt(CommunicationConstants.SOCKET_PORT));
 
             objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -86,6 +90,15 @@ public class ClientThreadPool implements Runnable {
         user.setEmail(email);
         sendViaSocket(user);
     }
+
+    public void sendRegistration(User user){
+        sendViaSocket(Constants.REGISTER_USER);
+        sendViaSocket(user);
+
+        // TODO: method to call for activating a waiting screen
+    }
+
+
 
     private void sendViaSocket(Object toSend){
         try {

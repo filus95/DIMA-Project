@@ -4,7 +4,7 @@ import static java.lang.Thread.sleep;
 
 public class NetworkStarter {
 
-    NetworkStarter() {
+    public NetworkStarter() {
     }
 
     public void startNetwork() throws InterruptedException {
@@ -14,7 +14,8 @@ public class NetworkStarter {
 
 
         sleep(5*1000);
-        clientThreadPool.login("Fede", "cacca_addosso", "bettix4@io.cit");
+//        clientThreadPool.login("Fede", "cacca_addosso", "bettix4@io.cit");
 
     }
+
 }
