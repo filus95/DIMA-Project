@@ -7,17 +7,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.NetworkStarter;
 import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.R;
 
 public class Login extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        new StartNetwork().execute();
+        startService(new Intent(Login.this, ConnectionService.class));
     }
 
     public void login(View view) {
@@ -55,11 +55,7 @@ public class Login extends AppCompatActivity {
     private static class StartNetwork extends AsyncTask<Void, String, Void> {
         protected Void doInBackground(Void... voids) {
             NetworkStarter networkStarter = new NetworkStarter();
-            try {
-                networkStarter.startNetwork();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            networkStarter.startNetwork();
             return null;
         }
     }

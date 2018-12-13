@@ -1,11 +1,16 @@
 package com.easylib.dima.easylib.Login;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
+import com.easylib.dima.easylib.ConnectionLayer.ClientThreadPool;
+import com.easylib.dima.easylib.ConnectionLayer.NetworkStarter;
 import com.easylib.dima.easylib.R;
+
+import AnswerClasses.User;
 
 public class Register extends AppCompatActivity {
 
@@ -30,7 +35,19 @@ public class Register extends AppCompatActivity {
                 password.length() == 0 )
             findViewById(R.id.text_error).setVisibility(View.VISIBLE);
 
+        User user = new User();
+        user.setUsername(surname);
+        user.setEmail(email);
+        user.setPlainPassword(password);
+        new sendMessage().execute();
+        //        .sendRegistration(user);
         //TODO register method
+    }
 
+    private static class sendMessage extends AsyncTask<User, String, Void> {
+        @Override
+        protected Void doInBackground(User... user) {
+            return null;
+        }
     }
 }

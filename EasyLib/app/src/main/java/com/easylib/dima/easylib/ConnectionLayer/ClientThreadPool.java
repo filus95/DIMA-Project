@@ -1,6 +1,8 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
 
+import android.os.Handler;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,48 +24,42 @@ public class ClientThreadPool implements Runnable {
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
     private MessagesFromServerHandler messagesFromServerHandler;
+    private Handler handler;
 
 
-    public ClientThreadPool(){
+    ClientThreadPool(Handler handler){
         isStopped  = false;
         this.runningThread= null;
-//        this.threadPool = Executors.newFixedThreadPool(10);
-        try {
+        this.handler = handler;
+        this.messagesFromServerHandler = new MessagesFromServerHandler(objectOutputStream,
+                objectInputStream, handler);
 
-            socket = new Socket("10.169.212.234",
-                    Integer.parseInt(CommunicationConstants.SOCKET_PORT));
 
-            objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
-            objectInputStream = new ObjectInputStream(socket.getInputStream());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        this.messagesFromServerHandler = new MessagesFromServerHandler(objectOutputStream, objectInputStream);
     }
 
     public void run(){
-//        synchronized(this){
-//            this.runningThread = Thread.currentThread();
-//        }
-
         String message;
         try {
+            try {
+
+                socket = new Socket("192.168.1.5",
+                        Integer.parseInt(CommunicationConstants.SOCKET_PORT));
+
+                objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                objectInputStream = new ObjectInputStream(socket.getInputStream());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             while (!isStopped) {
 
                 System.out.print("Listening...\n");
                 message = (String)objectInputStream.readObject();
                 messagesFromServerHandler.handleMessage(message);
 
-//                this.threadPool.execute(
-//                        new SocketClient(objectInputStream,objectOutputStream, message));
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-        // close the connection
-//        this.threadPool.shutdown();
-
         try {
 
             objectInputStream.close();

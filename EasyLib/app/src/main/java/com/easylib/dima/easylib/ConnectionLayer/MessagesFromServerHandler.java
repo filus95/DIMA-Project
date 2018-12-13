@@ -1,5 +1,7 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
+import android.os.Handler;
+import android.os.Message;
 import android.widget.ArrayAdapter;
 
 import java.io.IOException;
@@ -10,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.User;
 
 /**
  * Class used to manage the answers coming from the server: we firstly receive a string that
@@ -22,11 +25,13 @@ public class MessagesFromServerHandler {
 //    private SocketClient client;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
+    private Handler handler;
 
 
-    MessagesFromServerHandler(ObjectOutputStream outputStream, ObjectInputStream inputStream){
+    MessagesFromServerHandler(ObjectOutputStream outputStream, ObjectInputStream inputStream, Handler handler){
         map = new HashMap<>();
 //        this.client = client;
+        this.handler = handler;
         this.objectInputStream = inputStream;
         this.objectOutputStream = outputStream;
 
@@ -80,8 +85,11 @@ public class MessagesFromServerHandler {
 
     private void userRegistration() {
         try {
+            Message message = new Message();
             boolean res = (boolean) objectInputStream.readObject();
-            System.out.print(res);
+            message.obj = res;
+            handler.handleMessage(message);
+
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }

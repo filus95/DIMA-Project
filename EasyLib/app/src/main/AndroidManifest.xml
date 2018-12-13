@@ -20,6 +20,13 @@
         </activity>
         <activity android:name=".Main.MainActivity" />
         <activity android:name=".Login.Register"></activity>
+
+        <service
+            android:name=".ConnectionLayer.ConnectionService"
+            >
+        </service>
     </application>
+
+    
 
 </manifest>
