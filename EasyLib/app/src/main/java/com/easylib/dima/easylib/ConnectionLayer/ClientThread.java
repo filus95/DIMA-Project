@@ -1,11 +1,15 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
 
+import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
@@ -16,9 +20,8 @@ import java.util.concurrent.Executors;
 import AnswerClasses.User;
 
 
-public class ClientThreadPool implements Runnable {
-    private Thread runningThread;
-    private ExecutorService threadPool;
+public class ClientThread implements Runnable, Serializable {
+    private ConnectionService connectionService;
     private boolean isStopped;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
@@ -27,14 +30,10 @@ public class ClientThreadPool implements Runnable {
     private Handler handler;
 
 
-    ClientThreadPool(Handler handler){
+    ClientThread(Handler handler, ConnectionService connectionService){
         isStopped  = false;
-        this.runningThread= null;
+        this.connectionService = connectionService;
         this.handler = handler;
-        this.messagesFromServerHandler = new MessagesFromServerHandler(objectOutputStream,
-                objectInputStream, handler);
-
-
     }
 
     public void run(){
@@ -44,9 +43,11 @@ public class ClientThreadPool implements Runnable {
 
                 socket = new Socket("192.168.1.5",
                         Integer.parseInt(CommunicationConstants.SOCKET_PORT));
-
                 objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                connectionService.setOut(objectOutputStream);
                 objectInputStream = new ObjectInputStream(socket.getInputStream());
+                this.messagesFromServerHandler = new MessagesFromServerHandler(objectInputStream, handler);
+                connectionService.setOut(objectOutputStream);
             } catch (IOException e) {
                 e.printStackTrace();
             }

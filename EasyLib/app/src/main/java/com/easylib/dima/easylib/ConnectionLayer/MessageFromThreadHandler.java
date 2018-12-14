@@ -1,41 +1,22 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
-import android.widget.ArrayAdapter;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import AnswerClasses.LibraryDescriptor;
-import AnswerClasses.User;
 
-/**
- * Class used to manage the answers coming from the server: we firstly receive a string that
- * explain the message's content and we call the correct method to manage that kind of communication
- *
- */
-public class MessagesFromServerHandler {
-
+public class MessageFromThreadHandler implements Serializable{
     private Map<String, ContextCreator> map;
-//    private SocketClient client;
-    private ObjectInputStream objectInputStream;
-    private Handler handler;
 
-
-    MessagesFromServerHandler( ObjectInputStream inputStream, Handler handler){
+    MessageFromThreadHandler(){
         map = new HashMap<>();
-//        this.client = client;
-        this.handler = handler;
-        this.objectInputStream = inputStream;
 
         map.put(CommunicationConstants.TEST_CONN, this::test);
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
@@ -61,137 +42,100 @@ public class MessagesFromServerHandler {
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
     }
 
-    private void bookQuery() {
+    // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
+    // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
+    private void bookQuery(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertReservation() {
+    private void insertReservation(Bundle bundle) {
 
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertEventPartecipant() {
+    private void insertEventPartecipant(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertEvent() {
+    private void insertEvent(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertNews() {
+    private void insertNews(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertWaitingPerson() {
+    private void insertWaitingPerson(Bundle bundle) {
     }
 
-    private void userRegistration() {
-        try {
-            Bundle b = new Bundle();
-            Message message = handler.obtainMessage();
-
-            boolean res = (boolean) objectInputStream.readObject();
-            b.putSerializable(Constants.REGISTER_USER, res );
-
-            //Extract the key to use in the map in the UI thread
-//            Set<String> x = b.keySet();
-//            Iterator c = x.iterator();
-//            String key = (String) c.next();
-
-            message.obj = b;
-            message.sendToTarget();
-
-        } catch (ClassNotFoundException | IOException e) {
-            e.printStackTrace();
-        }
+    private void userRegistration(Bundle bundle) {
+        System.out.print("HERE");
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertLibrary() {
+    private void insertLibrary(Bundle bundle) {
     }
 
     //it receives a Library descriptor object from the stream. If something wrong, receives null
-    private void getLibraryInfo() {
-        try {
-            ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>) objectInputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void getLibraryInfo(Bundle bundle) {
     }
 
     //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
-    private void getAllLibraries() {
+    private void getAllLibraries(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void userLogin() {
+    private void userLogin(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void passwordForgot() {
+    private void passwordForgot(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertPreference() {
+    private void insertPreference(Bundle bundle) {
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertRating() {
+    private void insertRating(Bundle bundle) {
     }
 
     //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
-    private void getUserPreferences() {
+    private void getUserPreferences(Bundle bundle) {
     }
 
     //it receives a WaitingPerson arraylist from the stream. If something wrong, receives null
-    private void getWaitingListForAbook() {
+    private void getWaitingListForAbook(Bundle bundle) {
     }
 
     //it receives a News arraylist from the stream. If something wrong, receives null
-    private void getNews() {
+    private void getNews(Bundle bundle) {
     }
 
     //it receives a Event arraylist from the stream. If something wrong, receives null
-    private void getEvents() {
+    private void getEvents(Bundle bundle) {
     }
 
     //it receives a Reservation arraylist from the stream. If something wrong, receives null
-    private void getUserReservations() {
+    private void getUserReservations(Bundle bundle) {
     }
 
     //it receives a String from the stream. If something wrong, receives null
-    private void librayConnInfo() {
+    private void librayConnInfo(Bundle bundle) {
     }
 
     //it receives a Book arraylist from the stream. If something wrong, receives null
-    private void getAllBooks() {
+    private void getAllBooks(Bundle bundle) {
     }
 
     // test
-    private void test() {
+    private void test(Bundle bundle) {
         System.out.print("TEST\n");
     }
 
-
-
-    /**
-     * It overwrite the functional interface with the reference of a specific method in the map according to the string
-     * received from Socket client
-     *
-     * @param message string received from the socket client
-     * @throws IOException  Signals that an I/O exception of some sort has occurred. This
-     * @throws ClassNotFoundException hrown when an application tries to load in a class through its
-     * string name using:
-     * The forName method in class Class.
-     * The findSystemClass method in class ClassLoader.
-     * The loadClass method in class ClassLoader
-     * but no definition for the class with the specified name could be found.
-     */
-    void handleMessage(String message) throws IOException, ClassNotFoundException {
+    void handleMessage(String message, Bundle b) throws IOException, ClassNotFoundException {
         ContextCreator contextCreator = map.get(message);
-        contextCreator.build();
+        contextCreator.build(b);
     }
 
     /**
@@ -199,6 +143,6 @@ public class MessagesFromServerHandler {
      */
     @FunctionalInterface
     private interface ContextCreator{
-        void build() throws IOException, ClassNotFoundException;
+        void build(Bundle bundle) throws IOException, ClassNotFoundException;
     }
 }

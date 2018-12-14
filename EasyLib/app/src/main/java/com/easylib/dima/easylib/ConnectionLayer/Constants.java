@@ -18,7 +18,7 @@ public class Constants {
     static final String GET_ALL_LIBRARIES = "get_all_libraries";
     static final String GET_LIBRARY_INFO = "get_library_info";
     static final String INSERT_NEW_LIBRARY = "insert_new_library";
-    static final String REGISTER_USER = "register_user";
+    static public final String REGISTER_USER = "register_user";
     static final String INSERT_WAITING_PERSON = "insert_waiting_person";
     static final String INSERT_NEWS = "insert_news";
     static final String QUERY_ON_BOOKS = "query_on_books" ;

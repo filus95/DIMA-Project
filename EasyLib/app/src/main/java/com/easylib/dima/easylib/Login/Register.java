@@ -1,22 +1,51 @@
 package com.easylib.dima.easylib.Login;
 
-import android.os.AsyncTask;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.easylib.dima.easylib.ConnectionLayer.ClientThreadPool;
-import com.easylib.dima.easylib.ConnectionLayer.NetworkStarter;
+import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
+import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
 import AnswerClasses.User;
 
 public class Register extends AppCompatActivity {
+    ConnectionService mBoundService;
+    boolean mIsBound;
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((ConnectionService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+    };
+
+    public void doBindService() {
+        bindService(new Intent(Register.this, ConnectionService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+        if(mBoundService!=null){
+            mBoundService.IsBoundable();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        doBindService();
         setContentView(R.layout.register);
     }
 
@@ -39,15 +68,11 @@ public class Register extends AppCompatActivity {
         user.setUsername(surname);
         user.setEmail(email);
         user.setPlainPassword(password);
-        new sendMessage().execute();
-        //        .sendRegistration(user);
-        //TODO register method
-    }
 
-    private static class sendMessage extends AsyncTask<User, String, Void> {
-        @Override
-        protected Void doInBackground(User... user) {
-            return null;
+        //TODO register method
+        if(mBoundService!=null)
+        {
+            mBoundService.sendMessageWithContent(Constants.REGISTER_USER, user );
         }
     }
 }
