@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.easylib.dima.easylib.R;
@@ -86,5 +88,13 @@ public class MainActivity extends AppCompatActivity
 
     public void onFragmentInteraction(Uri uri) {
         //empty
+    }
+
+    public void activateSearch(View view) {
+        EditText searchText = (EditText) findViewById(R.id.search_text);
+        if (searchText.getVisibility() == View.VISIBLE)
+            searchText.setVisibility(View.INVISIBLE);
+        else
+            searchText.setVisibility(View.VISIBLE);
     }
 }
