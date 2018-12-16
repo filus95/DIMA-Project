@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Main;
 
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,7 +9,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 
 import com.easylib.dima.easylib.R;
 
@@ -86,5 +90,18 @@ public class MainActivity extends AppCompatActivity
 
     public void onFragmentInteraction(Uri uri) {
         //empty
+    }
+
+    public void activateSearch(View view) {
+        EditText searchText = (EditText) findViewById(R.id.search_text);
+        ImageButton searchBt = (ImageButton) findViewById(R.id.search_icon);
+        if (searchText.getVisibility() == View.VISIBLE) {
+            searchText.setVisibility(View.INVISIBLE);
+            searchBt.setColorFilter(Color.WHITE);
+        }
+        else {
+            searchText.setVisibility(View.VISIBLE);
+            searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
+        }
     }
 }
