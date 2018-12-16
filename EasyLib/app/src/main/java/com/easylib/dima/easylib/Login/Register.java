@@ -16,12 +16,17 @@ import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+
 import AnswerClasses.User;
 
 public class Register extends Activity {
     ConnectionService mBoundService;
     boolean mIsBound;
 
+    // Create Service bounding inside the class
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -34,20 +39,6 @@ public class Register extends Activity {
         }
     };
 
-    //This is the handler that will manager to process the broadcast intent
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            goToLogin();
-            // Extract data included in the Intent
-//            String message = intent.getStringExtra("message");
-
-            //do other stuff here
-        }
-    };
-
-
     public void doBindService() {
         bindService(new Intent(Register.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
@@ -55,6 +46,32 @@ public class Register extends Activity {
         if(mBoundService!=null){
             mBoundService.IsBoundable();
         }
+    }
+
+    //This is the handler that will manager to process the broadcast intent
+    //This has to be created inside each activity that needs it ( almost anyone )
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key = extractKey(intent);
+
+            if ( key.equals(Constants.REGISTER_USER))
+                goToLogin();
+
+//            else if something Else....
+//            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
+
+
+            // Extract data included in the Intent
+            // String message = intent.getStringExtra("message");
+
+        }
+    };
+
+    private String extractKey(Intent intent){
+        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
+        Iterator iterator = keySet.iterator();
+        return (String)iterator.next();
     }
 
     @Override
@@ -85,7 +102,6 @@ public class Register extends Activity {
         user.setEmail(email);
         user.setPlainPassword(password);
 
-        //TODO register method
         if(mBoundService!=null)
         {
             mBoundService.setCurrentContext(this);
@@ -93,15 +109,9 @@ public class Register extends Activity {
         }
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        this.unregisterReceiver(mMessageReceiver);
-    }
-
     public void goToLogin(){
         Intent intent = new Intent(this, Login.class);
+        this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
 
     }

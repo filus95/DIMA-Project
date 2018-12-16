@@ -72,13 +72,12 @@ public class MessageFromThreadHandler implements Serializable{
             Intent intent = new Intent(Constants.REGISTER_USER);
 
             //put whatever data you want to send, if any
-//            intent.putExtra("message", message);
+            intent.putExtra(Constants.REGISTER_USER, (Bundle) null);
 
             //send broadcast
             this.currentContext.sendBroadcast(intent);
 
         }
-        System.out.print("HERE");
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
