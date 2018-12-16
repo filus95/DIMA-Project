@@ -1,20 +1,19 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Message;
+
+import com.easylib.dima.easylib.Login.Register;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.sql.SQLSyntaxErrorException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import AnswerClasses.LibraryDescriptor;
-
 public class MessageFromThreadHandler implements Serializable{
     private Map<String, ContextCreator> map;
-
+    Context currentContext;
     MessageFromThreadHandler(){
         map = new HashMap<>();
 
@@ -69,6 +68,16 @@ public class MessageFromThreadHandler implements Serializable{
     }
 
     private void userRegistration(Bundle bundle) {
+        if ((boolean)bundle.getSerializable(Constants.REGISTER_USER)) {
+            Intent intent = new Intent(Constants.REGISTER_USER);
+
+            //put whatever data you want to send, if any
+//            intent.putExtra("message", message);
+
+            //send broadcast
+            this.currentContext.sendBroadcast(intent);
+
+        }
         System.out.print("HERE");
     }
 
@@ -136,6 +145,10 @@ public class MessageFromThreadHandler implements Serializable{
     void handleMessage(String message, Bundle b) throws IOException, ClassNotFoundException {
         ContextCreator contextCreator = map.get(message);
         contextCreator.build(b);
+    }
+
+    public void setCurrentContext(Context currentContext) {
+        this.currentContext = currentContext;
     }
 
     /**

@@ -1,11 +1,13 @@
 package com.easylib.dima.easylib.Login;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -16,7 +18,7 @@ import com.easylib.dima.easylib.R;
 
 import AnswerClasses.User;
 
-public class Register extends AppCompatActivity {
+public class Register extends Activity {
     ConnectionService mBoundService;
     boolean mIsBound;
 
@@ -32,6 +34,20 @@ public class Register extends AppCompatActivity {
         }
     };
 
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            goToLogin();
+            // Extract data included in the Intent
+//            String message = intent.getStringExtra("message");
+
+            //do other stuff here
+        }
+    };
+
+
     public void doBindService() {
         bindService(new Intent(Register.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
@@ -41,12 +57,12 @@ public class Register extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         doBindService();
         setContentView(R.layout.register);
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
     }
 
     public void register(View view) {
@@ -72,7 +88,21 @@ public class Register extends AppCompatActivity {
         //TODO register method
         if(mBoundService!=null)
         {
+            mBoundService.setCurrentContext(this);
             mBoundService.sendMessageWithContent(Constants.REGISTER_USER, user );
         }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        this.unregisterReceiver(mMessageReceiver);
+    }
+
+    public void goToLogin(){
+        Intent intent = new Intent(this, Login.class);
+        startActivity(intent);
+
     }
 }

@@ -1,21 +1,21 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.logging.LogRecord;
 
 public class ConnectionHandler implements Serializable{
             private ConnectionService connectionService;
             MessageFromThreadHandler messageFromThreadHandler;
+            Context currentContext;
 
 
             @SuppressLint("HandlerLeak")
@@ -47,5 +47,11 @@ public class ConnectionHandler implements Serializable{
 
     public Handler getHandler() {
         return handler;
+    }
+
+    public void setCurrentContext(Context currentContext) {
+        this.currentContext = currentContext;
+        this.messageFromThreadHandler.setCurrentContext(this.currentContext);
+
     }
 }

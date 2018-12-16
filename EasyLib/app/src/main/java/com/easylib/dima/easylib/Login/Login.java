@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void register(View view) {
-
+        mBoundService.setCurrentContext(this);
         Intent intent = new Intent(this, Register.class);
         startActivity(intent);
     }

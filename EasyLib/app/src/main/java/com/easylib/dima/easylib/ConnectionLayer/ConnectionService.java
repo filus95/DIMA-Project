@@ -1,29 +1,32 @@
 package com.easylib.dima.easylib.ConnectionLayer;
 
-import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
-import android.media.MediaRecorder;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.net.Socket;
-import java.util.Iterator;
-import java.util.Set;
 
 public class ConnectionService extends Service implements Serializable{
     private ConnectionHandler connectionHandler;
     Handler myhandler;
     ClientThread clientThread;
     ObjectOutputStream out;
+    Context currentContext;
+
+    public ConnectionService() {
+        this.connectionHandler = new ConnectionHandler(this);
+        myhandler = connectionHandler.getHandler();
+    }
+
+    public void setCurrentContext(Context currentContext) {
+        this.currentContext = currentContext;
+        this.connectionHandler.setCurrentContext(currentContext);
+    }
 
     public void setOut(ObjectOutputStream out) {
         this.out = out;
@@ -45,11 +48,6 @@ public class ConnectionService extends Service implements Serializable{
 
     public void sendMessageWithContent(String kindOfMessage, Object content){
         new Thread(new SendingThread(out, kindOfMessage, content)).start();
-    }
-
-    public ConnectionService() {
-        this.connectionHandler = new ConnectionHandler(this);
-        myhandler = connectionHandler.getHandler();
     }
 
     @Override
