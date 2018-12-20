@@ -15,6 +15,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easylib.dima.easylib.R;
@@ -26,31 +27,47 @@ public class MainActivity extends AppCompatActivity
             QueueFragment.OnFragmentInteractionListener,
             ScanFragment.OnFragmentInteractionListener {
 
+
+    // Frame for Fragments and BottomNavBar
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
-
+    // Fragments available from main
     private HomeFragment homeFragment;
     private CalendarFragment calendarFragment;
     private ScanFragment scanFragment;
     private QueueFragment queueFragment;
     private ProfileFragment profileFragment;
+    // Search items
+    private EditText searchText;
+    private ImageButton searchBt;
+    private LinearLayout searchLay;
+    private ImageButton clearbt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Frame for Fragments and BottomNavBar
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.bottom_navbar);
-
+        // Fragments available from main
         homeFragment = new HomeFragment();
         calendarFragment = new CalendarFragment();
         scanFragment = new ScanFragment();
         queueFragment = new QueueFragment();
         profileFragment = new ProfileFragment();
+        // Search items
+        searchText = (EditText) findViewById(R.id.search_text);
+        searchBt = (ImageButton) findViewById(R.id.search_icon);
+        searchLay = (LinearLayout) findViewById(R.id.search_lin_layout);
+        clearbt = (ImageButton) findViewById(R.id.clear_bt);
 
+        // Set Initial Fragment to be visualized
         setFragment(homeFragment);
 
+        // Change fragment based on icon clicked on bottomNavBar
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -95,12 +112,18 @@ public class MainActivity extends AppCompatActivity
         //empty
     }
 
-
-    // Method called by the Search icon
-
+    // Method called when the Search icon is clicked
     public void activateSearch(View view) {
-        EditText searchText = (EditText) findViewById(R.id.search_text);
-        ImageButton searchBt = (ImageButton) findViewById(R.id.search_icon);
+
+        // Set Text Visible or Not when Search icon is pressed
+        if (searchLay.getVisibility() == View.VISIBLE) {
+            searchLay.setVisibility(View.INVISIBLE);
+            searchBt.setColorFilter(Color.WHITE);
+        }
+        else {
+            searchLay.setVisibility(View.VISIBLE);
+            searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
+        }
 
         // Change the Enter key on keyborad in a Search button
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -113,15 +136,12 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
+    }
 
-        // Set Text Visible or Not when Search icon is pressed
-        if (searchText.getVisibility() == View.VISIBLE) {
-            searchText.setVisibility(View.INVISIBLE);
-            searchBt.setColorFilter(Color.WHITE);
-        }
-        else {
-            searchText.setVisibility(View.VISIBLE);
-            searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
-        }
+    // When X button is pressed the search text is cleared
+    public void clearSearchText(View view) {
+
+        searchText.getText().clear();
+
     }
 }
