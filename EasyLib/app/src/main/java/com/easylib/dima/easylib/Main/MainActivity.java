@@ -8,11 +8,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.easylib.dima.easylib.R;
 
@@ -92,9 +95,26 @@ public class MainActivity extends AppCompatActivity
         //empty
     }
 
+
+    // Method called by the Search icon
+
     public void activateSearch(View view) {
         EditText searchText = (EditText) findViewById(R.id.search_text);
         ImageButton searchBt = (ImageButton) findViewById(R.id.search_icon);
+
+        // Change the Enter key on keyborad in a Search button
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // TODO: performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // Set Text Visible or Not when Search icon is pressed
         if (searchText.getVisibility() == View.VISIBLE) {
             searchText.setVisibility(View.INVISIBLE);
             searchBt.setColorFilter(Color.WHITE);
