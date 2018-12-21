@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
+import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.R;
 
@@ -58,6 +59,9 @@ public class Login extends AppCompatActivity {
 
     public void login(View view) {
         // Get username & password
+//        Integer num = 1;
+        mBoundService.setCurrentContext(this);
+//        mBoundService.sendMessage(Constants.GET_NEWS, num);
         EditText uText = (EditText) findViewById(R.id.username);
         String username = uText.getText().toString();
         EditText pText = (EditText) findViewById(R.id.password);

@@ -23,14 +23,27 @@ public class SendingThread implements Runnable{
     }
 
     public void run() {
-        sendMessageWithContent(kindMessage, content);
+        if (content == null)
+            sendMessage(kindMessage);
+        else
+            sendMessageWithContent(kindMessage, content);
+
     }
+
+    private void sendMessage(String kindMessage) {
+        try {
+            out.writeObject(kindMessage);
+            out.flush();
+            out.reset();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void sendMessageWithContent(String kindOfMessage, Object content){
         try {
-            out.writeObject(kindOfMessage);
-            out.flush();
-            out.reset();
+            sendMessage(kindOfMessage);
 
             out.writeObject(content);
             out.flush();

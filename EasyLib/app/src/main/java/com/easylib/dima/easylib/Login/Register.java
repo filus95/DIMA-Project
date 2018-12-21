@@ -105,7 +105,7 @@ public class Register extends Activity {
         if(mBoundService!=null)
         {
             mBoundService.setCurrentContext(this);
-            mBoundService.sendMessageWithContent(Constants.REGISTER_USER, user );
+            mBoundService.sendMessage(Constants.REGISTER_USER, user );
         }
     }
 

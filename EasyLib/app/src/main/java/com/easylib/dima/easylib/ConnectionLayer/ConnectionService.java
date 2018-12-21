@@ -46,9 +46,10 @@ public class ConnectionService extends Service implements Serializable{
         }
     }
 
-    public void sendMessageWithContent(String kindOfMessage, Object content){
+    public void sendMessage(String kindOfMessage, Object content){
         new Thread(new SendingThread(out, kindOfMessage, content)).start();
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
