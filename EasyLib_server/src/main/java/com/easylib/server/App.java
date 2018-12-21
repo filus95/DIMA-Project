@@ -1,5 +1,6 @@
 package com.easylib.server;
 
+import AnswerClasses.Event;
 import AnswerClasses.News;
 import AnswerClasses.Reservation;
 import com.easylib.server.API.GoogleBooks;
@@ -11,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventListener;
 
 /**
  * Hello world!
@@ -31,26 +33,27 @@ public class App
                 e.printStackTrace();
             }
          **/
+
+        // todo: always use SimpleDateFormat for dates since windows sucks...
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
 
         String query = "Maradona";
         DatabaseManager dbms = new DatabaseManager();
-        Reservation reservation = new Reservation();
+        // todo: always use SimpleDateFormat for dates since windows sucks...
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 =  simpleDateFormat.parse("2030-11-11");
-        Date date2 =  simpleDateFormat.parse("2031-11-11");
-        Date date3 =  simpleDateFormat.parse("2032-11-11");
+        Date date1 =  simpleDateFormat.parse("2018-12-31");
 
-        reservation.setBook_idetifier("0385542690");
-        reservation.setBook_title("Origin");
-        reservation.setReservation_date(date1);
-        reservation.setQuantity(1);
-        reservation.setStart_res_date(date3);
-        reservation.setEnd_res_date(date2);
-        reservation.setUser_id(1);
-
-        dbms.insertNewReservation(reservation, "library_1");
+        Event event = new Event();
+        event.setTitle("Ufficiale! Heide si faceva la droga.");
+        event.setDescription("Tutto vero");
+        event.setImage_link("www.nonessite.ciao");
+        event.setSeats(15);
+        event.setDate(date1);
+        dbms.insertNewEvent(event, "library_1");
 
         //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);

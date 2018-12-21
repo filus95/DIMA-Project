@@ -152,6 +152,7 @@ public class DatabaseManager {
         columnsName.add("description");
         columnsName.add("image_link");
         columnsName.add("seats");
+        columnsName.add("date");
 
         map = event.getMapAttribute(columnsName);
 
@@ -462,7 +463,7 @@ public class DatabaseManager {
             while (rs.next() && count < limit){
                 News elem = new News();
                 elem.setTitle(rs.getString("title"));
-                elem.setPost_date(new SimpleDateFormat(rs.getString("post_date")));
+                elem.setPost_date(rs.getDate("post_date"));
                 elem.setContent(rs.getString("content"));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
