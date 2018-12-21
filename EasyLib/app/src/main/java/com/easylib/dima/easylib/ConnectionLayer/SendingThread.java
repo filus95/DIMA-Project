@@ -41,6 +41,30 @@ public class SendingThread implements Runnable{
     }
 
 
+    /**
+     * @param kindOfMessage Message from Constants class
+     * @param content Object needed to the Server to perform operations
+     *
+     *                MESSAGE TO THE SERVER : OBJECT TO FILL
+     *                - Login: user
+     *                - Password forgot: user
+     *                - registration: user
+     *                - Library conncetion info: id library (INTEGER not int)( goes from 1 to 2 in the current state )
+     *                - Insert rating: Rating
+     *                - get user preferences: User id (int)
+     *                - insert preferences: User preference
+     *                - getWaitingListForAbook: Book object filled with only book identifier (ISBN) and the id of the library in which it is located
+     *                - getNews: idLib (int)
+     *                - getEvents: idLib (int)
+     *                - insertEventPartecipant: Partecipant filled also with idLib
+     *                - getUserReservations: Reservation filled with idLib and userId
+     *                - insertReservation: Reservation filled with idLib and userId
+     *                - getLibraryInfo: idLib (int)
+     *                - getAllLibraries: only the message in Constants, no objects needed
+     *                - bookQuery: Query,  filled also with idLib
+     *                - getAllBooks: idLib (int)
+     *
+     */
     private void sendMessageWithContent(String kindOfMessage, Object content){
         try {
             sendMessage(kindOfMessage);
