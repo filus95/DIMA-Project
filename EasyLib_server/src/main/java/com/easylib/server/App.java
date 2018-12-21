@@ -1,6 +1,7 @@
 package com.easylib.server;
 
 import AnswerClasses.News;
+import AnswerClasses.Reservation;
 import com.easylib.server.API.GoogleBooks;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
@@ -17,8 +18,7 @@ import java.util.Date;
  */
 public class App 
 {
-    public static void main( String[] args )
-    {
+    public static void main( String[] args ) throws ParseException {
 
         /**
             Connection conn = new DatabaseConnection().startConnection();
@@ -36,11 +36,24 @@ public class App
 
         String query = "Maradona";
         DatabaseManager dbms = new DatabaseManager();
+        Reservation reservation = new Reservation();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 =  simpleDateFormat.parse("2030-11-11");
+        Date date2 =  simpleDateFormat.parse("2031-11-11");
+        Date date3 =  simpleDateFormat.parse("2032-11-11");
 
-//        ArrayList<Object> res = dbms.queryBooksByTitle(query);
+        reservation.setBook_idetifier("0385542690");
+        reservation.setBook_title("Origin");
+        reservation.setReservation_date(date1);
+        reservation.setQuantity(1);
+        reservation.setStart_res_date(date3);
+        reservation.setEnd_res_date(date2);
+        reservation.setUser_id(1);
+
+        dbms.insertNewReservation(reservation, "library_1");
+
+        //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);
-        ArrayList<News> x = dbms.getAllNews("library_1", 5);
-        System.out.print(x.size());
 //        GoogleBooks gb = new GoogleBooks();
 //        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
 //                "library_1");

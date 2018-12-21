@@ -88,6 +88,9 @@ public class DatabaseManager {
         columnsName.add("starting_reservation_date");
         columnsName.add("ending_reservation_date");
         columnsName.add("quantity");
+        // todo: correct bug in jar, there is a duplicated user id
+        columnsName.add("user_id");
+
 
         // Columns name passed must be in the order of the DB columns
         map = reservInfo.getMapAttribute(columnsName);
