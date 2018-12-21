@@ -89,10 +89,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
         try {
             ArrayList<Book> result;
             // receive the library id that the user want to query
-            int id_lib = (int)objectInputStream.readObject();
             // extract the schema_name recorded in the DB of libraries related to id_lib
-            String schema_lib = dbms.getSchemaNameLib(id_lib);
             Query query = (Query)objectInputStream.readObject();
+            String schema_lib = dbms.getSchemaNameLib(query.getIdLib());
+
             if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
                 result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
             else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
@@ -155,10 +155,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void insertReservation(){
         boolean res;
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
 
             Reservation reservation = (Reservation)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
+
             res = dbms.insertNewReservation(reservation, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -170,11 +170,11 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
     private void getUserReservations(){
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
 
-            int user_id = (int)objectInputStream.readObject();
-            ArrayList<Reservation> res = dbms.getReservations(user_id, schema_name);
+            Reservation reservation = (Reservation)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
+
+            ArrayList<Reservation> res = dbms.getReservations(reservation.getUser_id(), schema_name);
             socketHandler.sendViaSocket(Constants.GET_USER_RESERVATION);
             socketHandler.sendViaSocket(res);
         } catch (IOException | ClassNotFoundException e) {
@@ -185,11 +185,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
     private void insertEventPartecipant(){
         boolean res;
-        try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
 
+        try {
             Event_partecipant partecipant = (Event_partecipant)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
             res = dbms.insertNewEventPartecipant(partecipant, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -200,12 +199,13 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     }
 
     private void insertEvent(){
+
         boolean res;
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
 
             Event event = (Event)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(event.getIdLib());
+
             res = dbms.insertNewEvent(event, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -220,7 +220,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
             int id_lib = (int)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(id_lib);
 
-            int limit = (int)objectInputStream.readObject();
+            int limit = 5;
             socketHandler.sendViaSocket(Constants.GET_EVENTS);
             res = dbms.getAllEvents(schema_name, limit);
         } catch (IOException | ClassNotFoundException e) {
@@ -232,11 +232,13 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
     private void insertNews(){
         boolean res;
+
+
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
 
             News news = (News)objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(news.getIdLib());
+
             res = dbms.insertNews(news, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -263,10 +265,11 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void insertWaitingPerson(){
         boolean res;
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
+
 
             WaitingPerson wp = (WaitingPerson) objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(wp.getIdLib());
+
             res = dbms.insertNewWaitingPerson(wp, schema_name);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -279,9 +282,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void getWaitingListForAbook(){
         ArrayList<WaitingPerson> res;
         try {
-            int id_lib = (int)objectInputStream.readObject();
+            Book book = (Book)objectInputStream.readObject();
+            int id_lib = book.getIdLibrary();
             String schema_name = dbms.getSchemaNameLib(id_lib);
-            String book_id = (String)objectInputStream.readObject();
+            String book_id = book.getIdentifier();
             socketHandler.sendViaSocket(Constants.GET_WAITING_LIST_BOOK);
             res = dbms.getWaitingList(book_id, schema_name);
 
@@ -337,10 +341,8 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private void insertRating(){
 
         try {
-            int id_lib = (int)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(id_lib);
             Rating rating = (Rating) objectInputStream.readObject();
-
+            String schema_name = dbms.getSchemaNameLib(rating.getIdLib());
             socketHandler.sendViaSocket(Constants.INSERT_RATING);
             socketHandler.sendViaSocket(dbms.insertRating(rating, schema_name));
         } catch (IOException | ClassNotFoundException e) {
@@ -393,6 +395,7 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
             e.printStackTrace();
         }
     }
+
 
     private void userLogin(){
         try {

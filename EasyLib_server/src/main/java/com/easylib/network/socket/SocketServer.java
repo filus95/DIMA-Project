@@ -33,7 +33,7 @@ class SocketServer implements Runnable{
         this.serverPort = serverPort;
         this.serverSocket = null;
         this.runningThread= null;
-        this.threadPool = Executors.newFixedThreadPool(10);
+        this.threadPool = Executors.newFixedThreadPool(100);
     }
     
     /**
