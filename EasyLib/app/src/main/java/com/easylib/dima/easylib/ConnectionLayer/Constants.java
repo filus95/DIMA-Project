@@ -6,14 +6,14 @@ package com.easylib.dima.easylib.ConnectionLayer;
  */
 public class Constants {
 
-    static final String GET_USER_RESERVATION = "get_user_reservation";
-    static final String GET_EVENTS = "get_events";
-    static final String GET_NEWS = "get_news";
-    static final String GET_WAITING_LIST_BOOK = "get_waiting_list_book";
-    static final String GET_USER_PREFERENCES = "get_user_preferences";
-    static final String INSERT_RATING = "insert_rating";
-    static final String INSERT_PREFERENCE = "insert_preference";
-    static final String PASSWORD_FORGOT = "password_forgot";
+    static public final String GET_USER_RESERVATION = "get_user_reservation";
+    static public final String GET_EVENTS = "get_events";
+    static public final String GET_NEWS = "get_news";
+    static public final String GET_WAITING_LIST_BOOK = "get_waiting_list_book";
+    static public final String GET_USER_PREFERENCES = "get_user_preferences";
+    static public final String INSERT_RATING = "insert_rating";
+    static public final String INSERT_PREFERENCE = "insert_preference";
+    static public final String PASSWORD_FORGOT = "password_forgot";
     static final String USER_LOGIN = "user_login";
     static final String GET_ALL_LIBRARIES = "get_all_libraries";
     static final String GET_LIBRARY_INFO = "get_library_info";
