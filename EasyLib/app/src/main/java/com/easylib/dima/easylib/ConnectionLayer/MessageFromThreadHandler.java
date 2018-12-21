@@ -102,7 +102,6 @@ public class MessageFromThreadHandler implements Serializable{
         }
     }
 
-
     //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo(Bundle bundle) {
         LibraryDescriptor libraryDescriptor = (LibraryDescriptor) bundle.getSerializable(Constants.GET_LIBRARY_INFO);

@@ -15,8 +15,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import AnswerClasses.Answer;
+import AnswerClasses.Book;
+import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.News;
+import AnswerClasses.Reservation;
 import AnswerClasses.User;
+import AnswerClasses.WaitingPerson;
 
 /**
  * Class used to manage the answers coming from the server: we firstly receive a string that
@@ -33,7 +39,6 @@ public class MessagesFromServerHandler {
 
     MessagesFromServerHandler( ObjectInputStream inputStream, Handler handler){
         map = new HashMap<>();
-//        this.client = client;
         this.handler = handler;
         this.objectInputStream = inputStream;
 
@@ -43,11 +48,8 @@ public class MessagesFromServerHandler {
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
         map.put(Constants.INSERT_RESERVATION, this::insertReservation);
         map.put(Constants.INSERT_EVENT_PARTICIPANT, this::insertEventPartecipant);
-        map.put(Constants.INSERT_EVENT, this::insertEvent);
-        map.put(Constants.INSERT_NEWS, this::insertNews);
         map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
         map.put(Constants.REGISTER_USER, this::userRegistration);
-        map.put(Constants.INSERT_NEW_LIBRARY, this::insertLibrary);
         map.put(Constants.GET_LIBRARY_INFO, this::getLibraryInfo);
         map.put(Constants.GET_ALL_LIBRARIES, this::getAllLibraries);
         map.put(Constants.USER_LOGIN, this::userLogin);
@@ -62,27 +64,70 @@ public class MessagesFromServerHandler {
     }
 
     private void bookQuery() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Book> res = (ArrayList<Book>) objectInputStream.readObject();
+            b.putSerializable(Constants.QUERY_ON_BOOKS, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertReservation() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
 
+            boolean res = (boolean)objectInputStream.readObject();
+            b.putSerializable(Constants.INSERT_RESERVATION, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertEventPartecipant() {
-    }
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
 
-    //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertEvent() {
-    }
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.INSERT_EVENT_PARTICIPANT, res );
 
-    //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertNews() {
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertWaitingPerson() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.INSERT_WAITING_PERSON, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void userRegistration() {
@@ -106,67 +151,229 @@ public class MessagesFromServerHandler {
         }
     }
 
-    //it receives a true boolean from the stream. If something wrong, receives false
-    private void insertLibrary() {
-    }
-
     //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo() {
         try {
-            ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>) objectInputStream.readObject();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            LibraryDescriptor res = (LibraryDescriptor) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_LIBRARY_INFO, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }
     }
 
     //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
     private void getAllLibraries() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>)
+                    objectInputStream.readObject();
+            b.putSerializable(Constants.GET_ALL_LIBRARIES, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void userLogin() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.USER_LOGIN, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void passwordForgot() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.PASSWORD_FORGOT, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertPreference() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_USER_PREFERENCES, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertRating() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.INSERT_RATING, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a LibraryDescriptor arraylist from the stream. If something wrong, receives null
     private void getUserPreferences() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<LibraryDescriptor> res =
+                    (ArrayList<LibraryDescriptor>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_USER_PREFERENCES, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a WaitingPerson arraylist from the stream. If something wrong, receives null
     private void getWaitingListForAbook() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<WaitingPerson> res =
+                    (ArrayList<WaitingPerson>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_WAITING_LIST_BOOK, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a News arraylist from the stream. If something wrong, receives null
     private void getNews() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<News> res =
+                    (ArrayList<News>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_NEWS, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a Event arraylist from the stream. If something wrong, receives null
     private void getEvents() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Event> res = (ArrayList<Event>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_EVENTS, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a Reservation arraylist from the stream. If something wrong, receives null
     private void getUserReservations() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Reservation> res = (ArrayList<Reservation>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_USER_RESERVATION, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a String from the stream. If something wrong, receives null
     private void librayConnInfo() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            String res = (String) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_LIBRARY_CONN_INFO, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //it receives a Book arraylist from the stream. If something wrong, receives null
     private void getAllBooks() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Book> res = (ArrayList<Book>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_ALL_BOOKS, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // test

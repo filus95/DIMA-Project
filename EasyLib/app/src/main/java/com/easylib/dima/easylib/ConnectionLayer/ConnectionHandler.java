@@ -32,10 +32,6 @@ public class ConnectionHandler implements Serializable{
                     } catch (IOException | ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-//                    if ( msg.obj == Constants.REGISTER_USER)
-//                    boolean r = (boolean) msg.getData().getSerializable("registered");
-//                    System.out.print("RESULT!: "+ r);
-
         }
     };
 
