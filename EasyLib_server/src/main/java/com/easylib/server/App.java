@@ -48,12 +48,12 @@ public class App
         Date date1 =  simpleDateFormat.parse("2018-12-31");
 
         Event event = new Event();
-        event.setTitle("Ufficiale! Heide si faceva la droga.");
+        event.setTitle("SEeeeee");
         event.setDescription("Tutto vero");
         event.setImage_link("www.nonessite.ciao");
         event.setSeats(15);
         event.setDate(date1);
-        dbms.insertNewEvent(event, "library_1");
+        dbms.insertNewEvent(event, "library_2");
 
         //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);
