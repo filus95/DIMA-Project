@@ -1,6 +1,7 @@
 package com.easylib.server;
 
 import AnswerClasses.Event;
+import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
 import AnswerClasses.Reservation;
 import com.easylib.server.API.GoogleBooks;
@@ -44,13 +45,24 @@ public class App
         DatabaseManager dbms = new DatabaseManager();
         // todo: always use SimpleDateFormat for dates since windows sucks...
 
-        GoogleBooks googleBooks = new GoogleBooks();
 
-        String query = "La cattedrale del mare";
-        query = correctQueryString(query);
-        googleBooks.apiCallAndFillDB(query, "books", "library_2");
-        //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
+//        GoogleBooks googleBooks = new GoogleBooks();
+//
+//        String query = "La cattedrale del mare";
+//        query = correctQueryString(query);
+//        googleBooks.apiCallAndFillDB(query, "books", "library_2");
+
+//        ArrayList<News> res = dbms.getAllNews("library_1", 3);
 //        printQueryResult(res);
+        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
+        libraryDescriptor.setLib_name("Biblioteca Lambrate");
+        libraryDescriptor.setSchema_name("library_2");
+        libraryDescriptor.setImage_link("qqqq");
+        libraryDescriptor.setTelephone_number("021994492");
+        libraryDescriptor.setAddress("Lambrate, 6");
+        libraryDescriptor.setEmail("lambrate@poli.it");
+        libraryDescriptor.setDescription("siamo piu forti");
+        dbms.insertNewLibrary(libraryDescriptor, "propietary_db");
 //        GoogleBooks gb = new GoogleBooks();
 //        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
 //                "library_1");
@@ -95,18 +107,17 @@ public class App
         return result;
     }
 
-    private static void printQueryResult(ArrayList<Object> res){
+    private static void printQueryResult(ArrayList<News> res){
         if (res.size()==0)
             System.out.print("Sorry, no book responding to this title found.");
-        for (Object elem: res){
-            for (Object to_ret: (ArrayList<Object>)elem){
+            for (News to_ret: res){
                 if ( to_ret == null)
                     continue;
-                System.out.print(to_ret+" ");
+                System.out.print(to_ret.getTitle()+" ");
             }
             System.out.print("\n");
         }
-    }
+
 
     /**
      * Correct the query format to make it suitable for an Google API call

@@ -247,11 +247,10 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
 
     private void getNews(){
         ArrayList<News> res;
+        int limit = 5;
         try {
             int id_lib = (int)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(id_lib);
-
-            int limit = (int)objectInputStream.readObject();
             socketHandler.sendViaSocket(Constants.GET_NEWS);
             res = dbms.getAllNews(schema_name, limit);
         } catch (IOException | ClassNotFoundException e) {
