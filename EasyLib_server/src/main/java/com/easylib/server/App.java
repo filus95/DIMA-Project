@@ -41,20 +41,14 @@ public class App
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
 
-        String query = "Maradona";
         DatabaseManager dbms = new DatabaseManager();
         // todo: always use SimpleDateFormat for dates since windows sucks...
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date1 =  simpleDateFormat.parse("2018-12-31");
 
-        Event event = new Event();
-        event.setTitle("SEeeeee");
-        event.setDescription("Tutto vero");
-        event.setImage_link("www.nonessite.ciao");
-        event.setSeats(15);
-        event.setDate(date1);
-        dbms.insertNewEvent(event, "library_2");
+        GoogleBooks googleBooks = new GoogleBooks();
 
+        String query = "La cattedrale del mare";
+        query = correctQueryString(query);
+        googleBooks.apiCallAndFillDB(query, "books", "library_2");
         //        ArrayList<Object> res = dbms.queryBooksByTitle(query);
 //        printQueryResult(res);
 //        GoogleBooks gb = new GoogleBooks();
@@ -120,7 +114,7 @@ public class App
      * @param query string to correct
      * @return corrected string
      */
-    private String correctQueryString(String query){
+    public static String correctQueryString(String query){
 
         return query.replaceAll("\\s", "+");
     }
