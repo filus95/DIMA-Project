@@ -14,6 +14,7 @@
         android:layout_marginTop="20dp"
         android:background="@android:color/transparent"
         android:onClick="loginFb"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.552"
         app:layout_constraintStart_toStartOf="parent"
