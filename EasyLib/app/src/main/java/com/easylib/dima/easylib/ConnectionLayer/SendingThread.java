@@ -40,7 +40,6 @@ public class SendingThread implements Runnable{
         }
     }
 
-
     /**
      * @param kindOfMessage Message from Constants class
      * @param content Object needed to the Server to perform operations
