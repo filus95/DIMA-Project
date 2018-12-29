@@ -6,28 +6,24 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
-import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.R;
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,20 +36,23 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import AnswerClasses.User;
 
 public class Login extends AppCompatActivity {
+
+    //Comunication
     ConnectionService mBoundService;
     private boolean mIsBound;
     //SignInButton googleSignInButtun;
-    //FirebaseAuth mAuth;
+    FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 1;
-    //GoogleSignInClient mGoogleSignInClient;
-    //FirebaseAuth.AuthStateListener mAuthListener;
-
+    GoogleSignInClient mGoogleSignInClient;
+    FirebaseAuth.AuthStateListener mAuthListener;
 
     private EditText eText;
     private EditText pText;
     private ProgressBar progBar;
     private TextView progText;
     private ImageView progImage;
+    private ImageButton googleButton;
+    private ImageButton facebookButton;
 
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
@@ -84,12 +83,12 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    /*@Override
+    @Override
     protected void onStart() {
         super.onStart();
 
         mAuth.addAuthStateListener(mAuthListener);
-    }*/
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,18 +100,13 @@ public class Login extends AppCompatActivity {
         progBar = (ProgressBar) findViewById(R.id.prog_bar);
         progText = (TextView) findViewById(R.id.prog_login);
         progImage = (ImageView) findViewById(R.id.prog_image);
+        googleButton = (ImageButton) findViewById(R.id.g_bt);
+        facebookButton = (ImageButton) findViewById(R.id.fb_bt);
 
         startService(new Intent(Login.this, ConnectionService.class));
 
-/*       Decomment after implementing the button
-//        googleSignInButtun = (SignInButton) findViewById(R.id.googleBtn);
+        // Google Initialization
         mAuth = FirebaseAuth.getInstance();
-        googleSignInButtun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signIn();
-            }
-        });
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -128,13 +122,51 @@ public class Login extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso); */
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         doBindService();
     }
 
+    public void login(View view) {
+        String email = eText.getText().toString();
+        String password = pText.getText().toString();
 
-    /*private void signIn() {
+        // try...catch used to hide keyboard after Login button pressed
+        try {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+        }
+
+        if( email.length() == 0 || password.length() == 0)
+            findViewById(R.id.text_error).setVisibility(View.VISIBLE);
+
+        else {
+
+            progBar.setVisibility(View.VISIBLE);
+            progImage.setVisibility(View.VISIBLE);
+            progText.setVisibility(View.VISIBLE);
+
+            //TODO: Make the call to Server
+            // Get username & password
+//          Integer num = 1;
+            mBoundService.setCurrentContext(this);
+            // TODO: finish implementing getNews
+//          mBoundService.sendMessage(Constants.GET_NEWS, num);
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    }
+
+    public void register(View view) {
+        mBoundService.setCurrentContext(this);
+        Intent intent = new Intent(this, Register.class);
+        startActivity(intent);
+    }
+
+    public void loginGoogle(View view) {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -150,7 +182,7 @@ public class Login extends AppCompatActivity {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
-                  //
+                //
                 User user = new User();
                 user.setEmail(account.getEmail());
                 user.setUsername(account.getGivenName());
@@ -162,7 +194,6 @@ public class Login extends AppCompatActivity {
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -179,57 +210,11 @@ public class Login extends AppCompatActivity {
 //                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
 //                            updateUI(null);
                         }
-
-                        // ...
                     }
                 });
-    }*/
-
-    public void login(View view) {
-        // Get username & password
-//        Integer num = 1;
-        mBoundService.setCurrentContext(this);
-//        mBoundService.sendMessage(Constants.GET_NEWS, num);
-        String email = eText.getText().toString();
-        String password = pText.getText().toString();
-
-        // try...catch used to hide keyboard after Login button pressed
-        try {
-            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
-
-        if( email.length() == 0 || password.length() == 0)
-            findViewById(R.id.text_error).setVisibility(View.VISIBLE);
-
-        else {
-
-            progBar.setVisibility(View.VISIBLE);
-            progImage.setVisibility(View.VISIBLE);
-            progText.setVisibility(View.VISIBLE);
-
-            //TODO: Make the call to Server
-
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    public void register(View view) {
-        mBoundService.setCurrentContext(this);
-        Intent intent = new Intent(this, Register.class);
-        startActivity(intent);
     }
 
     public void loginFb(View view) {
         //TODO: call Facebook Login API
-    }
-
-    public void loginGoogle(View view) {
-        // Configure Google Sign In
-
     }
 }
