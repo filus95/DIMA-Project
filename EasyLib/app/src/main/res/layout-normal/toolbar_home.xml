@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@drawable/topnav_back"
+    android:orientation="horizontal"
+    android:paddingLeft="3dp"
+    android:paddingRight="3dp">
+
+    <ImageButton
+        android:id="@+id/search_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent"
+        android:onClick="activateSearch"
+        android:scaleType="fitXY"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_search" />
+
+    <LinearLayout
+        android:id="@+id/search_lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="25dp"
+        android:layout_weight="0.35"
+        android:orientation="horizontal"
+        android:visibility="invisible">
+
+        <EditText
+            android:id="@+id/search_text"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_weight="0.3"
+            android:background="@color/colorWhite"
+            android:ems="10"
+            android:fontFamily="serif-monospace"
+            android:hint="Search"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/clear_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_weight="0.1"
+            android:background="@android:color/transparent"
+            android:onClick="clearSearchText"
+            android:scaleType="fitCenter"
+            android:tint="@android:color/darker_gray"
+            app:srcCompat="@android:drawable/ic_delete" />
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/notification_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1"
+        android:backgroundTint="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:tint="@android:color/white"
+        app:srcCompat="@drawable/ic_msg" />
+</LinearLayout>
