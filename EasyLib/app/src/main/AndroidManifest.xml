@@ -12,15 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true">
-        <activity android:name=".Login.Login">
+        <activity android:name=".Login.Login"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main.MainActivity" />
-        <activity android:name=".Login.Register"></activity>
+        <activity android:name=".Main.MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Login.Register"
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".ConnectionLayer.ConnectionService"

@@ -42,11 +42,11 @@ import AnswerClasses.User;
 public class Login extends AppCompatActivity {
     ConnectionService mBoundService;
     private boolean mIsBound;
-    SignInButton googleSignInButtun;
-    FirebaseAuth mAuth;
+    //SignInButton googleSignInButtun;
+    //FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 1;
-    GoogleSignInClient mGoogleSignInClient;
-    FirebaseAuth.AuthStateListener mAuthListener;
+    //GoogleSignInClient mGoogleSignInClient;
+    //FirebaseAuth.AuthStateListener mAuthListener;
 
 
     private EditText eText;
@@ -84,12 +84,12 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    @Override
+    /*@Override
     protected void onStart() {
         super.onStart();
 
         mAuth.addAuthStateListener(mAuthListener);
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +104,7 @@ public class Login extends AppCompatActivity {
 
         startService(new Intent(Login.this, ConnectionService.class));
 
-//        Decomment after implementing the button
+/*       Decomment after implementing the button
 //        googleSignInButtun = (SignInButton) findViewById(R.id.googleBtn);
         mAuth = FirebaseAuth.getInstance();
         googleSignInButtun.setOnClickListener(new View.OnClickListener() {
@@ -128,13 +128,13 @@ public class Login extends AppCompatActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso); */
 
         doBindService();
     }
 
 
-    private void signIn() {
+    /*private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -183,7 +183,7 @@ public class Login extends AppCompatActivity {
                         // ...
                     }
                 });
-    }
+    }*/
 
     public void login(View view) {
         // Get username & password
@@ -214,6 +214,7 @@ public class Login extends AppCompatActivity {
 
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
