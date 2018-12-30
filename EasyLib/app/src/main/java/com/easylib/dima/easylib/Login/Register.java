@@ -96,16 +96,16 @@ public class Register extends Activity {
         if( surname.length() == 0 || name.length() == 0 || email.length() == 0 ||
                 password.length() == 0 )
             findViewById(R.id.text_error).setVisibility(View.VISIBLE);
+        else {
+            User user = new User();
+            user.setUsername(surname);
+            user.setEmail(email);
+            user.setPlainPassword(password);
 
-        User user = new User();
-        user.setUsername(surname);
-        user.setEmail(email);
-        user.setPlainPassword(password);
-
-        if(mBoundService!=null)
-        {
-            mBoundService.setCurrentContext(this);
-            mBoundService.sendMessage(Constants.REGISTER_USER, user );
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(this);
+                mBoundService.sendMessage(Constants.REGISTER_USER, user);
+            }
         }
     }
 
