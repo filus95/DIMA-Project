@@ -154,8 +154,10 @@ public class Login extends AppCompatActivity {
             // TODO: finish implementing getNews
 //          mBoundService.sendMessage(Constants.GET_NEWS, num);
 
-            Intent intent = new Intent(this, MainActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+            //Intent intent = new Intent(this, MainActivity.class);
+            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            Intent intent = new Intent(this, LoginPreference.class);
             startActivity(intent);
         }
     }
