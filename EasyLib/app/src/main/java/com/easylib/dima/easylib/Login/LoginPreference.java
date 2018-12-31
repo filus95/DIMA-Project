@@ -25,8 +25,8 @@ public class LoginPreference extends AppCompatActivity {
         setContentView(R.layout.login_preference);
 
         int i;
-        for(i=0; i<4; i++) {
-            libraries.add(new Biblo("name"+i, "address"+i));
+        for(i=0; i<15; i++) {
+            libraries.add(new Biblo("Library Name "+i, "Via della strada "+i+" (MI)"));
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
