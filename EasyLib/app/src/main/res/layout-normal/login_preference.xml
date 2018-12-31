@@ -26,6 +26,7 @@
         android:clipChildren="true"
         android:clipToPadding="true"
         android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@color/colorGray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
