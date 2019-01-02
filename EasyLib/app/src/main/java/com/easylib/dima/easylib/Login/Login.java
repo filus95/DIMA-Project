@@ -9,7 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -103,6 +105,18 @@ public class Login extends AppCompatActivity {
         googleButton = (ImageButton) findViewById(R.id.g_bt);
         facebookButton = (ImageButton) findViewById(R.id.fb_bt);
 
+        // Change Enter key in Done key when password is typed
+        pText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    login(v);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         startService(new Intent(Login.this, ConnectionService.class));
 
         // Google Initialization
@@ -153,9 +167,6 @@ public class Login extends AppCompatActivity {
             mBoundService.setCurrentContext(this);
             // TODO: finish implementing getNews
 //          mBoundService.sendMessage(Constants.GET_NEWS, num);
-
-            //Intent intent = new Intent(this, MainActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 
             Intent intent = new Intent(this, LoginPreference.class);
             startActivity(intent);

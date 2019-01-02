@@ -77,6 +77,7 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onAttach(Context context) {
+        // Call server methods
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;

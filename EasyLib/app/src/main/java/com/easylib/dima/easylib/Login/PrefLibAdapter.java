@@ -1,13 +1,15 @@
 package com.easylib.dima.easylib.Login;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Main.MainActivity;
 import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
 
@@ -38,10 +40,13 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
         holder.lAddr.setText(biblo.getAddr());
 
         // implemented onClickListener event
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: call method
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
         });
     }

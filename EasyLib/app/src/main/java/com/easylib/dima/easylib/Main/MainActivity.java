@@ -64,6 +64,18 @@ public class MainActivity extends AppCompatActivity
         searchLay = (LinearLayout) findViewById(R.id.search_lin_layout);
         clearbt = (ImageButton) findViewById(R.id.clear_bt);
 
+        // Change the Enter key on keyborad in a Search button
+        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // TODO: performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+
         // Set Initial Fragment to be visualized
         setFragment(homeFragment);
 
@@ -124,18 +136,6 @@ public class MainActivity extends AppCompatActivity
             searchLay.setVisibility(View.VISIBLE);
             searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
         }
-
-        // Change the Enter key on keyborad in a Search button
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // TODO: performSearch();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     // When X button is pressed the search text is cleared
