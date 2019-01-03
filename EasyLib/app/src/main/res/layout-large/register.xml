@@ -112,7 +112,7 @@
         android:id="@+id/reg_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="34dp"
+        android:layout_marginBottom="70dp"
         android:background="@android:color/transparent"
         android:onClick="register"
         android:src="@drawable/ic_reg"

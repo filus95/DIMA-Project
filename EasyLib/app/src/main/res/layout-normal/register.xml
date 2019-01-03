@@ -109,9 +109,9 @@
 
     <ImageButton
         android:id="@+id/reg_bt"
-        android:layout_width="250dp"
+        android:layout_width="245dp"
         android:layout_height="45dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="50dp"
         android:background="@android:color/transparent"
         android:onClick="register"
         android:scaleType="fitXY"
