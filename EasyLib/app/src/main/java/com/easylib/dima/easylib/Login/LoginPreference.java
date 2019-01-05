@@ -24,6 +24,7 @@ public class LoginPreference extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_preference);
 
+        // JUST FOR TEST
         int i;
         for(i=0; i<15; i++) {
             libraries.add(new Biblo("Library Name "+i, "Via della strada "+i+" (MI)"));

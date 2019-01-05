@@ -1,14 +1,19 @@
-package com.easylib.dima.easylib.Main;
+package com.easylib.dima.easylib.Main.QueueFragment;
 
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +34,12 @@ public class QueueFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ArrayList<Book> books = new ArrayList<Book>();
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     public QueueFragment() {
         // Required empty public constructor
@@ -65,7 +76,27 @@ public class QueueFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_queue, container, false);
+        View root = inflater.inflate(R.layout.fragment_queue, container, false);
+
+        // JUST FOR TEST
+        int i;
+        for(i=0; i<15; i++) {
+            books.add(new Book("Book Title"+i,"Book Author "+i, "https://goo.gl/images/kpEyP1", i));
+        }
+
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);
+
+        // improve performance
+        mRecyclerView.setHasFixedSize(true);
+
+        // used linear layout
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter
+        mAdapter = new QueueAdapter(getContext(), books);
+        mRecyclerView.setAdapter(mAdapter);
+        return root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

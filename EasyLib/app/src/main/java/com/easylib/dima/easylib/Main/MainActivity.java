@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Main.QueueFragment.QueueFragment;
 import com.easylib.dima.easylib.R;
 
 public class MainActivity extends AppCompatActivity
