@@ -1,49 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:orientation="horizontal"
-    android:paddingLeft="30dp"
-    android:paddingRight="30dp"
-    android:paddingBottom="20dp"
-    android:paddingTop="20dp">
-
-    <ImageView
-        android:id="@+id/queue_img"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_weight="0.5"
-        app:srcCompat="@color/colorPrimary" />
+    android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/queue_foreground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp">
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp">
 
-        <TextView
-            android:id="@+id/queue_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Title" />
+        <ImageView
+            android:id="@+id/queue_img"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_weight="0.5"
+            app:srcCompat="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/queue_author"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="Author" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/queue_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Title" />
+
+            <TextView
+                android:id="@+id/queue_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Author" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/queue_num"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0"
+            android:text="9"
+            android:textSize="40sp" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/queue_num"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="0"
-        android:text="9"
-        android:textSize="40sp" />
+    <LinearLayout
+        android:id="@+id/queue_background"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/colorGray"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="20dp"
+        android:paddingRight="30dp"
+        android:paddingBottom="20dp">
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_weight="0"
+            android:scaleType="fitXY"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/monotype_corsiva"
+            android:text="Delete"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+</FrameLayout>

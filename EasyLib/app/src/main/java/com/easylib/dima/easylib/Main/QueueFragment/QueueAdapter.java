@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.easylib.dima.easylib.Model.Book;
@@ -75,12 +76,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
         protected TextView author;
         protected TextView num;
 
+        protected LinearLayout viewBackground, viewForeground;
+
         public QueueHolder(View v) {
             super(v);
             image = v.findViewById(R.id.queue_img);
             title = v.findViewById(R.id.queue_title);
             author = v.findViewById(R.id.queue_author);
             num = v.findViewById(R.id.queue_num);
+            viewBackground = v.findViewById(R.id.queue_background);
+            viewForeground = v.findViewById(R.id.queue_foreground);
         }
     }
 }
