@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
@@ -38,7 +39,9 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
     public void onBindViewHolder(QueueHolder holder, int position) {
         // set the data in items
         Book book = queue_books.get(position);
-        holder.image.setImageDrawable(this.loadImageFromUrl(book.getImage()));
+        Glide.with(context)
+                .load(book.getImage())
+                .into(holder.image);
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
         holder.num.setText(String.valueOf(book.getQueue()));
@@ -55,19 +58,16 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
         });
     }
 
-    private Drawable loadImageFromUrl(String url) {
-        try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "cover");
-            return d;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     @Override
     public int getItemCount() {
         return queue_books.size();
+    }
+
+    public void removeItem(int position) {
+        queue_books.remove(position);
+        // notify the item removed by position
+        // to perform recyclerview delete animations
+        notifyItemRemoved(position);
     }
 
     static class QueueHolder extends RecyclerView.ViewHolder {

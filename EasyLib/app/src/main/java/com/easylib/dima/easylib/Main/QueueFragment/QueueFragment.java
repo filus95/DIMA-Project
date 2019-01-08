@@ -3,9 +3,13 @@ package com.easylib.dima.easylib.Main.QueueFragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +27,8 @@ import java.util.ArrayList;
  * Use the {@link QueueFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class QueueFragment extends Fragment {
+public class QueueFragment extends Fragment
+        implements QueueRecyclerItemTouchHelper.QueueRecyclerItemTouchHelperListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -38,7 +43,7 @@ public class QueueFragment extends Fragment {
     private ArrayList<Book> books = new ArrayList<Book>();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private QueueAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public QueueFragment() {
@@ -92,10 +97,17 @@ public class QueueFragment extends Fragment {
         // used linear layout
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
 
         // specify an adapter
         mAdapter = new QueueAdapter(getContext(), books);
         mRecyclerView.setAdapter(mAdapter);
+
+        // adding item touch helper
+        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new QueueRecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
+        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+
         return root;
     }
 
@@ -121,6 +133,21 @@ public class QueueFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
+        if (viewHolder instanceof QueueAdapter.QueueHolder) {
+            // get the removed item name to display it in snack bar
+            String name = books.get(viewHolder.getAdapterPosition()).getTitle();
+
+            // backup of removed item for undo purpose
+            final Book deletedItem = books.get(viewHolder.getAdapterPosition());
+            final int deletedIndex = viewHolder.getAdapterPosition();
+
+            // remove the item from recycler view
+            mAdapter.removeItem(viewHolder.getAdapterPosition());
+        }
     }
 
     /**

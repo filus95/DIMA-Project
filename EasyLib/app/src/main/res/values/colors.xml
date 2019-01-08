@@ -12,6 +12,7 @@
     <color name="colorGray">#cccccc</color>
 
     <color name="colorYellow">#ffd416</color>
+    <color name="RedDelete">#f92525</color>
 
     <color name="colorDarkBlueTransparent">#dc212d42</color>
 </resources>
