@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity
     private ImageButton searchBt;
     private LinearLayout searchLay;
     private ImageButton clearbt;
+    private LinearLayout advancesSearchLay;
+    private EditText advSearchAuthor;
+    private EditText advSearchGenre;
+    private EditText advSearchLib;
 
 
     @Override
@@ -64,9 +68,44 @@ public class MainActivity extends AppCompatActivity
         searchBt = (ImageButton) findViewById(R.id.search_icon);
         searchLay = (LinearLayout) findViewById(R.id.search_lin_layout);
         clearbt = (ImageButton) findViewById(R.id.clear_bt);
+        // Advancd Search items
+        advancesSearchLay = (LinearLayout) findViewById(R.id.advanced_search_linear_layout);
+        advSearchAuthor = (EditText) findViewById(R.id.search_author);
+        advSearchGenre = (EditText) findViewById(R.id.search_genre);
+        advSearchLib = (EditText) findViewById(R.id.search_biblo);
 
         // Change the Enter key on keyborad in a Search button
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // TODO: performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+        advSearchAuthor.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // TODO: performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+        advSearchGenre.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    // TODO: performSearch();
+                    return true;
+                }
+                return false;
+            }
+        });
+        advSearchLib.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -84,7 +123,6 @@ public class MainActivity extends AppCompatActivity
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-
                 switch (menuItem.getItemId()) {
 
                     case R.id.home_item :
@@ -112,10 +150,17 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+        searchBt.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                activateAdvancedSearch();
+                return true;
+            }
+        });
     }
 
     private void setFragment(Fragment fragment) {
-
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.commit();
@@ -127,10 +172,10 @@ public class MainActivity extends AppCompatActivity
 
     // Method called when the Search icon is clicked
     public void activateSearch(View view) {
-
         // Set Text Visible or Not when Search icon is pressed
         if (searchLay.getVisibility() == View.VISIBLE) {
             searchLay.setVisibility(View.INVISIBLE);
+            advancesSearchLay.setVisibility(View.INVISIBLE);
             searchBt.setColorFilter(Color.WHITE);
         }
         else {
@@ -139,10 +184,24 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void activateAdvancedSearch() {
+        if (advancesSearchLay.getVisibility() == View.INVISIBLE
+                && searchLay.getVisibility() == View.VISIBLE) {
+            advancesSearchLay.setVisibility(View.VISIBLE);
+        }
+        else if (advancesSearchLay.getVisibility() == View.INVISIBLE
+                && searchLay.getVisibility() == View.INVISIBLE) {
+            advancesSearchLay.setVisibility(View.VISIBLE);
+            searchLay.setVisibility(View.VISIBLE);
+            searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
+        }
+        else {
+            advancesSearchLay.setVisibility(View.INVISIBLE);
+        }
+    }
+
     // When X button is pressed the search text is cleared
     public void clearSearchText(View view) {
-
         searchText.getText().clear();
-
     }
 }
