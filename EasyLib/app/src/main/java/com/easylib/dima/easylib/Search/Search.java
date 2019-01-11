@@ -27,7 +27,7 @@ public class Search extends AppCompatActivity {
 
     // recycle view
     private RecyclerView mRecyclerView;
-    private QueueAdapter mAdapter;
+    private SearchAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     // Toolbar
@@ -102,7 +102,7 @@ public class Search extends AppCompatActivity {
 
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://goo.gl/images/kpEyP1", i));
+            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         // Recycle View Settings
@@ -114,7 +114,7 @@ public class Search extends AppCompatActivity {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         // specify an adapter
-        mAdapter = new QueueAdapter(this, books);
+        mAdapter = new SearchAdapter(this, books);
         mRecyclerView.setAdapter(mAdapter);
     }
 

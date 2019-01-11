@@ -65,9 +65,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
 
         public SearchHolder(View v) {
             super(v);
-            image = v.findViewById(R.id.queue_img);
-            title = v.findViewById(R.id.queue_title);
-            author = v.findViewById(R.id.queue_author);
+            image = v.findViewById(R.id.search_img);
+            title = v.findViewById(R.id.search_title);
+            author = v.findViewById(R.id.search_author);
         }
     }
 }
