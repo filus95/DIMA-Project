@@ -40,6 +40,7 @@
         <service android:name=".ConnectionLayer.ConnectionService" />
 
         <activity android:name=".Login.LoginPreference"></activity>
+        <activity android:name=".Search.Search" />
     </application>
 
 </manifest>

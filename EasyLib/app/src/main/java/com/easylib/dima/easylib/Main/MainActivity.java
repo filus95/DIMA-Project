@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Main;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.easylib.dima.easylib.Main.QueueFragment.QueueFragment;
 import com.easylib.dima.easylib.R;
+import com.easylib.dima.easylib.Search.Search;
 
 public class MainActivity extends AppCompatActivity
             implements HomeFragment.OnFragmentInteractionListener,
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // TODO: performSearch();
+                    performSearch("ciao");
                     return true;
                 }
                 return false;
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // TODO: performSearch();
+                    performSearch("ciao");
                     return true;
                 }
                 return false;
@@ -99,7 +101,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // TODO: performSearch();
+                    performSearch("ciao");
                     return true;
                 }
                 return false;
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    // TODO: performSearch();
+                    performSearch("ciao");
                     return true;
                 }
                 return false;
@@ -203,5 +205,11 @@ public class MainActivity extends AppCompatActivity
     // When X button is pressed the search text is cleared
     public void clearSearchText(View view) {
         searchText.getText().clear();
+    }
+
+    public void performSearch(String searchedText) {
+        Intent intent = new Intent(this, Search.class);
+        intent.putExtra("searched", searchedText);
+        startActivity(intent);
     }
 }
