@@ -38,7 +38,7 @@ public class Constants {
 
     // Table names
     // PROPIETARY_DB
-    public static final String PREFERENCE_TABLE_NAME = "user_preferences";
+    public static final String PREFERENCE_TABLE_NAME = "users_preferences";
     public static final String USERS_TABLE_NAME = "users";
     public static final String NOTIFICATION_TABLE_NAME = "notifications";
     public static final String LIBRARIES_TABLE_NAME = "libraries";

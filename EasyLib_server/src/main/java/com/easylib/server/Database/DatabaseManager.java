@@ -121,8 +121,8 @@ public class DatabaseManager {
                 queryResult.setUser_id(rs.getInt("user_id"));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
-                queryResult.setStart_res_date((LocalDate) rs.getObject("starting_reservation_date"));
-                queryResult.setEnd_res_date((LocalDate) rs.getObject("ending_reservation_date"));
+                queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
+                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate());
                 queryResult.setQuantity(rs.getInt("quantity"));
 
                 results.add(queryResult);
@@ -202,6 +202,7 @@ public class DatabaseManager {
 
     public boolean insertPreferences(UserPreferences up){
         ArrayList<String> columnsName = new ArrayList<>();
+        columnsName.add("user_id");
         columnsName.add("library_1_id");
         columnsName.add("library_2_id");
         columnsName.add("library_3_id");
@@ -242,6 +243,7 @@ public class DatabaseManager {
         columnsName.add("user_id");
         columnsName.add("book_identifier");
         columnsName.add("rating");
+        columnsName.add("id_lib");
 
         map = rating.getMapAttribute(columnsName);
 
@@ -458,9 +460,9 @@ public class DatabaseManager {
                 WaitingPerson queryResult = new WaitingPerson();
                 queryResult.setBook_identifier(rs.getString("book_identifier"));
                 queryResult.setWaiting_pos(rs.getInt("waiting_position"));
-                queryResult.setReservation_date((LocalDateTime) rs.getObject("reservation_date"));
-                queryResult.setStart_res_date((LocalDate) rs.getObject("starting_reservation_date"));
-                queryResult.setEnd_res_date((LocalDate) rs.getObject("ending_reservation_date"));
+                queryResult.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime());
+                queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
+                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate());
                 queryResult.setUser_id(rs.getInt("user_id"));
                 queryResult.setQuantity(rs.getInt("quantity"));
 
@@ -485,7 +487,7 @@ public class DatabaseManager {
             while (rs.next() && count < limit){
                 News elem = new News();
                 elem.setTitle(rs.getString("title"));
-                elem.setPost_date((LocalDateTime) rs.getObject("post_date"));
+                elem.setPost_date(rs.getTimestamp("post_date").toLocalDateTime());
                 elem.setContent(rs.getString("content"));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
@@ -677,15 +679,16 @@ public class DatabaseManager {
     }
 
 
-    public boolean checkUserExsist(String username) {
+    public boolean checkUserExsist(String email) {
         boolean ret = false;
         try {
 
-            String sql = "SELECT username FROM "+Constants.PROPIETARY_DB+".users " +
-                    "WHERE username = ?";
+            //todo: transform the query in this way
+            String sql = "SELECT username, name, surname FROM "+Constants.PROPIETARY_DB+".users " +
+                    "WHERE email = ?";
 
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, username);
+            pst.setString(1, email);
             ResultSet rs = pst.executeQuery();
 
             if ( rs.getFetchSize() > 0 )
@@ -746,10 +749,11 @@ public class DatabaseManager {
 
         Map<String, Object> map = new HashMap<>();
         map.put("username", user.getUsername());
+        map.put("name", user.getName());
+        map.put("surname", user.getSurname());
         map.put("email", user.getEmail());
         map.put("hashed_pd", hashPas);
         map.put("salt", salt);
-        //secondo me non serve a nulla
 
         String tableName = "users";
         return  insertStatement(map, tableName, Constants.PROPIETARY_DB);

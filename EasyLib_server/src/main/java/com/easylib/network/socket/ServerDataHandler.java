@@ -377,18 +377,16 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
 
+    //todo: modify for facebook and google
     private void userRegistration(){
         try {
             User user = (User) objectInputStream.readObject();
             socketHandler.sendViaSocket(Constants.REGISTER_USER);
 
-            if (!dbms.checkUserExsist(user.getUsername())) {
+            if (!dbms.checkUserExsist(user.getEmail()))
                 socketHandler.sendViaSocket(dbms.addUser(user));
-
-            }else
+            else
                 socketHandler.sendViaSocket(false);
-
-
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

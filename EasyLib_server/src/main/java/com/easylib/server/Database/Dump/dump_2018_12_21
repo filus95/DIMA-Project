@@ -570,7 +570,7 @@ DELIMITER ;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
   if OLD.waiting_position = 1 then
-    update library_2.books set wating_list = false;
+    update library_2.books set waiting_list = false;
   end if;
   update library_2.waitinglist set waiting_position = waiting_position - 1
   where library_2.waitinglist.book_identifier = OLD.book_identifier;

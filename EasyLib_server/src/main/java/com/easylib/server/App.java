@@ -99,18 +99,40 @@ public class App
         //        event.setDate(dtf.format(dateTime));
 
 
-        WaitingPerson wp = new WaitingPerson();
-        wp.setIdLib(1);
-        wp.setBook_identifier("1626366543");
-        wp.setEnd_res_date(yourDate);
-        wp.setQuantity(1);
-        wp.setReservation_date(dateTime);
-        wp.setStart_res_date(yourDate);
-        String schema_name = dbms.getSchemaNameLib(wp.getIdLib());
-
-        Boolean res = dbms.insertNewWaitingPerson(wp, schema_name);
+        Rating rating = new Rating();
+        rating.setBook_identifier("1408827727");
+        rating.setIdLib(1);
+        rating.setRating(1);
+        rating.setUser_id(1);
+        String schema_name = dbms.getSchemaNameLib(rating.getIdLib());
+        Boolean res = dbms.insertRating(rating, schema_name);
 
         System.out.print(res);
+
+//        int user_id = 1;
+//        ArrayList<Integer> pref_lib_ids = dbms.getUserPreferences(user_id);
+//
+//        System.out.print("\nLibrary name:\n");
+//        for ( Integer id : pref_lib_ids) {
+//            LibraryDescriptor ld = dbms.getLibraryInfo(id);
+//            LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+//            System.out.print(ld.getLib_name() + "\n");
+//
+//
+//            System.out.print("\nBooks:\n");
+//            for (Book b : lc.getBooks())
+//            System.out.print(b.getTitle() + "\n");
+//
+//            System.out.print("\n" + "Events:\n");
+//            for (Event e : lc.getEvents())
+//                System.out.print(e.getId()+"\n");
+//
+//            System.out.print("\n" + "News:\n");
+//            for (News n : lc.getNews())
+//                System.out.print(n.getTitle() + "\n");
+//
+//        }
+
         // TODO: DELETE FROM booksreservations
     // ciao
     //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
