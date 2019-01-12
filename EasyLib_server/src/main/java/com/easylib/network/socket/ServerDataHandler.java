@@ -233,7 +233,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void insertNews(){
         boolean res;
 
-
         try {
 
             News news = (News)objectInputStream.readObject();

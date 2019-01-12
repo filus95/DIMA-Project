@@ -4,6 +4,7 @@ import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -120,9 +121,8 @@ public class DatabaseManager {
                 queryResult.setUser_id(rs.getInt("user_id"));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
-                queryResult.setReservation_date(rs.getDate("reservation_date"));
-                queryResult.setStart_res_date(rs.getDate("starting_reservation_date"));
-                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date"));
+                queryResult.setStart_res_date((LocalDate) rs.getObject("starting_reservation_date"));
+                queryResult.setEnd_res_date((LocalDate) rs.getObject("ending_reservation_date"));
                 queryResult.setQuantity(rs.getInt("quantity"));
 
                 results.add(queryResult);
@@ -259,11 +259,11 @@ public class DatabaseManager {
             int count = 1;
             Object value;
             for (String key : map.keySet()) {
-                if (key.equals("reservation_date")){
+                // todo: translate it in the set method of the corresponding classes
+                if (key.equals("reservation_date") || key.equals("post_date")){
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     value = dtf.format(now);
-                    System.out.print(value);
                 }
                 else
                     value = map.get(key);
@@ -458,9 +458,9 @@ public class DatabaseManager {
                 WaitingPerson queryResult = new WaitingPerson();
                 queryResult.setBook_identifier(rs.getString("book_identifier"));
                 queryResult.setWaiting_pos(rs.getInt("waiting_position"));
-                queryResult.setReservation_date(rs.getDate("reservation_date"));
-                queryResult.setStart_res_date(rs.getDate("starting_reservation_date"));
-                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date"));
+                queryResult.setReservation_date((LocalDateTime) rs.getObject("reservation_date"));
+                queryResult.setStart_res_date((LocalDate) rs.getObject("starting_reservation_date"));
+                queryResult.setEnd_res_date((LocalDate) rs.getObject("ending_reservation_date"));
                 queryResult.setUser_id(rs.getInt("user_id"));
                 queryResult.setQuantity(rs.getInt("quantity"));
 
@@ -485,7 +485,7 @@ public class DatabaseManager {
             while (rs.next() && count < limit){
                 News elem = new News();
                 elem.setTitle(rs.getString("title"));
-                elem.setPost_date(rs.getDate("post_date"));
+                elem.setPost_date((LocalDateTime) rs.getObject("post_date"));
                 elem.setContent(rs.getString("content"));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
@@ -509,6 +509,7 @@ public class DatabaseManager {
 
             while (rs.next() && count < limit){
                 Event elem = new Event();
+                elem.setId(rs.getInt("id"));
                 elem.setTitle(rs.getString("title"));
                 elem.setDescription(rs.getString("description"));
                 elem.setSeats((Integer.parseInt(rs.getString("seats"))));
