@@ -112,7 +112,6 @@ public class Search extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         // specify an adapter
         mAdapter = new SearchAdapter(this, books);
         mRecyclerView.setAdapter(mAdapter);

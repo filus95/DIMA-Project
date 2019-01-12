@@ -12,6 +12,7 @@
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
         android:paddingRight="30dp"
+        android:layout_marginRight="15dp"
         android:visibility="visible">
 
         <ImageView
