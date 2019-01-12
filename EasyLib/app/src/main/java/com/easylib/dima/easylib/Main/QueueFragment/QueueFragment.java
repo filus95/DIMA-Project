@@ -98,7 +98,6 @@ public class QueueFragment extends Fragment
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL));
 
         // specify an adapter
         mAdapter = new QueueAdapter(getContext(), books);
