@@ -4,12 +4,14 @@ import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DatabaseManager {
 
-    private Connection conn = new DatabaseConnection().startConnection();
+    private DatabaseConnection dbConnection = new DatabaseConnection();
+    private Connection conn = dbConnection.startConnection();
     PasswordManager pm = new PasswordManager(conn, this);
 
     // todo this can be generalized for any insertion: look down
@@ -114,6 +116,7 @@ public class DatabaseManager {
 
             while (rs.next()){
                 Reservation queryResult = new Reservation();
+                queryResult.setReservation_id(rs.getInt("reservation_id"));
                 queryResult.setUser_id(rs.getInt("user_id"));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
@@ -256,7 +259,15 @@ public class DatabaseManager {
             int count = 1;
             Object value;
             for (String key : map.keySet()) {
-                value = map.get(key);
+                if (key.equals("reservation_date")){
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    value = dtf.format(now);
+                    System.out.print(value);
+                }
+                else
+                    value = map.get(key);
+
                 pstmt.setObject(count, value);
                 count++;
             }
@@ -282,7 +293,8 @@ public class DatabaseManager {
 
 
     public ArrayList<Book> queryAllBooks(String schema_lib){
-        String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
+        String query = "select identifier, title, publisher, category_1, category_2, category_3," +
+                " author_1, author_2, author_3, author_4 " +
                 "from "+schema_lib+".books";
 
         return getQueryResultsBooks(query);
@@ -296,9 +308,9 @@ public class DatabaseManager {
      * @return it must be casted to the book data type in the calling function
      */
     public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+".books where author_1 = '"+author+"'" + "or author_2='"+author+"'"
-                +"or author_3='"+author+"'or author_4='"+author+"'";
+        String query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
+                "from "+schema_lib+".books where author_1 = '"+author+"'" + " or author_2='"+author+"'"
+                +" or author_3='"+author+"' or author_4='"+author+"'";
 
         return getQueryResultsBooks(query);
     }
@@ -311,8 +323,9 @@ public class DatabaseManager {
      * @return
      */
     public ArrayList<Book> queryBooksByTitle(String title, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+"."+Constants.BOOKS_TABLE_NAME+" where title = '"+title+"'";
+        String query = "select identifier, title, publisher, category_1, category_2, category_3," +
+                " author_1, author_2, author_3, author_4 " +
+                "from "+schema_lib+".books where title = '"+title+"'";
 
         return getQueryResultsBooks(query);
     }
@@ -325,43 +338,51 @@ public class DatabaseManager {
      * @return
      */
     public ArrayList<Book> queryBooksByCategory(String category, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3"+
+        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+                "category_1, category_2, category_3 "+
         "from "+schema_lib+".books where category_1 ='"+category+"' or category_2='"+category+"' or category_3='"+category+"'";
 
         return getQueryResultsBooks(query);
     }
 
     public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
-                "from "+schema_lib+".books where category_1 ='" + category + "' or category_2='" + category + "' or category_3='"
-                + category + "' and author_1 = '"+author+"'" + "or author_2='"+author+"'" +
-                "or author_3='"+author+"'or author_4='"+author+"'";
+        String query = "select identifier, title, publisher, author_1, auhtor_2, author_3, author_4, " +
+                "category_1, category_2, category_3 " +
+                "from "+schema_lib+".books where ( category_1 ='" + category + "' or category_2='" + category + "' " +
+                "or category_3='"
+                + category + "') and ( author_1 = '"+author+"'" + "or author_2='"+author+"'" +
+                "or author_3='"+author+"'or author_4='"+author+"')";
 
         return getQueryResultsBooks(query);
     }
 
     public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
-                "from "+schema_lib+".books where title = '"+title+"' and author_1 = '"+author+"'" + "or author_2='"+author+"'" +
-                "or author_3='"+author+"'or author_4='"+author+"'";
+        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+                " category_1, category_2, category_3 " +
+                "from "+schema_lib+".books where title = '"+title+"' and ( author_1 = '"+author+"'" + " " +
+                "or author_2='"+author+"'" +
+                " or author_3='"+author+"' or author_4='"+author+"')";
 
         return getQueryResultsBooks(query);
     }
 
     public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
-                "from "+schema_lib+".books where title = '"+title+"' and category_1 = '"+category+"'" + "or category_2='"+category+"'" +
-                "or category_3='"+category+"'";
+        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4, " +
+                "category_1, category_2, category_3 " +
+                " from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " " +
+                "or category_2='"+category+"'" +
+                " or category_3='"+category+"')";
 
 
         return getQueryResultsBooks(query);
     }
 
     public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3" +
-                "from books where title = '"+title+"' and category_1 = '"+category+"'" + "or category_1='"+category+"'" +
-                "or category_1='"+category+"' and and author_1 = '"+author+"'" + "or author_2='"+author+"' or" +
-                " author_3='"+author+"'or author_4='"+author+"'";
+        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+                " category_1, category_2, category_3 " +
+                "from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " or category_2='"+category+"'" +
+                " or category_3='"+category+"') and (author_1 = '"+author+"'" + " or author_2='"+author+"' or" +
+                " author_3='"+author+"' or author_4='"+author+"')";
 
         return getQueryResultsBooks(query);
     }
@@ -392,9 +413,10 @@ public class DatabaseManager {
                         (rs.getString("author_2")),
                         (rs.getString("author_3")),
                         (rs.getString("author_4")));
-                queryResult.setReserved(rs.getBoolean("reserved"));
-                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
-                queryResult.setAverageRating(rs.getFloat("averageRating"));
+                //todo: should i add these columns in DB?
+//                queryResult.setReserved(rs.getBoolean("reserved"));
+//                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
+//                queryResult.setAverageRating(rs.getFloat("averageRating"));
                 results.add(queryResult);
             }
         } catch (SQLException e) {
@@ -672,6 +694,7 @@ public class DatabaseManager {
             System.out.print("Query Error!");
             e.printStackTrace();
             ret = false;
+            conn = dbConnection.startConnection();
         }
         return ret;
     }

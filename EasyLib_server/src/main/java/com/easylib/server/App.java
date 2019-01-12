@@ -1,9 +1,7 @@
 package com.easylib.server;
 
-import AnswerClasses.Event;
-import AnswerClasses.LibraryDescriptor;
-import AnswerClasses.News;
-import AnswerClasses.Reservation;
+import AnswerClasses.*;
+import com.easylib.network.socket.ServerDataHandler;
 import com.easylib.server.API.GoogleBooks;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
@@ -11,6 +9,7 @@ import com.easylib.server.Database.DatabaseManager;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EventListener;
@@ -44,8 +43,16 @@ public class App
 
         DatabaseManager dbms = new DatabaseManager();
         // todo: always use SimpleDateFormat for dates since windows sucks...
+        Query query = new Query();
 
+//        Reservation reservation = new Reservation();
+//        reservation.setUser_id(4);
+//        reservation.setStart_res_date(new Date(2,2,2));
+//        reservation.setQuantity(1);
+//        reservation.setReservation_date(new Date());
+//        String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
 
+//        res = dbms.insertNewReservation(reservation, schema_name);
 //        GoogleBooks googleBooks = new GoogleBooks();
 //
 //        String query = "La cattedrale del mare";
@@ -54,45 +61,48 @@ public class App
 
 //        ArrayList<News> res = dbms.getAllNews("library_1", 3);
 //        printQueryResult(res);
-        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
-        libraryDescriptor.setLib_name("Biblioteca Lambrate");
-        libraryDescriptor.setSchema_name("library_2");
-        libraryDescriptor.setImage_link("qqqq");
-        libraryDescriptor.setTelephone_number("021994492");
-        libraryDescriptor.setAddress("Lambrate, 6");
-        libraryDescriptor.setEmail("lambrate@poli.it");
-        libraryDescriptor.setDescription("siamo piu forti");
-        dbms.insertNewLibrary(libraryDescriptor, "propietary_db");
+//        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
+//        libraryDescriptor.setLib_name("Biblioteca Lambrate");
+//        libraryDescriptor.setSchema_name("library_2");
+//        libraryDescriptor.setImage_link("qqqq");
+//        libraryDescriptor.setTelephone_number("021994492");
+//        libraryDescriptor.setAddress("Lambrate, 6");
+//        libraryDescriptor.setEmail("lambrate@poli.it");
+//        libraryDescriptor.setDescription("siamo piu forti");
+//        dbms.insertNewLibrary(libraryDescriptor, "propietary_db");
 //        GoogleBooks gb = new GoogleBooks();
 //        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
 //                "library_1");
 
         // TODO: ADD INTO booksreservations
-//        java.util.Date dt = new java.util.Date();
-//        java.text.SimpleDateFormat reservation_date =
-//                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//        Date start_res = stringToDate("2018-12-3");
+        java.util.Date dt = new java.util.Date();
+        java.text.SimpleDateFormat reservation_date =
+                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date start_res = stringToDate("2018-12-3");
 //
-//        Date end_res = stringToDate("2018-12-30");
-//        String currentTime = reservation_date.format(dt);
+        Date end_res = stringToDate("2018-12-30");
+        LocalDateTime now = LocalDateTime.now();
+//        String currentTime = reservation_date.format(now);
+//        System.out.print(currentTime);
 //
-//
-//        ArrayList<Object> values = new ArrayList<>();
-//        values.add(14);
-//        values.add("1909430188");
-//        values.add("Andrea Pirlo: I Think Therefore I Play");
-//        values.add(currentTime);
-//        values.add(start_res);
-//        values.add(end_res);
-//        values.add(1);
-//        boolean res = dbms.insertNewReservation(values);
-//        System.out.print(res);
+        Event_partecipant partecipant = new Event_partecipant();
+
+        String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
+        Boolean res = dbms.insertNewEventPartecipant(partecipant, schema_name);
+
 
         // TODO: DELETE FROM booksreservations
 // ciao
 //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
 //                "library_1.booksreservations");
 //        System.out.print(res);
+    }
+
+    private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
+        LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);
+        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+        ld.setLibraryContent(lc);
+        return ld;
     }
 
     private static Date stringToDate(String s) {

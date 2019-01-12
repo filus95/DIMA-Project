@@ -17,7 +17,7 @@ import java.util.Map;
  * String received
  */
 
-class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
+public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
     private SocketThreadHandler socketHandler;
     private ObjectInputStream objectInputStream;
     private ObjectOutputStream objectOutputStream;
@@ -416,8 +416,6 @@ class ServerDataHandler implements ClientConnMethods, LibrarianConnMethods{
             e.printStackTrace();
         }
     }
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * It overwrite the functional interface with the reference of a specific method in the map according to the string

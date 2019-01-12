@@ -47,6 +47,7 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
             }
         } catch(IOException | ClassNotFoundException e){
             e.printStackTrace();
+            System.out.print("SONO USCITO");
         }
 
     }
