@@ -110,11 +110,16 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_on_reservation` AFTER INSERT ON `booksreservations` FOR EACH ROW BEGIN
-    update library_2.books set quantity = quantity - NEW.quantity and
-                                          books.reserved = true
-
-    where library_2.books.identifier = NEW.book_identifier;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_on_reservation` AFTER INSERT ON `booksreservations` FOR EACH ROW BEGIN
+
+    update library_2.books set quantity = quantity - NEW.quantity and
+
+                                          books.reserved = true
+
+
+
+    where library_2.books.identifier = NEW.book_identifier;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -130,10 +135,14 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_count_on_delivering` AFTER DELETE ON `booksreservations` FOR EACH ROW begin
-    update library_2.books set quantity = quantity + OLD.quantity and
-                                          books.reserved = false
-    where library_2.books.identifier = OLD.book_identifier;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_count_on_delivering` AFTER DELETE ON `booksreservations` FOR EACH ROW begin
+
+    update library_2.books set quantity = quantity + OLD.quantity and
+
+                                          books.reserved = false
+
+    where library_2.books.identifier = OLD.book_identifier;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -149,38 +158,70 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `waiting_list_flowing` AFTER DELETE ON `booksreservations` FOR EACH ROW begin
-
-    declare cond integer;
-    declare user_id integer;
-    declare reservation_date DATETIME;
-    declare start_res_date DATE;
-    declare end_res_date DATE;
-    declare quantity integer;
-
-    set cond = (select waiting_position from library_2.waitinglist where waitinglist.book_identifier =
-                                                                         OLD.book_identifier and waiting_position = 1);
-
-    if cond > 0 then
-
-      set user_id = (select user_id from waitinglist where waitinglist.book_identifier =
-                                                           OLD.book_identifier and waiting_position = 1);
-      set reservation_date = (select waitinglist.reservation_date from waitinglist where waitinglist.book_identifier =
-                                                                                         OLD.book_identifier and waiting_position = 1);
-      set start_res_date = (select waitinglist.user_id from waitinglist where waitinglist.book_identifier =
-                                                                              OLD.book_identifier and waiting_position = 1);
-      set end_res_date = (select waitinglist.ending_reservation_date from waitinglist where waitinglist.book_identifier =
-                                                                                            OLD.book_identifier and waiting_position = 1);
-      set quantity = (select waitinglist.quantity from waitinglist where waitinglist.book_identifier =
-                                                                         OLD.book_identifier and waiting_position = 1);
-
-      insert into booksreservations (user_id, book_identifier, book_title, reservation_date, starting_reservation_date,
-                                     ending_reservation_date, quantity)
-      values (user_id, old.book_identifier, old.book_title, reservation_date, start_res_date,end_res_date, quantity );
-
-      delete from waitinglist where waitinglist.book_identifier = old.book_identifier and
-                                    waiting_position = 1;
-    end if;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `waiting_list_flowing` AFTER DELETE ON `booksreservations` FOR EACH ROW begin
+
+
+
+    declare cond integer;
+
+    declare user_id integer;
+
+    declare reservation_date DATETIME;
+
+    declare start_res_date DATE;
+
+    declare end_res_date DATE;
+
+    declare quantity integer;
+
+
+
+    set cond = (select waiting_position from library_2.waitinglist where waitinglist.book_identifier =
+
+                                                                         OLD.book_identifier and waiting_position = 1);
+
+
+
+    if cond > 0 then
+
+
+
+      set user_id = (select user_id from waitinglist where waitinglist.book_identifier =
+
+                                                           OLD.book_identifier and waiting_position = 1);
+
+      set reservation_date = (select waitinglist.reservation_date from waitinglist where waitinglist.book_identifier =
+
+                                                                                         OLD.book_identifier and waiting_position = 1);
+
+      set start_res_date = (select waitinglist.user_id from waitinglist where waitinglist.book_identifier =
+
+                                                                              OLD.book_identifier and waiting_position = 1);
+
+      set end_res_date = (select waitinglist.ending_reservation_date from waitinglist where waitinglist.book_identifier =
+
+                                                                                            OLD.book_identifier and waiting_position = 1);
+
+      set quantity = (select waitinglist.quantity from waitinglist where waitinglist.book_identifier =
+
+                                                                         OLD.book_identifier and waiting_position = 1);
+
+
+
+      insert into booksreservations (user_id, book_identifier, book_title, reservation_date, starting_reservation_date,
+
+                                     ending_reservation_date, quantity)
+
+      values (user_id, old.book_identifier, old.book_title, reservation_date, start_res_date,end_res_date, quantity );
+
+
+
+      delete from waitinglist where waitinglist.book_identifier = old.book_identifier and
+
+                                    waiting_position = 1;
+
+    end if;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -302,15 +343,24 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating` AFTER INSERT ON `ratings` FOR EACH ROW begin
-
-    update propietary_db.ratings set rating = (rating*number_of_ratings
-                                                 + NEW.rating) / (number_of_ratings + 1)
-    where book_identifier = new.book_identifier;
-
-    update propietary_db.ratings set number_of_ratings = number_of_ratings + 1
-    where book_identifier = new.book_identifier;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating` AFTER INSERT ON `ratings` FOR EACH ROW begin
+
+
+
+    update propietary_db.ratings set rating = (rating*number_of_ratings
+
+                                                 + NEW.rating) / (number_of_ratings + 1)
+
+    where book_identifier = new.book_identifier;
+
+
+
+    update propietary_db.ratings set number_of_ratings = number_of_ratings + 1
+
+    where book_identifier = new.book_identifier;
+
+
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -355,15 +405,24 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_waiting_person` BEFORE INSERT ON `waitinglist` FOR EACH ROW begin
-    declare var int;
-
-    set var = count((select * from waitinglist where book_identifier = new.book_identifier));
-    set new.waiting_position = var + 1;
-
-    if NEW.waiting_position = 1 then
-      update library_1.books set wating_list = true;
-    end if;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_waiting_person` BEFORE INSERT ON `waitinglist` FOR EACH ROW begin
+
+    declare var int;
+
+
+
+    set var = count((select * from waitinglist where book_identifier = new.book_identifier));
+
+    set new.waiting_position = var + 1;
+
+
+
+    if NEW.waiting_position = 1 then
+
+      update library_1.books set wating_list = true;
+
+    end if;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -379,12 +438,18 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
-    if OLD.waiting_position = 1 then
-      update library_2.books set wating_list = false;
-    end if;
-    update library_2.waitinglist set waiting_position = waiting_position - 1
-    where library_2.waitinglist.book_identifier = OLD.book_identifier;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
+
+    if OLD.waiting_position = 1 then
+
+      update library_2.books set waiting_list = false;
+
+    end if;
+
+    update library_2.waitinglist set waiting_position = waiting_position - 1
+
+    where library_2.waitinglist.book_identifier = OLD.book_identifier;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;

@@ -679,15 +679,16 @@ public class DatabaseManager {
     }
 
 
-    public boolean checkUserExsist(String username) {
+    public boolean checkUserExsist(String email) {
         boolean ret = false;
         try {
 
-            String sql = "SELECT username FROM "+Constants.PROPIETARY_DB+".users " +
-                    "WHERE username = ?";
+            //todo: transform the query in this way
+            String sql = "SELECT username, name, surname FROM "+Constants.PROPIETARY_DB+".users " +
+                    "WHERE email = ?";
 
             PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, username);
+            pst.setString(1, email);
             ResultSet rs = pst.executeQuery();
 
             if ( rs.getFetchSize() > 0 )
@@ -748,10 +749,11 @@ public class DatabaseManager {
 
         Map<String, Object> map = new HashMap<>();
         map.put("username", user.getUsername());
+        map.put("name", user.getName());
+        map.put("surname", user.getSurname());
         map.put("email", user.getEmail());
         map.put("hashed_pd", hashPas);
         map.put("salt", salt);
-        //secondo me non serve a nulla
 
         String tableName = "users";
         return  insertStatement(map, tableName, Constants.PROPIETARY_DB);

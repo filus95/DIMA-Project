@@ -54,15 +54,24 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_waiting_person` BEFORE INSERT ON `waitinglist` FOR EACH ROW begin
-    declare var int;
-
-    set var = count((select * from waitinglist where book_identifier = new.book_identifier));
-    set new.waiting_position = var + 1;
-
-    if NEW.waiting_position = 1 then
-      update library_1.books set wating_list = true;
-    end if;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_waiting_person` BEFORE INSERT ON `waitinglist` FOR EACH ROW begin
+
+    declare var int;
+
+
+
+    set var = count((select * from waitinglist where book_identifier = new.book_identifier));
+
+    set new.waiting_position = var + 1;
+
+
+
+    if NEW.waiting_position = 1 then
+
+      update library_1.books set wating_list = true;
+
+    end if;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -78,12 +87,18 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
-    if OLD.waiting_position = 1 then
-      update library_2.books set wating_list = false;
-    end if;
-    update library_2.waitinglist set waiting_position = waiting_position - 1
-    where library_2.waitinglist.book_identifier = OLD.book_identifier;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
+
+    if OLD.waiting_position = 1 then
+
+      update library_2.books set waiting_list = false;
+
+    end if;
+
+    update library_2.waitinglist set waiting_position = waiting_position - 1
+
+    where library_2.waitinglist.book_identifier = OLD.book_identifier;
+
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
