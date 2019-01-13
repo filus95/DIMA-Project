@@ -15,6 +15,7 @@ import android.widget.EditText;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
+import com.gw.swipeback.SwipeBackLayout;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -79,6 +80,8 @@ public class Register extends Activity {
         super.onCreate(savedInstanceState);
         doBindService();
         setContentView(R.layout.register);
+        SwipeBackLayout mSwipeBackLayout = new SwipeBackLayout(this);
+        mSwipeBackLayout.attachToActivity(this);
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
     }
 

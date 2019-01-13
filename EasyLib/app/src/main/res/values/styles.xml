@@ -6,10 +6,32 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/Fade</item>
     </style>
 
     <style name="LoginInputs">
         <item name="colorAccent">@android:color/white</item>
+    </style>
+
+    <!-- Transparent Window Activity -->
+    <style name="AppTheme.TransparentWindow" parent="AppTheme">
+        <!--
+        We want the translucent background painted by the root layout instead
+        of painted by the window.
+        -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/Fade</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+    </style>
+    
+    // Fade transition when activity appears and disappears
+    <style name="Fade">
+        <item name="android:windowEnterAnimation">@anim/fade_in</item>
+        <item name="android:windowExitAnimation">@anim/fade_out</item>
     </style>
 
 </resources>

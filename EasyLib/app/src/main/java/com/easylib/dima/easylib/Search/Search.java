@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.easylib.dima.easylib.Main.QueueFragment.QueueAdapter;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
+import com.gw.swipeback.SwipeBackLayout;
 
 import java.util.ArrayList;
 
@@ -44,6 +45,8 @@ public class Search extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
+        SwipeBackLayout mSwipeBackLayout = new SwipeBackLayout(this);
+        mSwipeBackLayout.attachToActivity(this);
 
         // Search items
         searchText = (EditText) findViewById(R.id.search_text);
@@ -120,10 +123,10 @@ public class Search extends AppCompatActivity {
     public void activateAdvancedSearch(View view) {
         if (advancesSearchLay.getVisibility() == View.INVISIBLE) {
             advancesSearchLay.setVisibility(View.VISIBLE);
-            searchBt.setColorFilter(getResources().getColor(R.color.colorYellow));
+            searchBt.setColorFilter(getResources().getColor(R.color.colorPrimaryDark));
         } else {
             advancesSearchLay.setVisibility(View.INVISIBLE);
-            searchBt.setColorFilter(Color.WHITE);
+            searchBt.setColorFilter(R.color.colorGray);
         }
     }
 
