@@ -11,8 +11,8 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="0dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="@font/monotype_corsiva"
         android:text="In Line"
         android:textAlignment="center"
@@ -28,7 +28,6 @@
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

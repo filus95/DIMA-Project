@@ -35,16 +35,13 @@
             android:hardwareAccelerated="true"/>
         <activity
             android:name=".Login.Register"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.ConnectionService" />
 
         <activity android:name=".Login.LoginPreference"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Search.Search"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.TransparentWindow"/>
     </application>
 
