@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
@@ -80,8 +81,6 @@ public class Register extends Activity {
         super.onCreate(savedInstanceState);
         doBindService();
         setContentView(R.layout.register);
-        SwipeBackLayout mSwipeBackLayout = new SwipeBackLayout(this);
-        mSwipeBackLayout.attachToActivity(this);
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
     }
 

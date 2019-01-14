@@ -45,8 +45,6 @@ public class Search extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
-        SwipeBackLayout mSwipeBackLayout = new SwipeBackLayout(this);
-        mSwipeBackLayout.attachToActivity(this);
 
         // Search items
         searchText = (EditText) findViewById(R.id.search_text);
