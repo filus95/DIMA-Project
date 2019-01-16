@@ -208,9 +208,64 @@ public class DatabaseManager {
         columnsName.add("library_3_id");
 
         Map<String, Object> map = up.getMapAttribute(columnsName);
+        String query_is_user_in = "select * from "+Constants.PROPIETARY_DB+
+                "."+Constants.PREFERENCE_TABLE_NAME+" where user_id = ?";
+
+        try {
+
+            PreparedStatement pst = conn.prepareStatement(query_is_user_in);
+            pst.setInt(1, up.getUser_id());
+            ResultSet rs = pst.executeQuery();
+            if ( rs.next() ) {
+                return updateStatement (map, Constants.PROPIETARY_DB, Constants.PREFERENCE_TABLE_NAME);
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+
         return insertStatement(map, Constants.PREFERENCE_TABLE_NAME, Constants.PROPIETARY_DB);
 
     }
+
+    private boolean updateStatement(Map<String, Object> map, String schema_name, String table_name) {
+        boolean res = false;
+        try {
+
+            String query = createUpdateStatement(map, schema_name, table_name);
+            PreparedStatement pstmt = conn.prepareStatement(query);
+
+            pstmt.executeUpdate();
+            pstmt.close();
+            res = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
+    private String createUpdateStatement(Map<String, Object> map, String schema_name, String tableName) {
+        StringBuilder columns_name = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        int count = 0;
+        String stm = "UPDATE "+schema_name+"."+tableName+" SET ";// +"+columns_name+" = "+values",";
+        columns_name.append(stm);
+
+        int lenght = map.size();
+        for (String key: map.keySet()) {
+            if ((count != lenght - 1)) {
+                columns_name.append(key).append(" = ").append(map.get(key)).append(", ");
+            } else
+                columns_name.append(key).append(" = ").append(map.get(key));
+
+            count++;
+        }
+
+        columns_name.append(" where user_id = ").append(map.get("user_id"));
+        System.out.print("ciao");
+        return  columns_name.toString();
+    }
+
 
     public ArrayList<Integer> getUserPreferences(int user_id) {
         String query = "select * from "+Constants.PROPIETARY_DB+
@@ -282,6 +337,7 @@ public class DatabaseManager {
             res = false;
         }
 
+        //todo: necessary to close conn?
         try {
             conn.close();
         } catch (SQLException e) {

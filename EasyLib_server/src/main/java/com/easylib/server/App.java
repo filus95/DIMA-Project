@@ -49,14 +49,16 @@ public class App
         DatabaseManager dbms = new DatabaseManager();
         // todo: always use SimpleDateFormat for dates since windows sucks...
 
-        int id_lib = 1;
-        int limit = 3;
-        String schema_name = dbms.getSchemaNameLib(id_lib);
-        ArrayList<News> res = dbms.getNews(schema_name, limit);
+//        int id_lib = 1;
+//        int limit = 3;
+//        String schema_name = dbms.getSchemaNameLib(id_lib);
+//        ArrayList<News> res = dbms.getNews(schema_name, limit);
 
-        for (News x: res){
-            System.out.print(x.getTitle()+"\n");
-        }
+        UserPreferences up = new UserPreferences();
+        up.setUser_id(1);
+        up.setId_lib1(3);
+        System.out.print(dbms.insertPreferences(up));
+
 
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);
