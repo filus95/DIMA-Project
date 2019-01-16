@@ -222,7 +222,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             int limit = 5;
             socketHandler.sendViaSocket(Constants.GET_EVENTS);
-            res = dbms.getAllEvents(schema_name, limit);
+            res = dbms.getEvents(schema_name, limit);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             res = null;
@@ -253,7 +253,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             int id_lib = (int)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(id_lib);
             socketHandler.sendViaSocket(Constants.GET_NEWS);
-            res = dbms.getAllNews(schema_name, limit);
+            res = dbms.getNews(schema_name, limit);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             res = null;

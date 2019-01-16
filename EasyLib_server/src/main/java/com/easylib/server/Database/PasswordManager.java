@@ -82,10 +82,10 @@ class PasswordManager {
      */
     boolean isExpectedPassword(User user) throws SQLException {
 
-        String sql = "SELECT username, salt, hashed_pd FROM propietary_db.users WHERE username = ?";
+        String sql = "SELECT salt, hashed_pd FROM propietary_db.users WHERE email = ?";
 
         PreparedStatement st = this.conn.prepareStatement(sql);
-        st.setString(1, user.getUsername());
+        st.setString(1, user.getEmail());
         ResultSet rs = st.executeQuery();
 
         if (rs.next()) {

@@ -48,7 +48,15 @@ public class App
 
         DatabaseManager dbms = new DatabaseManager();
         // todo: always use SimpleDateFormat for dates since windows sucks...
-        Query query = new Query();
+
+        int id_lib = 1;
+        int limit = 3;
+        String schema_name = dbms.getSchemaNameLib(id_lib);
+        ArrayList<News> res = dbms.getNews(schema_name, limit);
+
+        for (News x: res){
+            System.out.print(x.getTitle()+"\n");
+        }
 
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);
@@ -80,34 +88,34 @@ public class App
         //                "library_1");
 
         // TODO: ADD INTO booksreservations
-        java.util.Date dt = new java.util.Date();
-        java.text.SimpleDateFormat reservation_date =
-                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date start_res = stringToDate("2018-12-3");
-        //
-        Date end_res = stringToDate("2018-12-30");
-        LocalDateTime now = LocalDateTime.now();
-        //        System.out.print(currentTime);
-        //
-        Event event = new Event();
-        event.setIdLib(1);
-        LocalDate yourDate = LocalDate.of(2018, 12, 27);
-        LocalDate yourDate1 = LocalDate.of(2019, 1, 27);
-
-        LocalDateTime dateTime = yourDate1.atTime(LocalTime.of(17, 30));
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        //        event.setDate(dtf.format(dateTime));
-
-
-        Rating rating = new Rating();
-        rating.setBook_identifier("1408827727");
-        rating.setIdLib(1);
-        rating.setRating(1);
-        rating.setUser_id(1);
-        String schema_name = dbms.getSchemaNameLib(rating.getIdLib());
-        Boolean res = dbms.insertRating(rating, schema_name);
-
-        System.out.print(res);
+//        java.util.Date dt = new java.util.Date();
+//        java.text.SimpleDateFormat reservation_date =
+//                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        Date start_res = stringToDate("2018-12-3");
+//        //
+//        Date end_res = stringToDate("2018-12-30");
+//        LocalDateTime now = LocalDateTime.now();
+//        //        System.out.print(currentTime);
+//        //
+//        Event event = new Event();
+//        event.setIdLib(1);
+//        LocalDate yourDate = LocalDate.of(2018, 12, 27);
+//        LocalDate yourDate1 = LocalDate.of(2019, 1, 27);
+//
+//        LocalDateTime dateTime = yourDate1.atTime(LocalTime.of(17, 30));
+//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+//        //        event.setDate(dtf.format(dateTime));
+//
+//
+//        Rating rating = new Rating();
+//        rating.setBook_identifier("1408827727");
+//        rating.setIdLib(1);
+//        rating.setRating(1);
+//        rating.setUser_id(1);
+//        String schema_name = dbms.getSchemaNameLib(rating.getIdLib());
+//        Boolean res = dbms.insertRating(rating, schema_name);
+//
+//        System.out.print(res);
 
 //        int user_id = 1;
 //        ArrayList<Integer> pref_lib_ids = dbms.getUserPreferences(user_id);
@@ -130,7 +138,7 @@ public class App
 //            System.out.print("\n" + "News:\n");
 //            for (News n : lc.getNews())
 //                System.out.print(n.getTitle() + "\n");
-//
+
 //        }
 
         // TODO: DELETE FROM booksreservations

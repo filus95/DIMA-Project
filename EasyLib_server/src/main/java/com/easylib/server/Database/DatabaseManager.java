@@ -297,7 +297,7 @@ public class DatabaseManager {
     public ArrayList<Book> queryAllBooks(String schema_lib){
         String query = "select identifier, title, publisher, category_1, category_2, category_3," +
                 " author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+".books";
+                "from "+schema_lib+".books order by id desc";
 
         return getQueryResultsBooks(query);
     }
@@ -475,23 +475,18 @@ public class DatabaseManager {
         return results;
     }
 
-     public ArrayList<News> getAllNews(String schema_name, int limit){
-        ArrayList<News> to_ret = new ArrayList<>();
-        String query = "select * from "+schema_name+".news";
-
-        int count = 0;
+    private ArrayList<News> createNewsObject(ArrayList<News> to_ret, String query) {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            while (rs.next() && count < limit){
+            while (rs.next()){
                 News elem = new News();
                 elem.setTitle(rs.getString("title"));
                 elem.setPost_date(rs.getTimestamp("post_date").toLocalDateTime());
                 elem.setContent(rs.getString("content"));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
-                count++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -500,16 +495,50 @@ public class DatabaseManager {
         return to_ret;
     }
 
+    public ArrayList<News> getNews(String schema_name, int limit) {
+        ArrayList<News> to_ret = new ArrayList<>();
+
+        String query = "select * from "+schema_name+".news " +
+                "order by id desc LIMIT "+limit;
+
+        to_ret = createNewsObject(to_ret, query);
+        return to_ret;
+    }
+
+    public ArrayList<News> getAllNews(String schema_name){
+        ArrayList<News> to_ret = new ArrayList<>();
+
+        String query = "select * from "+schema_name+".news " +
+                "order by id desc";
+
+        to_ret = createNewsObject(to_ret, query);
+        return to_ret;
+    }
+
     public ArrayList<Event> getAllEvents(String schema_name, int limit){
         ArrayList<Event> to_ret = new ArrayList<>();
-        String query = "select * from "+schema_name+".events";
+        String query = "select * from "+schema_name+".events order by" +
+                "  id desc";
 
-        int count = 0;
+        to_ret = createEventsObject(to_ret, query);
+        return to_ret;
+    }
+
+    public ArrayList<Event> getEvents(String schema_name, int limit){
+        ArrayList<Event> to_ret = new ArrayList<>();
+        String query = "select * from "+schema_name+".events order by" +
+                "  id desc LIMIT "+limit;
+
+        to_ret = createEventsObject(to_ret, query);
+        return to_ret;
+    }
+
+    private ArrayList<Event> createEventsObject(ArrayList<Event> to_ret, String query) {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            while (rs.next() && count < limit){
+            while (rs.next()){
                 Event elem = new Event();
                 elem.setId(rs.getInt("id"));
                 elem.setTitle(rs.getString("title"));
@@ -517,7 +546,6 @@ public class DatabaseManager {
                 elem.setSeats((Integer.parseInt(rs.getString("seats"))));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
-                count++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -637,7 +665,7 @@ public class DatabaseManager {
     public LibraryContent getLibraryContent(String schema_name) {
         ArrayList<Book> books = queryAllBooks(schema_name);
         books = getNbooks(books, 5);
-        ArrayList<News> news = getAllNews(schema_name, 5);
+        ArrayList<News> news = getAllNews(schema_name);
         ArrayList<Event> events = getAllEvents(schema_name, 5);
 
         LibraryContent lc = new LibraryContent();
