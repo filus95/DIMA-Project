@@ -54,10 +54,14 @@ public class App
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
 //        ArrayList<News> res = dbms.getNews(schema_name, limit);
 
-        UserPreferences up = new UserPreferences();
-        up.setUser_id(1);
-        up.setId_lib1(3);
-        System.out.print(dbms.insertPreferences(up));
+        Query query = new Query();
+        query.setIdentifier("0385542690");
+
+        ArrayList<Book> books = dbms.queryBookByIdentifier(query.getIdentifier(), "library_1");
+
+        for ( Book b: books){
+            System.out.print(b.getTitle());
+        }
 
 
         //        Reservation reservation = new Reservation();

@@ -60,6 +60,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.GET_NEWS, this::getNews);
         map.put(Constants.GET_EVENTS, this::getEvents);
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
+        map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
         // Add new methods
     }
 
@@ -93,7 +94,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             Query query = (Query)objectInputStream.readObject();
             String schema_lib = dbms.getSchemaNameLib(query.getIdLib());
 
-            if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
+            if ( query.getIdentifier() != null ){
+                result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib);
+            }
+            else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
                 result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
             else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
                 result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib);
@@ -294,6 +298,24 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
         socketHandler.sendViaSocket(res);
     }
+
+    private void getWaitingListForAUser() {
+        ArrayList<Book> res;
+        try {
+            User user = (User) objectInputStream.readObject();
+            ArrayList<Integer> id_libs = dbms.getAllIdLibs();
+            int user_id = user.getUser_id();
+            res = dbms.getWaitingListUser(user_id, id_libs);
+
+            socketHandler.sendViaSocket(Constants.GET_WAITING_LIST_USER);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            res = null;
+        }
+        socketHandler.sendViaSocket(res);
+    }
+
 
     private void insertLibrary(){
         boolean res = false;
