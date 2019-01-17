@@ -1,10 +1,8 @@
 package com.easylib.dima.easylib.Search;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -15,10 +13,8 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.easylib.dima.easylib.Main.QueueFragment.QueueAdapter;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
-import com.gw.swipeback.SwipeBackLayout;
 
 import java.util.ArrayList;
 
@@ -98,8 +94,6 @@ public class Search extends AppCompatActivity {
                 return false;
             }
         });
-
-        searchText.setText(getIntent().getStringExtra("searched"));
 
         int i;
         for(i=0; i<15; i++) {
