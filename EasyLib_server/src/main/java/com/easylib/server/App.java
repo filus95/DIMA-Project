@@ -54,14 +54,16 @@ public class App
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
 //        ArrayList<News> res = dbms.getNews(schema_name, limit);
 
-        Query query = new Query();
-        query.setIdentifier("0385542690");
+        WaitingPersonInsert wp = new WaitingPersonInsert();
+        wp.setBook_identifier("8852068317");
+        wp.setId_lib(1);
+        wp.setQuantity(1);
+        wp.setReservation_date(LocalDateTime.now());
+        wp.setUser_id(1);
 
-        ArrayList<Book> books = dbms.queryBookByIdentifier(query.getIdentifier(), "library_1");
+        String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
 
-        for ( Book b: books){
-            System.out.print(b.getTitle());
-        }
+        System.out.print(dbms.insertNewWaitingPerson(wp, schema_name));
 
 
         //        Reservation reservation = new Reservation();

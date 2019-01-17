@@ -269,9 +269,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         boolean res;
         try {
 
-
-            WaitingPerson wp = (WaitingPerson) objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(wp.getIdLib());
+            WaitingPersonInsert wp = (WaitingPersonInsert) objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
 
             res = dbms.insertNewWaitingPerson(wp, schema_name);
         } catch (IOException | ClassNotFoundException e) {
@@ -300,7 +299,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     }
 
     private void getWaitingListForAUser() {
-        ArrayList<Book> res;
+        WaitingPerson res;
         try {
             User user = (User) objectInputStream.readObject();
             ArrayList<Integer> id_libs = dbms.getAllIdLibs();
