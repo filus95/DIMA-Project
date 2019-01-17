@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Login;
+package com.easylib.dima.easylib.Activities.Login;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -10,13 +10,11 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
-import com.gw.swipeback.SwipeBackLayout;
 
 import java.util.Iterator;
 import java.util.Objects;

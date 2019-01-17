@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Login;
+package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.easylib.dima.easylib.Main.MainActivity;
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
 

@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Main.QueueFragment;
+package com.easylib.dima.easylib.Adapters;
 
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;

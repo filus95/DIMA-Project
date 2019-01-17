@@ -1,7 +1,6 @@
-package com.easylib.dima.easylib.Main.QueueFragment;
+package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +13,6 @@ import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder> {
@@ -70,7 +67,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
         notifyItemRemoved(position);
     }
 
-    static class QueueHolder extends RecyclerView.ViewHolder {
+    static public class QueueHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
         protected TextView title;
         protected TextView author;

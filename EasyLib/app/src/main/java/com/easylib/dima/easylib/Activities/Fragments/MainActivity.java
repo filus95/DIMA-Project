@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Main;
+package com.easylib.dima.easylib.Activities.Fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,9 +12,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.easylib.dima.easylib.Main.QueueFragment.QueueFragment;
 import com.easylib.dima.easylib.R;
-import com.easylib.dima.easylib.Search.Search;
+import com.easylib.dima.easylib.Activities.Search;
 
 public class MainActivity extends AppCompatActivity {
 

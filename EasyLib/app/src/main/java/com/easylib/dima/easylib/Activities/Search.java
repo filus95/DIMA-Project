@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Search;
+package com.easylib.dima.easylib.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

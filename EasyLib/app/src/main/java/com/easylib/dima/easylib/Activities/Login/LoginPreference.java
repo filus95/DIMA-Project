@@ -1,15 +1,15 @@
-package com.easylib.dima.easylib.Login;
+package com.easylib.dima.easylib.Activities.Login;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.easylib.dima.easylib.Adapters.PrefLibAdapter;
 import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class LoginPreference extends AppCompatActivity {
 

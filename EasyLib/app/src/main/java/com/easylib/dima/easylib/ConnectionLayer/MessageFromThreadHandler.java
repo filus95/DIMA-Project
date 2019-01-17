@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.easylib.dima.easylib.Login.Register;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
