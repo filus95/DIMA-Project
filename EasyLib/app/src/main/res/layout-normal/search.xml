@@ -38,7 +38,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/search_item" />
+                tools:listitem="@layout/book_list_item" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -64,7 +64,7 @@
                         android:layout_weight="1.75"
                         android:backgroundTint="@android:color/transparent"
                         android:onClick="activateAdvancedSearch"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
                         app:srcCompat="@drawable/ic_adv_filter_search" />
 
                     <LinearLayout

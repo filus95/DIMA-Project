@@ -13,6 +13,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
@@ -24,7 +25,7 @@ public class Search extends AppCompatActivity {
 
     // recycle view
     private RecyclerView mRecyclerView;
-    private SearchAdapter mAdapter;
+    private BookAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     // Toolbar
@@ -108,7 +109,7 @@ public class Search extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new SearchAdapter(this, books);
+        mAdapter = new BookAdapter(this, books);
         mRecyclerView.setAdapter(mAdapter);
     }
 

@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Search;
+package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -14,27 +14,27 @@ import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
-public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHolder> {
+public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookHolder> {
 
-    ArrayList<Book> search_books;
+    ArrayList<Book> books;
     Context context;
 
-    public SearchAdapter(Context context, ArrayList search_books) {
+    public BookAdapter(Context context, ArrayList books) {
         this.context = context;
-        this.search_books = search_books;
+        this.books = books;
     }
 
     @Override
-    public SearchHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BookHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // inflate the item
-        View v = LayoutInflater.from(context).inflate(R.layout.search_item, parent, false);
-        return new SearchHolder(v);
+        View v = LayoutInflater.from(context).inflate(R.layout.book_list_item, parent, false);
+        return new BookHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(SearchHolder holder, int position) {
+    public void onBindViewHolder(BookHolder holder, int position) {
         // set the data in items
-        Book book = search_books.get(position);
+        Book book = books.get(position);
         Glide.with(context)
                 .load(book.getImage())
                 .into(holder.image);
@@ -55,15 +55,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchHold
 
     @Override
     public int getItemCount() {
-        return search_books.size();
+        return books.size();
     }
 
-    static class SearchHolder extends RecyclerView.ViewHolder {
+    static class BookHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
         protected TextView title;
         protected TextView author;
 
-        public SearchHolder(View v) {
+        public BookHolder(View v) {
             super(v);
             image = v.findViewById(R.id.search_img);
             title = v.findViewById(R.id.search_title);
