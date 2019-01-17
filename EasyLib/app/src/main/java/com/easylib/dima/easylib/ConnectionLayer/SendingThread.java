@@ -50,7 +50,7 @@ public class SendingThread implements Runnable{
      *                - registration: user
      *                - Library conncetion info: id library (INTEGER not int)( goes from 1 to 2 in the current state )
      *                - Insert rating: Rating
-     *                - get user preferences: User id (int)
+     *                - getUserPreferences: User id (int)
      *                - insert preferences: User preference
      *                - getWaitingListForAbook: Book object filled with only book identifier (ISBN) and the id of the library in which it is located
      *                - getNews: idLib (int)
