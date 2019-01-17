@@ -7,17 +7,57 @@
     android:layout_height="match_parent"
     tools:context=".Main.MainActivity">
 
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@drawable/topnav_back"
+        android:orientation="horizontal"
+        android:paddingLeft="3dp"
+        android:paddingRight="3dp"
+        android:visibility="visible">
+
+        <ImageButton
+            android:id="@+id/search_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="goToSearch"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_search" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_weight="0.35"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+
+        <ImageButton
+            android:id="@+id/notification_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:onClick="goToNofitication"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_notification" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="55dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbar">
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"></FrameLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navbar"
@@ -34,17 +74,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_items">
-
     </android.support.design.widget.BottomNavigationView>
-
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
 </android.support.constraint.ConstraintLayout>

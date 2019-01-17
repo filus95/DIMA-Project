@@ -86,7 +86,7 @@
                             android:background="@color/colorWhite"
                             android:ems="10"
                             android:fontFamily="serif-monospace"
-                            android:hint="Search"
+                            android:hint="Title"
                             android:imeOptions="actionSearch"
                             android:inputType="text"
                             android:textAlignment="center"
