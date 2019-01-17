@@ -22,7 +22,7 @@ import java.util.Set;
 
 import AnswerClasses.User;
 
-public class Register extends Activity {
+public class RegisterActivity extends Activity {
     ConnectionService mBoundService;
     boolean mIsBound;
 
@@ -40,7 +40,7 @@ public class Register extends Activity {
     };
 
     public void doBindService() {
-        bindService(new Intent(Register.this, ConnectionService.class), mConnection,
+        bindService(new Intent(RegisterActivity.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -110,7 +110,7 @@ public class Register extends Activity {
     }
 
     public void goToLogin(){
-        Intent intent = new Intent(this, Login.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
 

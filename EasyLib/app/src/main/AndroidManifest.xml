@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.Login.Login"
+            android:name=".Activities.Login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,14 +34,14 @@
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"/>
         <activity
-            android:name=".Activities.Login.Register"
+            android:name=".Activities.Login.RegisterActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.ConnectionService" />
 
-        <activity android:name=".Activities.Login.LoginPreference"
+        <activity android:name=".Activities.Login.LoginPreferenceActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
-        <activity android:name=".Activities.Search"
+        <activity android:name=".Activities.SearchActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
     </application>
 

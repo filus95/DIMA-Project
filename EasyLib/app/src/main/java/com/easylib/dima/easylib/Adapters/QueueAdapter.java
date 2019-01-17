@@ -41,13 +41,14 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
                 .into(holder.image);
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
+        holder.location.setText(book.getLocation());
         holder.num.setText(String.valueOf(book.getQueue()));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call method to see book activity
+                // TODO: call method to see book_activity activity
                 //Intent intent = new Intent(context, MainActivity.class);
                 //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 //context.startActivity(intent);
@@ -71,6 +72,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
         protected ImageView image;
         protected TextView title;
         protected TextView author;
+        protected TextView location;
         protected TextView num;
 
         protected LinearLayout viewBackground, viewForeground;
@@ -80,6 +82,7 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
             image = v.findViewById(R.id.queue_img);
             title = v.findViewById(R.id.queue_title);
             author = v.findViewById(R.id.queue_author);
+            location = v.findViewById(R.id.queue_location);
             num = v.findViewById(R.id.queue_num);
             viewBackground = v.findViewById(R.id.queue_background);
             viewForeground = v.findViewById(R.id.queue_foreground);

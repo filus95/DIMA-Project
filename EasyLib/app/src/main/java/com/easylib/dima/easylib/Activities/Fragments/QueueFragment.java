@@ -35,7 +35,7 @@ public class QueueFragment extends Fragment
         // JUST FOR TEST
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
+            books.add(new Book("Title"+i,"Author "+i, "Via non lo so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);

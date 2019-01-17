@@ -11,7 +11,7 @@ import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
-public class LoginPreference extends AppCompatActivity {
+public class LoginPreferenceActivity extends AppCompatActivity {
 
     private ArrayList<Biblo> libraries = new ArrayList<Biblo>();
 

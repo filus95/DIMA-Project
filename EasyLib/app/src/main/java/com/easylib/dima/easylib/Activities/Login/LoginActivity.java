@@ -37,7 +37,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import AnswerClasses.User;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     //Comunication
     ConnectionService mBoundService;
@@ -69,7 +69,7 @@ public class Login extends AppCompatActivity {
     };
 
     public void doBindService() {
-        bindService(new Intent(Login.this, ConnectionService.class), mConnection,
+        bindService(new Intent(LoginActivity.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -117,7 +117,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        startService(new Intent(Login.this, ConnectionService.class));
+        startService(new Intent(LoginActivity.this, ConnectionService.class));
 
         // Google Initialization
         mAuth = FirebaseAuth.getInstance();
@@ -126,7 +126,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if( firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(Login.this, MainActivity.class));
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
         };
@@ -145,7 +145,7 @@ public class Login extends AppCompatActivity {
         String email = eText.getText().toString();
         String password = pText.getText().toString();
 
-        // try...catch used to hide keyboard after Login button pressed
+        // try...catch used to hide keyboard after LoginActivity button pressed
         try {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
@@ -168,14 +168,14 @@ public class Login extends AppCompatActivity {
             // TODO: finish implementing getNews
 //          mBoundService.sendMessage(Constants.GET_NEWS, num);
 
-            Intent intent = new Intent(this, LoginPreference.class);
+            Intent intent = new Intent(this, LoginPreferenceActivity.class);
             startActivity(intent);
         }
     }
 
     public void register(View view) {
         mBoundService.setCurrentContext(this);
-        Intent intent = new Intent(this, Register.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 
@@ -228,6 +228,6 @@ public class Login extends AppCompatActivity {
     }
 
     public void loginFb(View view) {
-        //TODO: call Facebook Login API
+        //TODO: call Facebook LoginActivity API
     }
 }

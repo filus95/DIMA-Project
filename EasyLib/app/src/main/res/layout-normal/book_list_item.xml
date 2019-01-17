@@ -17,7 +17,7 @@
         android:visibility="visible">
 
         <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/search_img"
+            android:id="@+id/book_item_img"
             android:layout_width="60dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
@@ -31,24 +31,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/search_title"
+                android:id="@+id/book_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Title" />
+                android:text="Title"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/search_author"
+                android:id="@+id/book_item_author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Author" />
+                android:text="Author"
+                android:textSize="16sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/book_item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Location" />
 
         </LinearLayout>
 

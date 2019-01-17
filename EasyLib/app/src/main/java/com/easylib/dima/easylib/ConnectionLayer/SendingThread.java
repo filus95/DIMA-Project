@@ -45,14 +45,14 @@ public class SendingThread implements Runnable{
      * @param content Object needed to the Server to perform operations
      *
      *                MESSAGE TO THE SERVER : OBJECT TO FILL
-     *                - Login: user
+     *                - LoginActivity: user
      *                - Password forgot: user
      *                - registration: user
      *                - Library conncetion info: id library (INTEGER not int)( goes from 1 to 2 in the current state )
      *                - Insert rating: Rating
      *                - getUserPreferences: User id (int)
      *                - insert preferences: User preference
-     *                - getWaitingListForAbook: Book object filled with only book identifier (ISBN) and the id of the library in which it is located
+     *                - getWaitingListForAbook: BookActivity object filled with only book_activity identifier (ISBN) and the id of the library in which it is located
      *                - getNews: idLib (int)
      *                - getEvents: idLib (int)
      *                - insertEventPartecipant: Partecipant filled also with idLib

@@ -19,7 +19,7 @@ import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
-public class Search extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
 
     private ArrayList<Book> books = new ArrayList<Book>();
 
@@ -43,18 +43,18 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-        // Search items
+        // SearchActivity items
         searchText = (EditText) findViewById(R.id.search_text);
         searchBt = (ImageButton) findViewById(R.id.search_icon);
         searchLay = (LinearLayout) findViewById(R.id.search_lin_layout);
         clearbt = (ImageButton) findViewById(R.id.clear_bt);
-        // Advancd Search items
+        // Advancd SearchActivity items
         advancesSearchLay = (LinearLayout) findViewById(R.id.advanced_search_linear_layout);
         advSearchAuthor = (EditText) findViewById(R.id.search_author);
         advSearchGenre = (EditText) findViewById(R.id.search_genre);
         advSearchLib = (EditText) findViewById(R.id.search_biblo);
 
-        // Change the Enter key on keyborad in a Search button
+        // Change the Enter key on keyborad in a SearchActivity button
         searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -98,7 +98,7 @@ public class Search extends AppCompatActivity {
 
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
+            books.add(new Book("Title"+i,"Author "+i, "Via non la so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         // Recycle View Settings

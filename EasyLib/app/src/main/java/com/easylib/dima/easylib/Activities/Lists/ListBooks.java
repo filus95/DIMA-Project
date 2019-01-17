@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Lists;
+package com.easylib.dima.easylib.Activities.Lists;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,11 +24,11 @@ public class ListBooks extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+        setContentView(R.layout.book_list_activity);
 
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
+            books.add(new Book("BookActivity Title"+i,"BookActivity Author "+i, "Via non la so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         // Recycle View Settings

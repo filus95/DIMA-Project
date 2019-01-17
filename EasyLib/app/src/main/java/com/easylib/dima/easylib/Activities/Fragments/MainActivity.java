@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.R;
-import com.easylib.dima.easylib.Activities.Search;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     // Frame for Fragments and BottomNavBar
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
-    // Search items
+    // SearchActivity items
     private ImageButton searchBt;
 
     @Override
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // Frame for Fragments and BottomNavBar
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.bottom_navbar);
-        // Search items
+        // SearchActivity items
         searchBt = (ImageButton) findViewById(R.id.search_icon);
 
         // Set Initial Fragment to be visualized
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    // Method called when the Search icon is clicked
+    // Method called when the SearchActivity icon is clicked
     public void goToSearch(View view) {
-        Intent intent = new Intent(this, Search.class);
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 
