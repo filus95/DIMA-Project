@@ -54,6 +54,8 @@ public class App
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
 //        ArrayList<News> res = dbms.getNews(schema_name, limit);
 
+
+        System.out.print("ciao");
         WaitingPersonInsert wp = new WaitingPersonInsert();
         wp.setBook_identifier("8852068317");
         wp.setId_lib(1);
