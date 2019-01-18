@@ -34,6 +34,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import AnswerClasses.User;
 
@@ -56,6 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton googleButton;
     private ImageButton facebookButton;
 
+    //For the communication Service
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -231,4 +233,13 @@ public class LoginActivity extends AppCompatActivity {
     public void loginFb(View view) {
         //TODO: call Facebook LoginActivity API
     }
+
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the InstanceID token
+     * is initially generated so this is where you would retrieve the token.
+     */
+
+
+
 }

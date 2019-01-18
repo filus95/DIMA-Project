@@ -28,6 +28,7 @@ public class Constants {
     static final String INSERT_EVENT = "insert_event";
     static final String TEST_CONN = "test";
     static final String GET_ALL_BOOKS = "get_all_books";
+    public static final String NEW_NOTIFICATION_TOKEN = "new_notification_token";
     // Communication strings
 
 }
