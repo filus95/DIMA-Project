@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
+import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,6 +35,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import AnswerClasses.User;
@@ -118,7 +121,6 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-
         startService(new Intent(LoginActivity.this, ConnectionService.class));
 
         // Google Initialization
@@ -141,11 +143,27 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         doBindService();
+
     }
 
     public void login(View view) {
         String email = eText.getText().toString();
         String password = pText.getText().toString();
+
+        // sending identification token for Firebase notifications
+//        FirebaseInstanceId.getInstance().getInstanceId()
+//                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+//                        if (!task.isSuccessful()) {
+//                            return;
+//                        }
+//
+//                        // Get new Instance ID token
+//                        String token = task.getResult().getToken();
+//                        mBoundService.sendMessage("test", token);
+//                    }
+//                });
 
         // try...catch used to hide keyboard after LoginActivity button pressed
         try {
@@ -172,7 +190,10 @@ public class LoginActivity extends AppCompatActivity {
 
             Intent intent = new Intent(this, LoginPreferenceActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+//            mBoundService.sendMessage(Constants.);
+//            doUnbindService();
             startActivity(intent);
+
         }
     }
 

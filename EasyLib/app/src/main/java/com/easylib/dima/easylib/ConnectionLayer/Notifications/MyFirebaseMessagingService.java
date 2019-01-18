@@ -50,14 +50,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
     @Override
     public void onCreate() {
-        System.out.print("SONO IN FIREBASE SERVICE!");
+        super.onCreate();
+        System.out.print("HERE");
         doBindService();
     }
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         // TODO(developer): Handle FCM messages here.
-
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
@@ -82,7 +82,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
      */
     @Override
     public void onNewToken(String token) {
-
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
