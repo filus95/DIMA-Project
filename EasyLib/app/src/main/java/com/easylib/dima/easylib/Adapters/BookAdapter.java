@@ -40,6 +40,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookHolder> {
                 .into(holder.image);
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
+        holder.location.setText(book.getLocation());
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
