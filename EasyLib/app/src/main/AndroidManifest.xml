@@ -43,6 +43,12 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.SearchActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.BookActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.BookListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.LibraryListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
     </application>
 
 </manifest>
