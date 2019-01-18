@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Login.Login"
+            android:name=".Activities.Login.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,18 +30,26 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Main.MainActivity"
+            android:name=".Activities.Fragments.MainActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="true"/>
         <activity
-            android:name=".Login.Register"
+            android:name=".Activities.Login.RegisterActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.ConnectionService" />
 
-        <activity android:name=".Login.LoginPreference"
+        <activity android:name=".Activities.Login.LoginPreferenceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Activities.SearchActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
-        <activity android:name=".Search.Search"
+        <activity android:name=".Activities.BookActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.BookListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.LibraryListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.RatedBooksActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
     </application>
 

@@ -359,7 +359,7 @@ public class MessagesFromServerHandler {
         }
     }
 
-    //it receives a Book arraylist from the stream. If something wrong, receives null
+    //it receives a BookActivity arraylist from the stream. If something wrong, receives null
     private void getAllBooks() {
         try {
             Bundle b = new Bundle();

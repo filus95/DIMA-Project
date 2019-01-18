@@ -1,12 +1,8 @@
-package com.easylib.dima.easylib.Main.QueueFragment;
+package com.easylib.dima.easylib.Activities.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -14,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.easylib.dima.easylib.Adapters.QueueAdapter;
+import com.easylib.dima.easylib.Adapters.QueueRecyclerItemTouchHelper;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
@@ -37,7 +35,7 @@ public class QueueFragment extends Fragment
         // JUST FOR TEST
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
+            books.add(new Book("Title"+i,"Author "+i, "Via non lo so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);

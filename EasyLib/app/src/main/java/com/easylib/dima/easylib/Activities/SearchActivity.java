@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Search;
+package com.easylib.dima.easylib.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,25 +13,25 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
-public class Search extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity {
 
     private ArrayList<Book> books = new ArrayList<Book>();
 
     // recycle view
     private RecyclerView mRecyclerView;
-    private SearchAdapter mAdapter;
+    private BookAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     // Toolbar
-    private EditText searchText;
+    private EditText searchTitle;
     private ImageButton searchBt;
     private LinearLayout searchLay;
-    private ImageButton clearbt;
     private LinearLayout advancesSearchLay;
     private EditText advSearchAuthor;
     private EditText advSearchGenre;
@@ -42,19 +42,18 @@ public class Search extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-        // Search items
-        searchText = (EditText) findViewById(R.id.search_text);
+        // SearchActivity items
+        searchTitle = (EditText) findViewById(R.id.search_title);
         searchBt = (ImageButton) findViewById(R.id.search_icon);
         searchLay = (LinearLayout) findViewById(R.id.search_lin_layout);
-        clearbt = (ImageButton) findViewById(R.id.clear_bt);
-        // Advancd Search items
+        // Advancd SearchActivity items
         advancesSearchLay = (LinearLayout) findViewById(R.id.advanced_search_linear_layout);
         advSearchAuthor = (EditText) findViewById(R.id.search_author);
         advSearchGenre = (EditText) findViewById(R.id.search_genre);
         advSearchLib = (EditText) findViewById(R.id.search_biblo);
 
-        // Change the Enter key on keyborad in a Search button
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        // Change the Enter key on keyborad in a SearchActivity button
+        searchTitle.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -97,7 +96,7 @@ public class Search extends AppCompatActivity {
 
         int i;
         for(i=0; i<15; i++) {
-            books.add(new Book("Book Title"+i,"Book Author "+i, "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
+            books.add(new Book("Title"+i,"Author "+i, "Via non la so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
         // Recycle View Settings
@@ -108,7 +107,7 @@ public class Search extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new SearchAdapter(this, books);
+        mAdapter = new BookAdapter(this, books);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -122,8 +121,9 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    // When X button is pressed the search text is cleared
-    public void clearSearchText(View view) {
-        searchText.getText().clear();
-    }
+    // When X button is pressed the title text is cleared
+    public void clearTitleText(View view) {searchTitle.getText().clear();}
+    public void clearAuthorText(View view) {advSearchAuthor.getText().clear();}
+    public void clearGenreText(View view) {advSearchGenre.getText().clear();}
+    public void clearLibraryText(View view) {advSearchLib.getText().clear();}
 }

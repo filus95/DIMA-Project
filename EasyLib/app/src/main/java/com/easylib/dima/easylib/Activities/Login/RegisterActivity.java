@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib.Login;
+package com.easylib.dima.easylib.Activities.Login;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -10,13 +10,11 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
-import com.gw.swipeback.SwipeBackLayout;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -24,7 +22,7 @@ import java.util.Set;
 
 import AnswerClasses.User;
 
-public class Register extends Activity {
+public class RegisterActivity extends Activity {
     ConnectionService mBoundService;
     boolean mIsBound;
 
@@ -42,7 +40,7 @@ public class Register extends Activity {
     };
 
     public void doBindService() {
-        bindService(new Intent(Register.this, ConnectionService.class), mConnection,
+        bindService(new Intent(RegisterActivity.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
@@ -112,7 +110,7 @@ public class Register extends Activity {
     }
 
     public void goToLogin(){
-        Intent intent = new Intent(this, Login.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
 

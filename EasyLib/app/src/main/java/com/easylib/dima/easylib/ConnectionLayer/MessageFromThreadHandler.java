@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.easylib.dima.easylib.Login.Register;
-
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -222,7 +220,7 @@ public class MessageFromThreadHandler implements Serializable{
         this.currentContext.sendBroadcast(intent);
     }
 
-    //it receives a Book arraylist from the stream. If something wrong, receives null
+    //it receives a BookActivity arraylist from the stream. If something wrong, receives null
     private void getAllBooks(Bundle bundle) {
         ArrayList<Book> books = (ArrayList<Book>)bundle.getSerializable(Constants.GET_ALL_BOOKS);
         Intent intent = new Intent(Constants.GET_ALL_BOOKS);
