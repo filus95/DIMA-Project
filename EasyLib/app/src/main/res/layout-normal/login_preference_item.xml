@@ -34,10 +34,11 @@
 
             <TextView
                 android:id="@+id/login_pref_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Library Name"
+                android:singleLine="true"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -48,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="via non la so (MI)"
+                android:singleLine="true"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
         </LinearLayout>
