@@ -9,14 +9,15 @@ import android.view.View;
 
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.Adapters.PrefLibAdapter;
-import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
+import AnswerClasses.LibraryDescriptor;
+
 public class LoginPreferenceActivity extends AppCompatActivity {
 
-    private ArrayList<Biblo> libraries = new ArrayList<Biblo>();
+    private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -30,7 +31,11 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         // JUST FOR TEST
         int i;
         for(i=0; i<15; i++) {
-            libraries.add(new Biblo("Library Name "+i, "Via della strada "+i+" (MI)"));
+            LibraryDescriptor lib = new LibraryDescriptor();
+            lib.setAddress("via bla bla bla "+i+" (MI)");
+            lib.setLib_name("Library Name"+i);
+            lib.setImage_link("https://www.ucl.ac.uk/library/sites/library/files/students-studying.jpg");
+            libraries.add(lib);
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);

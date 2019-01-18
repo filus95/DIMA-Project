@@ -7,17 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
-import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
+import AnswerClasses.LibraryDescriptor;
+
 public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibHolder> {
 
-    ArrayList<Biblo> libraries;
+    ArrayList<LibraryDescriptor> libraries;
     Context context;
 
     public PrefLibAdapter(Context context, ArrayList libraries) {
@@ -35,12 +38,16 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
     @Override
     public void onBindViewHolder(PrefLibHolder holder, int position) {
         // set the data in items
-        Biblo biblo = libraries.get(position);
-        holder.lName.setText(biblo.getName());
-        holder.lAddr.setText(biblo.getAddr());
+        LibraryDescriptor library = libraries.get(position);
+        Glide.with(context)
+                .load(library.getImage_link())
+                .into(holder.image);
+        holder.name.setText(library.getLib_name());
+        holder.location.setText(library.getAddress());
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new OnClickListener() {
+            // TODO : onClick set Preference
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, MainActivity.class);
@@ -56,13 +63,15 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
     }
 
     static class PrefLibHolder extends RecyclerView.ViewHolder {
-        protected TextView lName;
-        protected TextView lAddr;
+        protected ImageView image;
+        protected TextView name;
+        protected TextView location;
 
         public PrefLibHolder(View v) {
             super(v);
-            lName = v.findViewById(R.id.lib_name);
-            lAddr = v.findViewById(R.id.lib_addr);
+            image = v.findViewById(R.id.login_pref_image);
+            name = v.findViewById(R.id.login_pref_name);
+            location = v.findViewById(R.id.login_pref_addr);
         }
     }
 }
