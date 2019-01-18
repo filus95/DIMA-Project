@@ -1,10 +1,13 @@
 package com.easylib.dima.easylib.Activities.Login;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.Adapters.PrefLibAdapter;
 import com.easylib.dima.easylib.Model.Biblo;
 import com.easylib.dima.easylib.R;
@@ -42,5 +45,11 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         // specify an adapter
         mAdapter = new PrefLibAdapter(this, libraries);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void skip(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

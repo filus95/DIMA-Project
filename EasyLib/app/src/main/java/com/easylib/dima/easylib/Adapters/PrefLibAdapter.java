@@ -43,7 +43,6 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
         holder.itemView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call method
                 Intent intent = new Intent(context, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
