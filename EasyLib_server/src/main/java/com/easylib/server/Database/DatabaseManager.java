@@ -4,7 +4,6 @@ import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -904,5 +903,37 @@ public class DatabaseManager {
     }
 
 
+    public ArrayList<Book> getAllUserRatedBooksForLib(Integer user_id, String schema_lib) {
+        String query = "select book_identifier from "+schema_lib+".ratings where " +
+                "user_id = "+user_id;
+
+        ArrayList<Integer> book_identifiers = getIdRatedBooks(query);
+        ArrayList<Book> result = new ArrayList<>();
+        for (Integer identifier: book_identifiers) {
+            query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2," +
+                    " author_3, author_4 " +
+                    "from " + schema_lib + ".books where identifier = "+identifier;
+
+            result.addAll(getQueryResultsBooks(query));
+        }
+        return result;
+    }
+
+    private ArrayList<Integer> getIdRatedBooks(String query) {
+        ArrayList<Integer> results = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next())
+                results.add(rs.getInt("book_identifier"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            results = null;
+        }
+        return results;
+    }
 }
 

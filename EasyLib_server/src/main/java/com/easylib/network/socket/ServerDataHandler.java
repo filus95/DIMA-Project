@@ -62,9 +62,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
         map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
         map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
+        map.put(Constants.GET_USER_RATED_BOOKS, this::getUserRatedBooks);
         // Add new methods
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
@@ -87,6 +87,28 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             e.printStackTrace();
         }
     }
+
+    private void getUserRatedBooks() {
+        try {
+
+            ArrayList<Book> result = new ArrayList<>();
+            ArrayList<Book> temp_res;
+            Integer user_id = (Integer)objectInputStream.readObject();
+            ArrayList<Integer> id_libs = dbms.getAllIdLibs();
+            for (Integer id_lib: id_libs) {
+                String schema_lib = dbms.getSchemaNameLib(id_lib);
+                temp_res = dbms.getAllUserRatedBooksForLib(user_id, schema_lib);
+                result.addAll(temp_res);
+            }
+
+            socketHandler.sendViaSocket(Constants.GET_USER_RATED_BOOKS);
+            socketHandler.sendBooks(result);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void bookQueryAllLib() {
         try {
