@@ -61,8 +61,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.GET_EVENTS, this::getEvents);
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
         map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
+        map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
         // Add new methods
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
@@ -86,6 +88,27 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
 
+    private void bookQueryAllLib() {
+        try {
+            ArrayList<Book> result = new ArrayList<>();
+            ArrayList<Book> temp_res;
+            Query query = (Query)objectInputStream.readObject();
+            ArrayList<Integer> id_libs = dbms.getAllIdLibs();
+
+            for (Integer id_lib: id_libs){
+                String schema_lib = dbms.getSchemaNameLib(id_lib);
+                temp_res = bookQueryUtility(query, schema_lib);
+                result.addAll(temp_res);
+            }
+
+            socketHandler.sendViaSocket(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
+            socketHandler.sendBooks(result);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void bookQuery(){
         try {
             ArrayList<Book> result;
@@ -94,29 +117,38 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             Query query = (Query)objectInputStream.readObject();
             String schema_lib = dbms.getSchemaNameLib(query.getIdLib());
 
-            if ( query.getIdentifier() != null ){
-                result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib);
-            }
-            else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
-                result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
-            else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
-                result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib);
-            else if(query.getTitle()==null && query.getAuthor() == null && query.getCategory() != null)
-                result = dbms.queryBooksByCategory(query.getCategory(), schema_lib);
-            else if(query.getTitle()!=null && query.getAuthor() != null && query.getCategory() == null)
-                result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor(), schema_lib);
-            else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() != null)
-                result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor(), schema_lib);
-            else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() != null)
-                result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory(), schema_lib);
-            else
-                result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory(), schema_lib);
+            result = bookQueryUtility(query, schema_lib);
 
             socketHandler.sendViaSocket(Constants.QUERY_ON_BOOKS);
             socketHandler.sendBooks(result);
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayList<Book> bookQueryUtility(Query query, String schema_lib){
+        ArrayList<Book> result;
+
+        if ( query.getIdentifier() != null ){
+            result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib);
+        }
+        else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
+            result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
+        else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
+            result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib);
+        else if(query.getTitle()==null && query.getAuthor() == null && query.getCategory() != null)
+            result = dbms.queryBooksByCategory(query.getCategory(), schema_lib);
+        else if(query.getTitle()!=null && query.getAuthor() != null && query.getCategory() == null)
+            result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor(), schema_lib);
+        else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() != null)
+            result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor(), schema_lib);
+        else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() != null)
+            result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory(), schema_lib);
+        else
+            result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory(), schema_lib);
+
+        return result;
     }
 
     private void getAllLibraries(){
