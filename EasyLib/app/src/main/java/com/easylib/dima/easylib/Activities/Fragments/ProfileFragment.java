@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -8,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.easylib.dima.easylib.Activities.RatedBooksActivity;
 import com.easylib.dima.easylib.Adapters.LibraryAdapter;
 import com.easylib.dima.easylib.R;
 
@@ -40,32 +44,48 @@ public class ProfileFragment extends Fragment {
             libraries.add(lib);
         }
 
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_library_recycle);
+        // Set Listener on Buttons
+        Button button1 = (Button) root.findViewById(R.id.profile_fragment_rated_books_button);
+        button1.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(getContext(), RatedBooksActivity.class);
+                startActivity(intent);
+            }
+        });
+        Button button2 = (Button) root.findViewById(R.id.profile_fragment_logout_button);
+        button2.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // TODO : implement logout
+            }
+        });
+        ImageButton button3 = (ImageButton) root.findViewById(R.id.profile_fragment_edit_button);
+        button3.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                // TODO : implement logout
+            }
+        });
 
+        // Recycle setup
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_library_recycle);
         // improve performance
         mRecyclerView.setHasFixedSize(true);
-
         // used linear layout
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
         // specify an adapter
         mAdapter = new LibraryAdapter(getContext(), libraries);
         mRecyclerView.setAdapter(mAdapter);
 
         return root;
-    }
-
-    public void editProfile(View view) {
-
-    }
-
-    public void readBooks(View view) {
-
-    }
-
-    public void logout(View view) {
-
     }
 }

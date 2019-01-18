@@ -40,7 +40,7 @@
         <service android:name=".ConnectionLayer.ConnectionService" />
 
         <activity android:name=".Activities.Login.LoginPreferenceActivity"
-            android:theme="@style/AppTheme.TransparentWindow"/>
+            android:screenOrientation="portrait"/>
         <activity android:name=".Activities.SearchActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.BookActivity"
@@ -48,6 +48,8 @@
         <activity android:name=".Activities.Lists.BookListActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.Lists.LibraryListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.RatedBooksActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
     </application>
 

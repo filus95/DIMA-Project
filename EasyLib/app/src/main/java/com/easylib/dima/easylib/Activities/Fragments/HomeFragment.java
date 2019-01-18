@@ -20,6 +20,8 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Set Listener on Buttons
         Button button = (Button) root.findViewById(R.id.allLibraries_home_fragment);
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -30,6 +32,7 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
         return root;
     }
 }
