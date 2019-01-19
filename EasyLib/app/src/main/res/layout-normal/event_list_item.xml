@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <LinearLayout
-        android:id="@+id/item_layout"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@drawable/round_rect_shadow"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/round_rect_shadow_cyan"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
         android:paddingRight="30dp"
-        android:layout_marginRight="15dp"
         android:visibility="visible">
 
         <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/book_item_img"
+            android:id="@+id/event_list_item_image"
             android:layout_width="60dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
@@ -28,37 +27,43 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/book_item_title"
+                android:id="@+id/event_list_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Title"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/book_item_author"
+                android:id="@+id/event_list_item_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Author"
-                android:textSize="16sp"
+                android:text="Location"
                 android:textStyle="italic" />
 
             <TextView
-                android:id="@+id/book_item_location"
+                android:id="@+id/event_list_item_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Location" />
+                android:text="00/00/0000" />
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/event_list_item_seats"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0"
+            android:text="10"
+            android:textSize="40sp" />
     </LinearLayout>
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

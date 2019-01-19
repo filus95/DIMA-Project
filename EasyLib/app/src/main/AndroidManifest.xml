@@ -50,6 +50,10 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.Lists.LibraryListActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.EventListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.Lists.NewsListActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.RatedBooksActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
 

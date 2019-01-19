@@ -24,7 +24,7 @@ public class BookListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.book_list_activity);
+        setContentView(R.layout.list_activity);
 
         int i;
         for(i=0; i<15; i++) {
@@ -32,7 +32,7 @@ public class BookListActivity extends AppCompatActivity {
         }
 
         // Recycle View Settings
-        mRecyclerView = (RecyclerView) findViewById(R.id.book_list_recycle);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
         mLayoutManager = new LinearLayoutManager(this);
