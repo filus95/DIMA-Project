@@ -42,6 +42,7 @@ public class SocketThreadHandler implements Runnable, ClientConnMethods, Librari
                 System.out.print("waiting for a string...\n");
                 Object object = objectInputStream.readObject();
                 System.out.print("String received!\n");
+                String x = object.toString();
                 System.out.print(object);
                 serverDataHandler.handleRequest(object);
                 System.out.print("Task terminated!\n");

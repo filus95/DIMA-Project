@@ -58,4 +58,9 @@ public class Constants {
     public static final String RATINGS_TABLE_NAME = "ratings";
     public static final String WAITING_LIST_TABLE_NAME = "waitinglist";
 
+    public static final String SERVER_KEY = "AAAAhmRahuY:APA91bHb85Vko2UAgMKbXJuSmH7477oWLoLRuhgvknl8h1o-" +
+            "M14C7OFGX99sYvVI9Aa_o0uwxZNmKu5gwKqP4y2tc5XbAKZ0uQ-PdnHXF3IL9VBS3IS8lo8GIj3pheqLmxLipS5lJrrp";
+
+
+
 }

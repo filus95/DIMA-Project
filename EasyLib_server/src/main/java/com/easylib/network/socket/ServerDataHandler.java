@@ -4,10 +4,23 @@ package com.easylib.network.socket; /**
 
 import AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -94,12 +107,45 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         try {
             User user = (User) objectInputStream.readObject();
             res = dbms.insertNotificationToken(user);
+            socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
+            sendNotification("test", "test", user.getNotification_token());
+            System.out.print("QUI");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            res = false;
         }
-        socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
-        socketHandler.sendViaSocket(res);
+    }
+
+    private void sendNotification(String title, String mess, String token){
+        // Declaration of Message Parameters
+        String message_url = "https://fcm.googleapis.com/fcm/send";
+        String message_sender_id = token;
+        String message_key = "key="+Constants.SERVER_KEY;
+
+        try {// Generating a JSONObject for the content of the message
+            JSONObject message = new JSONObject();
+
+            message.put("message", mess);
+
+            JSONObject protocol = new JSONObject();
+            protocol.put("to", message_sender_id);
+            protocol.put("data", message);
+
+        // Send Protocol
+
+            HttpClient httpClient = HttpClientBuilder.create().build();
+
+            HttpPost request = new HttpPost(message_url);
+            request.addHeader("content-type", "application/json");
+            request.addHeader("Authorization", message_key);
+
+            StringEntity params = new StringEntity(protocol.toString());
+            request.setEntity(params);
+            System.out.println(params);
+
+            HttpResponse response = httpClient.execute(request);
+            System.out.println(response.toString());
+        } catch (Exception e) {
+        }
     }
 
 
@@ -520,6 +566,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
      */
     void handleRequest(Object object) throws IOException, ClassNotFoundException {
 
+        String x = object.toString();
         this.methodsHadler = map.get(object.toString());
         this.methodsHadler.handle();
     }
