@@ -63,6 +63,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
         map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
         map.put(Constants.GET_USER_RATED_BOOKS, this::getUserRatedBooks);
+        map.put(Constants.NEW_NOTIFICATION_TOKEN, this::newNotificationToken);
         // Add new methods
     }
 
@@ -87,6 +88,20 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             e.printStackTrace();
         }
     }
+
+    private void newNotificationToken() {
+        Boolean res;
+        try {
+            User user = (User) objectInputStream.readObject();
+            res = dbms.insertNotificationToken(user);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            res = false;
+        }
+        socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
+        socketHandler.sendViaSocket(res);
+    }
+
 
     private void getUserRatedBooks() {
         try {
@@ -428,6 +443,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void test_conn() {
 
         try {
+            try {
+                String x = (String) objectInputStream.readObject();
+                System.out.print(x);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             objectOutputStream.writeObject("test");
             objectOutputStream.flush();
             objectOutputStream.reset();

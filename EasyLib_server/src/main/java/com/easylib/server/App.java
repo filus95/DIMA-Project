@@ -54,19 +54,23 @@ public class App
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
 //        ArrayList<News> res = dbms.getNews(schema_name, limit);
 
+//
+//        System.out.print("ciao");
+//        WaitingPersonInsert wp = new WaitingPersonInsert();
+//        wp.setBook_identifier("8852068317");
+//        wp.setId_lib(1);
+//        wp.setQuantity(1);
+//        wp.setReservation_date(LocalDateTime.now());
+//        wp.setUser_id(1);
+//
+//        String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
+//
+//        System.out.print(dbms.insertNewWaitingPerson(wp, schema_name));
 
-        System.out.print("ciao");
-        WaitingPersonInsert wp = new WaitingPersonInsert();
-        wp.setBook_identifier("8852068317");
-        wp.setId_lib(1);
-        wp.setQuantity(1);
-        wp.setReservation_date(LocalDateTime.now());
-        wp.setUser_id(1);
-
-        String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
-
-        System.out.print(dbms.insertNewWaitingPerson(wp, schema_name));
-
+        User user = new User();
+        user.setUser_id(1);
+        user.setNotification_token("cjdfadshfdkaòjggajnòfd");
+        dbms.insertNotificationToken(user);
 
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);

@@ -282,6 +282,7 @@ public class DatabaseManager {
         return res;
     }
 
+    // todo: maybe update can raise probles
     private String createUpdateStatement(Map<String, Object> map, String schema_name, String tableName) {
         StringBuilder columns_name = new StringBuilder();
         StringBuilder values = new StringBuilder();
@@ -291,6 +292,7 @@ public class DatabaseManager {
 
         int lenght = map.size();
         for (String key: map.keySet()) {
+
             if ((count != lenght - 1)) {
                 columns_name.append(key).append(" = ").append(map.get(key)).append(", ");
             } else
@@ -300,7 +302,6 @@ public class DatabaseManager {
         }
 
         columns_name.append(" where user_id = ").append(map.get("user_id"));
-        System.out.print("ciao");
         return  columns_name.toString();
     }
 
@@ -934,6 +935,26 @@ public class DatabaseManager {
             results = null;
         }
         return results;
+    }
+
+    public Boolean insertNotificationToken(User user) {
+        boolean res;
+        String query = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+
+                " SET messaging_token = '"+user.getNotification_token()+"' WHERE " +
+                "user_id = "+ user.getUser_id() +";";
+
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = conn.prepareStatement(query);
+
+            pstmt.executeUpdate();
+            pstmt.close();
+            res = true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            res = false;
+        }
+        return res;
     }
 }
 

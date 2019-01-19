@@ -31,6 +31,8 @@ public class Constants {
     static final String INSERT_EVENT = "insert_event";
     static final String TEST_CONN = "test";
     static final String GET_ALL_BOOKS = "get_all_books";
+    static final String NEW_NOTIFICATION_TOKEN = "new_notification_token";
+
     // Communication strings
 
     // DB strings
@@ -45,6 +47,7 @@ public class Constants {
     public static final String USERS_TABLE_NAME = "users";
     public static final String NOTIFICATION_TABLE_NAME = "notifications";
     public static final String LIBRARIES_TABLE_NAME = "libraries";
+
 
     //LIBRARY DB
     public static final String BOOKS_TABLE_NAME = "books";
