@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/round_rect_shadow_cyan"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingTop="10dp"
+        android:paddingRight="30dp"
+        android:visibility="visible">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/event_list_item_image"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:scaleType="fitXY"
+            app:riv_corner_radius="3dp"
+            app:riv_mutate_background="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/event_list_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Title"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/event_list_item_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Location"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/event_list_item_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="00/00/0000" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/event_list_item_seats"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_weight="0"
+            android:text="10"
+            android:textSize="40sp" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>
