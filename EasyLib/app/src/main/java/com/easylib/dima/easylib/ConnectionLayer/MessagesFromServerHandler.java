@@ -61,7 +61,11 @@ public class MessagesFromServerHandler {
         map.put(Constants.GET_NEWS, this::getNews);
         map.put(Constants.GET_EVENTS, this::getEvents);
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
+        map.put(Constants.NEW_NOTIFICATION_TOKEN, this::newNotificationToken);
+
+
     }
+
 
     private void bookQuery() {
         try {
@@ -75,6 +79,18 @@ public class MessagesFromServerHandler {
             message.sendToTarget();
 
         } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void newNotificationToken() {
+        try {
+
+            boolean res = (boolean)objectInputStream.readObject();
+
+            System.out.print(res);
+            // do we need something here?
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }

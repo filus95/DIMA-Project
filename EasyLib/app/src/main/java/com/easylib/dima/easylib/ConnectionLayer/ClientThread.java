@@ -41,7 +41,7 @@ public class ClientThread implements Runnable, Serializable {
         try {
             try {
 
-                socket = new Socket("192.168.1.3",
+                socket = new Socket(CommunicationConstants.SERVER_IP_ADDRESS,
                         Integer.parseInt(CommunicationConstants.SOCKET_PORT));
                 System.out.print("CONNECTED");
                 objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
