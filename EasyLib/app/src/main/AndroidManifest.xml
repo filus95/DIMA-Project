@@ -36,9 +36,6 @@
         <activity
             android:name=".Activities.Login.RegisterActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
-
-        <service android:name=".ConnectionLayer.ConnectionService" />
-
         <activity android:name=".Activities.Login.LoginPreferenceActivity"
             android:screenOrientation="portrait"/>
         <activity android:name=".Activities.SearchActivity"
@@ -57,6 +54,7 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service android:name=".ConnectionLayer.ConnectionService" />
 
     </application>
 
