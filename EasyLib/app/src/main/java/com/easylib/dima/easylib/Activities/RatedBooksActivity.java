@@ -24,7 +24,7 @@ public class RatedBooksActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.rated_books_activity);
+        setContentView(R.layout.list_activity);
 
         // JUST FOR TEST
         int i;
@@ -34,7 +34,7 @@ public class RatedBooksActivity extends AppCompatActivity {
             books.add(book);
         }
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.rated_books_recycle);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
         // improve performance
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
