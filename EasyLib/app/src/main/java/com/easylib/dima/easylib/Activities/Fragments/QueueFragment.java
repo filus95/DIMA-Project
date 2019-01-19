@@ -38,16 +38,14 @@ public class QueueFragment extends Fragment
             books.add(new Book("Title"+i,"Author "+i, "Via non lo so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
         }
 
+        // RecycleView setup
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);
-
         // improve performance
         mRecyclerView.setHasFixedSize(true);
-
         // used linear layout
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
         // specify an adapter
         mAdapter = new QueueAdapter(getContext(), books);
         mRecyclerView.setAdapter(mAdapter);
