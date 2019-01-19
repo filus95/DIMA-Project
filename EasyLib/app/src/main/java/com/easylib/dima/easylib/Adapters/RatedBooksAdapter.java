@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.R;
@@ -38,6 +39,7 @@ public class RatedBooksAdapter extends RecyclerView.Adapter<RatedBooksAdapter.Ra
         Glide.with(context)
                 .load(book.getImageLink())
                 .into(holder.image);
+        holder.rate.setText(Float.toString(7.4f));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -55,10 +57,12 @@ public class RatedBooksAdapter extends RecyclerView.Adapter<RatedBooksAdapter.Ra
 
     static class RatedBooksHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
+        protected TextView rate;
 
         public RatedBooksHolder(View v) {
             super(v);
             image = v.findViewById(R.id.rated_books_item_image);
+            rate = v.findViewById(R.id.rated_books_item_rate);
         }
     }
 }
