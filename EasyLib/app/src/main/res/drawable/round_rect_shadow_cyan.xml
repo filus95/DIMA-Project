@@ -11,7 +11,12 @@
     // Item
     <item>
         <shape>
-            <solid android:color="#63d1f9"/>
+            <gradient
+                android:startColor="#ffffff"
+                android:centerColor="#ffffff"
+                android:endColor="#63d1f9"
+                android:centerY="0.8"
+                android:angle="45"/>
 
             <stroke android:width="3dp"
                 android:color="#50cccccc"
