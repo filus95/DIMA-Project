@@ -9,18 +9,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.XML;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +71,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
         map.put(Constants.GET_USER_RATED_BOOKS, this::getUserRatedBooks);
         map.put(Constants.NEW_NOTIFICATION_TOKEN, this::newNotificationToken);
+        map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
+        map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
+        map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
         // Add new methods
     }
 
@@ -473,6 +470,52 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
     }
 
+    private void reservedBookTaken() {
+        //todo: triggered by librarian app when scan to deliver the book to the user
+        Boolean res;
+        try {
+            Reservation reservation = (Reservation) objectInputStream.readObject();
+            res = dbms.reservedBookTaken(reservation);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            res = false;
+        }
+
+        socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
+        socketHandler.sendViaSocket(res);
+    }
+
+    private void getAllReservationsForBook(){
+        ArrayList<Reservation> res;
+        try {
+            Reservation reservation = (Reservation) objectInputStream.readObject();
+            res = dbms.getAllReservationsForBook(reservation);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            res = null;
+        }
+
+        socketHandler.sendViaSocket(Constants.GET_ALL_RESERVATIONS_FOR_BOOK);
+        socketHandler.sendViaSocket(res);
+    }
+
+    private void reservedBookReturned(){
+        boolean res;
+        try {
+            Reservation reservation = (Reservation) objectInputStream.readObject();
+            res = dbms.reservedBookReturned(reservation);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            res = false;
+        }
+
+        socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
+        socketHandler.sendViaSocket(res);
+    }
+
     private void insertRating(){
 
         try {
@@ -534,7 +577,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             e.printStackTrace();
         }
     }
-
 
     private void userLogin(){
         try {

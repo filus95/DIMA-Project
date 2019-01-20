@@ -107,6 +107,8 @@ public class DatabaseManager {
         return getQueryReservations(query);
     }
 
+
+
     private ArrayList<Reservation> getQueryReservations(String query) {
         ArrayList<Reservation> results = new ArrayList<>();
 
@@ -680,10 +682,11 @@ public class DatabaseManager {
 
     /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
-    public boolean deleteStatementReservations( Reservation reservation, String tableName, String schemaName){
-        String query = "delete from "+schemaName+"."+tableName+" where " +
-                tableName+".book_identifier = "+reservation.getBook_idetifier()+" and " +
-                tableName+".user_id = "+reservation.getUser_id();
+    public boolean reservedBookReturned( Reservation res){
+        String query = "delete from "+getSchemaNameLib(res.getIdLib())+"."+
+                Constants.RESERVATIONS_TABLE_NAME+" where " +
+                "book_identifier = "+res.getBook_idetifier()+" and " +
+                "user_id = "+res.getUser_id();
 
         return queryExecution(conn, query);
     }
@@ -938,12 +941,25 @@ public class DatabaseManager {
     }
 
     public Boolean insertNotificationToken(User user) {
-        boolean res;
         String query = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+
                 " SET messaging_token = '"+user.getNotification_token()+"' WHERE " +
                 "user_id = "+ user.getUser_id() +";";
 
-        PreparedStatement pstmt = null;
+        return performStatement(query);
+    }
+
+    public Boolean reservedBookTaken(Reservation reservation) {
+        String query = "UPDATE "+getSchemaNameLib(reservation.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
+                " SET taken = true WHERE " +
+                "book_identifier = "+reservation.getBook_idetifier()+" and " +
+                "user_id = "+reservation.getUser_id()+";";
+
+        return performStatement(query);
+    }
+
+    private boolean performStatement(String query) {
+        PreparedStatement pstmt;
+        boolean res;
         try {
             pstmt = conn.prepareStatement(query);
 
@@ -955,6 +971,13 @@ public class DatabaseManager {
             res = false;
         }
         return res;
+    }
+
+    public ArrayList<Reservation> getAllReservationsForBook(Reservation res) {
+        String query = "select * from "+getSchemaNameLib(res.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
+                " where book_identifier = "+res.getBook_idetifier();
+
+        return getQueryReservations(query);
     }
 }
 

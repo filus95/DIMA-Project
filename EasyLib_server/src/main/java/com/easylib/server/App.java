@@ -67,11 +67,15 @@ public class App
 //
 //        System.out.print(dbms.insertNewWaitingPerson(wp, schema_name));
 
-        User user = new User();
-        user.setUser_id(1);
-        user.setNotification_token("cjdfadshfdkaòjggajnòfd");
-        dbms.insertNotificationToken(user);
+        Reservation reservation = new Reservation();
+        reservation.setIdLib(1);
+        reservation.setBook_idetifier("1909430188");
+        reservation.setUser_id(15);
+        ArrayList<Reservation> res = dbms.getAllReservationsForBook(reservation);
 
+        for (Reservation x: res){
+            System.out.print(x.getReservation_id()+"\n");
+        }
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);
         //        reservation.setStart_res_date(new Date(2,2,2));
