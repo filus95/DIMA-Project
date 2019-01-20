@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/round_rect_shadow"
+        android:background="@drawable/round_rect_shadow_yellow"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
@@ -21,9 +21,6 @@
             android:layout_width="60dp"
             android:layout_height="80dp"
             android:scaleType="fitXY"
-            android:src="@color/colorWhite"
-            app:riv_border_color="@color/colorWhite"
-            app:riv_border_width="2dp"
             app:riv_corner_radius="3dp"
             app:riv_mutate_background="true" />
 

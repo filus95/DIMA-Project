@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = pText.getText().toString();
 
         // sending identification token for Firebase notifications
-        FirebaseInstanceId.getInstance().getInstanceId()
+        /*FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
                     public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -178,6 +178,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+        */
 
         // try...catch used to hide keyboard after LoginActivity button pressed
         try {
