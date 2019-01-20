@@ -86,12 +86,14 @@ public class DatabaseManager {
         columnsName.add("user_id");
         columnsName.add("book_identifier");
         columnsName.add("book_title");
-        columnsName.add("reservation_date");
         columnsName.add("starting_reservation_date");
         columnsName.add("ending_reservation_date");
         columnsName.add("quantity");
-        // todo: correct bug in jar, there is a duplicated user id
-        columnsName.add("user_id");
+        columnsName.add("taken");
+        if ( reservInfo.getReservation_time() != null)
+            columnsName.add("reservation_date");
+//        // todo: correct bug in jar, there is a duplicated user id
+//        columnsName.add("user_id");
 
 
         // Columns name passed must be in the order of the DB columns
@@ -357,7 +359,8 @@ public class DatabaseManager {
             Object value;
             for (String key : map.keySet()) {
                 // todo: translate it in the set method of the corresponding classes
-                if (key.equals("reservation_date") || key.equals("post_date")){
+                if ((key.equals("reservation_date") || key.equals("post_date")) &&
+                        map.get(key) != null){
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     value = dtf.format(now);
@@ -500,7 +503,7 @@ public class DatabaseManager {
 
             while (rs.next()){
                 Book queryResult = new Book();
-                queryResult.setBookId_lib(rs.getString("identifier"));
+                queryResult.setIdentifier(rs.getString("identifier"));
                 queryResult.setTitle(rs.getString("title"));
                 queryResult.setPublisher((rs.getString("publisher")));
                 queryResult.setCategories(rs.getString("category_1"),
@@ -682,13 +685,29 @@ public class DatabaseManager {
 
     /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
-    public boolean reservedBookReturned( Reservation res){
-        String query = "delete from "+getSchemaNameLib(res.getIdLib())+"."+
-                Constants.RESERVATIONS_TABLE_NAME+" where " +
-                "book_identifier = "+res.getBook_idetifier()+" and " +
-                "user_id = "+res.getUser_id();
+    public boolean reservedBookReturned( Reservation reservation){
+        String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist where " +
+                "book_identifier = "+reservation.getBook_idetifier()+" and" +
+                " waiting_position = 1";
 
-        return queryExecution(conn, query);
+        WaitingPerson wp = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib())).get(0);
+        Book book = wp.getBooksInWaitingList().get(0);
+        Reservation res = new Reservation();
+        res.setUser_id(wp.getUser_id());
+        res.setBook_idetifier(book.getIdentifier());
+        res.setBook_title(book.getTitle());
+        res.setQuantity(1);
+        res.setReservation_time(book.getReservation_date());
+
+        String query = "delete from "+getSchemaNameLib(reservation.getIdLib())+"."+
+                Constants.RESERVATIONS_TABLE_NAME+" where " +
+                "book_identifier = '"+res.getBook_idetifier()+"'" + " and " +
+                "user_id = "+reservation.getUser_id();
+
+        queryExecution(conn, query);
+
+        return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
+
     }
 
     public boolean deleteStatementUsers( User user, String tableName, String schemaName){
@@ -942,7 +961,7 @@ public class DatabaseManager {
 
     public Boolean insertNotificationToken(User user) {
         String query = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+
-                " SET messaging_token = '"+user.getNotification_token()+"' WHERE " +
+                " SET messaging_token = "+user.getNotification_token()+" WHERE " +
                 "user_id = "+ user.getUser_id() +";";
 
         return performStatement(query);
@@ -975,7 +994,7 @@ public class DatabaseManager {
 
     public ArrayList<Reservation> getAllReservationsForBook(Reservation res) {
         String query = "select * from "+getSchemaNameLib(res.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
-                " where book_identifier = "+res.getBook_idetifier();
+                " where book_identifier = '"+res.getBook_idetifier()+"'";
 
         return getQueryReservations(query);
     }
