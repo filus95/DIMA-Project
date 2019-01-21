@@ -2,6 +2,12 @@ package com.easylib.server.Database;
 
 import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -705,6 +711,15 @@ public class DatabaseManager {
 
         queryExecution(conn, query);
 
+        String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
+        String book_title =queryBookByIdentifier(book.getIdentifier(), getSchemaNameLib(reservation.getIdLib()))
+                .get(0)
+                .getTitle();
+        String title = "Your book is available!";
+        String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
+
+        sendNotification(title,mess, getNotificationToken(reservation.getUser_id()));
+
         return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
 
     }
@@ -1025,6 +1040,39 @@ public class DatabaseManager {
             e.printStackTrace();
         }
         return token;
+    }
+
+    public void sendNotification(String title, String mess, String token){
+        // Declaration of Message Parameters
+        String message_url = "https://fcm.googleapis.com/fcm/send";
+        String message_sender_id = token;
+        String message_key = "key="+Constants.SERVER_KEY;
+
+        try {// Generating a JSONObject for the content of the message
+            JSONObject message = new JSONObject();
+
+            message.put("message", mess);
+
+            JSONObject protocol = new JSONObject();
+            protocol.put("to", message_sender_id);
+            protocol.put("data", message);
+
+            // Send Protocol
+
+            HttpClient httpClient = HttpClientBuilder.create().build();
+
+            HttpPost request = new HttpPost(message_url);
+            request.addHeader("content-type", "application/json");
+            request.addHeader("Authorization", message_key);
+
+            StringEntity params = new StringEntity(protocol.toString());
+            request.setEntity(params);
+            System.out.println(params);
+
+            HttpResponse response = httpClient.execute(request);
+            System.out.println(response.toString());
+        } catch (Exception e) {
+        }
     }
 }
 

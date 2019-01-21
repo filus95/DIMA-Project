@@ -45,7 +45,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
      * Load the map for the functional interface
      */
     private void loadMap(){
-        map.put(Constants.TEST_CONN, this::test_conn);
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
         map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
@@ -105,43 +104,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             User user = (User) objectInputStream.readObject();
             res = dbms.insertNotificationToken(user);
             socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
-            sendNotification("test", "test", user.getNotification_token());
-            System.out.print("QUI");
+            dbms.sendNotification("test", "test", user.getNotification_token());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void sendNotification(String title, String mess, String token){
-        // Declaration of Message Parameters
-        String message_url = "https://fcm.googleapis.com/fcm/send";
-        String message_sender_id = token;
-        String message_key = "key="+Constants.SERVER_KEY;
-
-        try {// Generating a JSONObject for the content of the message
-            JSONObject message = new JSONObject();
-
-            message.put("message", mess);
-
-            JSONObject protocol = new JSONObject();
-            protocol.put("to", message_sender_id);
-            protocol.put("data", message);
-
-        // Send Protocol
-
-            HttpClient httpClient = HttpClientBuilder.create().build();
-
-            HttpPost request = new HttpPost(message_url);
-            request.addHeader("content-type", "application/json");
-            request.addHeader("Authorization", message_key);
-
-            StringEntity params = new StringEntity(protocol.toString());
-            request.setEntity(params);
-            System.out.println(params);
-
-            HttpResponse response = httpClient.execute(request);
-            System.out.println(response.toString());
-        } catch (Exception e) {
         }
     }
 
@@ -271,7 +236,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void insertReservation(){
         boolean res;
         try {
-
+            String title;
+            String mess;
             Reservation reservation = (Reservation)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
 
@@ -280,9 +246,16 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             socketHandler.sendViaSocket(Constants.INSERT_RESERVATION);
             socketHandler.sendViaSocket(res);
 
-            String title = "Reservation confirmation";
-            String mess = "Your book reservation have been completed with success!";
-            sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
+            if ( res ) {
+                title = "Reservation confirmation";
+                mess = "Your book reservation have been completed with success!";
+            }
+            else{
+                title = "Reservation denied";
+                mess = "Sorry, your reservation have been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -309,15 +282,31 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         boolean res;
 
         try {
+            String title;
+            String mess;
             Event_partecipant partecipant = (Event_partecipant)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
             res = dbms.insertNewEventPartecipant(partecipant, schema_name);
+
+            socketHandler.sendViaSocket(Constants.INSERT_EVENT_PARTICIPANT);
+            socketHandler.sendViaSocket(res);
+
+            if ( res ) {
+                title = "Event partecipation confirmed";
+                mess = "You have correctly booked your seat for the event!";
+            }
+            else{
+                title = "Event partecipation denied";
+                mess = "Sorry, your event participation have been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(partecipant.getPartecipant_id()));
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            res = false;
+
         }
-        socketHandler.sendViaSocket(Constants.INSERT_EVENT_PARTICIPANT);
-        socketHandler.sendViaSocket(res);
+
     }
 
     private void insertEvent(){
@@ -391,12 +380,26 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
 
             res = dbms.insertNewWaitingPerson(wp, schema_name);
+
+            socketHandler.sendViaSocket(Constants.INSERT_WAITING_PERSON);
+            socketHandler.sendViaSocket(res);String title;
+            String mess;
+
+            if ( res ) {
+                title =  "Insertion in waiting list confirmed";
+                mess = "You have been correctly inserted in the waiting list!";
+            }
+            else{
+                title = "Insertion in waiting list denied";
+                mess = "Sorry, your insertion in the waiting list have been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(wp.getUser_id()));
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             res = false;
         }
-        socketHandler.sendViaSocket(Constants.INSERT_WAITING_PERSON);
-        socketHandler.sendViaSocket(res);
     }
 
     private void getWaitingListForAbook(){
@@ -480,16 +483,30 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         //todo: triggered by librarian app when scan to deliver the book to the user
         Boolean res;
         try {
+            String title;
+            String mess;
+
             Reservation reservation = (Reservation) objectInputStream.readObject();
             res = dbms.reservedBookTaken(reservation);
 
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            res = false;
-        }
+            socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
+            socketHandler.sendViaSocket(res);
 
-        socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
-        socketHandler.sendViaSocket(res);
+            if ( res ) {
+                title =  "Book delivering confirmed";
+                mess = "Your book has been correctly delivered... have a good read!";
+            }
+            else{
+                title = "Book delivering denied";
+                mess = "Sorry, the book delivering has been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
+
+        } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        res = false;
+        }
     }
 
     private void getAllReservationsForBook(){
@@ -510,16 +527,30 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void reservedBookReturned(){
         boolean res;
         try {
+            String title;
+            String mess;
+
             Reservation reservation = (Reservation) objectInputStream.readObject();
             res = dbms.reservedBookReturned(reservation);
 
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            res = false;
-        }
+            socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
+            socketHandler.sendViaSocket(res);
 
-        socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
-        socketHandler.sendViaSocket(res);
+            if ( res ) {
+                title =  "Book returning confirmed";
+                mess = "You have correctly returned your book. Come to visit us soon!";
+            }
+            else{
+                title = "Book returning confirmed";
+                mess = "Sorry, the book returning has been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
+
+
+        } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+      }
     }
 
     private void insertRating(){
@@ -533,27 +564,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             e.printStackTrace();
         }
     }
-    // ONLY FOR TESTING
-
-    private void test_conn() {
-
-        try {
-            try {
-                String x = (String) objectInputStream.readObject();
-                System.out.print(x);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            objectOutputStream.writeObject("test");
-            objectOutputStream.flush();
-            objectOutputStream.reset();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.print("SENT\n");
-    }
-
     //////////////////////////////////////METHODS THAT INTERACT WITH THE PROPIETARY DB//////////////////////////////////
 
 
