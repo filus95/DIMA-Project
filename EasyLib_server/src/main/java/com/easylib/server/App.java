@@ -69,8 +69,14 @@ public class App
 
         Reservation reservation = new Reservation();
         reservation.setBook_idetifier("8852068317");
-        reservation.setUser_id(110);
+        reservation.setUser_id(200);
         reservation.setIdLib(1);
+        reservation.setBook_title(dbms.queryBookByIdentifier(
+                reservation.getBook_idetifier(),dbms.getSchemaNameLib(reservation.getIdLib())
+        ).get(0).getTitle());
+
+//        dbms.insertNewReservation(reservation, "library_1");
+
         dbms.reservedBookReturned(reservation);
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);

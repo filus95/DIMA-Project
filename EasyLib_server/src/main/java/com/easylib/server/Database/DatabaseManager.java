@@ -4,6 +4,7 @@ import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -90,8 +91,7 @@ public class DatabaseManager {
         columnsName.add("ending_reservation_date");
         columnsName.add("quantity");
         columnsName.add("taken");
-        if ( reservInfo.getReservation_time() != null)
-            columnsName.add("reservation_date");
+        columnsName.add("reservation_date");
 //        // todo: correct bug in jar, there is a duplicated user id
 //        columnsName.add("user_id");
 
@@ -359,8 +359,7 @@ public class DatabaseManager {
             Object value;
             for (String key : map.keySet()) {
                 // todo: translate it in the set method of the corresponding classes
-                if ((key.equals("reservation_date") || key.equals("post_date")) &&
-                        map.get(key) != null){
+                if ((key.equals("reservation_date") || key.equals("post_date"))){
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     value = dtf.format(now);
@@ -970,6 +969,21 @@ public class DatabaseManager {
     public Boolean reservedBookTaken(Reservation reservation) {
         String query = "UPDATE "+getSchemaNameLib(reservation.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
                 " SET taken = true WHERE " +
+                "book_identifier = "+reservation.getBook_idetifier()+" and " +
+                "user_id = "+reservation.getUser_id()+";";
+
+        performStatement(query);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime start_date = LocalDateTime.now();
+        String start_date_s = dtf.format(start_date);
+        LocalDateTime end_date = start_date.plusMonths(1);
+        String end_date_s = dtf.format(end_date);
+
+        query = "UPDATE "+getSchemaNameLib(reservation.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
+                " SET starting_reservation_date = '"+start_date_s+
+                "', ending_reservation_date = '"+end_date_s+
+                "' WHERE " +
                 "book_identifier = "+reservation.getBook_idetifier()+" and " +
                 "user_id = "+reservation.getUser_id()+";";
 
