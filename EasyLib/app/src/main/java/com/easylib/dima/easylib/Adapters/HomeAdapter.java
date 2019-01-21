@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.easylib.dima.easylib.R;
@@ -70,6 +71,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.recycleEvent.setAdapter(eventsAdapter);
         ImageTitleNewsAdapter booksAdapter = new ImageTitleNewsAdapter(context, books);
         holder.recycleBooks.setAdapter(booksAdapter);
+
+        // set Button click listener
+        // implemented onClickListener event
+        holder.libraryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: call method to see library_activity activity
+            }
+        });
     }
 
     @Override
@@ -80,6 +90,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         protected RecyclerView recycleNews;
         protected RecyclerView recycleEvent;
         protected RecyclerView recycleBooks;
+        protected Button libraryButton;
 
         public HomeHolder(View v) {
             super(v);
@@ -87,6 +98,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             recycleNews = v.findViewById(R.id.fragment_home_item_recycle_news);
             recycleEvent = v.findViewById(R.id.fragment_home_item_recycle_event);
             recycleBooks = v.findViewById(R.id.fragment_home_item_recycle_book);
+            libraryButton = v.findViewById(R.id.fragment_home_item_recycle_button);
         }
     }
 }
