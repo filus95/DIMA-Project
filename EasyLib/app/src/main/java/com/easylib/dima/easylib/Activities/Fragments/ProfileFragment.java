@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.RatedBooksActivity;
+import com.easylib.dima.easylib.Adapters.ImageTitleLibraryAdapter;
 import com.easylib.dima.easylib.Adapters.LibraryAdapter;
 import com.easylib.dima.easylib.Adapters.RatedBooksAdapter;
 import com.easylib.dima.easylib.R;
@@ -31,7 +32,7 @@ public class ProfileFragment extends Fragment {
 
     // for Favourite Libraries
     private RecyclerView mRecyclerView;
-    private LibraryAdapter mAdapter;
+    private ImageTitleLibraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     // for Rated Books
     private RecyclerView mRecyclerView2;
@@ -104,11 +105,11 @@ public class ProfileFragment extends Fragment {
         // improve performance
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new GridLayoutManager(getContext(), 3);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new LibraryAdapter(getContext(), libraries);
+        mAdapter = new ImageTitleLibraryAdapter(getContext(), libraries);
         mRecyclerView.setAdapter(mAdapter);
 
         // Recycle setup Favourite Libraries

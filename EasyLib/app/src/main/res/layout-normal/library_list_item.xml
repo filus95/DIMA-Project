@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginRight="15dp"
-        android:background="@drawable/round_rect_shadow_yellow"
+        android:background="@drawable/round_rect_shadow"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
@@ -34,9 +34,10 @@
 
             <TextView
                 android:id="@+id/library_item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:singleLine="true"
                 android:text="Library Name"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -46,6 +47,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                app:fontFamily="monospace"
+                android:singleLine="true"
                 android:text="via non la so (MI)"
                 android:textSize="16sp" />
 
