@@ -42,6 +42,13 @@ public class MessageFromThreadHandler implements Serializable{
         map.put(Constants.GET_NEWS, this::getNews);
         map.put(Constants.GET_EVENTS, this::getEvents);
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
+        map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
+        map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
+        map.put(Constants.GET_USER_RATED_BOOKS, this::getUserRatedBooks);
+        map.put(Constants.NEW_NOTIFICATION_TOKEN, this::newNotificationToken);
+        map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
+        map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
+        map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
     }
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
@@ -57,7 +64,6 @@ public class MessageFromThreadHandler implements Serializable{
         this.currentContext.sendBroadcast(intent);
     }
 
-
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertReservation(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_RESERVATION);
@@ -66,6 +72,38 @@ public class MessageFromThreadHandler implements Serializable{
 
         this.currentContext.sendBroadcast(intent);
     }
+
+    private void reservedBookReturned(Bundle bundle) {
+        Intent intent = new Intent(Constants.RESERVED_BOOK_RETURNED);
+        intent.putExtra(Constants.RESERVED_BOOK_RETURNED,
+                (boolean)bundle.getSerializable(Constants.RESERVED_BOOK_RETURNED));
+
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void reservedBookTaken(Bundle bundle) {
+        Intent intent = new Intent(Constants.RESERVED_BOOK_TAKEN);
+        intent.putExtra(Constants.RESERVED_BOOK_TAKEN,
+                (boolean)bundle.getSerializable(Constants.RESERVED_BOOK_TAKEN));
+
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void bookQueryAllLib(Bundle bundle) {
+    }
+
+    private void getAllReservationsForBook(Bundle bundle) {
+    }
+
+    private void newNotificationToken(Bundle bundle) {
+    }
+
+    private void getUserRatedBooks(Bundle bundle) {
+    }
+
+    private void getWaitingListForAUser(Bundle bundle) {
+    }
+
 
     //it receives a true boolean from the stream. If something wrong, receives false
     private void insertEventPartecipant(Bundle bundle) {

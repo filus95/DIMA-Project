@@ -42,7 +42,6 @@ public class MessagesFromServerHandler {
         this.handler = handler;
         this.objectInputStream = inputStream;
 
-        map.put(CommunicationConstants.TEST_CONN, this::test);
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
         map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
@@ -61,11 +60,110 @@ public class MessagesFromServerHandler {
         map.put(Constants.GET_NEWS, this::getNews);
         map.put(Constants.GET_EVENTS, this::getEvents);
         map.put(Constants.GET_USER_RESERVATION, this::getUserReservations);
+        map.put(Constants.GET_WAITING_LIST_USER, this::getWaitingListForAUser);
+        map.put(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, this::bookQueryAllLib);
+        map.put(Constants.GET_USER_RATED_BOOKS, this::getUserRatedBooks);
         map.put(Constants.NEW_NOTIFICATION_TOKEN, this::newNotificationToken);
-
-
+        map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
+        map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
+        map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
     }
 
+    private void getWaitingListForAUser() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            WaitingPerson res = (WaitingPerson) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_WAITING_LIST_USER, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void bookQueryAllLib() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Book> res = (ArrayList<Book>) objectInputStream.readObject();
+            b.putSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getUserRatedBooks() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Book> res = (ArrayList<Book>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_USER_RATED_BOOKS, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void getAllReservationsForBook() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Reservation> res = (ArrayList<Reservation>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void reservedBookReturned() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.RESERVED_BOOK_RETURNED, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void reservedBookTaken() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.RESERVED_BOOK_TAKEN, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void bookQuery() {
         try {

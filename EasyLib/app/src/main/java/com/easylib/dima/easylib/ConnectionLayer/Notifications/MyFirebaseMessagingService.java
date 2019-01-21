@@ -21,7 +21,7 @@ import com.easylib.dima.easylib.Activities.Login.LoginActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 
-import com.easylib.dima.easylib.R;
+//import com.easylib.dima.easylib.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -77,7 +77,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 //        RemoteMessage.Notification notification = remoteMessage.getNotification();
         super.onMessageReceived(remoteMessage);
         Map<String, String> data = remoteMessage.getData();
-//
+        System.out.print("");        //
 //        String title = remoteMessage.getData().get(“title”);
 //        String body = remoteMessage.getData().get(“body”);
 //        String objectId = remoteMessage.getData().get("object_id");
@@ -133,34 +133,34 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
     }
 
 
-    private void ShowNotification(RemoteMessage.Notification notification, Map<String, String> data) {
-
-        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/notification");
-
-
-        android.support.v4.app.NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle(data.get("title"))
-                .setContentText(data.get("text"))
-                .setAutoCancel(true)
-                .setSound(sound)
-                .setContentIntent(pendingIntent)
-                .setContentInfo("ANY")
-                .setLargeIcon(icon)
-                .setColor(Color.RED)
-                .setSmallIcon(R.mipmap.ic_launcher);
-
-
-        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
-        notificationBuilder.setLights(Color.YELLOW, 1000, 300);
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notificationBuilder.build());
-    }
-
+//    private void ShowNotification(RemoteMessage.Notification notification, Map<String, String> data) {
+//
+//        Bitmap icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+//
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+//        Uri sound = Uri.parse("android.resource://" + getApplicationContext().getPackageName() + "/raw/notification");
+//
+//
+//        android.support.v4.app.NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+//                .setContentTitle(data.get("title"))
+//                .setContentText(data.get("text"))
+//                .setAutoCancel(true)
+//                .setSound(sound)
+//                .setContentIntent(pendingIntent)
+//                .setContentInfo("ANY")
+//                .setLargeIcon(icon)
+//                .setColor(Color.RED)
+//                .setSmallIcon(R.mipmap.ic_launcher);
+//
+//
+//        notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+//        notificationBuilder.setLights(Color.YELLOW, 1000, 300);
+//
+//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//        notificationManager.notify(0, notificationBuilder.build());
+//    }
+//
 }
 

@@ -14,8 +14,8 @@ import java.util.Set;
 
 public class ConnectionHandler implements Serializable{
             private ConnectionService connectionService;
-            MessageFromThreadHandler messageFromThreadHandler;
-            Context currentContext;
+            private MessageFromThreadHandler messageFromThreadHandler;
+            private Context currentContext;
 
 
             @SuppressLint("HandlerLeak")
