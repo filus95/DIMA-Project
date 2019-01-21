@@ -39,6 +39,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="Library Name"
+                android:textAlignment="center"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="20sp" />
 
@@ -49,6 +50,7 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:text="via non la so (MI)"
+                android:textAlignment="center"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="16sp" />
         </LinearLayout>
