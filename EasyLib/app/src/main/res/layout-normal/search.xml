@@ -130,7 +130,6 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/monotype_corsiva"
                             android:text="Author"
                             android:textAlignment="center"
                             android:textSize="20sp" />
@@ -168,7 +167,6 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/monotype_corsiva"
                             android:text="Genre"
                             android:textAlignment="center"
                             android:textSize="20sp" />
@@ -207,7 +205,6 @@
                             android:layout_width="60dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:fontFamily="@font/monotype_corsiva"
                             android:text="Library"
                             android:textAlignment="center"
                             android:textSize="20sp" />

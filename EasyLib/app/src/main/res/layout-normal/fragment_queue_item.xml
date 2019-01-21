@@ -31,7 +31,6 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="2dp"
             android:layout_weight="1"
-            android:fontFamily="@font/monotype_corsiva"
             android:text="Delete"
             android:textColor="@android:color/white"
             android:textSize="30sp" />

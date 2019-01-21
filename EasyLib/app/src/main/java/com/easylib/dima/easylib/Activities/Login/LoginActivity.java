@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -57,9 +58,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText eText;
     private EditText pText;
-    private ProgressBar progBar;
-    private TextView progText;
-    private ImageView progImage;
+    private ConstraintLayout loadingLayout;
     private ImageButton googleButton;
     private ImageButton facebookButton;
 
@@ -108,9 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         eText = (EditText) findViewById(R.id.email);
         pText = (EditText) findViewById(R.id.password);
-        progBar = (ProgressBar) findViewById(R.id.prog_bar);
-        progText = (TextView) findViewById(R.id.prog_login);
-        progImage = (ImageView) findViewById(R.id.prog_image);
+        loadingLayout = (ConstraintLayout) findViewById(R.id.login_load_layout);
         googleButton = (ImageButton) findViewById(R.id.g_bt);
         facebookButton = (ImageButton) findViewById(R.id.fb_bt);
 
@@ -192,9 +189,7 @@ public class LoginActivity extends AppCompatActivity {
 
         else {
 
-            progBar.setVisibility(View.VISIBLE);
-            progImage.setVisibility(View.VISIBLE);
-            progText.setVisibility(View.VISIBLE);
+            loadingLayout.setVisibility(View.VISIBLE);
 
             //TODO: Make the call to Server
             // Get username & password
