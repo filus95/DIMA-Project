@@ -2,8 +2,15 @@ package com.easylib.server.Database;
 
 import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.json.JSONObject;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -90,8 +97,7 @@ public class DatabaseManager {
         columnsName.add("ending_reservation_date");
         columnsName.add("quantity");
         columnsName.add("taken");
-        if ( reservInfo.getReservation_time() != null)
-            columnsName.add("reservation_date");
+        columnsName.add("reservation_date");
 //        // todo: correct bug in jar, there is a duplicated user id
 //        columnsName.add("user_id");
 
@@ -359,8 +365,7 @@ public class DatabaseManager {
             Object value;
             for (String key : map.keySet()) {
                 // todo: translate it in the set method of the corresponding classes
-                if ((key.equals("reservation_date") || key.equals("post_date")) &&
-                        map.get(key) != null){
+                if ((key.equals("reservation_date") || key.equals("post_date"))){
                     DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
                     LocalDateTime now = LocalDateTime.now();
                     value = dtf.format(now);
@@ -706,6 +711,15 @@ public class DatabaseManager {
 
         queryExecution(conn, query);
 
+        String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
+        String book_title =queryBookByIdentifier(book.getIdentifier(), getSchemaNameLib(reservation.getIdLib()))
+                .get(0)
+                .getTitle();
+        String title = "Your book is available!";
+        String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
+
+        sendNotification(title,mess, getNotificationToken(reservation.getUser_id()));
+
         return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
 
     }
@@ -853,11 +867,11 @@ public class DatabaseManager {
 
         ResultSet rs;
         try {
-            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.username =" +
-                    " "+user.getUsername();
+            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.user_id =" +
+                    "?";
 
             PreparedStatement st = conn.prepareStatement(query);
-            st.setString(1, user.getUsername());
+            st.setInt(1, user.getUser_id());
 
             rs = st.executeQuery();
         } catch (SQLException e) {
@@ -973,6 +987,21 @@ public class DatabaseManager {
                 "book_identifier = "+reservation.getBook_idetifier()+" and " +
                 "user_id = "+reservation.getUser_id()+";";
 
+        performStatement(query);
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime start_date = LocalDateTime.now();
+        String start_date_s = dtf.format(start_date);
+        LocalDateTime end_date = start_date.plusMonths(1);
+        String end_date_s = dtf.format(end_date);
+
+        query = "UPDATE "+getSchemaNameLib(reservation.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
+                " SET starting_reservation_date = '"+start_date_s+
+                "', ending_reservation_date = '"+end_date_s+
+                "' WHERE " +
+                "book_identifier = "+reservation.getBook_idetifier()+" and " +
+                "user_id = "+reservation.getUser_id()+";";
+
         return performStatement(query);
     }
 
@@ -997,6 +1026,53 @@ public class DatabaseManager {
                 " where book_identifier = '"+res.getBook_idetifier()+"'";
 
         return getQueryReservations(query);
+    }
+
+    public String getNotificationToken(int user_id) {
+        User user = new User();
+        user.setUser_id(user_id);
+        ResultSet rs = queryUser(user);
+        String token = null;
+        try {
+            if ( rs.next())
+                token = rs.getString("messaging_token");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return token;
+    }
+
+    public void sendNotification(String title, String mess, String token){
+        // Declaration of Message Parameters
+        String message_url = "https://fcm.googleapis.com/fcm/send";
+        String message_sender_id = token;
+        String message_key = "key="+Constants.SERVER_KEY;
+
+        try {// Generating a JSONObject for the content of the message
+            JSONObject message = new JSONObject();
+
+            message.put("message", mess);
+
+            JSONObject protocol = new JSONObject();
+            protocol.put("to", message_sender_id);
+            protocol.put("data", message);
+
+            // Send Protocol
+
+            HttpClient httpClient = HttpClientBuilder.create().build();
+
+            HttpPost request = new HttpPost(message_url);
+            request.addHeader("content-type", "application/json");
+            request.addHeader("Authorization", message_key);
+
+            StringEntity params = new StringEntity(protocol.toString());
+            request.setEntity(params);
+            System.out.println(params);
+
+            HttpResponse response = httpClient.execute(request);
+            System.out.println(response.toString());
+        } catch (Exception e) {
+        }
     }
 }
 
