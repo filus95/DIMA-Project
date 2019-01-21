@@ -66,18 +66,19 @@ public class App
 //        String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
 //
 //        System.out.print(dbms.insertNewWaitingPerson(wp, schema_name));
+//
+//        Reservation reservation = new Reservation();
+//        reservation.setBook_idetifier("8852068317");
+//        reservation.setUser_id(200);
+//        reservation.setIdLib(1);
+//        reservation.setBook_title(dbms.queryBookByIdentifier(
+//                reservation.getBook_idetifier(),dbms.getSchemaNameLib(reservation.getIdLib())
+//        ).get(0).getTitle());
 
-        Reservation reservation = new Reservation();
-        reservation.setBook_idetifier("8852068317");
-        reservation.setUser_id(200);
-        reservation.setIdLib(1);
-        reservation.setBook_title(dbms.queryBookByIdentifier(
-                reservation.getBook_idetifier(),dbms.getSchemaNameLib(reservation.getIdLib())
-        ).get(0).getTitle());
-
+        System.out.print(dbms.getNotificationToken(25));
 //        dbms.insertNewReservation(reservation, "library_1");
 
-        dbms.reservedBookReturned(reservation);
+//        dbms.reservedBookReturned(reservation);
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);
         //        reservation.setStart_res_date(new Date(2,2,2));

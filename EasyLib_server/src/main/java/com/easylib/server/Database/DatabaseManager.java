@@ -852,11 +852,11 @@ public class DatabaseManager {
 
         ResultSet rs;
         try {
-            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.username =" +
-                    " "+user.getUsername();
+            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.user_id =" +
+                    "?";
 
             PreparedStatement st = conn.prepareStatement(query);
-            st.setString(1, user.getUsername());
+            st.setInt(1, user.getUser_id());
 
             rs = st.executeQuery();
         } catch (SQLException e) {
@@ -1011,6 +1011,20 @@ public class DatabaseManager {
                 " where book_identifier = '"+res.getBook_idetifier()+"'";
 
         return getQueryReservations(query);
+    }
+
+    public String getNotificationToken(int user_id) {
+        User user = new User();
+        user.setUser_id(user_id);
+        ResultSet rs = queryUser(user);
+        String token = null;
+        try {
+            if ( rs.next())
+                token = rs.getString("messaging_token");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return token;
     }
 }
 
