@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.RatedBooksActivity;
@@ -20,15 +21,24 @@ import com.easylib.dima.easylib.Adapters.LibraryAdapter;
 import com.easylib.dima.easylib.Adapters.RatedBooksAdapter;
 import com.easylib.dima.easylib.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.User;
 
 public class ProfileFragment extends Fragment {
 
     private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
     private ArrayList<Book> books = new ArrayList<Book>();
+    private User user;
+
+    // User info components
+    private TextView name;
+    private TextView email;
+    private TextView userID;
 
     // for Favourite Libraries
     private RecyclerView mRecyclerView;
@@ -96,9 +106,17 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO : implement logout
+                // TODO : implement edit profile activity
             }
         });
+
+        // setup user info
+        name = (TextView) root.findViewById(R.id.profile_name);
+        email = (TextView) root.findViewById(R.id.profile_email);
+        userID = (TextView) root.findViewById(R.id.profile_fragment_user_id);
+        name.setText(user.getName() + " " + user.getSurname());
+        email.setText(user.getEmail());
+        userID.setText(user.getUser_id());
 
         // Recycle setup Favourite Libraries
         mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_fav_lib_recycle);
