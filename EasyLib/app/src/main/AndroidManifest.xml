@@ -61,6 +61,8 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.NewsActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.LibraryActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.Notifications.MyFirebaseMessagingService">
             <intent-filter>
