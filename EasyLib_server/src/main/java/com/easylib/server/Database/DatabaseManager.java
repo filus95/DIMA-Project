@@ -902,7 +902,7 @@ public class DatabaseManager {
         return res;
     }
 
-    public boolean addUser(User user) {
+    public User addUser(User user) {
 
         byte[] salt = pm.getNextSalt();
         byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
@@ -916,17 +916,35 @@ public class DatabaseManager {
         map.put("salt", salt);
 
         String tableName = "users";
-        return  insertStatement(map, tableName, Constants.PROPIETARY_DB);
+        if (insertStatement(map, tableName, Constants.PROPIETARY_DB)) {
+
+            String sql = "SELECT user_id FROM propietary_db.users WHERE email = ?";
+
+            PreparedStatement st = null;
+            try {
+                st = this.conn.prepareStatement(sql);
+
+                st.setString(1, user.getEmail());
+                ResultSet rs = st.executeQuery();
+
+                if (rs.next())
+                    user.setUser_id(rs.getInt("user_id"));
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return user;
     }
 
     public boolean checkCorrectPassword(User user) {
-        boolean to_ret;
+        boolean to_ret = false;
         try {
             to_ret = pm.isExpectedPassword(user);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.print("QUERY ERROR!");
-            to_ret = false;
         }
         return to_ret;
     }
@@ -1073,6 +1091,93 @@ public class DatabaseManager {
             System.out.println(response.toString());
         } catch (Exception e) {
         }
+    }
+
+    public User registrationGoogleToken(User user) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", user.getName());
+        map.put("surname", user.getSurname());
+        map.put("email", user.getEmail());
+        map.put("google_id_token", user.getGoogle_id_token());
+
+        insertStatement(map,Constants.USERS_TABLE_NAME,Constants.PROPIETARY_DB);
+
+        String sql = "SELECT user_id FROM propietary_db.users WHERE email = ?";
+
+        PreparedStatement st = null;
+        try {
+            st = this.conn.prepareStatement(sql);
+
+            st.setString(1, user.getEmail());
+            ResultSet rs = st.executeQuery();
+            user.setUser_id(-1);
+
+            if (rs.next())
+                user.setUser_id(rs.getInt("user_id"));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            user.setUser_id(-1);
+            return user;
+        }
+
+        return user;
+    }
+
+    public boolean silentGoogleLogin(User user) {
+
+        String sql = "SELECT user_id, google_id_token FROM propietary_db.users WHERE user_id = ?";
+
+        PreparedStatement st = null;
+        try {
+            st = this.conn.prepareStatement(sql);
+
+            st.setInt(1, user.getUser_id());
+            ResultSet rs = st.executeQuery();
+            user.setUser_id(-1);
+
+            if (rs.next()) {
+               if (user.getGoogle_id_token().equals(rs.getString("google_id_token")))
+                   return true;
+            }else
+                return false;
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean editProfile(UserPreferences up) {
+        // create the java mysql update preparedstatement
+        String library_to_edit = checkLibraryToDelete(up);
+
+        String query = "update propietary_db.users_preferences " +
+                "set "+library_to_edit+" = ? where user_id = ?";
+        PreparedStatement preparedStmt = null;
+        try {
+            preparedStmt = conn.prepareStatement(query);
+            preparedStmt.setObject   (1, null);
+            preparedStmt.setInt(2,up.getUser_id());
+
+            // execute the java preparedstatement
+            preparedStmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private String checkLibraryToDelete(UserPreferences up) {
+        if (up.getId_lib1() == -1)
+            return "library_1_id";
+        else if (up.getId_lib2() == -1)
+            return "library_2_id";
+        else
+            return "library_3_id";
     }
 }
 
