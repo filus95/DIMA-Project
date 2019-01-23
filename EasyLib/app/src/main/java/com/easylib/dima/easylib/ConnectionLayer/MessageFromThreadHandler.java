@@ -50,7 +50,10 @@ public class MessageFromThreadHandler implements Serializable{
         map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
+        map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
+        map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
     }
+
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -62,6 +65,28 @@ public class MessageFromThreadHandler implements Serializable{
         intent.putExtra(Constants.QUERY_ON_BOOKS, books);
 
         //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void userSilentLoginGoogle(Bundle bundle) {
+        if ((boolean)bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE)) {
+            Intent intent = new Intent(Constants.USER_SILENT_LOGIN_GOOGLE);
+
+            //put whatever data you want to send, if any
+            intent.putExtra(Constants.USER_SILENT_LOGIN_GOOGLE,
+                    (boolean)bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE));
+
+            //send broadcast
+            this.currentContext.sendBroadcast(intent);
+
+        }
+    }
+
+    private void userLoginGoogle(Bundle bundle) {
+        Intent intent = new Intent(Constants.USER_SILENT_LOGIN_GOOGLE);
+        intent.putExtra(Constants.USER_LOGIN_GOOGLE,
+                bundle.getSerializable(Constants.USER_LOGIN_GOOGLE));
+
         this.currentContext.sendBroadcast(intent);
     }
 
@@ -91,18 +116,43 @@ public class MessageFromThreadHandler implements Serializable{
     }
 
     private void bookQueryAllLib(Bundle bundle) {
+        Intent intent = new Intent(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
+        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES,
+                (boolean)bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getAllReservationsForBook(Bundle bundle) {
+        Intent intent = new Intent(Constants.GET_ALL_RESERVATIONS_FOR_BOOK);
+        intent.putExtra(Constants.GET_ALL_RESERVATIONS_FOR_BOOK,
+                bundle.getSerializable(Constants.GET_ALL_RESERVATIONS_FOR_BOOK));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void newNotificationToken(Bundle bundle) {
+        Intent intent = new Intent(Constants.NEW_NOTIFICATION_TOKEN);
+        intent.putExtra(Constants.NEW_NOTIFICATION_TOKEN,
+                (boolean)bundle.getSerializable(Constants.NEW_NOTIFICATION_TOKEN));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getUserRatedBooks(Bundle bundle) {
+        Intent intent = new Intent(Constants.GET_USER_RATED_BOOKS);
+        intent.putExtra(Constants.GET_USER_RATED_BOOKS,
+                bundle.getSerializable(Constants.GET_USER_RATED_BOOKS));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getWaitingListForAUser(Bundle bundle) {
+        Intent intent = new Intent(Constants.GET_WAITING_LIST_USER);
+        intent.putExtra(Constants.GET_WAITING_LIST_USER,
+                bundle.getSerializable(Constants.GET_WAITING_LIST_USER));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
 

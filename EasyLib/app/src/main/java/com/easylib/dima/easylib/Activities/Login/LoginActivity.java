@@ -242,6 +242,7 @@ public class LoginActivity extends AppCompatActivity {
                 User user = new User();
                 user.setEmail(account.getEmail());
                 user.setUsername(account.getGivenName());
+                account.get
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 // ...

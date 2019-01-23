@@ -35,6 +35,8 @@ public class Constants {
     static final String TEST_CONN = "test";
     static final String GET_ALL_BOOKS = "get_all_books";
     public static final String NEW_NOTIFICATION_TOKEN = "new_notification_token";
+    static final String USER_SILENT_LOGIN_GOOGLE = "silent_user_login_google";
+    static final String USER_LOGIN_GOOGLE = "user_login_google";
     // Communication strings
 
 }
