@@ -144,8 +144,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
         startService(new Intent(LoginActivity.this, ConnectionService.class));
-        while ( !mIsBound )
-            doBindService();
+        doBindService();
     }
 
     public void login(View view) {

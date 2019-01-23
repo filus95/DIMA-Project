@@ -15,6 +15,7 @@ import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
 import AnswerClasses.Reservation;
+import AnswerClasses.User;
 import AnswerClasses.WaitingPerson;
 
 public class MessageFromThreadHandler implements Serializable{
@@ -162,7 +163,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void userLogin(Bundle bundle) {
         Intent intent = new Intent(Constants.USER_LOGIN);
         intent.putExtra(Constants.USER_LOGIN,
-                (boolean)bundle.getSerializable(Constants.USER_LOGIN));
+                bundle.getSerializable(Constants.USER_LOGIN));
 
         this.currentContext.sendBroadcast(intent);
     }

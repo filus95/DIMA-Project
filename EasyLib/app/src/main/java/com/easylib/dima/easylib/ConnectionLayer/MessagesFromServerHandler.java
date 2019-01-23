@@ -306,7 +306,7 @@ public class MessagesFromServerHandler {
             Bundle b = new Bundle();
             Message message = handler.obtainMessage();
 
-            boolean res = (boolean) objectInputStream.readObject();
+            User res = (User) objectInputStream.readObject();
             b.putSerializable(Constants.USER_LOGIN, res );
 
             message.obj = b;
