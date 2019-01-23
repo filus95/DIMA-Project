@@ -73,8 +73,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
+        map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
+        map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
+        map.put(Constants.EDIT_PROFILE, this::editProfile);
         // Add new methods
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
@@ -82,6 +86,46 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
 
     //////////////////////////////////////METHODS THAT INTERACT WITH THE LIB DB////////////////////////////////////////////
+
+    // The prefered library to delete is set to -1
+    private void editProfile() {
+
+        try {
+            UserPreferences up = (UserPreferences)objectInputStream.readObject();
+            socketHandler.sendViaSocket(Constants.EDIT_PROFILE);
+            socketHandler.sendViaSocket(dbms.editProfile(up));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    private void userLoginGoogle() {
+        try {
+            User user = (User) objectInputStream.readObject();
+            User res = dbms.registrationGoogleToken(user);
+            socketHandler.sendViaSocket(Constants.USER_LOGIN_GOOGLE);
+            socketHandler.sendViaSocket(res);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void userSilentLoginGoogle() {
+        User user = null;
+        try {
+            user = (User) objectInputStream.readObject();
+            boolean res = dbms.silentGoogleLogin(user);
+            socketHandler.sendViaSocket(Constants.USER_SILENT_LOGIN_GOOGLE);
+            socketHandler.sendViaSocket(res);
+
+        } catch (IOException | ClassNotFoundException e) {
+        e.printStackTrace();
+        }
+    }
+
+
 
     private void getAllBooks(){
         try {
@@ -565,7 +609,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
     //////////////////////////////////////METHODS THAT INTERACT WITH THE PROPIETARY DB//////////////////////////////////
-
 
     private void librayConnInfo() {
         try {

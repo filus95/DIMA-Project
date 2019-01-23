@@ -53,8 +53,9 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
         map.put(Constants.USER_LOGIN_GOOGLE, this::userLoginGoogle);
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this::userSilentLoginGoogle);
-    }
+        map.put(Constants.EDIT_PROFILE, this::editProfile);
 
+    }
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -81,6 +82,17 @@ public class MessageFromThreadHandler implements Serializable {
             this.currentContext.sendBroadcast(intent);
 
         }
+    }
+
+    private void editProfile(Bundle bundle) {
+        Intent intent = new Intent(Constants.EDIT_PROFILE);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.EDIT_PROFILE,
+                (boolean) bundle.getSerializable(Constants.EDIT_PROFILE));
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void userLoginGoogle(Bundle bundle) {

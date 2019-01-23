@@ -82,23 +82,26 @@ class PasswordManager {
      */
     boolean isExpectedPassword(User user) throws SQLException {
 
-        String sql = "SELECT salt, hashed_pd FROM propietary_db.users WHERE email = ?";
+        String sql = "SELECT user_id, salt, hashed_pd FROM propietary_db.users WHERE email = ?";
 
         PreparedStatement st = this.conn.prepareStatement(sql);
         st.setString(1, user.getEmail());
         ResultSet rs = st.executeQuery();
+        user.setUser_id(-1);
 
         if (rs.next()) {
             byte[] hash_pass = rs.getBytes("hashed_pd");
             byte[] salt = rs.getBytes("salt");
-
+//            user.setUser_id(rs.getInt("user_id"));
             byte[] pwdHash = hash(user.getPlainPassword().toCharArray(), salt);
             Arrays.fill(user.getPlainPassword().toCharArray(), Character.MIN_VALUE);
 
             //check if the stored hashed password is the same of that one inserted
             for (int i = 0; i < pwdHash.length; i++) {
-                if (pwdHash[i] != hash_pass[i])
+                if (pwdHash[i] != hash_pass[i]) {
+//                    user.setUser_id(-1);
                     return false;
+                }
             }
         } else return false;
 

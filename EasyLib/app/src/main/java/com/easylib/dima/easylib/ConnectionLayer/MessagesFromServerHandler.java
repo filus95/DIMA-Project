@@ -69,6 +69,7 @@ public class MessagesFromServerHandler {
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
         map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
+        map.put(Constants.EDIT_PROFILE, this::editProfile);
     }
 
     private void getWaitingListForAUser() {
@@ -95,10 +96,21 @@ public class MessagesFromServerHandler {
             boolean res = (boolean) objectInputStream.readObject();
             b.putSerializable(Constants.USER_SILENT_LOGIN_GOOGLE, res );
 
-            //Extract the key to use in the map in the UI thread
-//            Set<String> x = b.keySet();
-//            Iterator c = x.iterator();
-//            String key = (String) c.next();
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void editProfile() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.EDIT_PROFILE, res );
 
             message.obj = b;
             message.sendToTarget();
@@ -107,6 +119,7 @@ public class MessagesFromServerHandler {
             e.printStackTrace();
         }
     }
+
 
     private void userLoginGoogle() {
         try {

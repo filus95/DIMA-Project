@@ -6,6 +6,9 @@ package com.easylib.network.socket;
  */
 public class Constants {
 
+    static final String EDIT_PROFILE = "edit_profile";
+    static final String USER_SILENT_LOGIN_GOOGLE = "silent_user_login_google";
+    static final String USER_LOGIN_GOOGLE = "user_login_google";
     static final String GET_ALL_RESERVATIONS_FOR_BOOK = "get_all_reservations_for_book";
     static final String RESERVED_BOOK_RETURNED = "reserved_book_returned";
     static final String RESERVED_BOOK_TAKEN = "reserved_book_taken";
