@@ -1,8 +1,10 @@
 package com.easylib.dima.easylib.Activities;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -103,7 +105,13 @@ public class SearchActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycle_search);
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
-        mLayoutManager = new LinearLayoutManager(this);
+        if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            // used linear layout
+            mLayoutManager = new LinearLayoutManager(this);
+        } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            // used grid layout
+            mLayoutManager = new GridLayoutManager(this, 2);
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter

@@ -47,9 +47,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         ArrayList<Event> events = new ArrayList<Event>();
         ArrayList<Book> books = new ArrayList<Book>();
         for(i=0; i<3; i++) {
-            library.getLibraryContent().getNews().get(i);
-            library.getLibraryContent().getEvents().get(i);
-            library.getLibraryContent().getBooks().get(i);
+            news.add(library.getLibraryContent().getNews().get(i));
+            events.add(library.getLibraryContent().getEvents().get(i));
+            books.add(library.getLibraryContent().getBooks().get(i));
         }
 
         // improve performance

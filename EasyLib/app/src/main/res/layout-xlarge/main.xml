@@ -10,7 +10,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="90dp"
         android:background="@drawable/topnav_back"
         android:orientation="horizontal"
         android:paddingLeft="3dp"
@@ -65,18 +65,17 @@
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navbar"
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
+        android:layout_height="90dp"
         android:background="@drawable/botnav_back"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         app:itemBackground="@android:color/transparent"
-        app:itemIconSize="33dp"
+        app:itemIconSize="55dp"
         app:itemIconTint="@color/nav_item"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_items">
-    </android.support.design.widget.BottomNavigationView>
+        app:menu="@menu/bottom_nav_items"></android.support.design.widget.BottomNavigationView>
 
 </android.support.constraint.ConstraintLayout>

@@ -4,16 +4,31 @@ package com.easylib.dima.easylib.Activities.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
+import com.easylib.dima.easylib.Adapters.HomeAdapter;
 import com.easylib.dima.easylib.R;
+
+import java.util.ArrayList;
+
+import AnswerClasses.LibraryDescriptor;
 
 
 public class HomeFragment extends Fragment {
+
+    ArrayList<LibraryDescriptor> librariesPref;
+
+    // recycle view
+    private RecyclerView mRecyclerView;
+    private HomeAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +47,18 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        // Recycle View Settings
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_home_recycle);
+        mRecyclerView.setHasFixedSize(true);
+        // used linear layout
+        mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        // specify an adapter
+        // TODO : change adapter construction
+        mAdapter = new HomeAdapter(getContext(), librariesPref);
+        mRecyclerView.setAdapter(mAdapter);
 
         return root;
     }
