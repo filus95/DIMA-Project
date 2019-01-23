@@ -1,8 +1,10 @@
 package com.easylib.dima.easylib.Activities.Login;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -38,18 +40,21 @@ public class LoginPreferenceActivity extends AppCompatActivity {
             libraries.add(lib);
         }
 
+        // RecyclerView setup
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
-
         // improve performance
         mRecyclerView.setHasFixedSize(true);
-
-        // used linear layout
-        mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
         // specify an adapter
         mAdapter = new PrefLibAdapter(this, libraries);
         mRecyclerView.setAdapter(mAdapter);
+        if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            // used linear layout
+            mLayoutManager = new LinearLayoutManager(this);
+        } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            // used grid layout
+            mLayoutManager = new GridLayoutManager(this, 2);
+        }
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     public void skip(View view) {
