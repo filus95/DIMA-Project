@@ -18,16 +18,17 @@ import AnswerClasses.Reservation;
 import AnswerClasses.User;
 import AnswerClasses.WaitingPerson;
 
-public class MessageFromThreadHandler implements Serializable{
+public class MessageFromThreadHandler implements Serializable {
     private Map<String, ContextCreator> map;
     Context currentContext;
-    MessageFromThreadHandler(){
+
+    MessageFromThreadHandler() {
         map = new HashMap<>();
 
         map.put(CommunicationConstants.TEST_CONN, this::test);
         map.put(Constants.GET_ALL_BOOKS, this::getAllBooks);
         map.put(Constants.QUERY_ON_BOOKS, this::bookQuery);
-        map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
+        map.put(Constants.GET_LIBRARY_CONN_INFO, this::librayConnInfo);
         map.put(Constants.INSERT_RESERVATION, this::insertReservation);
         map.put(Constants.INSERT_EVENT_PARTICIPANT, this::insertEventPartecipant);
         map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
@@ -50,15 +51,15 @@ public class MessageFromThreadHandler implements Serializable{
         map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
-        map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
-        map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
+        map.put(Constants.USER_LOGIN_GOOGLE, this::userLoginGoogle);
+        map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this::userSilentLoginGoogle);
     }
 
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
     private void bookQuery(Bundle bundle) {
-        ArrayList<Book> books = (ArrayList<Book>)bundle.getSerializable(Constants.QUERY_ON_BOOKS);
+        ArrayList<Book> books = (ArrayList<Book>) bundle.getSerializable(Constants.QUERY_ON_BOOKS);
         Intent intent = new Intent(Constants.QUERY_ON_BOOKS);
 
         //put whatever data you want to send, if any
@@ -69,12 +70,12 @@ public class MessageFromThreadHandler implements Serializable{
     }
 
     private void userSilentLoginGoogle(Bundle bundle) {
-        if ((boolean)bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE)) {
+        if ((boolean) bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE)) {
             Intent intent = new Intent(Constants.USER_SILENT_LOGIN_GOOGLE);
 
             //put whatever data you want to send, if any
             intent.putExtra(Constants.USER_SILENT_LOGIN_GOOGLE,
-                    (boolean)bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE));
+                    (boolean) bundle.getSerializable(Constants.USER_SILENT_LOGIN_GOOGLE));
 
             //send broadcast
             this.currentContext.sendBroadcast(intent);
@@ -94,7 +95,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void insertReservation(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_RESERVATION);
         intent.putExtra(Constants.INSERT_RESERVATION,
-                (boolean)bundle.getSerializable(Constants.INSERT_RESERVATION));
+                (boolean) bundle.getSerializable(Constants.INSERT_RESERVATION));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -102,7 +103,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void reservedBookReturned(Bundle bundle) {
         Intent intent = new Intent(Constants.RESERVED_BOOK_RETURNED);
         intent.putExtra(Constants.RESERVED_BOOK_RETURNED,
-                (boolean)bundle.getSerializable(Constants.RESERVED_BOOK_RETURNED));
+                (boolean) bundle.getSerializable(Constants.RESERVED_BOOK_RETURNED));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -110,7 +111,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void reservedBookTaken(Bundle bundle) {
         Intent intent = new Intent(Constants.RESERVED_BOOK_TAKEN);
         intent.putExtra(Constants.RESERVED_BOOK_TAKEN,
-                (boolean)bundle.getSerializable(Constants.RESERVED_BOOK_TAKEN));
+                (boolean) bundle.getSerializable(Constants.RESERVED_BOOK_TAKEN));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -118,7 +119,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void bookQueryAllLib(Bundle bundle) {
         Intent intent = new Intent(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
         intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES,
-                (boolean)bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+                (boolean) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -134,7 +135,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void newNotificationToken(Bundle bundle) {
         Intent intent = new Intent(Constants.NEW_NOTIFICATION_TOKEN);
         intent.putExtra(Constants.NEW_NOTIFICATION_TOKEN,
-                (boolean)bundle.getSerializable(Constants.NEW_NOTIFICATION_TOKEN));
+                (boolean) bundle.getSerializable(Constants.NEW_NOTIFICATION_TOKEN));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -160,7 +161,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void insertEventPartecipant(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_EVENT_PARTICIPANT);
         intent.putExtra(Constants.INSERT_EVENT_PARTICIPANT,
-                (boolean)bundle.getSerializable(Constants.INSERT_EVENT_PARTICIPANT));
+                (boolean) bundle.getSerializable(Constants.INSERT_EVENT_PARTICIPANT));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -170,24 +171,24 @@ public class MessageFromThreadHandler implements Serializable{
     private void insertWaitingPerson(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_WAITING_PERSON);
         intent.putExtra(Constants.INSERT_WAITING_PERSON,
-                (boolean)bundle.getSerializable(Constants.INSERT_WAITING_PERSON));
+                (boolean) bundle.getSerializable(Constants.INSERT_WAITING_PERSON));
 
         this.currentContext.sendBroadcast(intent);
 
     }
 
     private void userRegistration(Bundle bundle) {
-        if ((boolean)bundle.getSerializable(Constants.REGISTER_USER)) {
-            Intent intent = new Intent(Constants.REGISTER_USER);
+        Intent intent = new Intent(Constants.REGISTER_USER);
 
-            //put whatever data you want to send, if any
-            intent.putExtra(Constants.REGISTER_USER, (Bundle) null);
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.REGISTER_USER,
+                bundle.getSerializable(Constants.REGISTER_USER));
 
-            //send broadcast
-            this.currentContext.sendBroadcast(intent);
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
 
-        }
     }
+
 
     //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo(Bundle bundle) {
@@ -213,7 +214,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void userLogin(Bundle bundle) {
         Intent intent = new Intent(Constants.USER_LOGIN);
         intent.putExtra(Constants.USER_LOGIN,
-                bundle.getSerializable(Constants.USER_LOGIN));
+                (boolean) bundle.getSerializable(Constants.USER_LOGIN));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -222,7 +223,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void passwordForgot(Bundle bundle) {
         Intent intent = new Intent(Constants.PASSWORD_FORGOT);
         intent.putExtra(Constants.PASSWORD_FORGOT,
-                (boolean)bundle.getSerializable(Constants.PASSWORD_FORGOT));
+                (boolean) bundle.getSerializable(Constants.PASSWORD_FORGOT));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -231,7 +232,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void insertPreference(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_PREFERENCE);
         intent.putExtra(Constants.INSERT_PREFERENCE,
-                (boolean)bundle.getSerializable(Constants.INSERT_PREFERENCE));
+                (boolean) bundle.getSerializable(Constants.INSERT_PREFERENCE));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -240,7 +241,7 @@ public class MessageFromThreadHandler implements Serializable{
     private void insertRating(Bundle bundle) {
         Intent intent = new Intent(Constants.INSERT_RATING);
         intent.putExtra(Constants.INSERT_RATING,
-                (boolean)bundle.getSerializable(Constants.INSERT_RATING));
+                (boolean) bundle.getSerializable(Constants.INSERT_RATING));
 
         this.currentContext.sendBroadcast(intent);
     }
@@ -257,7 +258,7 @@ public class MessageFromThreadHandler implements Serializable{
     }
 
     //it receives a WaitingPerson arraylist from the stream. If something wrong, receives null
-    private void getWaitingListForAbook(Bundle bundle){
+    private void getWaitingListForAbook(Bundle bundle) {
         ArrayList<WaitingPerson> waitingPeople = (ArrayList<WaitingPerson>)
                 bundle.getSerializable(Constants.GET_WAITING_LIST_BOOK);
 
@@ -311,7 +312,7 @@ public class MessageFromThreadHandler implements Serializable{
 
     //it receives a BookActivity arraylist from the stream. If something wrong, receives null
     private void getAllBooks(Bundle bundle) {
-        ArrayList<Book> books = (ArrayList<Book>)bundle.getSerializable(Constants.GET_ALL_BOOKS);
+        ArrayList<Book> books = (ArrayList<Book>) bundle.getSerializable(Constants.GET_ALL_BOOKS);
         Intent intent = new Intent(Constants.GET_ALL_BOOKS);
 
         //put whatever data you want to send, if any
@@ -339,7 +340,8 @@ public class MessageFromThreadHandler implements Serializable{
      * functional interface
      */
     @FunctionalInterface
-    private interface ContextCreator{
+    private interface ContextCreator {
         void build(Bundle bundle) throws IOException, ClassNotFoundException;
     }
 }
+

@@ -288,7 +288,7 @@ public class MessagesFromServerHandler {
             Bundle b = new Bundle();
             Message message = handler.obtainMessage();
 
-            boolean res = (boolean) objectInputStream.readObject();
+            User res = (User) objectInputStream.readObject();
             b.putSerializable(Constants.REGISTER_USER, res );
 
             //Extract the key to use in the map in the UI thread
@@ -345,7 +345,7 @@ public class MessagesFromServerHandler {
             Bundle b = new Bundle();
             Message message = handler.obtainMessage();
 
-            User res = (User) objectInputStream.readObject();
+            boolean res = (boolean) objectInputStream.readObject();
             b.putSerializable(Constants.USER_LOGIN, res );
 
             message.obj = b;
