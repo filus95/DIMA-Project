@@ -11,6 +11,7 @@ import android.os.IBinder;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -55,8 +56,12 @@ public class RegisterActivity extends Activity {
         public void onReceive(Context context, Intent intent) {
             String key = extractKey(intent);
 
-            if ( key.equals(Constants.REGISTER_USER))
+            if ( key.equals(Constants.REGISTER_USER)) {
+                User user = (User) intent.getSerializableExtra(Constants.REGISTER_USER);
+                Toast.makeText(context, user.getName() + user.getEmail(), Toast.LENGTH_LONG);
                 goToLogin();
+            }
+
 
 //            else if something Else....
 //            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
@@ -98,7 +103,8 @@ public class RegisterActivity extends Activity {
             findViewById(R.id.text_error).setVisibility(View.VISIBLE);
         else {
             User user = new User();
-            user.setUsername(surname);
+            user.setName(name);
+            user.setSurname(surname);
             user.setEmail(email);
             user.setPlainPassword(password);
 

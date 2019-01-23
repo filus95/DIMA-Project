@@ -74,29 +74,6 @@ public class ClientThread implements Runnable, Serializable {
         System.out.println("Server Stopped.") ;
     }
 
-
-    // MESSAGE TO SEND TO THE SERVER
-
-
-    public void login(String username, String password, String email){
-        sendMessage(Constants.REGISTER_USER);
-
-        User user = new User();
-        user.setUsername(username);
-        user.setPlainPassword(password);
-        user.setEmail(email);
-        sendViaSocket(user);
-    }
-
-    public void sendRegistration(User user){
-        sendViaSocket(Constants.REGISTER_USER);
-        sendViaSocket(user);
-
-        // TODO: method to call for activating a waiting screen
-    }
-
-
-
     private void sendViaSocket(Object toSend){
         try {
             objectOutputStream.writeObject(toSend);

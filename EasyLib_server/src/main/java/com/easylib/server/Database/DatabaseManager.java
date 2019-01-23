@@ -1098,7 +1098,7 @@ public class DatabaseManager {
         map.put("name", user.getName());
         map.put("surname", user.getSurname());
         map.put("email", user.getEmail());
-        map.put("google_id_token", user.getGoogle_id_token());
+        //map.put("google_id_token", user.getGoogle_id_token());
 
         insertStatement(map,Constants.USERS_TABLE_NAME,Constants.PROPIETARY_DB);
 
@@ -1137,7 +1137,7 @@ public class DatabaseManager {
             user.setUser_id(-1);
 
             if (rs.next()) {
-               if (user.getGoogle_id_token().equals(rs.getString("google_id_token")))
+               //if (user.getGoogle_id_token().equals(rs.getString("google_id_token")))
                    return true;
             }else
                 return false;
