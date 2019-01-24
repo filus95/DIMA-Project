@@ -1,8 +1,10 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,7 +47,13 @@ public class CalendarFragment extends Fragment {
         // improve performance
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
-        mLayoutManager = new LinearLayoutManager(getContext());
+        if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            // used linear layout
+            mLayoutManager = new LinearLayoutManager(getContext());
+        } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            // used grid layout
+            mLayoutManager = new GridLayoutManager(getContext(), 2);
+        }
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
