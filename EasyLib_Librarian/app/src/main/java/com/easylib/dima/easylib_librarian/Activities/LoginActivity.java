@@ -1,4 +1,4 @@
-package com.easylib.dima.easylib_librarian;
+package com.easylib.dima.easylib_librarian.Activities;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -12,15 +12,15 @@ import android.widget.EditText;
 
 import com.easylib.dima.easylib_librarian.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib_librarian.Main.MainActivity;
+import com.easylib.dima.easylib_librarian.R;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 //import com.google.firebase.auth.FirebaseAuth;
 
-public class login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
 
     //Comunication
     ConnectionService mBoundService;
     private boolean mIsBound;
-    //SignInButton googleSignInButtun;
 //    FirebaseAuth mAuth;
     private final static int RC_SIGN_IN = 1;
 //    GoogleSignInClient mGoogleSignInClient;
@@ -72,8 +72,8 @@ public class login extends AppCompatActivity {
 
     public void login(View view) {
         // Get username & password
-        EditText uText = (EditText) findViewById(R.id.username);
-        String username = uText.getText().toString();
+        EditText eText = (EditText) findViewById(R.id.email);
+        String username = eText.getText().toString();
         EditText pText = (EditText) findViewById(R.id.password);
         String password = pText.getText().toString();
 
@@ -81,17 +81,5 @@ public class login extends AppCompatActivity {
 //        mAuth = FirebaseAuth.getInstance();
 
         //TODO: Make the call to Server
-
-        //Just for test
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
-
-    public void loginFb(View view) {
-        //TODO: call Facebook login API
-    }
-
-    public void loginGoogle(View view) {
-        //TODO: call Google login API
     }
 }
