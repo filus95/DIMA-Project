@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.easylib.dima.easylib_librarian.ConnectionLayer.ConnectionService;
-import com.easylib.dima.easylib_librarian.Main.MainActivity;
 import com.easylib.dima.easylib_librarian.R;
 //import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 //import com.google.firebase.auth.FirebaseAuth;
@@ -81,5 +80,8 @@ public class LoginActivity extends AppCompatActivity {
 //        mAuth = FirebaseAuth.getInstance();
 
         //TODO: Make the call to Server
+        Intent intent = new Intent(this, LibraryActivity.class);
+        doBindService();
+        startActivity(intent);
     }
 }
