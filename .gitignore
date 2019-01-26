@@ -73,3 +73,9 @@ EasyLib/\.idea/gradle\.xml
 EasyLib/\.idea/misc\.xml
 
 EasyLib_Librarian/\.idea/caches/gradle_models\.ser
+
+EasyLib/\.idea/
+
+EasyLib_Librarian/\.idea/
+
+EasyLib/app/src/main/java/com/easylib/dima/easylib/ConnectionLayer/CommunicationConstants\.java
