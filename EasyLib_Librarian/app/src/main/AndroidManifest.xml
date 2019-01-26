@@ -19,5 +19,6 @@
         </activity>
 
         <activity android:name=".Activities.LibraryActivity"/>
+        <activity android:name=".Activities.BookActivity"/>
     </application>
 </manifest>
