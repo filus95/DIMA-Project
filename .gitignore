@@ -63,3 +63,13 @@ fastlane/Preview.html
 fastlane/screenshots
 fastlane/test_output
 fastlane/readme.md
+
+EasyLib/\.idea/caches/build_file_checksums\.ser
+
+EasyLib/\.idea/caches/gradle_models\.ser
+
+EasyLib/\.idea/gradle\.xml
+
+EasyLib/\.idea/misc\.xml
+
+EasyLib_Librarian/\.idea/caches/gradle_models\.ser
