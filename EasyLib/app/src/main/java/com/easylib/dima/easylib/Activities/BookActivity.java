@@ -67,6 +67,7 @@ public class BookActivity extends AppCompatActivity {
             authors.setText(authors + ", " + author);
         }
         description.setText(book.getDescription());
+        avgRate.setText(book.getAverageRating().intValue());
         Glide.with(this)
                 .load(book.getImageLink())
                 .into(image);
@@ -83,6 +84,5 @@ public class BookActivity extends AppCompatActivity {
         // TODO : change adapter construction
         mAdapter = new BookAvailableLibAdapter(this, true, "string", new ArrayList<Book>());
         mRecyclerView.setAdapter(mAdapter);
-
     }
 }
