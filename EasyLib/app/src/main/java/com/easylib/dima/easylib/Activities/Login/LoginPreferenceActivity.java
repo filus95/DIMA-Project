@@ -89,6 +89,23 @@ public class LoginPreferenceActivity extends AppCompatActivity {
             if ( key.equals(Constants.GET_USER_PREFERENCES)) {
                 // TODO : check su user_id se = -1 allora Login non a buon fine
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
+
+                // RecyclerView setup
+                mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
+                // improve performance
+                mRecyclerView.setHasFixedSize(true);
+                // specify an adapter
+                mAdapter = new PrefLibAdapter(context, libraries);
+                mRecyclerView.setAdapter(mAdapter);
+                if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+                    // used linear layout
+                    mLayoutManager = new LinearLayoutManager(context);
+                } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                    // used grid layout
+                    mLayoutManager = new GridLayoutManager(context, 2);
+                }
+                mRecyclerView.setLayoutManager(mLayoutManager);
+
                 /*Intent loginPref = new Intent(context, LoginPreferenceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("user Info", user);
@@ -114,22 +131,6 @@ public class LoginPreferenceActivity extends AppCompatActivity {
             mBoundService.setCurrentContext(this);
             mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, 1);
         }
-
-        // RecyclerView setup
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
-        // improve performance
-        mRecyclerView.setHasFixedSize(true);
-        // specify an adapter
-        mAdapter = new PrefLibAdapter(this, libraries);
-        mRecyclerView.setAdapter(mAdapter);
-        if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
-            // used linear layout
-            mLayoutManager = new LinearLayoutManager(this);
-        } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-            // used grid layout
-            mLayoutManager = new GridLayoutManager(this, 2);
-        }
-        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     public void skip(View view) {
