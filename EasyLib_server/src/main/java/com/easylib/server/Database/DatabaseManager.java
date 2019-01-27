@@ -931,8 +931,8 @@ public class DatabaseManager {
         return user;
     }
 
-    public boolean checkCorrectPassword(User user) {
-        boolean to_ret = false;
+    public User checkCorrectPassword(User user) {
+        User to_ret = null;
         try {
             to_ret = pm.isExpectedPassword(user);
         } catch (SQLException e) {

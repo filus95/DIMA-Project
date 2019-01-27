@@ -80,9 +80,9 @@ class PasswordManager {
      *
      * @return true if the given password and salt match the hashed value, false otherwise
      */
-    boolean isExpectedPassword(User user) throws SQLException {
+    User isExpectedPassword(User user) throws SQLException {
 
-        String sql = "SELECT user_id, salt, hashed_pd FROM propietary_db.users WHERE email = ?";
+        String sql = "SELECT users.name, surname, user_id, salt, hashed_pd FROM propietary_db.users WHERE email = ?";
 
         PreparedStatement st = this.conn.prepareStatement(sql);
         st.setString(1, user.getEmail());
@@ -92,20 +92,22 @@ class PasswordManager {
         if (rs.next()) {
             byte[] hash_pass = rs.getBytes("hashed_pd");
             byte[] salt = rs.getBytes("salt");
-//            user.setUser_id(rs.getInt("user_id"));
             byte[] pwdHash = hash(user.getPlainPassword().toCharArray(), salt);
             Arrays.fill(user.getPlainPassword().toCharArray(), Character.MIN_VALUE);
+            user.setUser_id(rs.getInt("user_id"));
+            user.setName(rs.getString("name"));
+            user.setSurname(rs.getString("surname"));
 
             //check if the stored hashed password is the same of that one inserted
             for (int i = 0; i < pwdHash.length; i++) {
                 if (pwdHash[i] != hash_pass[i]) {
-//                    user.setUser_id(-1);
-                    return false;
+                    user.setUser_id(-1);
+                    return user;
                 }
             }
-        } else return false;
+        } else return user;
 
-        return true;
+        return user;
     }
 
     boolean changeForgottenPassword(String username, String email ){
