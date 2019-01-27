@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO : check su user_id se = -1 allora Login non a buon fine
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
                 // TODO : adjust Toast
-                Toast.makeText(context, user.getUser_id(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, String.valueOf(user.getUser_id()), Toast.LENGTH_LONG).show();
                 loginPref = new Intent(context, LoginPreferenceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("user Info", user);
@@ -135,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 bundle.putSerializable("user Preferences", libraries);
                 loginPref.putExtras(bundle);
                 doUnbindService();
+                unregisterReceiver(mMessageReceiver);
                 startActivity(loginPref);
             }
         }
