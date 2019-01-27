@@ -263,13 +263,6 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/library_activity_fav_lib_button"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Set Favourite" />
-
         </LinearLayout>
     </ScrollView>
 
