@@ -46,10 +46,12 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
+import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.User;
 
 public class LoginActivity extends AppCompatActivity {
@@ -62,6 +64,9 @@ public class LoginActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 1;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
+
+    Intent loginPref;
+    private ArrayList<LibraryDescriptor> libraries;
 
     private EditText eText;
     private EditText pText;
@@ -117,11 +122,18 @@ public class LoginActivity extends AppCompatActivity {
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
                 // TODO : adjust Toast
                 Toast.makeText(context, user.getUser_id(), Toast.LENGTH_LONG).show();
-                Intent loginPref = new Intent(context, LoginPreferenceActivity.class);
+                loginPref = new Intent(context, LoginPreferenceActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("user Info", user);
                 loginPref.putExtras(bundle);
                 loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                callUserPreferences();
+            }
+            if (key.equals(Constants.GET_USER_PREFERENCES)) {
+                libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user Preferences", libraries);
+                loginPref.putExtras(bundle);
                 doUnbindService();
                 startActivity(loginPref);
             }
@@ -186,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // for Multiple Filters call this multiple times
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
     }
 
     public void login(View view) {
@@ -243,6 +256,13 @@ public class LoginActivity extends AppCompatActivity {
                 mBoundService.setCurrentContext(this);
                 mBoundService.sendMessage(Constants.USER_LOGIN, user);
             }
+        }
+    }
+
+    public void callUserPreferences() {
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(this);
+            mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, 1);
         }
     }
 
