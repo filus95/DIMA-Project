@@ -113,19 +113,18 @@ public class LoginActivity extends AppCompatActivity {
             String key = extractKey(intent);
 
             if ( key.equals(Constants.USER_LOGIN)) {
+                // TODO : check su user_id se = -1 allora Login non a buon fine
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
                 // TODO : adjust Toast
                 Toast.makeText(context, user.getUser_id(), Toast.LENGTH_LONG).show();
+                Intent loginPref = new Intent(context, LoginPreferenceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user Info", user);
+                loginPref.putExtras(bundle);
+                loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                doUnbindService();
+                startActivity(loginPref);
             }
-
-
-//            else if something Else....
-//            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
-
-
-            // Extract data included in the Intent
-            // String message = intent.getStringExtra("message");
-
         }
     };
 
@@ -184,6 +183,8 @@ public class LoginActivity extends AppCompatActivity {
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         doBindService();
+
+        // for Multiple Filters call this multiple times
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
     }
 
@@ -242,16 +243,6 @@ public class LoginActivity extends AppCompatActivity {
                 mBoundService.setCurrentContext(this);
                 mBoundService.sendMessage(Constants.USER_LOGIN, user);
             }
-
-            // TODO: finish implementing getNews
-//          mBoundService.sendMessage(Constants.GET_NEWS, num);
-
-            /*Intent intent = new Intent(this, LoginPreferenceActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//            mBoundService.sendMessage(Constants.);
-            doUnbindService();
-            startActivity(intent);*/
-
         }
     }
 
