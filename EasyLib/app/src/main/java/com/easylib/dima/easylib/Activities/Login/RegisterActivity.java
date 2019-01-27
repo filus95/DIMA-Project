@@ -62,7 +62,6 @@ public class RegisterActivity extends Activity {
                 goToLogin();
             }
 
-
 //            else if something Else....
 //            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
 
