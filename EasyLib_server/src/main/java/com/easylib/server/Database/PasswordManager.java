@@ -102,11 +102,16 @@ class PasswordManager {
             for (int i = 0; i < pwdHash.length; i++) {
                 if (pwdHash[i] != hash_pass[i]) {
                     user.setUser_id(-1);
+                    user.setPlainPassword(null);
                     return user;
                 }
             }
-        } else return user;
+        } else{
+            user.setPlainPassword(null);
+            return user;
+        }
 
+        user.setPlainPassword(null);
         return user;
     }
 

@@ -512,8 +512,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             socketHandler.sendViaSocket(Constants.GET_USER_PREFERENCES);
 
             res = new ArrayList<>();
-            for ( Integer id : pref_lib_ids)
-                res.add(getLibraryDescriptor(id));
+            for ( Integer id : pref_lib_ids) {
+                if ( id != 0)
+                    res.add(getLibraryDescriptor(id));
+            }
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
