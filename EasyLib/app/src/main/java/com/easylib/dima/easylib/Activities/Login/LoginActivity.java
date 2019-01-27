@@ -2,9 +2,11 @@ package com.easylib.dima.easylib.Activities.Login;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
@@ -22,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
@@ -42,6 +45,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 import AnswerClasses.User;
 
@@ -92,6 +99,36 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private String extractKey(Intent intent){
+        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
+        Iterator iterator = keySet.iterator();
+        return (String)iterator.next();
+    }
+
+    //This is the handler that will manager to process the broadcast intent
+    //This has to be created inside each activity that needs it ( almost anyone )
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key = extractKey(intent);
+
+            if ( key.equals(Constants.USER_LOGIN)) {
+                User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
+                // TODO : adjust Toast
+                Toast.makeText(context, user.getUser_id(), Toast.LENGTH_LONG).show();
+            }
+
+
+//            else if something Else....
+//            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
+
+
+            // Extract data included in the Intent
+            // String message = intent.getStringExtra("message");
+
+        }
+    };
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -101,6 +138,10 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Start the Service
+        startService(new Intent(LoginActivity.this, ConnectionService.class));
+
         super.onCreate(savedInstanceState);
         notificationSetup();
         setContentView(R.layout.login);
@@ -142,14 +183,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-
-        startService(new Intent(LoginActivity.this, ConnectionService.class));
         doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
     }
 
     public void login(View view) {
         String email = eText.getText().toString();
         String password = pText.getText().toString();
+        User user = new User();
+        user.setEmail(email);
+        user.setPlainPassword(password);
 
         // sending identification token for Firebase notifications
         /*FirebaseInstanceId.getInstance().getInstanceId()
@@ -194,16 +237,20 @@ public class LoginActivity extends AppCompatActivity {
             // Get username & password
 //          Integer num = 1;
 
-            mBoundService.setCurrentContext(this);
+            // Send Login Info to Server
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(this);
+                mBoundService.sendMessage(Constants.USER_LOGIN, user);
+            }
 
             // TODO: finish implementing getNews
 //          mBoundService.sendMessage(Constants.GET_NEWS, num);
 
-            Intent intent = new Intent(this, LoginPreferenceActivity.class);
+            /*Intent intent = new Intent(this, LoginPreferenceActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
 //            mBoundService.sendMessage(Constants.);
             doUnbindService();
-            startActivity(intent);
+            startActivity(intent);*/
 
         }
     }

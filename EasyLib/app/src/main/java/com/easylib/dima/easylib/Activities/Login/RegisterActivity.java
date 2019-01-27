@@ -58,6 +58,7 @@ public class RegisterActivity extends Activity {
 
             if ( key.equals(Constants.REGISTER_USER)) {
                 User user = (User) intent.getSerializableExtra(Constants.REGISTER_USER);
+                // TODO : adjust Toast
                 Toast.makeText(context, user.getName() + user.getEmail(), Toast.LENGTH_LONG).show();
                 goToLogin();
             }
