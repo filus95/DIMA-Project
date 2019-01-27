@@ -385,13 +385,6 @@ public class DatabaseManager {
             res = false;
         }
 
-        //todo: necessary to close conn?
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return res;
-        }
         return res;
     }
 
