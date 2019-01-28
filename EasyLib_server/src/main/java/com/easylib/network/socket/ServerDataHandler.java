@@ -631,8 +631,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             if (!dbms.checkUserExsist(user.getEmail()))
                 socketHandler.sendViaSocket(dbms.addUser(user));
-            else
-                socketHandler.sendViaSocket(false);
+            else {
+                user.setUser_id(-1);
+                socketHandler.sendViaSocket(user);
+            }
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

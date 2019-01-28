@@ -925,6 +925,7 @@ public class DatabaseManager {
 
             } catch (SQLException e) {
                 e.printStackTrace();
+                user.setUser_id(-1);
             }
         }
 
