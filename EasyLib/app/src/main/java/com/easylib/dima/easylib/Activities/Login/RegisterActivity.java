@@ -9,8 +9,11 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
@@ -24,8 +27,14 @@ import java.util.Set;
 import AnswerClasses.User;
 
 public class RegisterActivity extends Activity {
+
     ConnectionService mBoundService;
     boolean mIsBound;
+
+    private EditText sText;
+    private EditText nText;
+    private EditText eText;
+    private EditText pText;
 
     // Create Service bounding inside the class
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -58,18 +67,13 @@ public class RegisterActivity extends Activity {
 
             if ( key.equals(Constants.REGISTER_USER)) {
                 User user = (User) intent.getSerializableExtra(Constants.REGISTER_USER);
-                // TODO : adjust Toast
-                Toast.makeText(context, user.getName() + user.getEmail(), Toast.LENGTH_LONG).show();
-                goToLogin();
+                if (user.getUser_id() == -1) {
+                    Toast.makeText(context, "Not Registered", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Registered", Toast.LENGTH_LONG).show();
+                    goToLogin();
+                }
             }
-
-//            else if something Else....
-//            IN THIS WAY WE CAN MANAGE DIFFERENT MESSAGES AND DIFFERENT REACTION FOR EACH ACTIVITY
-
-
-            // Extract data included in the Intent
-            // String message = intent.getStringExtra("message");
-
         }
     };
 
@@ -85,17 +89,33 @@ public class RegisterActivity extends Activity {
         doBindService();
         setContentView(R.layout.register);
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
+
+        sText = (EditText) findViewById(R.id.surname);
+        nText = (EditText) findViewById(R.id.name);
+        eText = (EditText) findViewById(R.id.email);
+        pText = (EditText) findViewById(R.id.password);
+
+        // Change Enter key in Done key when password is typed
+        pText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    reg();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void register(View view) {
+        reg();
+    }
 
-        EditText sText = (EditText) findViewById(R.id.surname);
+    public void reg() {
         String surname = sText.getText().toString();
-        EditText nText = (EditText) findViewById(R.id.name);
         String name = nText.getText().toString();
-        EditText eText = (EditText) findViewById(R.id.email);
         String email = eText.getText().toString();
-        EditText pText = (EditText) findViewById(R.id.password);
         String password = pText.getText().toString();
 
         if( surname.length() == 0 || name.length() == 0 || email.length() == 0 ||

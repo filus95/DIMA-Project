@@ -118,16 +118,17 @@ public class LoginActivity extends AppCompatActivity {
             String key = extractKey(intent);
 
             if ( key.equals(Constants.USER_LOGIN)) {
-                // TODO : check su user_id se = -1 allora Login non a buon fine
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
-                // TODO : adjust Toast
-                Toast.makeText(context, String.valueOf(user.getUser_id()), Toast.LENGTH_LONG).show();
-                loginPref = new Intent(context, LoginPreferenceActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("user Info", user);
-                loginPref.putExtras(bundle);
-                loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                callUserPreferences();
+                if (user.getUser_id() == -1) {
+                    Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
+                } else {
+                    loginPref = new Intent(context, LoginPreferenceActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("user Info", user);
+                    loginPref.putExtras(bundle);
+                    loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    callUserPreferences();
+                }
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
@@ -168,7 +169,7 @@ public class LoginActivity extends AppCompatActivity {
         pText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
                     login(v);
                     return true;
                 }
@@ -272,6 +273,7 @@ public class LoginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RegisterActivity.class);
 
         doUnbindService();
+        this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
     }
 

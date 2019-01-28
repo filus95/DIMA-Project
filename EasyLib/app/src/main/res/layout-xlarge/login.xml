@@ -92,7 +92,7 @@
         android:ems="10"
         android:fontFamily="sans-serif-medium"
         android:hint="Password"
-        android:imeOptions="actionDone"
+        android:imeOptions="actionSend"
         android:inputType="textPassword"
         android:textAlignment="center"
         android:textColor="@android:color/white"
