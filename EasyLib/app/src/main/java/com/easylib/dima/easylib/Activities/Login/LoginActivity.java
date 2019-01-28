@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -67,6 +69,12 @@ public class LoginActivity extends AppCompatActivity {
 
     Intent loginPref;
     private ArrayList<LibraryDescriptor> libraries;
+    private static final String USER_ID = "User ID";
+    private static final String USER_EMAIL = "User Email";
+    private static final String USER_PASS = "User Pass";
+    private static final String LOGIN = "Login";
+    private static final String USER_PREFERENCES = "User Preferences";
+    private static final String USER_INFO = "User Info";
 
     private EditText eText;
     private EditText pText;
@@ -122,9 +130,17 @@ public class LoginActivity extends AppCompatActivity {
                 if (user.getUser_id() == -1) {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
                 } else {
+                    SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+                    if(!sp.contains(USER_EMAIL)) {
+                        SharedPreferences.Editor Ed = sp.edit();
+                        Ed.putInt(USER_ID, user.getUser_id());
+                        Ed.putString(USER_EMAIL, user.getEmail());
+                        Ed.putString(USER_PASS, user.getPlainPassword());
+                        Ed.commit();
+                    }
                     loginPref = new Intent(context, LoginPreferenceActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("user Info", user);
+                    bundle.putSerializable(USER_INFO, user);
                     loginPref.putExtras(bundle);
                     loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     callUserPreferences();
@@ -133,7 +149,7 @@ public class LoginActivity extends AppCompatActivity {
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable("user Preferences", libraries);
+                bundle.putSerializable(USER_PREFERENCES, libraries);
                 loginPref.putExtras(bundle);
                 doUnbindService();
                 unregisterReceiver(mMessageReceiver);
@@ -201,6 +217,28 @@ public class LoginActivity extends AppCompatActivity {
         // for Multiple Filters call this multiple times
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+
+        // Check if Info are saved
+        SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+        if(!sp.contains(USER_EMAIL)) {
+            loadingLayout.setVisibility(View.INVISIBLE);
+        } else {
+            User user = new User();
+            //user.setUser_id(sp.getInt(USER_ID, -1));
+            user.setEmail(sp.getString(USER_EMAIL, null));
+            user.setPlainPassword("ciao0000");
+            Toast.makeText(getApplicationContext(), user.getPlainPassword(), Toast.LENGTH_LONG).show();
+            // Send Login Info to Server
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.USER_LOGIN, user);
+                    }
+                }
+            }, 1000);
+        }
     }
 
     public void login(View view) {

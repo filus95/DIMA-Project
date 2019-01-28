@@ -1,11 +1,11 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +17,8 @@ import android.widget.TextView;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.RatedBooksActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleLibraryAdapter;
-import com.easylib.dima.easylib.Adapters.LibraryAdapter;
 import com.easylib.dima.easylib.Adapters.RatedBooksAdapter;
 import com.easylib.dima.easylib.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -29,11 +26,15 @@ import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.User;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ProfileFragment extends Fragment {
 
     private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
     private ArrayList<Book> books = new ArrayList<Book>();
     private User user;
+
+    private static final String LOGIN = "Login";
 
     // User info components
     private TextView name;
@@ -98,6 +99,8 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v)
             {
                 // TODO : implement logout
+                SharedPreferences sp = getContext().getSharedPreferences(LOGIN, MODE_PRIVATE);
+                sp.edit().clear().apply();
             }
         });
         ImageButton button3 = (ImageButton) root.findViewById(R.id.profile_fragment_edit_button);

@@ -34,6 +34,8 @@ public class LoginPreferenceActivity extends AppCompatActivity {
 
     private ArrayList<LibraryDescriptor> libraries;
     private User user;
+    private static final String USER_PREFERENCES = "User Preferences";
+    private static final String USER_INFO = "User Info";
 
     //Comunication
     ConnectionService mBoundService;
@@ -103,8 +105,8 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_preference);
 
-        user = (User) getIntent().getSerializableExtra("user Info");
-        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra("user Preferences");
+        user = (User) getIntent().getSerializableExtra(USER_INFO);
+        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
 
         // RecyclerView setup
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
