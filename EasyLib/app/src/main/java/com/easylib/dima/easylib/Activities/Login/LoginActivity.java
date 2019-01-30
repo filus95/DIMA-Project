@@ -23,8 +23,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,9 +42,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -67,7 +62,9 @@ public class LoginActivity extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAuth.AuthStateListener mAuthListener;
 
-    Intent loginPref;
+    private Intent loginPrefIntent;
+    private Intent mainIntent;
+    private User userInfo;
     private ArrayList<LibraryDescriptor> libraries;
     private static final String USER_ID = "User ID";
     private static final String USER_EMAIL = "User Email";
@@ -75,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String LOGIN = "Login";
     private static final String USER_PREFERENCES = "User Preferences";
     private static final String USER_INFO = "User Info";
+    private static final String LOGIN_ALL_LIBRARIES = "Login all Libraries";
 
     private EditText eText;
     private EditText pText;
@@ -138,22 +136,37 @@ public class LoginActivity extends AppCompatActivity {
                         Ed.putString(USER_PASS, user.getPlainPassword());
                         Ed.commit();
                     }
-                    loginPref = new Intent(context, LoginPreferenceActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(USER_INFO, user);
-                    loginPref.putExtras(bundle);
-                    loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    userInfo = user;
                     callUserPreferences();
                 }
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
+                if (libraries.size() == 0) {
+                    callAllLibraries();
+                } else {
+                    mainIntent = new Intent(context, MainActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(USER_PREFERENCES, libraries);
+                    bundle.putSerializable(USER_INFO, userInfo);
+                    mainIntent.putExtras(bundle);
+                    mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                    doUnbindService();
+                    unregisterReceiver(mMessageReceiver);
+                    startActivity(mainIntent);
+                }
+            }
+            if (key.equals(Constants.GET_ALL_LIBRARIES)) {
+                libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_ALL_LIBRARIES);
+                loginPrefIntent = new Intent(context, LoginPreferenceActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(USER_PREFERENCES, libraries);
-                loginPref.putExtras(bundle);
+                bundle.putSerializable(USER_INFO, userInfo);
+                bundle.putSerializable(LOGIN_ALL_LIBRARIES, libraries);
+                loginPrefIntent.putExtras(bundle);
+                loginPrefIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 doUnbindService();
                 unregisterReceiver(mMessageReceiver);
-                startActivity(loginPref);
+                startActivity(loginPrefIntent);
             }
         }
     };
@@ -302,7 +315,14 @@ public class LoginActivity extends AppCompatActivity {
     public void callUserPreferences() {
         if (mBoundService != null) {
             mBoundService.setCurrentContext(this);
-            mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, 1);
+            mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id());
+        }
+    }
+
+    public void callAllLibraries() {
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(this);
+            mBoundService.sendMessage(Constants.GET_ALL_LIBRARIES, null);
         }
     }
 
