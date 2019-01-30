@@ -230,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
         // for Multiple Filters call this multiple times
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
 
         // Check if Info are saved
         SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
