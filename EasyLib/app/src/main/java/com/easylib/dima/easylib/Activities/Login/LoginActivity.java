@@ -261,6 +261,7 @@ public class LoginActivity extends AppCompatActivity {
         User user = new User();
         user.setEmail(email);
         user.setPlainPassword(password);
+        user.setUser_id(-1);
 
         // sending identification token for Firebase notifications
         /*FirebaseInstanceId.getInstance().getInstanceId()

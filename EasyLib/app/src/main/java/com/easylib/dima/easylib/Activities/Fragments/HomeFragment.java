@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        /*
         // Recycle View Settings
         mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_home_recycle);
         mRecyclerView.setHasFixedSize(true);
@@ -59,6 +60,7 @@ public class HomeFragment extends Fragment {
         // TODO : change adapter construction
         mAdapter = new HomeAdapter(getContext(), librariesPref);
         mRecyclerView.setAdapter(mAdapter);
+        */
 
         return root;
     }
