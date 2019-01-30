@@ -15,8 +15,17 @@ import android.widget.ImageButton;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.R;
 
+import java.util.ArrayList;
+
+import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.User;
+
 public class MainActivity extends AppCompatActivity {
 
+    private static final String USER_PREFERENCES = "User Preferences";
+    private static final String USER_INFO = "User Info";
+    User userInfo;
+    ArrayList<LibraryDescriptor> prefLibraries;
 
     // Frame for Fragments and BottomNavBar
     private BottomNavigationView mMainNav;
@@ -28,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
+        prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
 
         // Frame for Fragments and BottomNavBar
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
