@@ -57,19 +57,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.recycleEvent.setHasFixedSize(true);
         holder.recycleBooks.setHasFixedSize(true);
         // used grid layout
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(context, 3);
-        holder.recycleNews.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager1 = new GridLayoutManager(context, 3);
+        holder.recycleNews.setLayoutManager(mLayoutManager1);
         holder.recycleNews.setItemAnimator(new DefaultItemAnimator());
-        holder.recycleEvent.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(context, 3);
+        holder.recycleEvent.setLayoutManager(mLayoutManager2);
         holder.recycleEvent.setItemAnimator(new DefaultItemAnimator());
-        holder.recycleBooks.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(context, 3);
+        holder.recycleBooks.setLayoutManager(mLayoutManager3);
         holder.recycleBooks.setItemAnimator(new DefaultItemAnimator());
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(context, news);
         holder.recycleNews.setAdapter(newsAdapter);
-        ImageTitleNewsAdapter eventsAdapter = new ImageTitleNewsAdapter(context, events);
+        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(context, events);
         holder.recycleEvent.setAdapter(eventsAdapter);
-        ImageTitleNewsAdapter booksAdapter = new ImageTitleNewsAdapter(context, books);
+        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(context, books);
         holder.recycleBooks.setAdapter(booksAdapter);
 
         // set Button click listener
