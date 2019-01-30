@@ -29,6 +29,7 @@ import java.util.Set;
 
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.User;
+import AnswerClasses.UserPreferences;
 
 public class LoginPreferenceActivity extends AppCompatActivity {
 
@@ -91,15 +92,9 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String key = extractKey(intent);
 
-            /*if ( key.equals(Constants.GET_USER_PREFERENCES)) {
-                Intent loginPref = new Intent(context, LoginPreferenceActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("user Info", user);
-                loginPref.putExtras(bundle);
-                loginPref.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                doUnbindService();
-                startActivity(loginPref);
-            }*/
+            if (key.equals(Constants.INSERT_PREFERENCE)) {
+                goToMainActivty();
+            }
         }
     };
 
@@ -130,7 +125,7 @@ public class LoginPreferenceActivity extends AppCompatActivity {
 
         // Communication
         doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
     }
 
     public void skipOnClick(View view) {
@@ -151,6 +146,12 @@ public class LoginPreferenceActivity extends AppCompatActivity {
 
     public void addPrefLibrary(LibraryDescriptor library) {
         librariesPref.add(library);
-        goToMainActivty();
+        UserPreferences userPreferences = new UserPreferences();
+        userPreferences.setUser_id(userInfo.getUser_id());
+        userPreferences.setId_lib1(library.getId_lib());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.INSERT_PREFERENCE, userPreferences);
+        }
     }
 }
