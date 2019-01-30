@@ -943,6 +943,27 @@ public class DatabaseManager {
         return to_ret;
     }
 
+    public User getUser(User user) {
+        String sql = "SELECT users.name, users.surname, users.email FROM propietary_db.users WHERE user_id = ?";
+
+        PreparedStatement st = null;
+        try {
+            st = this.conn.prepareStatement(sql);
+            st.setInt(1,user.getUser_id());
+            ResultSet rs = st.executeQuery();
+
+
+        if (rs.next()) {
+            user.setEmail(rs.getString("email"));
+            user.setName(rs.getString("name"));
+            user.setSurname(rs.getString("surname"));
+        }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
 
     public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib) {
         String query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
