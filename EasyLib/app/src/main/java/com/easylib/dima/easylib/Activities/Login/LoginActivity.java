@@ -67,8 +67,6 @@ public class LoginActivity extends AppCompatActivity {
     private User userInfo;
     private ArrayList<LibraryDescriptor> libraries;
     private static final String USER_ID = "User ID";
-    private static final String USER_EMAIL = "User Email";
-    private static final String USER_PASS = "User Pass";
     private static final String LOGIN = "Login";
     private static final String USER_PREFERENCES = "User Preferences";
     private static final String USER_INFO = "User Info";
@@ -129,11 +127,9 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
                 } else {
                     SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
-                    if(!sp.contains(USER_EMAIL)) {
+                    if(!sp.contains(USER_ID)) {
                         SharedPreferences.Editor Ed = sp.edit();
                         Ed.putInt(USER_ID, user.getUser_id());
-                        Ed.putString(USER_EMAIL, user.getEmail());
-                        Ed.putString(USER_PASS, user.getPlainPassword());
                         Ed.commit();
                     }
                     userInfo = user;
@@ -234,14 +230,11 @@ public class LoginActivity extends AppCompatActivity {
 
         // Check if Info are saved
         SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        if(!sp.contains(USER_EMAIL)) {
+        if(!sp.contains(USER_ID)) {
             loadingLayout.setVisibility(View.INVISIBLE);
         } else {
             User user = new User();
-            //user.setUser_id(sp.getInt(USER_ID, -1));
-            user.setEmail(sp.getString(USER_EMAIL, null));
-            user.setPlainPassword("ciao0000");
-            Toast.makeText(getApplicationContext(), user.getPlainPassword(), Toast.LENGTH_LONG).show();
+            user.setUser_id(sp.getInt(USER_ID, -1));
             // Send Login Info to Server
             new Handler().postDelayed(new Runnable() {
                 @Override
