@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
+import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -50,9 +51,9 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
             // TODO : onClick set Preference
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+                if(context instanceof LoginPreferenceActivity){
+                    ((LoginPreferenceActivity)context).addPrefLibrary(library);
+                }
             }
         });
     }

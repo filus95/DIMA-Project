@@ -32,10 +32,13 @@ import AnswerClasses.User;
 
 public class LoginPreferenceActivity extends AppCompatActivity {
 
-    private ArrayList<LibraryDescriptor> libraries;
-    private User user;
-    private static final String USER_PREFERENCES = "User Preferences";
+    private ArrayList<LibraryDescriptor> librariesPref;
+    private ArrayList<LibraryDescriptor> allLibraries;
+    private User userInfo;
+    private Intent mainIntent;
     private static final String USER_INFO = "User Info";
+    private static final String LOGIN_ALL_LIBRARIES = "Login all Libraries";
+    private static final String USER_PREFERENCES = "User Preferences";
 
     //Comunication
     ConnectionService mBoundService;
@@ -105,15 +108,16 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_preference);
 
-        user = (User) getIntent().getSerializableExtra(USER_INFO);
-        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
+        userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
+        allLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(LOGIN_ALL_LIBRARIES);
+        librariesPref = new ArrayList<LibraryDescriptor>();
 
         // RecyclerView setup
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_pref);
         // improve performance
         mRecyclerView.setHasFixedSize(true);
         // specify an adapter
-        mAdapter = new PrefLibAdapter(this, libraries);
+        mAdapter = new PrefLibAdapter(this, allLibraries);
         mRecyclerView.setAdapter(mAdapter);
         if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
             // used linear layout
@@ -127,15 +131,26 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        if (mBoundService != null) {
-            mBoundService.setCurrentContext(this);
-            mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, 1);
-        }
     }
 
-    public void skip(View view) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+    public void skipOnClick(View view) {
+        goToMainActivty();
+    }
+
+    public void goToMainActivty() {
+        mainIntent = new Intent(this, MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER_PREFERENCES, librariesPref);
+        bundle.putSerializable(USER_INFO, userInfo);
+        mainIntent.putExtras(bundle);
+        mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
+        startActivity(mainIntent);
+    }
+
+    public void addPrefLibrary(LibraryDescriptor library) {
+        librariesPref.add(library);
+        goToMainActivty();
     }
 }
