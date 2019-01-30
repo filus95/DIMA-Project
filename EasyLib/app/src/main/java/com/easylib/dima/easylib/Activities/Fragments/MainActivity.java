@@ -24,8 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String USER_PREFERENCES = "User Preferences";
     private static final String USER_INFO = "User Info";
-    User userInfo;
-    ArrayList<LibraryDescriptor> prefLibraries;
+    private User userInfo;
+    private ArrayList<LibraryDescriptor> prefLibraries;
+    private Fragment fragment;
 
     // Frame for Fragments and BottomNavBar
     private BottomNavigationView mMainNav;
@@ -48,13 +49,14 @@ public class MainActivity extends AppCompatActivity {
         searchBt = (ImageButton) findViewById(R.id.search_icon);
 
         // Set Initial Fragment to be visualized
-        setFragment(new HomeFragment());
+        fragment = new HomeFragment();
+        ((HomeFragment) fragment).setLibrariesPref(prefLibraries);
+        setFragment(fragment);
 
         // Change fragment based on icon clicked on bottomNavBar
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                Fragment fragment = null;
                 switch (menuItem.getItemId()) {
                     case R.id.home_item :
                         fragment = new HomeFragment();

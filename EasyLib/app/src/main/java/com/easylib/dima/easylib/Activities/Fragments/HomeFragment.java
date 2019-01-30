@@ -23,7 +23,7 @@ import AnswerClasses.LibraryDescriptor;
 
 public class HomeFragment extends Fragment {
 
-    ArrayList<LibraryDescriptor> librariesPref;
+    private ArrayList<LibraryDescriptor> librariesPref;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -48,7 +48,6 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        /*
         // Recycle View Settings
         mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_home_recycle);
         mRecyclerView.setHasFixedSize(true);
@@ -60,8 +59,11 @@ public class HomeFragment extends Fragment {
         // TODO : change adapter construction
         mAdapter = new HomeAdapter(getContext(), librariesPref);
         mRecyclerView.setAdapter(mAdapter);
-        */
 
         return root;
+    }
+
+    public void setLibrariesPref(ArrayList<LibraryDescriptor> libraries) {
+        librariesPref = libraries;
     }
 }
