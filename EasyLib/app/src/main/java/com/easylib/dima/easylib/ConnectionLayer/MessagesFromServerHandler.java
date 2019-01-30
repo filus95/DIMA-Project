@@ -393,7 +393,7 @@ public class MessagesFromServerHandler {
             Message message = handler.obtainMessage();
 
             boolean res = (boolean) objectInputStream.readObject();
-            b.putSerializable(Constants.GET_USER_PREFERENCES, res );
+            b.putSerializable(Constants.INSERT_PREFERENCE, res );
 
             message.obj = b;
             message.sendToTarget();
