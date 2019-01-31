@@ -12,10 +12,14 @@ import com.easylib.dima.easylib.R;
 import java.util.ArrayList;
 
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.User;
 
 public class LibraryListActivity extends AppCompatActivity {
 
+    private static final String ALL_LIBRARIES_LIST = "All Libraries List";
+    private static final String USER_INFO = "User Info";
     private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
+    private User userInfo;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -27,14 +31,8 @@ public class LibraryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
 
-        int i;
-        for(i=0; i<15; i++) {
-            LibraryDescriptor lib = new LibraryDescriptor();
-            lib.setAddress("via bla bla bla "+i+" (MI)");
-            lib.setLib_name("Library Name"+i);
-            lib.setImage_link("https://www.ucl.ac.uk/library/sites/library/files/students-studying.jpg");
-            libraries.add(lib);
-        }
+        userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
+        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(ALL_LIBRARIES_LIST);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
         // improve performance

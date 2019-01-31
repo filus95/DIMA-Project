@@ -41,6 +41,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         // set the data in items
         LibraryDescriptor library = libraries.get(position);
 
+        holder.libraryTitle.setText(library.getLib_name());
+
         // get first 3 items of news, events, books
         int i;
         ArrayList<News> news = new ArrayList<News>();

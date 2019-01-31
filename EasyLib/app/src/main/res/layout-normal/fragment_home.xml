@@ -42,6 +42,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="60dp"
+                android:onClick="getAllLibraries"
                 android:text="All Libraries"
                 android:textAlignment="center" />
         </LinearLayout>
