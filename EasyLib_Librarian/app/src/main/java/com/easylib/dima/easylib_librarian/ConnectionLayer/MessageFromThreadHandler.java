@@ -76,20 +76,44 @@ public class MessageFromThreadHandler implements Serializable{
     }
 
     private void bookQueryAllLib(Bundle bundle) {
+        Intent intent = new Intent(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
+        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES,
+                (boolean) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getAllReservationsForBook(Bundle bundle) {
+        Intent intent = new Intent(Constants.GET_ALL_RESERVATIONS_FOR_BOOK);
+        intent.putExtra(Constants.GET_ALL_RESERVATIONS_FOR_BOOK,
+                bundle.getSerializable(Constants.GET_ALL_RESERVATIONS_FOR_BOOK));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void newNotificationToken(Bundle bundle) {
+        Intent intent = new Intent(Constants.NEW_NOTIFICATION_TOKEN);
+        intent.putExtra(Constants.NEW_NOTIFICATION_TOKEN,
+                (boolean) bundle.getSerializable(Constants.NEW_NOTIFICATION_TOKEN));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getUserRatedBooks(Bundle bundle) {
+        Intent intent = new Intent(Constants.GET_USER_RATED_BOOKS);
+        intent.putExtra(Constants.GET_USER_RATED_BOOKS,
+                bundle.getSerializable(Constants.GET_USER_RATED_BOOKS));
+
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void getWaitingListForAUser(Bundle bundle) {
-    }
+        Intent intent = new Intent(Constants.GET_WAITING_LIST_USER);
+        intent.putExtra(Constants.GET_WAITING_LIST_USER,
+                bundle.getSerializable(Constants.GET_WAITING_LIST_USER));
 
+        this.currentContext.sendBroadcast(intent);
+    }
 
     //it receives a Library descriptor object from the stream. If something wrong, receives null
     private void getLibraryInfo(Bundle bundle) {
