@@ -516,8 +516,8 @@ public class DatabaseManager {
                         (rs.getString("author_4")));
 
                 // Create JSON Array from String
-                JsonParser jsonParser = new JsonParser();
                 if ( rs.getString("imageLinks") != null ) {
+                    JsonParser jsonParser = new JsonParser();
                     JsonObject imageLinks = jsonParser.parse(rs.getString("imageLinks")).getAsJsonObject();
                     queryResult.setImageLink(String.valueOf(imageLinks.get("thumbnail")).replace("\"", ""));
                 }
@@ -623,7 +623,7 @@ public class DatabaseManager {
         return to_ret;
     }
 
-    public ArrayList<Event> getAllEvents(String schema_name, int limit){
+    public ArrayList<Event> getAllEvents(String schema_name){
         ArrayList<Event> to_ret = new ArrayList<>();
         String query = "select * from "+schema_name+".events order by" +
                 "  id desc";
@@ -780,6 +780,7 @@ public class DatabaseManager {
 
             ResultSet rs = st.executeQuery(query);
             while (rs.next()){
+                libraryDescriptor.setId_lib(rs.getInt("id_lib"));
                 libraryDescriptor.setLib_name(rs.getString("lib_name"));
                 libraryDescriptor.setSchema_name(rs.getString("schema_name"));
                 libraryDescriptor.setImage_link(rs.getString("image_link"));
@@ -798,9 +799,8 @@ public class DatabaseManager {
 
     public LibraryContent getLibraryContent(String schema_name) {
         ArrayList<Book> books = queryAllBooks(schema_name);
-        books = getNbooks(books, 5);
         ArrayList<News> news = getAllNews(schema_name);
-        ArrayList<Event> events = getAllEvents(schema_name, 5);
+        ArrayList<Event> events = getAllEvents(schema_name);
 
         LibraryContent lc = new LibraryContent();
         lc.setBooks(books);
