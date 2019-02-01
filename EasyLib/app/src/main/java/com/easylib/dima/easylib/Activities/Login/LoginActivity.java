@@ -176,6 +176,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         // Start the Service

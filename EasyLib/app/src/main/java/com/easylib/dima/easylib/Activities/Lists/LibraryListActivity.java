@@ -95,11 +95,11 @@ public class LibraryListActivity extends AppCompatActivity {
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 ArrayList<LibraryDescriptor> librariesPref = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
                 Boolean libraryIsPref;
+                libraryIsPref = false;
                 for (LibraryDescriptor library : librariesPref) {
                     if (library.getId_lib() == libraryToShow.getId_lib())
                         libraryIsPref = true;
                 }
-                libraryIsPref = false;
                 libraryIntent = new Intent(context, LibraryActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(LIBRARY_INFO, libraryToShow);

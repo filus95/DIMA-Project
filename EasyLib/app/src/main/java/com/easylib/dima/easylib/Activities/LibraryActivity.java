@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Activities;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -118,7 +119,7 @@ public class LibraryActivity extends AppCompatActivity {
         // setPreference Button setup based on the fact that library is already a favourite or not
         if(!isLibraryFavourite) {
             setFavourite.setText("Set Favourite");
-            // TODO : set color red
+            setFavourite.setTextColor(Color.GREEN);
             setFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -127,7 +128,7 @@ public class LibraryActivity extends AppCompatActivity {
             });
         } else {
             setFavourite.setText("Remove Favourite");
-            // TODO : set color yellow
+            setFavourite.setTextColor(Color.RED);
             setFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
