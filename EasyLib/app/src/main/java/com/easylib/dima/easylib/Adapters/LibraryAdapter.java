@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -46,10 +47,7 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryH
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call method to see library_activity activity
-                //Intent intent = new Intent(context, MainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                //context.startActivity(intent);
+                ((LibraryListActivity)context).showLibrary(library);
             }
         });
     }
