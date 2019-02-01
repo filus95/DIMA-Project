@@ -63,8 +63,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(getContext(), LibraryListActivity.class);
-                startActivity(intent);
+                // TODO
             }
         });
         Button button1 = (Button) root.findViewById(R.id.profile_fragment_rated_books_button);
@@ -73,8 +72,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                Intent intent = new Intent(getContext(), RatedBooksActivity.class);
-                startActivity(intent);
+                ((MainActivity)getActivity()).getRatedBooks(true);
             }
         });
         Button button2 = (Button) root.findViewById(R.id.profile_fragment_logout_button);
@@ -83,9 +81,9 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO : implement logout
                 SharedPreferences sp = getContext().getSharedPreferences(LOGIN, MODE_PRIVATE);
                 sp.edit().clear().apply();
+                // TODO : go to Login
             }
         });
         ImageButton button3 = (ImageButton) root.findViewById(R.id.profile_fragment_edit_button);

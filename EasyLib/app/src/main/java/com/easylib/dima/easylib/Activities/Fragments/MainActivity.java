@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
+import com.easylib.dima.easylib.Activities.RatedBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -52,8 +53,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String LIBRARY_INFO = "Library Info";
     private Intent libraryActivityIntent;
     private LibraryDescriptor libraryToShow;
+    private Boolean prefLibCalledForLibrary = false;
     // Profile Fragment
+    private static final String RATED_BOOKS_ARRAY = "Rated Books Array";
     private Boolean prefLibCalledForProfile = false;
+    private Boolean ratedBooksCalledForList = false;
 
     //Comunication
     ConnectionService mBoundService;
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 prefLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
-                if (!prefLibCalledForProfile) {
+                if (prefLibCalledForLibrary) {
                     Boolean libraryIsPref;
                     libraryIsPref = false;
                     for (LibraryDescriptor library : prefLibraries) {
@@ -134,18 +138,32 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(LIBRARY_IS_PREFERITE, libraryIsPref);
                     bundle.putSerializable(USER_INFO, userInfo);
                     libraryActivityIntent.putExtras(bundle);
+                    prefLibCalledForLibrary = false;
                     doUnbindService();
                     unregisterReceiver(mMessageReceiver);
                     startActivity(libraryActivityIntent);
-                } else {
-                    getRatedBooks();
+                }
+                if (prefLibCalledForProfile){
+                    getRatedBooks(false);
+                    prefLibCalledForProfile = false;
                 }
             }
             if (key.equals(Constants.GET_USER_RATED_BOOKS)) {
                 ArrayList<Book> ratedBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_USER_RATED_BOOKS);
-                ((ProfileFragment)fragment).setData(userInfo, prefLibraries, ratedBooks);
-                setFragment(fragment);
-                prefLibCalledForProfile = false;
+                if (!ratedBooksCalledForList) {
+                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, ratedBooks);
+                    setFragment(fragment);
+                } else {
+                    Intent ratedBooksIntent = new Intent(context, RatedBooksActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(RATED_BOOKS_ARRAY, ratedBooks);
+                    bundle.putSerializable(USER_INFO, userInfo);
+                    ratedBooksIntent.putExtras(bundle);
+                    ratedBooksCalledForList = false;
+                    doUnbindService();
+                    unregisterReceiver(mMessageReceiver);
+                    startActivity(ratedBooksIntent);
+                }
             }
         }
     };
@@ -199,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.profile_item :
                         fragment = new ProfileFragment();
                         prefLibCalledForProfile = true;
-                        getPrefLibraries();
+                        getPrefLibraries(false, true);
                         break;
                 }
                 return true;
@@ -244,17 +262,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void showLibrary(LibraryDescriptor library) {
         libraryToShow = library;
-        getPrefLibraries();
+        getPrefLibraries(true, false);
     }
 
-    public void getPrefLibraries() {
+    public void getPrefLibraries(Boolean prefLibCalledForLibrary, boolean prefLibCalledForProfile) {
+        this.prefLibCalledForProfile = prefLibCalledForProfile;
+        this.prefLibCalledForLibrary = prefLibCalledForLibrary;
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id());
         }
     }
 
-    public void getRatedBooks() {
+    public void getRatedBooks(Boolean ratedBooksCalledForList) {
+        this.ratedBooksCalledForList = ratedBooksCalledForList;
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id());
