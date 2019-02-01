@@ -167,6 +167,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -185,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Get all Libraries from Home
-    public void getAllLibraries(View view) {
+    public void getAllLibraries() {
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_ALL_LIBRARIES, null);

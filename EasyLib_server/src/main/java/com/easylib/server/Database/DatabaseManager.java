@@ -517,8 +517,10 @@ public class DatabaseManager {
 
                 // Create JSON Array from String
                 JsonParser jsonParser = new JsonParser();
-                JsonObject imageLinks = jsonParser.parse(rs.getString("imageLinks")).getAsJsonObject();
-                queryResult.setImageLink(String.valueOf(imageLinks.get("thumbnail")).replace("\"",""));
+                if ( rs.getString("imageLinks") != null ) {
+                    JsonObject imageLinks = jsonParser.parse(rs.getString("imageLinks")).getAsJsonObject();
+                    queryResult.setImageLink(String.valueOf(imageLinks.get("thumbnail")).replace("\"", ""));
+                }
                 //todo: should i add these columns in DB?
 //                queryResult.setReserved(rs.getBoolean("reserved"));
 //                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
