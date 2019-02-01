@@ -166,8 +166,10 @@ public class App
     //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
     //                "library_1.booksreservations");
     //        System.out.print(res);
-       ArrayList<Book> b = dbms.queryBookByIdentifier("0743277716", "library_1");
-       System.out.print(b.get(0).getImageLink());
+       UserPreferences up = new UserPreferences();
+       up.setUser_id(5);
+       up.setId_lib1(2);
+       dbms.insertPreferences(up);
     }
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
