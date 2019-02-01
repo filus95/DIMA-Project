@@ -2,6 +2,8 @@ package com.easylib.server.Database;
 
 import AnswerClasses.*;
 import com.easylib.network.socket.Constants;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -392,8 +394,8 @@ public class DatabaseManager {
 
 
     public ArrayList<Book> queryAllBooks(String schema_lib){
-        String query = "select identifier, title, publisher, category_1, category_2, category_3," +
-                " author_1, author_2, author_3, author_4 " +
+        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3," +
+                " author_1, author_2, author_3, author_4, imageLinks " +
                 "from "+schema_lib+".books order by id desc";
 
         return getQueryResultsBooks(query);
@@ -407,7 +409,7 @@ public class DatabaseManager {
      * @return it must be casted to the book data type in the calling function
      */
     public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
+        String query = "select identifier, title, publisher, imageLinks, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
                 "from "+schema_lib+".books where author_1 = '"+author+"'" + " or author_2='"+author+"'"
                 +" or author_3='"+author+"' or author_4='"+author+"'";
 
@@ -422,7 +424,7 @@ public class DatabaseManager {
      * @return
      */
     public ArrayList<Book> queryBooksByTitle(String title, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3," +
+        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3," +
                 " author_1, author_2, author_3, author_4 " +
                 "from "+schema_lib+".books where title = '"+title+"'";
 
@@ -437,7 +439,7 @@ public class DatabaseManager {
      * @return
      */
     public ArrayList<Book> queryBooksByCategory(String category, String schema_lib) {
-        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4," +
                 "category_1, category_2, category_3 "+
         "from "+schema_lib+".books where category_1 ='"+category+"' or category_2='"+category+"' or category_3='"+category+"'";
 
@@ -445,7 +447,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib) {
-        String query = "select identifier, title, publisher, author_1, auhtor_2, author_3, author_4, " +
+        String query = "select identifier, title, imageLinks, publisher, author_1, auhtor_2, author_3, author_4, " +
                 "category_1, category_2, category_3 " +
                 "from "+schema_lib+".books where ( category_1 ='" + category + "' or category_2='" + category + "' " +
                 "or category_3='"
@@ -456,7 +458,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib) {
-        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4," +
                 " category_1, category_2, category_3 " +
                 "from "+schema_lib+".books where title = '"+title+"' and ( author_1 = '"+author+"'" + " " +
                 "or author_2='"+author+"'" +
@@ -466,7 +468,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib) {
-        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4, " +
+        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4, " +
                 "category_1, category_2, category_3 " +
                 " from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " " +
                 "or category_2='"+category+"'" +
@@ -477,7 +479,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib) {
-        String query = "select identifier, title, publisher, author_1, author_2, author_3, author_4," +
+        String query = "select identifier, title, publisher, imageLinks, author_1, author_2, author_3, author_4," +
                 " category_1, category_2, category_3 " +
                 "from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " or category_2='"+category+"'" +
                 " or category_3='"+category+"') and (author_1 = '"+author+"'" + " or author_2='"+author+"' or" +
@@ -512,6 +514,11 @@ public class DatabaseManager {
                         (rs.getString("author_2")),
                         (rs.getString("author_3")),
                         (rs.getString("author_4")));
+
+                // Create JSON Array from String
+                JsonParser jsonParser = new JsonParser();
+                JsonObject imageLinks = jsonParser.parse(rs.getString("imageLinks")).getAsJsonObject();
+                queryResult.setImageLink(String.valueOf(imageLinks.get("thumbnail")).replace("\"",""));
                 //todo: should i add these columns in DB?
 //                queryResult.setReserved(rs.getBoolean("reserved"));
 //                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
@@ -966,7 +973,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib) {
-        String query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
+        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
                 "from "+schema_lib+".books where identifier = "+ identifier;
 
         return getQueryResultsBooks(query);

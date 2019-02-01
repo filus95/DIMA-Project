@@ -75,7 +75,6 @@ public class App
 //                reservation.getBook_idetifier(),dbms.getSchemaNameLib(reservation.getIdLib())
 //        ).get(0).getTitle());
 
-        System.out.print(dbms.getNotificationToken(25));
 //        dbms.insertNewReservation(reservation, "library_1");
 
 //        dbms.reservedBookReturned(reservation);
@@ -167,6 +166,8 @@ public class App
     //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
     //                "library_1.booksreservations");
     //        System.out.print(res);
+       ArrayList<Book> b = dbms.queryBookByIdentifier("0743277716", "library_1");
+       System.out.print(b.get(0).getImageLink());
     }
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
