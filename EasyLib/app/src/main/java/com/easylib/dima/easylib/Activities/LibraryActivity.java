@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Adapters.ImageTitleBookAdapter;
+import com.easylib.dima.easylib.Adapters.ImageTitleEventAdapter;
 import com.easylib.dima.easylib.Adapters.ImageTitleNewsAdapter;
 import com.easylib.dima.easylib.R;
 
@@ -19,11 +22,16 @@ import AnswerClasses.Book;
 import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
+import AnswerClasses.User;
 
 public class LibraryActivity extends AppCompatActivity {
 
-    private LibraryDescriptor library;
-    private Boolean isUserFavourite;
+    private static final String LIBRARY_IS_PREFERITE = "Library is Preferite";
+    private static final String USER_INFO = "User Info";
+    private static final String LIBRARY_INFO = "Library Info";
+    private LibraryDescriptor libraryInfo;
+    private User userInfo;
+    private Boolean isLibraryFavourite;
 
     // Layout Components
     private TextView name;
@@ -45,6 +53,10 @@ public class LibraryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.library_activity);
 
+        userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
+        libraryInfo = (LibraryDescriptor) getIntent().getSerializableExtra(LIBRARY_INFO);
+        isLibraryFavourite = (Boolean) getIntent().getSerializableExtra(LIBRARY_IS_PREFERITE);
+
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
         location = (TextView) findViewById(R.id.library_activity_location);
@@ -60,15 +72,25 @@ public class LibraryActivity extends AppCompatActivity {
         booksButton = (Button) findViewById(R.id.library_activity_all_books_button);
         setFavourite = (Button) findViewById(R.id.library_activity_fav_lib_button);
 
+        // Setup Library Info
+        name.setText(libraryInfo.getLib_name());
+        location.setText(libraryInfo.getAddress());
+        Glide.with(this)
+                .load(libraryInfo.getImage_link())
+                .into(image);
+        description.setText(libraryInfo.getDescription());
+        email.setText(libraryInfo.getEmail());
+        phone.setText(libraryInfo.getTelephone_number());
+
         // get 3 elements of each arrayList news, events, books
         int i;
         ArrayList<News> newsList = new ArrayList<News>();
         ArrayList<Event> eventsList = new ArrayList<Event>();
         ArrayList<Book> booksList = new ArrayList<Book>();
         for(i=0; i<3; i++) {
-            newsList.add(library.getLibraryContent().getNews().get(i));
-            eventsList.add(library.getLibraryContent().getEvents().get(i));
-            booksList.add(library.getLibraryContent().getBooks().get(i));
+            newsList.add(libraryInfo.getLibraryContent().getNews().get(i));
+            eventsList.add(libraryInfo.getLibraryContent().getEvents().get(i));
+            booksList.add(libraryInfo.getLibraryContent().getBooks().get(i));
         }
 
         // setup recycleViews
@@ -79,21 +101,23 @@ public class LibraryActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
         newsRec.setLayoutManager(mLayoutManager);
         newsRec.setItemAnimator(new DefaultItemAnimator());
-        eventsRec.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 3);
+        eventsRec.setLayoutManager(mLayoutManager2);
         eventsRec.setItemAnimator(new DefaultItemAnimator());
-        booksRec.setLayoutManager(mLayoutManager);
+        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, 3);
+        booksRec.setLayoutManager(mLayoutManager3);
         booksRec.setItemAnimator(new DefaultItemAnimator());
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(this, newsList);
         newsRec.setAdapter(newsAdapter);
-        ImageTitleNewsAdapter eventsAdapter = new ImageTitleNewsAdapter(this, eventsList);
+        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(this, eventsList);
         eventsRec.setAdapter(eventsAdapter);
-        ImageTitleNewsAdapter booksAdapter = new ImageTitleNewsAdapter(this, booksList);
+        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList);
         booksRec.setAdapter(booksAdapter);
 
         // setPreference Button setup based on the fact that library is already a favourite or not
-        if(!isUserFavourite) {
-            setFavourite.setText("Remove from Favourite");
+        if(!isLibraryFavourite) {
+            setFavourite.setText("Set Favourite");
             // TODO : set color red
             setFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -102,7 +126,7 @@ public class LibraryActivity extends AppCompatActivity {
                 }
             });
         } else {
-            setFavourite.setText("Set Favourite");
+            setFavourite.setText("Remove Favourite");
             // TODO : set color yellow
             setFavourite.setOnClickListener(new View.OnClickListener() {
                 @Override
