@@ -22,7 +22,7 @@
                 android:id="@+id/frameLayout11"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:background="@color/blackBar"
+                android:background="@drawable/profile_back_photo"
                 app:layout_constraintBottom_toBottomOf="@+id/profile_img"
                 app:layout_constraintTop_toBottomOf="@+id/profile_img">
 
@@ -57,11 +57,13 @@
                     android:id="@+id/profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_label_gray"
                     android:fontFamily="sans-serif-condensed"
                     android:singleLine="true"
                     android:text="Name Surname"
                     android:textAlignment="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="26sp"
                     app:layout_constraintBottom_toTopOf="@+id/profile_email"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -72,10 +74,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:background="@drawable/round_label_gray"
                     android:singleLine="true"
                     android:text="email@email.it"
                     android:textAlignment="center"
-                    android:textColor="@android:color/white"
+                    android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="italic"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -206,10 +209,13 @@
 
             <Button
                 android:id="@+id/profile_fragment_logout_button"
-                style="@style/Widget.AppCompat.Button.Colored"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="30dp"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="LOGOUT" />
+                android:text="LOGOUT"
+                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 

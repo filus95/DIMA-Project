@@ -30,9 +30,9 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
 
-    private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
-    private ArrayList<Book> books = new ArrayList<Book>();
-    private User user;
+    private ArrayList<LibraryDescriptor> prefLibraries;
+    private ArrayList<Book> ratedBooks;
+    private User userInfo;
 
     private static final String LOGIN = "Login";
 
@@ -55,21 +55,6 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
-
-        // JUST FOR TEST
-        int i;
-        for(i=0; i<3; i++) {
-            LibraryDescriptor lib = new LibraryDescriptor();
-            lib.setAddress("via bla bla bla "+i+" (MI)");
-            lib.setLib_name("Library Name"+i);
-            lib.setImage_link("https://www.ucl.ac.uk/library/sites/library/files/students-studying.jpg");
-            libraries.add(lib);
-        }
-        for(i=0; i<3; i++) {
-            Book book = new Book();
-            book.setImageLink("https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png");
-            books.add(book);
-        }
 
         // Set Listener on Buttons
         Button button0 = (Button) root.findViewById(R.id.profile_fragment_fav_lib_button);
@@ -117,9 +102,9 @@ public class ProfileFragment extends Fragment {
         name = (TextView) root.findViewById(R.id.profile_name);
         email = (TextView) root.findViewById(R.id.profile_email);
         userID = (TextView) root.findViewById(R.id.profile_fragment_user_id);
-        name.setText(user.getName() + " " + user.getSurname());
-        email.setText(user.getEmail());
-        userID.setText(user.getUser_id());
+        name.setText(userInfo.getName() + " " + userInfo.getSurname());
+        email.setText(userInfo.getEmail());
+        userID.setText(String.valueOf(userInfo.getUser_id()));
 
         // Recycle setup Favourite Libraries
         mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_fav_lib_recycle);
@@ -130,7 +115,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new ImageTitleLibraryAdapter(getContext(), libraries);
+        mAdapter = new ImageTitleLibraryAdapter(getContext(), prefLibraries);
         mRecyclerView.setAdapter(mAdapter);
 
         // Recycle setup Favourite Libraries
@@ -142,9 +127,15 @@ public class ProfileFragment extends Fragment {
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter2 = new RatedBooksAdapter(getContext(), books);
+        mAdapter2 = new RatedBooksAdapter(getContext(), ratedBooks);
         mRecyclerView2.setAdapter(mAdapter2);
 
         return root;
+    }
+
+    public void setData (User userInfo, ArrayList<LibraryDescriptor> prefLibraries, ArrayList<Book> ratedBooks) {
+        this.userInfo = userInfo;
+        this.prefLibraries = prefLibraries;
+        this.ratedBooks = ratedBooks;
     }
 }

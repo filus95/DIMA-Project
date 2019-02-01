@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.libraryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call method to see library_activity activity
+                ((MainActivity)context).showLibrary(library);
             }
         });
     }
