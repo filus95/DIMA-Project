@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO
+                ((MainActivity)getActivity()).getPrefLibraries (false);
             }
         });
         Button button1 = (Button) root.findViewById(R.id.profile_fragment_rated_books_button);
@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
             {
                 SharedPreferences sp = getContext().getSharedPreferences(LOGIN, MODE_PRIVATE);
                 sp.edit().clear().apply();
-                // TODO : go to Login
+                ((MainActivity)getActivity ()).goToLogin ();
             }
         });
         ImageButton button3 = (ImageButton) root.findViewById(R.id.profile_fragment_edit_button);

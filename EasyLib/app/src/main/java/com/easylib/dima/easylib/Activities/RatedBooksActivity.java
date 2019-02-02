@@ -112,8 +112,8 @@ public class RatedBooksActivity extends AppCompatActivity {
 
         // Communication
         doBindService();
-        // this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         // TODO : calls on item click
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
     }
 
     @Override
@@ -122,5 +122,12 @@ public class RatedBooksActivity extends AppCompatActivity {
         // Communication
         doBindService();
         //this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
     }
 }

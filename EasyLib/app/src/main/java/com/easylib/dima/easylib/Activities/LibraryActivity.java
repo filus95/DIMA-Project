@@ -123,14 +123,6 @@ public class LibraryActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.library_activity);
@@ -211,6 +203,21 @@ public class LibraryActivity extends AppCompatActivity {
                 }
             }
         }, 1000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
     }
 
     // setPreference Button setup based on the fact that library is already a favourite or not

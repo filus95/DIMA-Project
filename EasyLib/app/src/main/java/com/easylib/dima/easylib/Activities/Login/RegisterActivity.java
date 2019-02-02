@@ -58,6 +58,14 @@ public class RegisterActivity extends Activity {
         }
     }
 
+    private void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
     //This is the handler that will manager to process the broadcast intent
     //This has to be created inside each activity that needs it ( almost anyone )
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
@@ -108,6 +116,13 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
+    }
+
     public void register(View view) {
         reg();
     }
@@ -137,8 +152,9 @@ public class RegisterActivity extends Activity {
 
     public void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        doUnbindService ();
         this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
-
     }
 }
