@@ -1,7 +1,15 @@
 package com.easylib.dima.easylib.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,12 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleBookAdapter;
 import com.easylib.dima.easylib.Adapters.ImageTitleEventAdapter;
 import com.easylib.dima.easylib.Adapters.ImageTitleNewsAdapter;
+import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
+import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 import AnswerClasses.Book;
 import AnswerClasses.Event;
@@ -27,12 +41,15 @@ import AnswerClasses.User;
 
 public class LibraryActivity extends AppCompatActivity {
 
-    private static final String LIBRARY_IS_PREFERITE = "Library is Preferite";
     private static final String USER_INFO = "User Info";
     private static final String LIBRARY_INFO = "Library Info";
     private LibraryDescriptor libraryInfo;
     private User userInfo;
     private Boolean isLibraryFavourite;
+
+    //Comunication
+    ConnectionService mBoundService;
+    private boolean mIsBound;
 
     // Layout Components
     private TextView name;
@@ -49,6 +66,62 @@ public class LibraryActivity extends AppCompatActivity {
     private Button booksButton;
     private Button setFavourite;
 
+    //For the communication Service
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBoundService = ((ConnectionService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBoundService = null;
+        }
+    };
+
+    public void doBindService() {
+        bindService(new Intent (LibraryActivity.this, ConnectionService.class), mConnection,
+                Context.BIND_AUTO_CREATE);
+        mIsBound = true;
+        if(mBoundService!=null){
+            mBoundService.IsBoundable();
+        }
+    }
+
+    private void doUnbindService() {
+        if (mIsBound) {
+            // Detach our existing connection.
+            unbindService(mConnection);
+            mIsBound = false;
+        }
+    }
+
+    private String extractKey(Intent intent){
+        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
+        Iterator iterator = keySet.iterator();
+        return (String)iterator.next();
+    }
+
+    //This is the handler that will manager to process the broadcast intent
+    //This has to be created inside each activity that needs it ( almost anyone )
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key = extractKey(intent);
+
+            if (key.equals(Constants.GET_USER_PREFERENCES)) {
+                ArrayList<LibraryDescriptor> prefLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
+                Boolean libraryIsPref;
+                libraryIsPref = false;
+                for (LibraryDescriptor library : prefLibraries) {
+                    if (library.getId_lib() == libraryInfo.getId_lib())
+                        libraryIsPref = true;
+                }
+                setFavouriteButton(libraryIsPref);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +129,10 @@ public class LibraryActivity extends AppCompatActivity {
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         libraryInfo = (LibraryDescriptor) getIntent().getSerializableExtra(LIBRARY_INFO);
-        isLibraryFavourite = (Boolean) getIntent().getSerializableExtra(LIBRARY_IS_PREFERITE);
+
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_PREFERENCES));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
@@ -82,6 +158,7 @@ public class LibraryActivity extends AppCompatActivity {
         description.setText(libraryInfo.getDescription());
         email.setText(libraryInfo.getEmail());
         phone.setText(libraryInfo.getTelephone_number());
+        setFavourite.setVisibility (View.INVISIBLE);
 
         // get 3 elements of each arrayList news, events, books
         int i;
@@ -116,8 +193,36 @@ public class LibraryActivity extends AppCompatActivity {
         ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList);
         booksRec.setAdapter(booksAdapter);
 
-        // setPreference Button setup based on the fact that library is already a favourite or not
-        if(!isLibraryFavourite) {
+        // Get user Preferences from Server to see if this library is Prefered
+        new Handler ().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id ());
+                }
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
+    }
+
+    // setPreference Button setup based on the fact that library is already a favourite or not
+    public void setFavouriteButton(Boolean isFavourite) {
+        if(!isFavourite) {
             setFavourite.setText("Set Favourite");
             setFavourite.setTextColor(Color.GREEN);
             setFavourite.setOnClickListener(new View.OnClickListener() {
@@ -136,6 +241,7 @@ public class LibraryActivity extends AppCompatActivity {
                 }
             });
         }
+        setFavourite.setVisibility (View.VISIBLE);
     }
 
     public void setFavourite() {
