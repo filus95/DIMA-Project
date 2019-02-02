@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
+import com.easylib.dima.easylib.Activities.Login.LoginActivity;
 import com.easylib.dima.easylib.Activities.RatedBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String USER_PREFERENCES = "User Preferences";
     private static final String USER_INFO = "User Info";
-    private static final String ALL_LIBRARIES_LIST = "All Libraries List";
+    private static final String LIBRARIES_LIST = "Libraries List";
     private User userInfo;
     private ArrayList<LibraryDescriptor> prefLibraries;
     private ArrayList<LibraryDescriptor> allLibrariesList;
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 librariesListIntent = new Intent(context, LibraryListActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(USER_INFO, userInfo);
-                bundle.putSerializable(ALL_LIBRARIES_LIST, allLibrariesList);
+                bundle.putSerializable(LIBRARIES_LIST, allLibrariesList);
                 librariesListIntent.putExtras(bundle);
                 doUnbindService();
                 unregisterReceiver(mMessageReceiver);
@@ -123,6 +124,15 @@ public class MainActivity extends AppCompatActivity {
                 if (prefLibCalledForProfile){
                     getRatedBooks(true);
                     prefLibCalledForProfile = false;
+                } else {
+                    Intent prefLibsIntent = new Intent(context, LibraryListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(USER_INFO, userInfo);
+                    bundle.putSerializable(LIBRARIES_LIST, prefLibraries);
+                    prefLibsIntent.putExtras(bundle);
+                    doUnbindService();
+                    unregisterReceiver(mMessageReceiver);
+                    startActivity(prefLibsIntent);
                 }
             }
             if (key.equals(Constants.GET_USER_RATED_BOOKS)) {
@@ -261,5 +271,13 @@ public class MainActivity extends AppCompatActivity {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id());
         }
+    }
+
+    public void goToLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        doUnbindService ();
+        this.unregisterReceiver(mMessageReceiver);
+        startActivity(intent);
     }
 }

@@ -31,7 +31,7 @@ import AnswerClasses.User;
 
 public class LibraryListActivity extends AppCompatActivity {
 
-    private static final String ALL_LIBRARIES_LIST = "All Libraries List";
+    private static final String LIBRARIES_LIST = "Libraries List";
     private static final String USER_INFO = "User Info";
     private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
     private User userInfo;
@@ -119,7 +119,7 @@ public class LibraryListActivity extends AppCompatActivity {
         setContentView(R.layout.list_activity);
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
-        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(ALL_LIBRARIES_LIST);
+        libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(LIBRARIES_LIST);
 
         // Communication
         doBindService();
@@ -143,6 +143,13 @@ public class LibraryListActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
     }
 
     public void showLibrary(LibraryDescriptor library) {
