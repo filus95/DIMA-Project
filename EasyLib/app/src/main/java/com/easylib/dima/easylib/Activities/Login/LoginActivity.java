@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -172,7 +174,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mAuth.addAuthStateListener(mAuthListener);
+        if ( isNetworkAvailable())
+            mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -188,13 +191,68 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        // Start the Service
-        startService(new Intent(LoginActivity.this, ConnectionService.class));
-
         super.onCreate(savedInstanceState);
-        notificationSetup();
         setContentView(R.layout.login);
 
+        if ( isNetworkAvailable() ) {
+            setView();
+            startService(new Intent(LoginActivity.this, ConnectionService.class));
+
+            notificationSetup();
+            // Google Initialization
+            mAuth = FirebaseAuth.getInstance();
+
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    if (firebaseAuth.getCurrentUser() != null) {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                }
+            };
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+
+            mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+            doBindService();
+
+            // for Multiple Filters call this multiple times
+            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
+            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+
+            // Check if Info are saved
+            SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+            if (!sp.contains(USER_ID)) {
+                loadingLayout.setVisibility(View.INVISIBLE);
+            } else {
+                User user = new User();
+                user.setUser_id(sp.getInt(USER_ID, -1));
+                // Send Login Info to Server
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mBoundService != null) {
+                            mBoundService.setCurrentContext(getApplicationContext());
+                            mBoundService.sendMessage(Constants.USER_LOGIN, user);
+                        }
+                    }
+                }, 1000);
+            }
+        }else {
+            setView();
+            Toast.makeText(this, "No internet connection :(\nReload the" +
+                    " app when you will have a network access please.", Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
+    void setView(){
         eText = (EditText) findViewById(R.id.email);
         pText = (EditText) findViewById(R.id.password);
         loadingLayout = (ConstraintLayout) findViewById(R.id.login_load_layout);
@@ -212,51 +270,6 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-
-        // Google Initialization
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if( firebaseAuth.getCurrentUser() != null){
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-            }
-        };
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        doBindService();
-
-        // for Multiple Filters call this multiple times
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
-
-        // Check if Info are saved
-        SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        if(!sp.contains(USER_ID)) {
-            loadingLayout.setVisibility(View.INVISIBLE);
-        } else {
-            User user = new User();
-            user.setUser_id(sp.getInt(USER_ID, -1));
-            // Send Login Info to Server
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mBoundService != null) {
-                        mBoundService.setCurrentContext(getApplicationContext());
-                        mBoundService.sendMessage(Constants.USER_LOGIN, user);
-                    }
-                }
-            }, 1000);
-        }
     }
 
     public void login(View view) {
@@ -432,5 +445,11 @@ public class LoginActivity extends AppCompatActivity {
 //            }
         }
         // [END handle_data_extras]
+        private boolean isNetworkAvailable() {
+            ConnectivityManager connectivityManager
+                    = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+            return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
 }
 
