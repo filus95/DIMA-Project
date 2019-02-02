@@ -12,8 +12,9 @@
         android:smallScreens="false"
         android:xlargeScreens="true" />
 
+
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+        android:name="com.easylib.dima.easylib.ConnectionLayer.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -71,6 +72,7 @@
             </intent-filter>
         </service>
         <service android:name=".ConnectionLayer.ConnectionService" />
+        <service android:name=".ConnectionLayer.CheckConnectionService"/>
 
     </application>
 

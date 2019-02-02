@@ -54,6 +54,7 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.USER_LOGIN_GOOGLE, this::userLoginGoogle);
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this::userSilentLoginGoogle);
         map.put(Constants.EDIT_PROFILE, this::editProfile);
+        map.put(Constants.NETWORK_STATE_CHANGED, this::networkStateChanged);
 
     }
 
@@ -329,6 +330,17 @@ public class MessageFromThreadHandler implements Serializable {
 
         //put whatever data you want to send, if any
         intent.putExtra(Constants.GET_ALL_BOOKS, books);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void networkStateChanged(Bundle bundle){
+        boolean connectionUp = (boolean) bundle.getSerializable(Constants.NETWORK_STATE_CHANGED);
+        Intent intent = new Intent(Constants.NETWORK_STATE_CHANGED);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.NETWORK_STATE_CHANGED, connectionUp);
 
         //send broadcast
         this.currentContext.sendBroadcast(intent);

@@ -28,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easylib.dima.easylib.ConnectionLayer.CheckConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -58,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //Comunication
     ConnectionService mBoundService;
+    CheckConnectionService mCheckConnService;
     private boolean mIsBound;
     //SignInButton googleSignInButtun;
     FirebaseAuth mAuth;
@@ -82,6 +84,17 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton facebookButton;
 
     //For the communication Service
+    private ServiceConnection mConnection2 = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mCheckConnService = ((CheckConnectionService.LocalBinder)service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -97,6 +110,9 @@ public class LoginActivity extends AppCompatActivity {
     public void doBindService() {
         bindService(new Intent(LoginActivity.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
+        bindService(new Intent(LoginActivity.this, CheckConnectionService.class), mConnection2,
+                Context.BIND_AUTO_CREATE);
+
         mIsBound = true;
         if(mBoundService!=null){
             mBoundService.IsBoundable();
@@ -167,6 +183,13 @@ public class LoginActivity extends AppCompatActivity {
                 unregisterReceiver(mMessageReceiver);
                 startActivity(loginPrefIntent);
             }
+            if (key.equals(Constants.NETWORK_STATE_UP)){
+              startService(new Intent(LoginActivity.this, ConnectionService.class));
+              Toast.makeText(context,"NETWORK IS UP!", Toast.LENGTH_LONG).show();
+            }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Toast.makeText(context,"NETWORK IS DOWN!", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
@@ -186,18 +209,22 @@ public class LoginActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_UP));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
+
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        startService(new Intent(LoginActivity.this, CheckConnectionService.class));
 
         if ( isNetworkAvailable() ) {
             setView();
             startService(new Intent(LoginActivity.this, ConnectionService.class));
-
             notificationSetup();
             // Google Initialization
             mAuth = FirebaseAuth.getInstance();
@@ -227,8 +254,18 @@ public class LoginActivity extends AppCompatActivity {
 
             // Check if Info are saved
             SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+            Handler handler = new Handler();
             if (!sp.contains(USER_ID)) {
                 loadingLayout.setVisibility(View.INVISIBLE);
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (mCheckConnService != null) {
+                            mCheckConnService.setCurrentContext(getApplicationContext());
+                        }
+                    }
+                }, 1000);
+
             } else {
                 User user = new User();
                 user.setUser_id(sp.getInt(USER_ID, -1));
@@ -237,6 +274,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         if (mBoundService != null) {
+                            mCheckConnService.setCurrentContext(getApplicationContext());
                             mBoundService.setCurrentContext(getApplicationContext());
                             mBoundService.sendMessage(Constants.USER_LOGIN, user);
                         }
@@ -245,8 +283,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }else {
             setView();
-            Toast.makeText(this, "No internet connection :(\nReload the" +
-                    " app when you will have a network access please.", Toast.LENGTH_LONG).show();
         }
 
 
