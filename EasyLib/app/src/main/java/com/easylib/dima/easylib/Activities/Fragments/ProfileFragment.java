@@ -72,7 +72,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity)getActivity()).getRatedBooks(true);
+                ((MainActivity)getActivity()).getRatedBooks(false);
             }
         });
         Button button2 = (Button) root.findViewById(R.id.profile_fragment_logout_button);
