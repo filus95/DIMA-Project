@@ -6,26 +6,20 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.widget.Toast;
+import android.support.annotation.Nullable;
 
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
-public class ConnectionService extends Service implements Serializable{
-    private ConnectionHandler connectionHandler;
-    Handler myhandler;
-    ClientThread clientThread;
+public class CheckConnectionService extends Service {
+    CheckConnectionThread checkConnectionThread;
     ObjectOutputStream out;
     Context currentContext;
 
-    public ConnectionService() {
-        this.connectionHandler = new ConnectionHandler(this);
-        myhandler = connectionHandler.getHandler();
+    public CheckConnectionService() {
     }
 
     public void setCurrentContext(Context currentContext) {
         this.currentContext = currentContext;
-        this.connectionHandler.setCurrentContext(currentContext);
     }
 
     public void setOut(ObjectOutputStream out) {
@@ -34,29 +28,21 @@ public class ConnectionService extends Service implements Serializable{
 
     private final IBinder myBinder = new LocalBinder();
 
-    public void IsBoundable() {
-        //Toast.makeText(this,"I bind like butter", Toast.LENGTH_LONG).show();
-    }
 
     public class LocalBinder extends Binder {
-        public ConnectionService getService() {
+        public CheckConnectionService getService() {
             System.out.println("I am in Localbinder ");
-            return ConnectionService.this;
+            return CheckConnectionService.this;
 
         }
     }
-
-    public void sendMessage(String kindOfMessage, Object content){
-        new Thread(new SendingThread(out, kindOfMessage, content)).start();
-    }
-
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //TODO do something useful
 
-        this.clientThread = new ClientThread(myhandler, this);
-        new Thread(clientThread).start();
+        this.checkConnectionThread = new CheckConnectionThread(this);
+        new Thread(checkConnectionThread).start();
         return Service.START_STICKY;
     }
 

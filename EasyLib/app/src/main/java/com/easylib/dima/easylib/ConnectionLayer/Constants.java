@@ -38,6 +38,10 @@ public class Constants {
     static public final String USER_SILENT_LOGIN_GOOGLE = "silent_user_login_google";
     static public final String USER_LOGIN_GOOGLE = "user_login_google";
     static public final String EDIT_PROFILE = "edit_profile";
+    public static final String NETWORK_STATE_CHANGED = "network_state_changed";
+    public static final String NETWORK_STATE_UP = "network_state_up";
+    public static final String NETWORK_STATE_DOWN = "network_state_down";
+
 
     // Communication strings
 
