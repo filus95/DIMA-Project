@@ -39,6 +39,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
@@ -47,7 +48,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="serif"
                         android:singleLine="true"
-                        android:text="Title of the Event"
                         android:textAlignment="center"
                         android:textSize="26sp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:singleLine="true"
-                        android:text="Via non la so (MI)"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:textStyle="italic"
@@ -74,7 +73,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
                         android:singleLine="true"
-                        android:text="00/00/0000 00:00"
                         android:textAlignment="center"
                         android:textSize="16sp" />
 
@@ -85,6 +83,7 @@
                         android:layout_marginStart="55dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="55dp"
+                        android:scaleType="fitXY"
                         app:riv_corner_radius="10dp" />
 
                     <TextView
@@ -92,7 +91,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Description"
                         android:textAlignment="center" />
 
                 </LinearLayout>

@@ -103,7 +103,7 @@
                             android:textAlignment="center"
                             android:textSize="16sp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/library_activity_email"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
@@ -111,6 +111,7 @@
                             android:background="@color/Transparent"
                             android:ems="10"
                             android:imeOptions="actionSearch"
+                            android:singleLine="true"
                             android:inputType="number"
                             android:text="email@live.it"
                             android:textAlignment="center"
@@ -133,7 +134,7 @@
                             android:textAlignment="center"
                             android:textSize="16sp" />
 
-                        <EditText
+                        <TextView
                             android:id="@+id/library_activity_phone"
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
@@ -141,6 +142,7 @@
                             android:background="@color/Transparent"
                             android:ems="10"
                             android:imeOptions="actionSearch"
+                            android:singleLine="true"
                             android:inputType="number"
                             android:text="075075075075"
                             android:textAlignment="center"
@@ -175,6 +177,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:onClick="showAllNews"
                             android:text="All News" />
                     </LinearLayout>
 
@@ -206,6 +209,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:onClick="showAllEvents"
                             android:text="All Events" />
                     </LinearLayout>
 
@@ -237,6 +241,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
+                            android:onClick="showAllBooks"
                             android:text="All Books" />
                     </LinearLayout>
 

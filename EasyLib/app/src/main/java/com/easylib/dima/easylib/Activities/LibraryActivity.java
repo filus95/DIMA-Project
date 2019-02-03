@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Lists.NewsListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleBookAdapter;
 import com.easylib.dima.easylib.Adapters.ImageTitleEventAdapter;
@@ -46,6 +47,11 @@ public class LibraryActivity extends AppCompatActivity {
     private LibraryDescriptor libraryInfo;
     private User userInfo;
     private Boolean isLibraryFavourite;
+
+    // For List Activities
+    private static final String ALL_NEWS = "All News";
+    private static final String ALL_EVENTS = "All Events";
+    private static final String ALL_BOOKS = "All Books";
 
     //Comunication
     ConnectionService mBoundService;
@@ -88,12 +94,13 @@ public class LibraryActivity extends AppCompatActivity {
         }
     }
 
-    private void doUnbindService() {
+    public void doUnbindService() {
         if (mIsBound) {
             // Detach our existing connection.
             unbindService(mConnection);
             mIsBound = false;
         }
+        unregisterReceiver(mMessageReceiver);
     }
 
     private String extractKey(Intent intent){
@@ -217,7 +224,6 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy ();
         doUnbindService();
-        unregisterReceiver(mMessageReceiver);
     }
 
     // setPreference Button setup based on the fact that library is already a favourite or not
@@ -242,6 +248,23 @@ public class LibraryActivity extends AppCompatActivity {
             });
         }
         setFavourite.setVisibility (View.VISIBLE);
+    }
+
+    public void showAllNews(View view) {
+        Intent newsIntent = new Intent (this, NewsListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ALL_NEWS, libraryInfo.getLibraryContent ().getNews ());
+        newsIntent.putExtras(bundle);
+        doUnbindService();
+        startActivity(newsIntent);
+    }
+
+    public void showAllEvents(View view) {
+
+    }
+
+    public void showAllBooks(View view) {
+
     }
 
     public void setFavourite() {
