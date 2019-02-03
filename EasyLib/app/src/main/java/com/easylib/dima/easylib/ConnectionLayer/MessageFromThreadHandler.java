@@ -97,7 +97,7 @@ public class MessageFromThreadHandler implements Serializable {
     }
 
     private void userLoginGoogle(Bundle bundle) {
-        Intent intent = new Intent(Constants.USER_SILENT_LOGIN_GOOGLE);
+        Intent intent = new Intent(Constants.USER_LOGIN_GOOGLE);
         intent.putExtra(Constants.USER_LOGIN_GOOGLE,
                 bundle.getSerializable(Constants.USER_LOGIN_GOOGLE));
 

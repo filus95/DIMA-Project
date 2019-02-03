@@ -71,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     private Intent mainIntent;
     private User userInfo;
     private ArrayList<LibraryDescriptor> libraries;
+    private static final String GOOGLE_TOKEN = "google_token";
     private static final String USER_ID = "User ID";
     private static final String LOGIN = "Login";
     private static final String USER_PREFERENCES = "User Preferences";
@@ -190,15 +191,33 @@ public class LoginActivity extends AppCompatActivity {
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Toast.makeText(context,"NETWORK IS DOWN!", Toast.LENGTH_LONG).show();
             }
+            if (key.equals(Constants.USER_LOGIN_GOOGLE)){
+                User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
+                if (user.getUser_id() == -1) {
+                    Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
+                } else {
+                    SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+                    if(!sp.contains(USER_ID)) {
+                        SharedPreferences.Editor Ed = sp.edit();
+                        Ed.putInt(USER_ID, user.getUser_id());
+                        Ed.commit();
+                    }
+                    userInfo = user;
+                    callUserPreferences();
+                }
+            }
         }
     };
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        if ( isNetworkAvailable())
-            mAuth.addAuthStateListener(mAuthListener);
+//        String email = mAuth.getCurrentUser().getEmail();
+//        if ( email != null ){
+//
+//        }
+//        if ( isNetworkAvailable())
+//            mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -211,6 +230,8 @@ public class LoginActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_UP));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN_GOOGLE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_SILENT_LOGIN_GOOGLE));
 
     }
 
@@ -413,12 +434,17 @@ public class LoginActivity extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
                 //
+                account.getIdToken();
                 User user = new User();
+                user.setGoogle_id_token(account.getIdToken());
                 user.setEmail(account.getEmail());
                 user.setUsername(account.getGivenName());
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(this);
+                    mBoundService.sendMessage(Constants.USER_LOGIN_GOOGLE, user);
+                }
             } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                // ...
+                e.printStackTrace();
             }
         }
     }

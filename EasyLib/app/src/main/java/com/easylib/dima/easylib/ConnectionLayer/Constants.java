@@ -41,6 +41,7 @@ public class Constants {
     public static final String NETWORK_STATE_CHANGED = "network_state_changed";
     public static final String NETWORK_STATE_UP = "network_state_up";
     public static final String NETWORK_STATE_DOWN = "network_state_down";
+    public static final String OLD_PROJECT_NAME = "android.support.multidex.MultiDexApplication";
 
 
     // Communication strings
