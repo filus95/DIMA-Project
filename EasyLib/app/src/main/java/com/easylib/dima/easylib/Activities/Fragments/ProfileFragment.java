@@ -63,7 +63,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity)getActivity()).getPrefLibraries (false);
+                ((MainActivity)getActivity()).getPrefLibraries (false, false);
             }
         });
         Button button1 = (Button) root.findViewById(R.id.profile_fragment_rated_books_button);

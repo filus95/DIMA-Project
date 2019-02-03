@@ -54,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String RATED_BOOKS_ARRAY = "Rated Books Array";
     private Boolean prefLibCalledForProfile = false;
     private Boolean ratedBooksCalledForProfile = false;
+    // Home Fragment
+    private Boolean prefLibCalledForHome = false;
 
     //Comunication
     ConnectionService mBoundService;
@@ -124,6 +126,10 @@ public class MainActivity extends AppCompatActivity {
                 if (prefLibCalledForProfile){
                     getRatedBooks(true);
                     prefLibCalledForProfile = false;
+                } else if (prefLibCalledForHome) {
+                    prefLibCalledForHome = false;
+                    ((HomeFragment) fragment).setLibrariesPref(prefLibraries);
+                    setFragment(fragment);
                 } else {
                     Intent prefLibsIntent = new Intent(context, LibraryListActivity.class);
                     Bundle bundle = new Bundle();
@@ -187,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
                     case R.id.home_item :
                         fragment = new HomeFragment();
+                        getPrefLibraries (false, true);
                         break;
 
                     case R.id.calendar_item :
@@ -203,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.profile_item :
                         fragment = new ProfileFragment();
-                        getPrefLibraries(true);
+                        getPrefLibraries(true, false);
                         break;
                 }
                 return true;
@@ -257,8 +264,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(libraryActivityIntent);
     }
 
-    public void getPrefLibraries(boolean prefLibCalledForProfile) {
+    public void getPrefLibraries(boolean prefLibCalledForProfile, Boolean prefLibCalledForHome) {
         this.prefLibCalledForProfile = prefLibCalledForProfile;
+        this.prefLibCalledForHome = prefLibCalledForHome;
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id());
