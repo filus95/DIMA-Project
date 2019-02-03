@@ -46,7 +46,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
                 .load(news.getImage_link())
                 .into(holder.image);
         holder.name.setText(news.getTitle());
-        holder.date.setText(news.getPost_date().toString());
+        holder.date.setText(news.getPost_date().toString().replace ("T", "  "));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {

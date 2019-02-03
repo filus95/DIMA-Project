@@ -111,7 +111,7 @@ public class NewsActivity extends AppCompatActivity {
 
         // set the components
         title.setText(news.getTitle());
-        date.setText(news.getPost_date().toString());
+        date.setText(news.getPost_date().toString().replace ("T", "  "));
         description.setText(news.getContent());
         Glide.with(this)
                 .load(news.getImage_link())

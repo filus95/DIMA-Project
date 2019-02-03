@@ -224,7 +224,6 @@ public class LibraryActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy ();
         doUnbindService();
-        unregisterReceiver(mMessageReceiver);
     }
 
     // setPreference Button setup based on the fact that library is already a favourite or not
