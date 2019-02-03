@@ -1,6 +1,8 @@
 package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.EventActivity;
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
+import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import AnswerClasses.Event;
 
 public class ImageTitleEventAdapter extends RecyclerView.Adapter<ImageTitleEventAdapter.ImageTitleEventHolder> {
 
+    private static final String EVENT_INFO = "Event Info";
     ArrayList<Event> events;
     Context context;
 
@@ -45,7 +51,15 @@ public class ImageTitleEventAdapter extends RecyclerView.Adapter<ImageTitleEvent
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : onClick open Library Activity
+                Intent eventIntent = new Intent (context, EventActivity.class);
+                Bundle bundle = new Bundle ();
+                bundle.putSerializable(EVENT_INFO, event);
+                eventIntent.putExtras(bundle);
+                if(context instanceof MainActivity)
+                    ((MainActivity)context).doUnbindService ();
+                if(context instanceof LibraryActivity)
+                    ((LibraryActivity)context).doUnbindService ();
+                context.startActivity(eventIntent);
             }
         });
     }

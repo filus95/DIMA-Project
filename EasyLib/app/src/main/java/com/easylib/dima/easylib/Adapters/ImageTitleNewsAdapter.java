@@ -60,7 +60,7 @@ public class ImageTitleNewsAdapter extends RecyclerView.Adapter<ImageTitleNewsAd
                     if(context instanceof LibraryActivity)
                         ((LibraryActivity)context).doUnbindService ();
                     context.startActivity(newsIntent);
-                        }
+                }
             });
     }
 
