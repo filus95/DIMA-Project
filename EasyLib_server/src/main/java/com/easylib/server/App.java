@@ -161,13 +161,12 @@ public class App
 //
 //        }
 
-        String schema_name = dbms.getSchemaNameLib(1);
+        int user_id = 31;
+        UserPreferences userPreferences = new UserPreferences();
+        userPreferences.setUser_id(4);
+        userPreferences.setLibrary_id_update(1);
+        dbms.insertPreferences(userPreferences);
 
-        int limit = 5;
-        ArrayList<Event>res = dbms.getEvents(schema_name, limit);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        for (Event e: res)
-            System.out.print(e.getDate().format(formatter));
 
     // TODO: DELETE FROM booksreservations
     // ciao

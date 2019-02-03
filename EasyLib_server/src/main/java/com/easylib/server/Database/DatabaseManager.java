@@ -252,13 +252,8 @@ public class DatabaseManager {
 
     public boolean insertPreferences(UserPreferences up){
         ArrayList<String> columnsName = new ArrayList<>();
-        columnsName.add("user_id");
-        columnsName.add("library_1_id");
-        columnsName.add("library_2_id");
-        columnsName.add("library_3_id");
 
-        Map<String, Object> map = up.getMapAttribute(columnsName);
-        String query_is_user_in = "select * from "+Constants.PROPIETARY_DB+
+        String query_is_user_in = "select library_1_id, library_2_id, library_3_id from "+Constants.PROPIETARY_DB+
                 "."+Constants.PREFERENCE_TABLE_NAME+" where user_id = ?";
 
         try {
@@ -267,21 +262,39 @@ public class DatabaseManager {
             pst.setInt(1, up.getUser_id());
             ResultSet rs = pst.executeQuery();
             if ( rs.next() ) {
-                return updateStatement (map, Constants.PROPIETARY_DB, Constants.PREFERENCE_TABLE_NAME);
+                columnsName.add("user_id");
+                columnsName.add("library_id_update");
+                Map<String, Object> map = up.getMapAttribute(columnsName);
+
+                String to_fill;
+                if ( rs.getInt("library_1_id") == 0 )
+                    to_fill = "library_1_id";
+                else if (rs.getInt("library_2_id") == 0)
+                    to_fill = "library_2_id";
+                else if (rs.getInt("library_3_id") == 0)
+                    to_fill = "library_3_id";
+
+                // All the slots are full. Need to edit the profile first
+                else
+                    return false;
+                return updateStatement (to_fill, map, Constants.PROPIETARY_DB, Constants.PREFERENCE_TABLE_NAME);
             }
         } catch (SQLException e) {
             return false;
         }
 
+        columnsName.add("user_id");
+        columnsName.add("library_1_id");
+        Map<String, Object> map = up.getMapAttribute(columnsName);
         return insertStatement(map, Constants.PREFERENCE_TABLE_NAME, Constants.PROPIETARY_DB);
 
     }
 
-    private boolean updateStatement(Map<String, Object> map, String schema_name, String table_name) {
+    private boolean updateStatement(String to_fill, Map<String, Object> map, String schema_name, String table_name) {
         boolean res = false;
         try {
 
-            String query = createUpdateStatement(map, schema_name, table_name);
+            String query = createUpdateStatement(to_fill, map, schema_name, table_name);
             PreparedStatement pstmt = conn.prepareStatement(query);
 
             pstmt.executeUpdate();
@@ -295,23 +308,23 @@ public class DatabaseManager {
     }
 
     // todo: maybe update can raise probles
-    private String createUpdateStatement(Map<String, Object> map, String schema_name, String tableName) {
+    private String createUpdateStatement(String to_fill, Map<String, Object> map, String schema_name, String tableName) {
         StringBuilder columns_name = new StringBuilder();
         StringBuilder values = new StringBuilder();
         int count = 0;
         String stm = "UPDATE "+schema_name+"."+tableName+" SET ";// +"+columns_name+" = "+values",";
         columns_name.append(stm);
 
-        int lenght = map.size();
-        for (String key: map.keySet()) {
+//        int lenght = map.size();
+//        for (String key: map.keySet()) {
 
-            if ((count != lenght - 1)) {
-                columns_name.append(key).append(" = ").append(map.get(key)).append(", ");
-            } else
-                columns_name.append(key).append(" = ").append(map.get(key));
+//            if ((count != lenght - 1)) {
+//                columns_name.append(to_fill).append(" = ").append(map.get("library_to_add")).append(", ");
+//            } else
+        columns_name.append(to_fill).append(" = ").append(map.get("library_id_update"));
 
-            count++;
-        }
+//            count++;
+//        }
 
         columns_name.append(" where user_id = ").append(map.get("user_id"));
         return  columns_name.toString();
@@ -1176,34 +1189,44 @@ public class DatabaseManager {
     }
 
     public boolean editProfile(UserPreferences up) {
-        // create the java mysql update preparedstatement
-        String library_to_edit = checkLibraryToDelete(up);
+        int lib_to_delete = up.getLibrary_to_delete();
+        String library_to_edit = null;
 
-        String query = "update propietary_db.users_preferences " +
-                "set "+library_to_edit+" = ? where user_id = ?";
-        PreparedStatement preparedStmt = null;
+        String query_is_user_in = "select library_1_id, library_2_id, library_3_id from "+Constants.PROPIETARY_DB+
+                "."+Constants.PREFERENCE_TABLE_NAME+" where user_id = ?";
+
         try {
+            PreparedStatement pst1 = conn.prepareStatement(query_is_user_in);
+            pst1.setInt(1, up.getUser_id());
+            ResultSet rs = pst1.executeQuery();
+            if ( rs.next() ) {
+                if ( rs.getInt("library_1_id") == lib_to_delete )
+                    library_to_edit = "library_1_id";
+                else if ( rs.getInt("library_2_id") == lib_to_delete )
+                    library_to_edit = "library_2_id";
+                else if ( rs.getInt("library_3_id") == lib_to_delete )
+                    library_to_edit = "library_3_id";
+                else
+                    return false;
+            }
+
+            String query = "update propietary_db.users_preferences " +
+                    "set " + library_to_edit + " = ? where user_id = ?";
+            PreparedStatement preparedStmt = null;
+
             preparedStmt = conn.prepareStatement(query);
-            preparedStmt.setObject   (1, null);
-            preparedStmt.setInt(2,up.getUser_id());
+            preparedStmt.setObject(1, null);
+            preparedStmt.setInt(2, up.getUser_id());
 
             // execute the java preparedstatement
             preparedStmt.executeUpdate();
-        }
-        catch (SQLException e) {
+
+
+        }catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
         return true;
-    }
-
-    private String checkLibraryToDelete(UserPreferences up) {
-        if (up.getId_lib1() == -1)
-            return "library_1_id";
-        else if (up.getId_lib2() == -1)
-            return "library_2_id";
-        else
-            return "library_3_id";
     }
 }
 
