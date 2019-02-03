@@ -88,12 +88,13 @@ public class LibraryActivity extends AppCompatActivity {
         }
     }
 
-    private void doUnbindService() {
+    public void doUnbindService() {
         if (mIsBound) {
             // Detach our existing connection.
             unbindService(mConnection);
             mIsBound = false;
         }
+        unregisterReceiver(mMessageReceiver);
     }
 
     private String extractKey(Intent intent){

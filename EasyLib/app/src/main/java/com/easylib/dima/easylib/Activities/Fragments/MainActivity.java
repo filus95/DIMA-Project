@@ -89,12 +89,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void doUnbindService() {
+    public void doUnbindService() {
         if (mIsBound) {
             // Detach our existing connection.
             unbindService(mConnection);
             mIsBound = false;
         }
+        unregisterReceiver(mMessageReceiver);
     }
 
     private String extractKey(Intent intent){
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putSerializable(LIBRARIES_LIST, allLibrariesList);
                 librariesListIntent.putExtras(bundle);
                 doUnbindService();
-                unregisterReceiver(mMessageReceiver);
                 startActivity(librariesListIntent);
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(LIBRARIES_LIST, prefLibraries);
                     prefLibsIntent.putExtras(bundle);
                     doUnbindService();
-                    unregisterReceiver(mMessageReceiver);
                     startActivity(prefLibsIntent);
                 }
             }
@@ -154,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(USER_INFO, userInfo);
                     ratedBooksIntent.putExtras(bundle);
                     doUnbindService();
-                    unregisterReceiver(mMessageReceiver);
                     startActivity(ratedBooksIntent);
                 }
             }
@@ -228,6 +226,12 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RATED_BOOKS));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -238,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
     public void goToSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
+        //TODO
     }
 
     // Method called when the Notification icon is clicked
@@ -260,7 +265,6 @@ public class MainActivity extends AppCompatActivity {
         bundle.putSerializable(USER_INFO, userInfo);
         libraryActivityIntent.putExtras(bundle);
         doUnbindService();
-        unregisterReceiver(mMessageReceiver);
         startActivity(libraryActivityIntent);
     }
 
@@ -285,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         doUnbindService ();
-        this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
     }
 }
