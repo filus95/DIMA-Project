@@ -97,9 +97,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
     }
-
 
     private void userLoginGoogle() {
         try {

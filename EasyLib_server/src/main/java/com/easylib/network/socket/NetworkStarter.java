@@ -18,7 +18,7 @@ public class NetworkStarter {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //System.out.println("Stopping Server");
-        //server.stop();
+//        System.out.println("Stopping Server");
+//        server.stop();
     }
 }

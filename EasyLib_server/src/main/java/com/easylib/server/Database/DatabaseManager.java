@@ -645,12 +645,14 @@ public class DatabaseManager {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
             while (rs.next()){
                 Event elem = new Event();
                 elem.setId(rs.getInt("id"));
                 elem.setTitle(rs.getString("title"));
                 elem.setDescription(rs.getString("description"));
+                elem.setDate(rs.getTimestamp("date").toLocalDateTime());
                 elem.setSeats((Integer.parseInt(rs.getString("seats"))));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);

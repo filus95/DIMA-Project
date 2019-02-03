@@ -158,18 +158,26 @@ public class App
 //            System.out.print("\n" + "News:\n");
 //            for (News n : lc.getNews())
 //                System.out.print(n.getTitle() + "\n");
-
+//
 //        }
 
-        // TODO: DELETE FROM booksreservations
+        String schema_name = dbms.getSchemaNameLib(1);
+
+        int limit = 5;
+        ArrayList<Event>res = dbms.getEvents(schema_name, limit);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        for (Event e: res)
+            System.out.print(e.getDate().format(formatter));
+
+    // TODO: DELETE FROM booksreservations
     // ciao
     //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
     //                "library_1.booksreservations");
     //        System.out.print(res);
-       UserPreferences up = new UserPreferences();
-       up.setUser_id(5);
-       up.setId_lib1(2);
-       dbms.insertPreferences(up);
+//       UserPreferences up = new UserPreferences();
+//       up.setUser_id(5);
+//       up.setId_lib1(2);
+//       dbms.insertPreferences(up);
     }
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
