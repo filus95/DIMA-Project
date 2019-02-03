@@ -7,8 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_marginRight="15dp"
         android:background="@drawable/round_rect_shadow"
+        android:gravity="center|center_horizontal|center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
         android:paddingTop="10dp"
@@ -28,42 +28,42 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
+            android:gravity="center|center_horizontal|center_vertical"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/event_list_item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_weight="0.3"
+                android:singleLine="true"
                 android:text="Title"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/event_list_item_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Location"
-                android:textStyle="italic" />
+                android:textAlignment="center"
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/event_list_item_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="00/00/0000" />
+                android:singleLine="true"
+                android:text="00/00/0000"
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/event_list_item_seats"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="0"
             android:text="10"
-            android:textSize="40sp" />
+            android:textAlignment="center"
+            android:textSize="36sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

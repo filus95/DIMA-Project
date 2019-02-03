@@ -39,6 +39,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
@@ -55,20 +56,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/event_activity_location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:singleLine="true"
-                        android:text="Via non la so (MI)"
-                        android:textAlignment="center"
-                        android:textSize="18sp"
-                        android:textStyle="italic"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/book_activity_title" />
-
-                    <TextView
                         android:id="@+id/event_activity_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -76,15 +63,16 @@
                         android:singleLine="true"
                         android:text="00/00/0000 00:00"
                         android:textAlignment="center"
-                        android:textSize="16sp" />
+                        android:textSize="18sp" />
 
                     <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/event_activity_image"
-                        android:layout_width="200dp"
-                        android:layout_height="250dp"
+                        android:layout_width="250dp"
+                        android:layout_height="200dp"
                         android:layout_marginStart="55dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="55dp"
+                        android:scaleType="fitXY"
                         app:riv_corner_radius="10dp" />
 
                     <TextView
@@ -98,7 +86,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:orientation="horizontal">
 
                         <TextView
@@ -126,11 +114,14 @@
 
                     <Button
                         android:id="@+id/event_activity_reservation_button"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         android:onClick="setReservation"
-                        android:text="Reserve" />
+                        android:text="Reserve Seat"
+                        android:textColor="@android:color/holo_green_light"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
             </ScrollView>

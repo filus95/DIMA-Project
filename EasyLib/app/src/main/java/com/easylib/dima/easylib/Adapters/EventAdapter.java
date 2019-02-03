@@ -1,6 +1,8 @@
 package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.EventActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -17,6 +20,7 @@ import AnswerClasses.Event;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder> {
 
+    private static final String EVENT_INFO = "Event Info";
     ArrayList<Event> events;
     Context context;
 
@@ -40,19 +44,18 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
                 .load(event.getImage_link())
                 .into(holder.image);
         holder.title.setText(event.getTitle());
-        // TODO : add location
-        holder.location.setText("location");
-        holder.date.setText(event.getDate().toString());
-        holder.seats.setText(event.getSeats());
+        holder.date.setText(event.getDate().toString().replace ("T", "  "));
+        holder.seats.setText(String.valueOf (event.getSeats()));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: call method to see event_activity activity
-                //Intent intent = new Intent(context, MainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                //context.startActivity(intent);
+                Intent newsIntent = new Intent (context, EventActivity.class);
+                Bundle bundle = new Bundle ();
+                bundle.putSerializable(EVENT_INFO, event);
+                newsIntent.putExtras(bundle);
+                context.startActivity(newsIntent);
             }
         });
     }
@@ -64,7 +67,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
     static class EventHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
         protected TextView title;
-        protected TextView location;
         protected TextView date;
         protected TextView seats;
 
@@ -72,7 +74,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
             super(v);
             image = v.findViewById(R.id.event_list_item_image);
             title = v.findViewById(R.id.event_list_item_title);
-            location = v.findViewById(R.id.event_list_item_location);
             date = v.findViewById(R.id.event_list_item_date);
             seats = v.findViewById(R.id.event_list_item_seats);
         }

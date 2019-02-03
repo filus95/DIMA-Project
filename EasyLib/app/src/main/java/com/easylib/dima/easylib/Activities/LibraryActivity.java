@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.NewsListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleBookAdapter;
@@ -260,11 +261,16 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     public void showAllEvents(View view) {
-
+        Intent eventIntent = new Intent (this, EventListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ALL_EVENTS, libraryInfo.getLibraryContent ().getEvents ());
+        eventIntent.putExtras(bundle);
+        doUnbindService();
+        startActivity(eventIntent);
     }
 
     public void showAllBooks(View view) {
-
+        // TODO
     }
 
     public void setFavourite() {

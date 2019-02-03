@@ -17,7 +17,8 @@ import AnswerClasses.Event;
 
 public class EventListActivity extends AppCompatActivity {
 
-    private ArrayList<Event> events = new ArrayList<Event>();
+    private static final String ALL_EVENTS = "All Events";
+    private ArrayList<Event> events;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -29,15 +30,7 @@ public class EventListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
 
-        // JUST FOR TEST
-        int i;
-        for(i=0; i<15; i++) {
-            Event event = new Event();
-            event.setImage_link("https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png");
-            event.setTitle("Title of the news "+i);
-            event.setDate(LocalDateTime.of(2014, Month.JANUARY, 1, 10, 10, 30));
-            events.add(event);
-        }
+        events = (ArrayList<Event>) getIntent().getSerializableExtra(ALL_EVENTS);
 
         // Recycle View Settings
         mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
