@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(context,"NETWORK IS DOWN!", Toast.LENGTH_LONG).show();
             }
             if (key.equals(Constants.USER_LOGIN_GOOGLE)){
-                User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
+                User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN_GOOGLE);
                 if (user.getUser_id() == -1) {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
                 } else {
@@ -438,7 +438,8 @@ public class LoginActivity extends AppCompatActivity {
                 User user = new User();
                 user.setGoogle_id_token(account.getIdToken());
                 user.setEmail(account.getEmail());
-                user.setUsername(account.getGivenName());
+                user.setName(account.getGivenName());
+                user.setSurname(account.getFamilyName());
                 if (mBoundService != null) {
                     mBoundService.setCurrentContext(this);
                     mBoundService.sendMessage(Constants.USER_LOGIN_GOOGLE, user);
