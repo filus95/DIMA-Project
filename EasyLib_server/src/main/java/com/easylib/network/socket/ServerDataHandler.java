@@ -116,7 +116,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         User user = null;
         try {
             user = (User) objectInputStream.readObject();
-            boolean res = dbms.silentGoogleLogin(user);
+            User res = dbms.silentGoogleLogin(user);
             socketHandler.sendViaSocket(Constants.USER_SILENT_LOGIN_GOOGLE);
             socketHandler.sendViaSocket(res);
 

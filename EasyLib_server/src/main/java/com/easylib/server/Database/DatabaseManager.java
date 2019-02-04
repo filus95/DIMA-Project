@@ -1217,59 +1217,62 @@ public class DatabaseManager {
     }
 
     public User registrationGoogleToken(User user) {
+
+        user = silentGoogleLogin(user);
+        if ( user.getUser_id() != -1)
+            return user;
+
         Map<String, Object> map = new HashMap<>();
         map.put("name", user.getName());
         map.put("surname", user.getSurname());
         map.put("email", user.getEmail());
-        //map.put("google_id_token", user.getGoogle_id_token());
+        map.put("google_id_token", user.getGoogle_id_token());
 
         insertStatement(map,Constants.USERS_TABLE_NAME,Constants.PROPIETARY_DB);
 
-        String sql = "SELECT user_id FROM propietary_db.users WHERE email = ?";
-
-        PreparedStatement st = null;
-        try {
-            st = this.conn.prepareStatement(sql);
-
-            st.setString(1, user.getEmail());
-            ResultSet rs = st.executeQuery();
-            user.setUser_id(-1);
-
-            if (rs.next())
-                user.setUser_id(rs.getInt("user_id"));
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            user.setUser_id(-1);
-            return user;
-        }
+//        String sql = "SELECT user_id FROM propietary_db.users WHERE email = ?";
+//
+//        PreparedStatement st = null;
+//        try {
+//            st = this.conn.prepareStatement(sql);
+//
+//            st.setString(1, user.getEmail());
+//            ResultSet rs = st.executeQuery();
+//            user.setUser_id(-1);
+//
+//            if (rs.next())
+//                user.setUser_id(rs.getInt("user_id"));
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            user.setUser_id(-1);
+//            return user;
+//        }
 
         return user;
     }
 
-    public boolean silentGoogleLogin(User user) {
+    public User silentGoogleLogin(User user) {
 
-        String sql = "SELECT user_id, google_id_token FROM propietary_db.users WHERE user_id = ?";
+        String sql = "SELECT * FROM propietary_db.users WHERE google_id_token = ?";
 
         PreparedStatement st = null;
         try {
             st = this.conn.prepareStatement(sql);
 
-            st.setInt(1, user.getUser_id());
+            st.setString(1, user.getGoogle_id_token());
             ResultSet rs = st.executeQuery();
             user.setUser_id(-1);
 
-            if (rs.next()) {
-               //if (user.getGoogle_id_token().equals(rs.getString("google_id_token")))
-                   return true;
-            }else
-                return false;
-
+            if (rs.next()){
+                user.setUser_id(rs.getInt("user_id"));
+                return user;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return user;
     }
 
     public boolean editProfile(UserPreferences up) {
