@@ -57,9 +57,9 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.NETWORK_STATE_CHANGED, this::networkStateChanged);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
+        map.put(Constants.EDIT_PASSWORD, this::editPassword);
 
     }
-
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -69,6 +69,17 @@ public class MessageFromThreadHandler implements Serializable {
 
         //put whatever data you want to send, if any
         intent.putExtra(Constants.QUERY_ON_BOOKS, books);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void editPassword(Bundle bundle) {
+        boolean res = (boolean) bundle.getSerializable(Constants.EDIT_PASSWORD);
+        Intent intent = new Intent(Constants.EDIT_PASSWORD);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.EDIT_PASSWORD, res);
 
         //send broadcast
         this.currentContext.sendBroadcast(intent);

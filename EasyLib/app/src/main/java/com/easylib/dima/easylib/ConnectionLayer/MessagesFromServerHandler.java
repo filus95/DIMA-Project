@@ -72,7 +72,24 @@ public class MessagesFromServerHandler {
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
+        map.put(Constants.EDIT_PASSWORD, this::editPassword);
 
+    }
+
+    private void editPassword() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.EDIT_PROFILE, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getWaitingListForAUser() {
