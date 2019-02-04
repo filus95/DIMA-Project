@@ -40,6 +40,7 @@ import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
 import AnswerClasses.User;
+import AnswerClasses.UserPreferences;
 
 public class LibraryActivity extends AppCompatActivity {
 
@@ -127,6 +128,9 @@ public class LibraryActivity extends AppCompatActivity {
                 }
                 setFavouriteButton(libraryIsPref);
             }
+            if (key.equals(Constants.GET_USER_PREFERENCES)) {
+                // nothing, just to catch the return
+            }
         }
     };
 
@@ -141,6 +145,7 @@ public class LibraryActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
@@ -219,6 +224,7 @@ public class LibraryActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
     }
 
     @Override
@@ -274,10 +280,38 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     public void setFavourite() {
-        // TODO : call set favourite
+        AnswerClasses.UserPreferences userPreferences = new UserPreferences ();
+        userPreferences.setUser_id (userInfo.getUser_id ());
+        userPreferences.setLibrary_id_update (libraryInfo.getId_lib ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.INSERT_PREFERENCE, userPreferences);
+        }
+        setFavourite.setText("Remove Favourite");
+        setFavourite.setTextColor(Color.RED);
+        setFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeFromFavourites();
+            }
+        });
     }
 
     public void removeFromFavourites() {
-        // TODO : call removeFromFavourites
+        AnswerClasses.UserPreferences userPreferences = new UserPreferences ();
+        userPreferences.setUser_id (userInfo.getUser_id ());
+        userPreferences.setLibrary_to_delete (libraryInfo.getId_lib ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.INSERT_PREFERENCE, userPreferences);
+        }
+        setFavourite.setText("Set Favourite");
+        setFavourite.setTextColor(Color.GREEN);
+        setFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setFavourite();
+            }
+        });
     }
 }
