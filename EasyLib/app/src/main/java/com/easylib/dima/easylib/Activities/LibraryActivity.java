@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
@@ -128,8 +129,35 @@ public class LibraryActivity extends AppCompatActivity {
                 }
                 setFavouriteButton(libraryIsPref);
             }
-            if (key.equals(Constants.GET_USER_PREFERENCES)) {
-                // nothing, just to catch the return
+            if (key.equals(Constants.INSERT_PREFERENCE)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_PREFERENCE);
+                if (bool) {
+                    Toast.makeText (context, "Library Added to Favourite", Toast.LENGTH_LONG).show ();
+                    setFavourite.setText("Remove Favourite");
+                    setFavourite.setTextColor(Color.RED);
+                    setFavourite.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeFromFavourites();
+                        }
+                    });
+                } else
+                    Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
+            }
+            if (key.equals(Constants.EDIT_PROFILE)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.EDIT_PROFILE);
+                if (bool) {
+                    Toast.makeText (context, "Library Removed from Favourite", Toast.LENGTH_LONG).show ();
+                    setFavourite.setText("Set Favourite");
+                    setFavourite.setTextColor(Color.GREEN);
+                    setFavourite.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setFavourite();
+                        }
+                    });
+                } else
+                    Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
         }
     };
@@ -146,6 +174,7 @@ public class LibraryActivity extends AppCompatActivity {
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
@@ -225,6 +254,7 @@ public class LibraryActivity extends AppCompatActivity {
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
     }
 
     @Override
@@ -287,14 +317,6 @@ public class LibraryActivity extends AppCompatActivity {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.INSERT_PREFERENCE, userPreferences);
         }
-        setFavourite.setText("Remove Favourite");
-        setFavourite.setTextColor(Color.RED);
-        setFavourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                removeFromFavourites();
-            }
-        });
     }
 
     public void removeFromFavourites() {
@@ -303,15 +325,7 @@ public class LibraryActivity extends AppCompatActivity {
         userPreferences.setLibrary_to_delete (libraryInfo.getId_lib ());
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
-            mBoundService.sendMessage(Constants.INSERT_PREFERENCE, userPreferences);
+            mBoundService.sendMessage(Constants.EDIT_PROFILE, userPreferences);
         }
-        setFavourite.setText("Set Favourite");
-        setFavourite.setTextColor(Color.GREEN);
-        setFavourite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setFavourite();
-            }
-        });
     }
 }

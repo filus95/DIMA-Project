@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
         mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_home_recycle);
         mRecyclerView.setHasFixedSize(true);
         // used linear layout
-        mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
