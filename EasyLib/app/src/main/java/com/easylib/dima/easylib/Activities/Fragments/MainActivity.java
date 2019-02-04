@@ -241,8 +241,11 @@ public class MainActivity extends AppCompatActivity {
     // Method called when the SearchActivity icon is clicked
     public void goToSearch(View view) {
         Intent intent = new Intent(this, SearchActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(USER_INFO, userInfo);
+        intent.putExtras(bundle);
+        doUnbindService ();
         startActivity(intent);
-        //TODO
     }
 
     // Method called when the Notification icon is clicked
