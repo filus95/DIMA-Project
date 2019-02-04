@@ -115,22 +115,24 @@ class PasswordManager {
         return user;
     }
 
-    boolean changeForgottenPassword(String username, String email ){
+    boolean changeForgottenPassword( User user ){
         MailClass mail = new MailClass();
         String newPassword = generateRandomPassword(16);
-        byte[] salt = getNextSalt();
-        byte[] newHashPass = generatePassword( newPassword, salt);
+        byte[] newSalt = getNextSalt();
+        byte[] newHashPass = generatePassword( newPassword, newSalt);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("username", username);
-        map.put("salt", salt);
-        map.put("email", email);
+        map.put("name", user.getName());
+        map.put("surname", user.getSurname());
+        map.put("email", user.getEmail());
+        map.put("messaging_token", user.getNotification_token());
+        map.put("salt", newSalt);
         map.put("hashed_pd", newHashPass);
 
         String schemaName = "propietary_db";
         String tableName = "users";
         dbms.insertStatement(map, tableName, schemaName);
-        mail.sendMail(email, newPassword);
+        mail.sendMail(user.getEmail(), newPassword);
         return true;
     }
     /**

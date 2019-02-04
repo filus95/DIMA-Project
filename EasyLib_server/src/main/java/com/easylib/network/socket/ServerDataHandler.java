@@ -78,6 +78,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
+        map.put(Constants.EDIT_PASSWORD, this::editPassword);
 
         // Add new methods
     }
@@ -678,6 +679,17 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             e.printStackTrace();
         }
     }
+
+    private void editPassword() {
+        try {
+            User user = (User) objectInputStream.readObject();
+            socketHandler.sendViaSocket(Constants.EDIT_PASSWORD);
+            socketHandler.sendViaSocket(dbms.editPassword(user));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void passwordForgot(){
         try {

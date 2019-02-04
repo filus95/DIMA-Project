@@ -294,6 +294,40 @@ public class DatabaseManager {
 
     }
 
+    public Boolean editPassword(User user) {
+
+        byte[] salt = pm.getNextSalt();
+        byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
+
+        StringBuilder columns_name = new StringBuilder();
+        StringBuilder values = new StringBuilder();
+        int count = 0;
+        String stm = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+" " +
+                "SET ";// +"+columns_name+" = "+values",";
+        columns_name.append(stm);
+
+        columns_name.append("hashed_pd").append(" = ").append(hashPas).append(", ");
+        columns_name.append("salt").append(" = ").append(salt);
+
+        columns_name.append(" where user_id = ").append(user.getUser_id());
+
+        boolean res;
+        try {
+
+            PreparedStatement pstmt = conn.prepareStatement(columns_name.toString());
+
+            pstmt.executeUpdate();
+            pstmt.close();
+            res = true;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            res = false;
+        }
+
+        return res;
+    }
+
     private boolean updateStatement(String to_fill, Map<String, Object> map, String schema_name, String table_name) {
         boolean res = false;
         try {
@@ -983,19 +1017,22 @@ public class DatabaseManager {
     }
 
     public boolean passwordChangeAfterForgot(User user) {
-        boolean res = false;
+        boolean res;
         try {
-            String email = "";
             ResultSet rs = queryUser(user);
 
-            if ( rs.next())
-                email = rs.getString("email");
+            if ( rs.next()) {
+                user.setUser_id(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+                user.setNotification_token(rs.getString("messaging_token"));
+            }
 
             System.out.print("deleting old row...");
-            String tableName = "users";
-            deleteStatementUsers(user, tableName, Constants.PROPIETARY_DB);
+            deleteStatementUsers(user, Constants.USERS_TABLE_NAME, Constants.PROPIETARY_DB);
             System.out.print("changing forgotten password..");
-            res = pm.changeForgottenPassword(user.getUsername(), email);
+            res = pm.changeForgottenPassword(user);
         } catch (SQLException e) {
             e.printStackTrace();
             res = false;
