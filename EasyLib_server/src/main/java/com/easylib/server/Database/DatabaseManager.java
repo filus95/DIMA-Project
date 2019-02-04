@@ -12,7 +12,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.json.JSONObject;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -434,6 +433,30 @@ public class DatabaseManager {
         return getQueryResultsBooks(query);
     }
 
+    public ArrayList<Book> getReadBooks(int user_id) {
+        String query = "select book_identifier, id_lib from "+Constants.PROPIETARY_DB+".read_books" +
+                " where user_id = "+user_id;
+
+        ArrayList<Book> read_books = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()){
+                read_books.add(queryBookByIdentifier(rs.getString("book_identifier"),
+                        getSchemaNameLib(rs.getInt("id_lib"))).get(0));
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            read_books = null;
+        }
+        return read_books;
+
+
+    }
+
     /**
      * Retrieve books by title
      *
@@ -753,29 +776,18 @@ public class DatabaseManager {
 
     /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
-    public boolean reservedBookReturned( Reservation reservation){
-        String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist where " +
-                "book_identifier = "+reservation.getBook_idetifier()+" and" +
-                " waiting_position = 1";
+    public boolean reservedBookReturned( Reservation reservation ){
 
-        WaitingPerson wp = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib())).get(0);
-        Book book = wp.getBooksInWaitingList().get(0);
-        Reservation res = new Reservation();
-        res.setUser_id(wp.getUser_id());
-        res.setBook_idetifier(book.getIdentifier());
-        res.setBook_title(book.getTitle());
-        res.setQuantity(1);
-        res.setReservation_time(book.getReservation_date());
+        // insert read book
+        Map<String, Object> map = new HashMap<>();
+        map.put("user_id", reservation.getUser_id());
+        map.put("book_identifier", reservation.getBook_idetifier());
+        map.put("id_lib", reservation.getIdLib());
+        insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
 
-        String query = "delete from "+getSchemaNameLib(reservation.getIdLib())+"."+
-                Constants.RESERVATIONS_TABLE_NAME+" where " +
-                "book_identifier = '"+res.getBook_idetifier()+"'" + " and " +
-                "user_id = "+reservation.getUser_id();
-
-        queryExecution(conn, query);
-
+        //set notification
         String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
-        String book_title =queryBookByIdentifier(book.getIdentifier(), getSchemaNameLib(reservation.getIdLib()))
+        String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()))
                 .get(0)
                 .getTitle();
         String title = "Your book is available!";
@@ -783,8 +795,34 @@ public class DatabaseManager {
 
         sendNotification(title,mess, getNotificationToken(reservation.getUser_id()));
 
-        return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
+        // Waiting list flow
+        String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist where " +
+                "book_identifier = "+reservation.getBook_idetifier()+" and" +
+                " waiting_position = 1";
 
+        // Delete old reservation
+        String query = "delete from "+getSchemaNameLib(reservation.getIdLib())+"."+
+                Constants.RESERVATIONS_TABLE_NAME+" where " +
+                "book_identifier = '"+reservation.getBook_idetifier()+"'" + " and " +
+                "user_id = "+reservation.getUser_id();
+
+        queryExecution(conn, query);
+
+        ArrayList<WaitingPerson> waitingPeople = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib()));
+        WaitingPerson wp;
+        if ( waitingPeople.size() != 0 ){
+            wp = waitingPeople.get(0);
+            Book book = wp.getBooksInWaitingList().get(0);
+            Reservation res = new Reservation();
+            res.setUser_id(wp.getUser_id());
+            res.setBook_idetifier(book.getIdentifier());
+            res.setBook_title(book.getTitle());
+            res.setQuantity(1);
+            res.setReservation_time(book.getReservation_date());
+
+            return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
+        }
+        return true;
     }
 
     public boolean deleteStatementUsers( User user, String tableName, String schemaName){

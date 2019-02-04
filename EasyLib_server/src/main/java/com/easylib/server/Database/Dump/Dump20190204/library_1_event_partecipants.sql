@@ -25,13 +25,13 @@ DROP TABLE IF EXISTS `event_partecipants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `event_partecipants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `event_id` int(11) NOT NULL,
   `partecipant_id` int(11) NOT NULL,
-  PRIMARY KEY (`event_id`,`partecipant_id`),
-  UNIQUE KEY `event_partecipants_partecipant_id_uindex` (`partecipant_id`),
-  UNIQUE KEY `event_partecipants_event_id_uindex` (`event_id`),
+  PRIMARY KEY (`id`),
+  KEY `event_partecipants_events_id_fk` (`event_id`),
   CONSTRAINT `event_partecipants_events_id_fk` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,6 +40,7 @@ CREATE TABLE `event_partecipants` (
 
 LOCK TABLES `event_partecipants` WRITE;
 /*!40000 ALTER TABLE `event_partecipants` DISABLE KEYS */;
+INSERT INTO `event_partecipants` VALUES (1,1,1),(2,2,1),(3,3,1),(4,1,3);
 /*!40000 ALTER TABLE `event_partecipants` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:45
+-- Dump completed on 2019-02-04 17:07:06

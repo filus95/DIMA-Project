@@ -29,8 +29,9 @@ CREATE TABLE `ratings` (
   `user_id` int(11) NOT NULL,
   `book_identifier` varchar(255) NOT NULL,
   `rating` int(11) NOT NULL,
+  `id_lib` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +40,7 @@ CREATE TABLE `ratings` (
 
 LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
+INSERT INTO `ratings` VALUES (1,1,'1408827727',5,1),(2,1,'1408827727',5,1),(3,1,'1408827727',5,1),(4,1,'1408827727',5,1),(5,1,'1408827727',1,1),(6,1,'1408827727',1,1),(7,1,'1408827727',1,1),(8,1,'1408827727',1,1),(9,1,'1408827727',1,1),(10,1,'1408827727',1,1),(11,1,'1408827727',1,1),(12,1,'1408827727',1,1);
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -52,12 +54,24 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating` AFTER INSERT ON `ratings` FOR EACH ROW begin
 
-    update propietary_db.ratings set rating = (rating*number_of_ratings 
-                                                 + NEW.rating) / (number_of_ratings + 1)
-      where book_identifier = new.book_identifier;
+    declare ratings int;
+    select count(*) into ratings from propietary_db.ratings
+        where NEW.book_identifier = propietary_db.ratings.book_identifier;
+
+    if ratings > 0 then
+      update propietary_db.ratings set rating = (rating*number_of_ratings
+                      + NEW.rating) / (number_of_ratings + 1)
+        where book_identifier = new.book_identifier;
+
+      update propietary_db.ratings set number_of_ratings = number_of_ratings + 1
+        where book_identifier = new.book_identifier;
     
-    update propietary_db.ratings set number_of_ratings = number_of_ratings + 1
-      where book_identifier = new.book_identifier;
+    end if;
+    
+    if ratings <= 0 then
+      insert into propietary_db.ratings (book_identifier, rating, number_of_ratings)
+      values (NEW.book_identifier, NEW.rating, 1);
+    end if;
 
   end */;;
 DELIMITER ;
@@ -75,4 +89,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:43
+-- Dump completed on 2019-02-04 17:07:04

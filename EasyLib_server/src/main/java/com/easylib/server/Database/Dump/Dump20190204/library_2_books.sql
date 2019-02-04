@@ -56,7 +56,7 @@ CREATE TABLE `books` (
   `category_3` varchar(255) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `reserved` tinyint(1) NOT NULL DEFAULT '0',
-  `wating_list` tinyint(1) NOT NULL DEFAULT '0',
+  `waiting_list` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`identifier`),
   UNIQUE KEY `books_Id_uindex` (`Id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -81,4 +81,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:46
+-- Dump completed on 2019-02-04 17:07:08

@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `propietary_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `propietary_db`;
+CREATE DATABASE  IF NOT EXISTS `library_2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `library_2`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: propietary_db
+-- Host: 127.0.0.1    Database: library_2
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,28 +18,30 @@ USE `propietary_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `notifications`
+-- Table structure for table `news`
 --
 
-DROP TABLE IF EXISTS `notifications`;
+DROP TABLE IF EXISTS `news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `notifications` (
-  `notification_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `notification_text` mediumtext NOT NULL,
-  `date_time` datetime NOT NULL,
-  PRIMARY KEY (`notification_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `news` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `post_date` datetime NOT NULL,
+  `content` mediumtext NOT NULL,
+  `image_link` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `notifications`
+-- Dumping data for table `news`
 --
 
-LOCK TABLES `notifications` WRITE;
-/*!40000 ALTER TABLE `notifications` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notifications` ENABLE KEYS */;
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+INSERT INTO `news` VALUES (1,'Capelli golosi','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(2,'Libri gratis per due ore','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(3,'Ciro Esposito di gomorra qui!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it');
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -51,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:42
+-- Dump completed on 2019-02-04 17:07:09

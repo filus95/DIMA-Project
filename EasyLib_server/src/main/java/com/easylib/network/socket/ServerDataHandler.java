@@ -77,6 +77,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
+        map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
+
         // Add new methods
     }
 
@@ -136,6 +138,18 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     }
 
 
+    private void getReadBooks() {
+        try {
+            User user = (User)objectInputStream.readObject();
+
+            ArrayList<Book> read_books = dbms.getReadBooks(user.getUser_id());
+            socketHandler.sendViaSocket(Constants.GET_READ_BOOKS);
+            socketHandler.sendViaSocket(read_books);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void getAllBooks(){
         try {

@@ -160,16 +160,9 @@ public class App
 //                System.out.print(n.getTitle() + "\n");
 //
 //        }
-        Reservation reservation = new Reservation();
-        reservation.setBook_idetifier("8852068317");
-        reservation.setIdLib(1);
 
-        ArrayList<Reservation> res = dbms.getAllReservationsForBook(reservation);
-
-        for ( Reservation reser: res){
-            System.out.print(reser.getBook().getTitle());
-        }
-
+        ArrayList<Book> books = dbms.getReadBooks(15);
+        System.out.print("ciapo");
 
     // TODO: DELETE FROM booksreservations
     // ciao

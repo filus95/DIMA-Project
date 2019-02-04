@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `propietary_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `propietary_db`;
+CREATE DATABASE  IF NOT EXISTS `library_1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `library_1`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: propietary_db
+-- Host: 127.0.0.1    Database: library_1
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,34 +18,31 @@ USE `propietary_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `libraries`
+-- Table structure for table `events`
 --
 
-DROP TABLE IF EXISTS `libraries`;
+DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `libraries` (
-  `id_lib` int(11) NOT NULL AUTO_INCREMENT,
-  `lib_name` varchar(255) NOT NULL,
-  `schema_name` varchar(255) NOT NULL,
-  `image_link` varchar(255) NOT NULL,
-  `telephone_number` varchar(255) DEFAULT NULL,
-  `address` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `description` mediumtext,
-  PRIMARY KEY (`id_lib`),
-  UNIQUE KEY `libraries_schema_name_uindex` (`schema_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `image_link` varchar(255) DEFAULT NULL,
+  `seats` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `libraries`
+-- Dumping data for table `events`
 --
 
-LOCK TABLES `libraries` WRITE;
-/*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
-INSERT INTO `libraries` VALUES (1,'BCA','library_1','qqqq','021994492','via Ampere, 2','bca@poli.it','siamo forti'),(2,'Biblioteca Lambrate','library_2','qqqq','021994492','Lambrate, 6','lambrate@poli.it','siamo piu forti');
-/*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
+LOCK TABLES `events` WRITE;
+/*!40000 ALTER TABLE `events` DISABLE KEYS */;
+INSERT INTO `events` VALUES (1,'SEeeeee','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(2,'banane gratis','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(3,'banane a pagamento','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(4,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-03 00:00:00'),(5,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-03 00:00:00'),(6,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-27 17:30:00');
+/*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:42
+-- Dump completed on 2019-02-04 17:07:07

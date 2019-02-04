@@ -18,29 +18,31 @@ USE `library_2`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `event_partecipants`
+-- Table structure for table `events`
 --
 
-DROP TABLE IF EXISTS `event_partecipants`;
+DROP TABLE IF EXISTS `events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `event_partecipants` (
-  `event_id` int(11) NOT NULL,
-  `partecipant_id` int(11) NOT NULL,
-  PRIMARY KEY (`event_id`,`partecipant_id`),
-  UNIQUE KEY `event_partecipants_event_id_uindex` (`event_id`),
-  UNIQUE KEY `event_partecipants_partecipant_id_uindex` (`partecipant_id`),
-  CONSTRAINT `event_partecipants_events_id_fk` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `image_link` varchar(255) DEFAULT NULL,
+  `seats` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `event_partecipants`
+-- Dumping data for table `events`
 --
 
-LOCK TABLES `event_partecipants` WRITE;
-/*!40000 ALTER TABLE `event_partecipants` DISABLE KEYS */;
-/*!40000 ALTER TABLE `event_partecipants` ENABLE KEYS */;
+LOCK TABLES `events` WRITE;
+/*!40000 ALTER TABLE `events` DISABLE KEYS */;
+INSERT INTO `events` VALUES (1,'SEeeeee','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(2,'Viva l\'italia!!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(3,'Forza Juve!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00');
+/*!40000 ALTER TABLE `events` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -52,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:47
+-- Dump completed on 2019-02-04 17:07:10

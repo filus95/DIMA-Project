@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `library_1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `library_1`;
+CREATE DATABASE  IF NOT EXISTS `propietary_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `propietary_db`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: library_1
+-- Host: 127.0.0.1    Database: propietary_db
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,30 +18,34 @@ USE `library_1`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `news`
+-- Table structure for table `libraries`
 --
 
-DROP TABLE IF EXISTS `news`;
+DROP TABLE IF EXISTS `libraries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `news` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `post_date` datetime NOT NULL,
-  `content` mediumtext NOT NULL,
+CREATE TABLE `libraries` (
+  `id_lib` int(11) NOT NULL AUTO_INCREMENT,
+  `lib_name` varchar(255) NOT NULL,
+  `schema_name` varchar(255) NOT NULL,
   `image_link` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
+  `telephone_number` varchar(255) DEFAULT NULL,
+  `address` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `description` mediumtext,
+  PRIMARY KEY (`id_lib`),
+  UNIQUE KEY `libraries_schema_name_uindex` (`schema_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `news`
+-- Dumping data for table `libraries`
 --
 
-LOCK TABLES `news` WRITE;
-/*!40000 ALTER TABLE `news` DISABLE KEYS */;
-INSERT INTO `news` VALUES (1,'Sogno che si realizza!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(2,'Natale si avvicina!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(3,'Viva gli gnomi!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it');
-/*!40000 ALTER TABLE `news` ENABLE KEYS */;
+LOCK TABLES `libraries` WRITE;
+/*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
+INSERT INTO `libraries` VALUES (1,'BCA','library_1','https://www.trumba.com/i/DgD2Go5hDnjQbhfM4iT5WsEM.jpg','021994492','via Ampere, 2','bca@poli.it','siamo forti'),(2,'Biblioteca Lambrate','library_2','https://findingtimetowrite.files.wordpress.com/2018/09/unilibbristolwills-memorial-library.jpg','021994492','Lambrate, 6','lambrate@poli.it','siamo piu forti');
+/*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +57,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:44
+-- Dump completed on 2019-02-04 17:07:01

@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `library_2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `library_2`;
+CREATE DATABASE  IF NOT EXISTS `library_1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `library_1`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: library_2
+-- Host: 127.0.0.1    Database: library_1
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,31 +18,30 @@ USE `library_2`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `events`
+-- Table structure for table `news`
 --
 
-DROP TABLE IF EXISTS `events`;
+DROP TABLE IF EXISTS `news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `events` (
+CREATE TABLE `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `image_link` varchar(255) DEFAULT NULL,
-  `seats` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `post_date` datetime NOT NULL,
+  `content` mediumtext NOT NULL,
+  `image_link` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `events`
+-- Dumping data for table `news`
 --
 
-LOCK TABLES `events` WRITE;
-/*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'SEeeeee','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(2,'Viva l\'italia!!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(3,'Forza Juve!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00');
-/*!40000 ALTER TABLE `events` ENABLE KEYS */;
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+INSERT INTO `news` VALUES (1,'Sogno che si realizza!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(2,'Natale si avvicina!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(3,'Viva gli gnomi!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(6,'La bella vita di Chiara Babudri!','2019-01-12 17:03:13','E andiamo a ballare gratissss!',':Q_____|||');
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-26 13:37:47
+-- Dump completed on 2019-02-04 17:07:06
