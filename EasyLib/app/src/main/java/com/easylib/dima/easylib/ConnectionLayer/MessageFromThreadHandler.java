@@ -56,6 +56,7 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.NETWORK_STATE_CHANGED, this::networkStateChanged);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
+        map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
 
     }
 
@@ -68,6 +69,17 @@ public class MessageFromThreadHandler implements Serializable {
 
         //put whatever data you want to send, if any
         intent.putExtra(Constants.QUERY_ON_BOOKS, books);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void getReadBooks(Bundle bundle) {
+        ArrayList<Book> books = (ArrayList<Book>) bundle.getSerializable(Constants.GET_READ_BOOKS);
+        Intent intent = new Intent(Constants.GET_READ_BOOKS);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.GET_READ_BOOKS, books);
 
         //send broadcast
         this.currentContext.sendBroadcast(intent);

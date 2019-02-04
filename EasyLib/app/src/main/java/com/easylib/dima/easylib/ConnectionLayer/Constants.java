@@ -43,6 +43,8 @@ public class Constants {
     public static final String NETWORK_STATE_DOWN = "network_state_down";
     public static final String OLD_PROJECT_NAME = "android.support.multidex.MultiDexApplication";
     public static final String GET_EVENTS_PER_USER = "get_events_per_user";
+    public static final String GET_READ_BOOKS = "get_read_books";
+
 
 
     // Communication strings
