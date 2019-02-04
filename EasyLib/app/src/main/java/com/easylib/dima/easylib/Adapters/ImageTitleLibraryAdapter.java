@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class ImageTitleLibraryAdapter extends RecyclerView.Adapter<ImageTitleLib
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : onClick open Library Activity
+                ((MainActivity)context).showLibrary(library);
             }
         });
     }

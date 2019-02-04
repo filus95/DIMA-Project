@@ -22,12 +22,15 @@ import AnswerClasses.News;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
+    private static final String USER_INFO = "User Info";
+    AnswerClasses.User userInfo;
     ArrayList<LibraryDescriptor> libraries;
     Context context;
 
-    public HomeAdapter(Context context, ArrayList libraries) {
+    public HomeAdapter(Context context, ArrayList libraries, AnswerClasses.User userInfo) {
         this.context = context;
         this.libraries = libraries;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -72,7 +75,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(context, news);
         holder.recycleNews.setAdapter(newsAdapter);
-        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(context, events);
+        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(context, events, userInfo);
         holder.recycleEvent.setAdapter(eventsAdapter);
         ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(context, books);
         holder.recycleBooks.setAdapter(booksAdapter);

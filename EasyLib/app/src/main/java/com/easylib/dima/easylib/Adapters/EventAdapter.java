@@ -21,12 +21,15 @@ import AnswerClasses.Event;
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder> {
 
     private static final String EVENT_INFO = "Event Info";
+    private static final String USER_INFO = "User Info";
+    AnswerClasses.User userInfo;
     ArrayList<Event> events;
     Context context;
 
-    public EventAdapter(Context context, ArrayList events) {
+    public EventAdapter(Context context, ArrayList events, AnswerClasses.User userInfo) {
         this.context = context;
         this.events = events;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventHolder>
                 Intent newsIntent = new Intent (context, EventActivity.class);
                 Bundle bundle = new Bundle ();
                 bundle.putSerializable(EVENT_INFO, event);
+                bundle.putSerializable (USER_INFO, userInfo);
                 newsIntent.putExtras(bundle);
                 context.startActivity(newsIntent);
             }

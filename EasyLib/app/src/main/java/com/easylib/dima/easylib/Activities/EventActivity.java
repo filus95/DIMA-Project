@@ -11,10 +11,13 @@ import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.R;
 
 import AnswerClasses.Event;
+import AnswerClasses.User;
 
 public class EventActivity extends AppCompatActivity {
 
     private static final String EVENT_INFO = "Event Info";
+    private static final String USER_INFO = "User Info";
+    AnswerClasses.User userInfo;
     private Event event;
 
     private TextView title;
@@ -30,6 +33,7 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.event_activity);
 
         event = (Event) getIntent ().getSerializableExtra(EVENT_INFO);
+        userInfo = (User) getIntent ().getSerializableExtra (USER_INFO);
 
         // get components
         title = (TextView) findViewById(R.id.event_activity_title);

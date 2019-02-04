@@ -23,12 +23,15 @@ import AnswerClasses.Event;
 public class ImageTitleEventAdapter extends RecyclerView.Adapter<ImageTitleEventAdapter.ImageTitleEventHolder> {
 
     private static final String EVENT_INFO = "Event Info";
+    private static final String USER_INFO = "User Info";
+    AnswerClasses.User userInfo;
     ArrayList<Event> events;
     Context context;
 
-    public ImageTitleEventAdapter(Context context, ArrayList events) {
+    public ImageTitleEventAdapter(Context context, ArrayList events, AnswerClasses.User userInfo) {
         this.context = context;
         this.events = events;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class ImageTitleEventAdapter extends RecyclerView.Adapter<ImageTitleEvent
                 Intent eventIntent = new Intent (context, EventActivity.class);
                 Bundle bundle = new Bundle ();
                 bundle.putSerializable(EVENT_INFO, event);
+                bundle.putSerializable (USER_INFO, userInfo);
                 eventIntent.putExtras(bundle);
                 if(context instanceof MainActivity)
                     ((MainActivity)context).doUnbindService ();

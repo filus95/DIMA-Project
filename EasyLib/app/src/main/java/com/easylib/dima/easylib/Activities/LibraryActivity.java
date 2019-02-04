@@ -230,7 +230,7 @@ public class LibraryActivity extends AppCompatActivity {
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(this, newsList);
         newsRec.setAdapter(newsAdapter);
-        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(this, eventsList);
+        ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(this, eventsList, userInfo);
         eventsRec.setAdapter(eventsAdapter);
         ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList);
         booksRec.setAdapter(booksAdapter);
@@ -300,6 +300,7 @@ public class LibraryActivity extends AppCompatActivity {
         Intent eventIntent = new Intent (this, EventListActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable(ALL_EVENTS, libraryInfo.getLibraryContent ().getEvents ());
+        bundle.putSerializable (USER_INFO, userInfo);
         eventIntent.putExtras(bundle);
         doUnbindService();
         startActivity(eventIntent);
