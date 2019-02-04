@@ -21,7 +21,10 @@ import AnswerClasses.Book;
 
 public class BookActivity extends AppCompatActivity {
 
-    private Book book;
+    private static final String BOOK_INFO = "Book Info";
+    private static final String USER_INFO = "User Info";
+    private Book bookInfo;
+    private AnswerClasses.User userInfo;
 
     private TextView title;
     private TextView authors;
@@ -44,13 +47,8 @@ public class BookActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_activity);
 
-        // JUST FOR TEST
-        book = new Book();
-        book.setTitle("Brisingr");
-        book.setAuthors("author 1", "author 2", "", "");
-        book.setDescription("sdjkfkjsd dskfndsjkf dskfnjsdk fdsf ndsfjds fjnds fndsl fdsln fds");
-        book.setImageLink("https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png");
-        book.setAverageRating(7.5f);
+        userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
+        bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);
 
         // get components
         title = (TextView) findViewById(R.id.book_activity_title);
@@ -60,18 +58,16 @@ public class BookActivity extends AppCompatActivity {
         userRate = (EditText) findViewById(R.id.book_activity_your_rate);
         image = (ImageView) findViewById(R.id.book_activity_image);
 
-        // TODO : make checks on servations and waitingList
         // set the components
-        title.setText(book.getTitle());
-        for(String author : book.getAuthors()){
+        title.setText(bookInfo.getTitle());
+        for(String author : bookInfo.getAuthors()){
             authors.setText(authors + ", " + author);
         }
-        description.setText(book.getDescription());
-        avgRate.setText(book.getAverageRating().intValue());
+        description.setText(bookInfo.getDescription());
+        avgRate.setText(bookInfo.getAverageRating().intValue());
         Glide.with(this)
-                .load(book.getImageLink())
+                .load(bookInfo.getImageLink())
                 .into(image);
-        // TODO : make call on user ratings and set userRating
 
         // Recycle View Settings
         mRecyclerView = (RecyclerView) findViewById(R.id.book_activity_lib_recycle);

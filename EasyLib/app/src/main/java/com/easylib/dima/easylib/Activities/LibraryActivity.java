@@ -232,7 +232,7 @@ public class LibraryActivity extends AppCompatActivity {
         newsRec.setAdapter(newsAdapter);
         ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(this, eventsList, userInfo);
         eventsRec.setAdapter(eventsAdapter);
-        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList);
+        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList, userInfo);
         booksRec.setAdapter(booksAdapter);
 
         // Get user Preferences from Server to see if this library is Prefered

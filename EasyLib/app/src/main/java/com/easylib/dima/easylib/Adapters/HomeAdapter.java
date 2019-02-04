@@ -77,7 +77,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.recycleNews.setAdapter(newsAdapter);
         ImageTitleEventAdapter eventsAdapter = new ImageTitleEventAdapter(context, events, userInfo);
         holder.recycleEvent.setAdapter(eventsAdapter);
-        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(context, books);
+        ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(context, books, userInfo);
         holder.recycleBooks.setAdapter(booksAdapter);
 
         // set Button click listener

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
+import com.easylib.dima.easylib.Activities.BookActivity;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private Intent librariesListIntent;
     // Library Activity
     private static final String LIBRARY_INFO = "Library Info";
+    // Book Activity
+    private static final String BOOK_INFO = "Book Info";
     // Profile Fragment
     private static final String RATED_BOOKS_ARRAY = "Rated Books Array";
     private Boolean prefLibCalledForProfile = false;
@@ -128,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     prefLibCalledForProfile = false;
                 } else if (prefLibCalledForHome) {
                     prefLibCalledForHome = false;
-                    ((HomeFragment) fragment).setLibrariesPref(prefLibraries);
+                    ((HomeFragment) fragment).setData (prefLibraries, userInfo);
                     setFragment(fragment);
                 } else {
                     Intent prefLibsIntent = new Intent(context, LibraryListActivity.class);
@@ -181,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set Initial Fragment to be visualized
         fragment = new HomeFragment();
-        ((HomeFragment) fragment).setLibrariesPref(prefLibraries);
+        ((HomeFragment) fragment).setData (prefLibraries, userInfo);
         setFragment(fragment);
 
         // Change fragment based on icon clicked on bottomNavBar
