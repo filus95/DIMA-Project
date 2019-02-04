@@ -55,8 +55,10 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this::userSilentLoginGoogle);
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.NETWORK_STATE_CHANGED, this::networkStateChanged);
+        map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
 
     }
+
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -299,6 +301,17 @@ public class MessageFromThreadHandler implements Serializable {
 
         Intent intent = new Intent(Constants.GET_EVENTS);
         intent.putExtra(Constants.GET_EVENTS, events);
+
+        this.currentContext.sendBroadcast(intent);
+    }
+
+
+    private void getEventsPerUser(Bundle bundle) {
+        ArrayList<Event> events = (ArrayList<Event>)
+                bundle.getSerializable(Constants.GET_EVENTS_PER_USER);
+
+        Intent intent = new Intent(Constants.GET_EVENTS_PER_USER);
+        intent.putExtra(Constants.GET_EVENTS_PER_USER, events);
 
         this.currentContext.sendBroadcast(intent);
     }

@@ -70,7 +70,10 @@ public class MessagesFromServerHandler {
         map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
         map.put(Constants.EDIT_PROFILE, this::editProfile);
+        map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
+
     }
+
 
     private void getWaitingListForAUser() {
         try {
@@ -87,6 +90,23 @@ public class MessagesFromServerHandler {
             e.printStackTrace();
         }
     }
+
+    private void getEventsPerUser() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<Event> res = (ArrayList<Event>) objectInputStream.readObject();
+            b.putSerializable(Constants.GET_EVENTS_PER_USER, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void userSilentLoginGoogle() {
         try {
