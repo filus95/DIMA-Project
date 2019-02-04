@@ -160,12 +160,15 @@ public class App
 //                System.out.print(n.getTitle() + "\n");
 //
 //        }
+        Reservation reservation = new Reservation();
+        reservation.setBook_idetifier("8852068317");
+        reservation.setIdLib(1);
 
-        int user_id = 31;
-        UserPreferences userPreferences = new UserPreferences();
-        userPreferences.setUser_id(4);
-        userPreferences.setLibrary_id_update(1);
-        dbms.insertPreferences(userPreferences);
+        ArrayList<Reservation> res = dbms.getAllReservationsForBook(reservation);
+
+        for ( Reservation reser: res){
+            System.out.print(reser.getBook().getTitle());
+        }
 
 
     // TODO: DELETE FROM booksreservations

@@ -76,9 +76,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.USER_LOGIN_GOOGLE, this:: userLoginGoogle);
         map.put(Constants.USER_SILENT_LOGIN_GOOGLE, this:: userSilentLoginGoogle);
         map.put(Constants.EDIT_PROFILE, this::editProfile);
+        map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         // Add new methods
     }
-
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
@@ -120,6 +120,18 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
         } catch (IOException | ClassNotFoundException e) {
         e.printStackTrace();
+        }
+    }
+
+    private void getEventsPerUser() {
+        User user = null;
+        try {
+            user = (User) objectInputStream.readObject();
+            ArrayList<Event> res = dbms.getEventsPerUser(user.getUser_id());
+            socketHandler.sendViaSocket(Constants.GET_EVENTS_PER_USER);
+            socketHandler.sendViaSocket(res);
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
     }
 

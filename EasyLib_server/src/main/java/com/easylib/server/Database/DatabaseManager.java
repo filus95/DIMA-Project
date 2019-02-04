@@ -114,12 +114,12 @@ public class DatabaseManager {
         String query = "select * from "+schema_name+"."+Constants.RESERVATIONS_TABLE_NAME+
                 " where user_id = "+user_id;
 
-        return getQueryReservations(query);
+        return getQueryReservations(query, schema_name);
     }
 
 
 
-    private ArrayList<Reservation> getQueryReservations(String query) {
+    private ArrayList<Reservation> getQueryReservations(String query, String schema_lib) {
         ArrayList<Reservation> results = new ArrayList<>();
 
         try {
@@ -130,11 +130,16 @@ public class DatabaseManager {
                 Reservation queryResult = new Reservation();
                 queryResult.setReservation_id(rs.getInt("reservation_id"));
                 queryResult.setUser_id(rs.getInt("user_id"));
+                queryResult.setBook(queryBookByIdentifier(rs.getString("book_identifier"), schema_lib).get(0));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
-                queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
-                queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate());
                 queryResult.setQuantity(rs.getInt("quantity"));
+
+                if ( rs.getDate("starting_reservation_date") != null)
+                    queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
+
+                if ( rs.getDate("ending_reservation_date") != null)
+                    queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate());
 
                 results.add(queryResult);
             }
@@ -654,6 +659,47 @@ public class DatabaseManager {
         return to_ret;
     }
 
+    public ArrayList<Event> getEventsPerUser(int user_id) {
+
+        ArrayList<Integer> events_id = new ArrayList<>();
+        ArrayList<Event> to_ret = new ArrayList<>();
+
+        ArrayList<Integer> libs_id = getAllIdLibs();
+
+        for ( Integer lib_id: libs_id) {
+            String schema_name = getSchemaNameLib(lib_id);
+            String query = "select event_id from " + schema_name + ".event_partecipants" +
+                    " where partecipant_id = "+user_id+" order by" +
+                    "  id desc";
+            events_id = eventsIdPerUser(query);
+
+            for (Integer event_id : events_id) {
+                String query1 = "select * from " + schema_name + ".events" +
+                        " where id = "+event_id+" order by" +
+                        "  id desc";
+                to_ret = createEventsObject(to_ret, query1);
+            }
+        }
+
+        return to_ret;
+    }
+
+    private ArrayList<Integer> eventsIdPerUser(String query){
+        ArrayList<Integer> to_ret = new ArrayList<>();
+
+        try {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+            while (rs.next()){
+                to_ret.add(rs.getInt("event_id"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            to_ret = null;
+        }
+        return to_ret;
+    }
+
     private ArrayList<Event> createEventsObject(ArrayList<Event> to_ret, String query) {
         try {
             Statement st = conn.createStatement();
@@ -1082,7 +1128,7 @@ public class DatabaseManager {
         String query = "select * from "+getSchemaNameLib(res.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
                 " where book_identifier = '"+res.getBook_idetifier()+"'";
 
-        return getQueryReservations(query);
+        return getQueryReservations(query, getSchemaNameLib(res.getIdLib()));
     }
 
     public String getNotificationToken(int user_id) {
