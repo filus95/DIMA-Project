@@ -33,85 +33,14 @@ public class LibraryListActivity extends AppCompatActivity {
 
     private static final String LIBRARIES_LIST = "Libraries List";
     private static final String USER_INFO = "User Info";
-    private ArrayList<LibraryDescriptor> libraries = new ArrayList<LibraryDescriptor>();
+    private ArrayList<LibraryDescriptor> libraries;
     private User userInfo;
-    private static final String LIBRARY_IS_PREFERITE = "Library is Preferite";
     private static final String LIBRARY_INFO = "Library Info";
-    private LibraryDescriptor libraryToShow;
-    private Intent libraryIntent;
-
-    //Comunication
-    ConnectionService mBoundService;
-    private boolean mIsBound;
 
     // recycle view
     private RecyclerView mRecyclerView;
     private LibraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-
-    //For the communication Service
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBoundService = ((ConnectionService.LocalBinder)service).getService();
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBoundService = null;
-        }
-    };
-
-    public void doBindService() {
-        bindService(new Intent(LibraryListActivity.this, ConnectionService.class), mConnection,
-                Context.BIND_AUTO_CREATE);
-        mIsBound = true;
-        if(mBoundService!=null){
-            mBoundService.IsBoundable();
-        }
-    }
-
-    private void doUnbindService() {
-        if (mIsBound) {
-            // Detach our existing connection.
-            unbindService(mConnection);
-            mIsBound = false;
-        }
-    }
-
-    private String extractKey(Intent intent){
-        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
-        Iterator iterator = keySet.iterator();
-        return (String)iterator.next();
-    }
-
-    //This is the handler that will manager to process the broadcast intent
-    //This has to be created inside each activity that needs it ( almost anyone )
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String key = extractKey(intent);
-
-            if (key.equals(Constants.GET_USER_PREFERENCES)) {
-                ArrayList<LibraryDescriptor> librariesPref = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
-                Boolean libraryIsPref;
-                libraryIsPref = false;
-                for (LibraryDescriptor library : librariesPref) {
-                    if (library.getId_lib() == libraryToShow.getId_lib())
-                        libraryIsPref = true;
-                }
-                libraryIntent = new Intent(context, LibraryActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(LIBRARY_INFO, libraryToShow);
-                bundle.putSerializable(LIBRARY_IS_PREFERITE, libraryIsPref);
-                bundle.putSerializable(USER_INFO, userInfo);
-                libraryIntent.putExtras(bundle);
-                doUnbindService();
-                unregisterReceiver(mMessageReceiver);
-                startActivity(libraryIntent);
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,10 +49,6 @@ public class LibraryListActivity extends AppCompatActivity {
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         libraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(LIBRARIES_LIST);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
         // improve performance
@@ -137,26 +62,12 @@ public class LibraryListActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy ();
-        doUnbindService();
-        unregisterReceiver(mMessageReceiver);
-    }
-
     public void showLibrary(LibraryDescriptor library) {
-        libraryToShow = library;
-        if (mBoundService != null) {
-            mBoundService.setCurrentContext(getApplicationContext());
-            mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id());
-        }
+        Intent libraryIntent = new Intent(this, LibraryActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(LIBRARY_INFO, library);
+        bundle.putSerializable(USER_INFO, userInfo);
+        libraryIntent.putExtras(bundle);
+        startActivity(libraryIntent);
     }
 }
