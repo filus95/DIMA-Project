@@ -161,9 +161,19 @@ public class App
 //
 //        }
 
-        ArrayList<Book> books = dbms.getReadBooks(15);
-        System.out.print("ciapo");
+      Reservation reservation = new Reservation();
+      reservation.setUser_id(4);
+      reservation.setBook_idetifier("8852016953");
+      reservation.setBook_title("Il simbolo perduto");
+      reservation.setIdLib(1);
 
+      WaitingPersonInsert waitingPerson = new WaitingPersonInsert();
+      waitingPerson.setId_lib(1);
+      waitingPerson.setUser_id(8);
+      waitingPerson.setBook_identifier("8852016953");
+//      dbms.insertNewWaitingPerson(waitingPerson, dbms.getSchemaNameLib(1));
+      dbms.reservedBookReturned(reservation);
+//      dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
     // TODO: DELETE FROM booksreservations
     // ciao
     //        boolean res = dbms.deleteStatementReservations("1909430188", "15",

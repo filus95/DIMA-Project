@@ -830,9 +830,14 @@ public class DatabaseManager {
         sendNotification(title,mess, getNotificationToken(reservation.getUser_id()));
 
         // Waiting list flow
-        String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist where " +
-                "book_identifier = "+reservation.getBook_idetifier()+" and" +
-                " waiting_position = 1";
+        String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist " +
+                "where library_1.waitinglist.waiting_position = 1";
+
+
+//                "" +
+//                "where " +
+//                "(book_identifier = '"+reservation.getBook_idetifier()+"'"+" and" +
+//                " waiting_position = 1";
 
         // Delete old reservation
         String query = "delete from "+getSchemaNameLib(reservation.getIdLib())+"."+
@@ -840,9 +845,9 @@ public class DatabaseManager {
                 "book_identifier = '"+reservation.getBook_idetifier()+"'" + " and " +
                 "user_id = "+reservation.getUser_id();
 
-        queryExecution(conn, query);
 
         ArrayList<WaitingPerson> waitingPeople = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib()));
+        queryExecution(conn, query);
         WaitingPerson wp;
         if ( waitingPeople.size() != 0 ){
             wp = waitingPeople.get(0);
