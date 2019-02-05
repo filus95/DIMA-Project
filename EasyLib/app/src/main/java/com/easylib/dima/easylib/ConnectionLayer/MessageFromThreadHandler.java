@@ -155,9 +155,11 @@ public class MessageFromThreadHandler implements Serializable {
     }
 
     private void bookQueryAllLib(Bundle bundle) {
+        ArrayList<Book> books = (ArrayList<Book>) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
         Intent intent = new Intent(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
-        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES,
-                (boolean) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, books);
 
         this.currentContext.sendBroadcast(intent);
     }
