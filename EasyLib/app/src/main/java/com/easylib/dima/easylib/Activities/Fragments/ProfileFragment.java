@@ -1,6 +1,5 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,10 +13,8 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
-import com.easylib.dima.easylib.Activities.RatedBooksActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleLibraryAdapter;
-import com.easylib.dima.easylib.Adapters.RatedBooksAdapter;
+import com.easylib.dima.easylib.Adapters.ReadBooksAdapter;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -47,7 +44,7 @@ public class ProfileFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     // for Rated Books
     private RecyclerView mRecyclerView2;
-    private RatedBooksAdapter mAdapter2;
+    private ReadBooksAdapter mAdapter2;
     private RecyclerView.LayoutManager mLayoutManager2;
 
     @Override
@@ -72,7 +69,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                ((MainActivity)getActivity()).getRatedBooks(false);
+                ((MainActivity)getActivity()).getReadBooks (false);
             }
         });
         Button button2 = (Button) root.findViewById(R.id.profile_fragment_logout_button);
@@ -125,7 +122,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter2 = new RatedBooksAdapter(getContext(), ratedBooks);
+        mAdapter2 = new ReadBooksAdapter (getContext(), ratedBooks);
         mRecyclerView2.setAdapter(mAdapter2);
 
         return root;

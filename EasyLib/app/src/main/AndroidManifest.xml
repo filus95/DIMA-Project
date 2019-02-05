@@ -56,7 +56,7 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.Lists.NewsListActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
-        <activity android:name=".Activities.RatedBooksActivity"
+        <activity android:name=".Activities.ReadBooksActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.EventActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>

@@ -18,11 +18,10 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
-import com.easylib.dima.easylib.Activities.BookActivity;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
-import com.easylib.dima.easylib.Activities.RatedBooksActivity;
+import com.easylib.dima.easylib.Activities.ReadBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -54,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
     // Book Activity
     private static final String BOOK_INFO = "Book Info";
     // Profile Fragment
-    private static final String RATED_BOOKS_ARRAY = "Rated Books Array";
+    private static final String READ_BOOKS_ARRAY = "Read Books Array";
     private Boolean prefLibCalledForProfile = false;
-    private Boolean ratedBooksCalledForProfile = false;
+    private Boolean readBooksCalledForProfile = false;
     // Home Fragment
     private Boolean prefLibCalledForHome = false;
 
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 prefLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
                 if (prefLibCalledForProfile){
-                    getRatedBooks(true);
+                    getReadBooks (true);
                     prefLibCalledForProfile = false;
                 } else if (prefLibCalledForHome) {
                     prefLibCalledForHome = false;
@@ -143,20 +142,20 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(prefLibsIntent);
                 }
             }
-            if (key.equals(Constants.GET_USER_RATED_BOOKS)) {
-                ArrayList<Book> ratedBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_USER_RATED_BOOKS);
-                if (ratedBooksCalledForProfile) {
-                    ratedBooksCalledForProfile = false;
-                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, ratedBooks);
+            if (key.equals(Constants.GET_READ_BOOKS)) {
+                ArrayList<Book> readBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_READ_BOOKS);
+                if (readBooksCalledForProfile) {
+                    readBooksCalledForProfile = false;
+                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks);
                     setFragment(fragment);
                 } else {
-                    Intent ratedBooksIntent = new Intent(context, RatedBooksActivity.class);
+                    Intent readBooksIntent = new Intent(context, ReadBooksActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable(RATED_BOOKS_ARRAY, ratedBooks);
+                    bundle.putSerializable(READ_BOOKS_ARRAY, readBooks);
                     bundle.putSerializable(USER_INFO, userInfo);
-                    ratedBooksIntent.putExtras(bundle);
+                    readBooksIntent.putExtras(bundle);
                     doUnbindService();
-                    startActivity(ratedBooksIntent);
+                    startActivity(readBooksIntent);
                 }
             }
         }
@@ -171,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RATED_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -226,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RATED_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
     }
 
     @Override
@@ -283,11 +282,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getRatedBooks(Boolean ratedBooksCalledForProfile) {
-        this.ratedBooksCalledForProfile = ratedBooksCalledForProfile;
+    public void getReadBooks(Boolean readBooksCalledForProfile) {
+        this.readBooksCalledForProfile = readBooksCalledForProfile;
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
-            mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id());
+            mBoundService.sendMessage(Constants.GET_READ_BOOKS, userInfo);
         }
     }
 
