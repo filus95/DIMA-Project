@@ -317,14 +317,14 @@ public class DatabaseManager {
         if ( user.getName() != null ){
             if (count > 0)
                 columns_name.append(", ");
-            columns_name.append("name").append(" = ").append(user.getName());
+            columns_name.append("name").append(" = '").append(user.getName()).append("'");
             count++;
         }
 
         if ( user.getSurname() != null){
             if (count > 0 )
                 columns_name.append(", ");
-            columns_name.append("surname").append(" = ").append(user.getSurname());
+            columns_name.append("surname").append(" = '").append(user.getSurname()).append("'");
 
         }
 

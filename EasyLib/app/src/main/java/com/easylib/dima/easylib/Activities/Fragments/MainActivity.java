@@ -27,6 +27,7 @@ import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String READ_BOOKS_ARRAY = "Read Books Array";
     private Boolean prefLibCalledForProfile = false;
     private Boolean readBooksCalledForProfile = false;
+    private ArrayList<Book> readBooks;
     // Home Fragment
     private Boolean prefLibCalledForHome = false;
 
@@ -143,11 +145,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             if (key.equals(Constants.GET_READ_BOOKS)) {
-                ArrayList<Book> readBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_READ_BOOKS);
+                readBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_READ_BOOKS);
                 if (readBooksCalledForProfile) {
                     readBooksCalledForProfile = false;
-                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks);
-                    setFragment(fragment);
+                    // Send Login Info to Server to recieve back userInfo
+                    User user = new User ();
+                    user.setUser_id (userInfo.getUser_id ());
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext ());
+                        mBoundService.sendMessage(Constants.USER_LOGIN, user);
+                    }
                 } else {
                     Intent readBooksIntent = new Intent(context, ReadBooksActivity.class);
                     Bundle bundle = new Bundle();
@@ -157,6 +164,12 @@ public class MainActivity extends AppCompatActivity {
                     doUnbindService();
                     startActivity(readBooksIntent);
                 }
+            }
+            if (key.equals(Constants.USER_LOGIN)) {
+                User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
+                userInfo = user;
+                ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks);
+                setFragment(fragment);
             }
         }
     };
@@ -171,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -226,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
     }
 
     @Override
@@ -263,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Called to show LibraryActivity
     public void showLibrary(LibraryDescriptor library) {
         Intent libraryActivityIntent = new Intent(this, LibraryActivity.class);
         Bundle bundle = new Bundle();
@@ -290,6 +306,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Called to set data when Profile Fragment has to be shown
+    public void setProfileData(User userInfo, ArrayList<LibraryDescriptor> prefLibraries, ArrayList<Book> readBooks) {
+
+    }
+
+    // Called from EditProfileActivity to set new UserInfo if changed
+    public void setUserInfo(User userInfo) {
+        this.userInfo = userInfo;
+    }
+
+    // Called after LOGOUT to go back to Login
     public void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

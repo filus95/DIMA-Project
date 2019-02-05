@@ -41,6 +41,8 @@ public class ReadBooksActivity extends AppCompatActivity {
     ConnectionService mBoundService;
     private boolean mIsBound;
 
+    // TODO CALL on Book... see if service bind needed
+
     //For the communication Service
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

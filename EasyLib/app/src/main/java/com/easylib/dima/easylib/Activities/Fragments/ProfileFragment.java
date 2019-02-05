@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.easylib.dima.easylib.Activities.EditProfileActivity;
 import com.easylib.dima.easylib.Adapters.ImageTitleLibraryAdapter;
 import com.easylib.dima.easylib.Adapters.ReadBooksAdapter;
 import com.easylib.dima.easylib.R;
@@ -27,6 +29,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ProfileFragment extends Fragment {
 
+    private static final String USER_INFO = "User Info";
     private ArrayList<LibraryDescriptor> prefLibraries;
     private ArrayList<Book> ratedBooks;
     private User userInfo;
@@ -89,7 +92,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                // TODO : implement edit profile activity
+                Intent editProfileIntent = new Intent(getContext (), EditProfileActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(USER_INFO, userInfo);
+                editProfileIntent.putExtras(bundle);
+                ((MainActivity)getActivity ()).doUnbindService ();
+                startActivity(editProfileIntent);
             }
         });
 
