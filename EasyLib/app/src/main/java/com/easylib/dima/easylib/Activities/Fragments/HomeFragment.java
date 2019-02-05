@@ -1,7 +1,6 @@
 package com.easylib.dima.easylib.Activities.Fragments;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Adapters.HomeAdapter;
 import com.easylib.dima.easylib.R;
 
@@ -24,6 +22,7 @@ import AnswerClasses.LibraryDescriptor;
 public class HomeFragment extends Fragment {
 
     private ArrayList<LibraryDescriptor> librariesPref;
+    private AnswerClasses.User userInfo;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -56,13 +55,14 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
         // TODO : change adapter construction
-        mAdapter = new HomeAdapter(getContext(), librariesPref);
+        mAdapter = new HomeAdapter(getContext(), librariesPref, userInfo);
         mRecyclerView.setAdapter(mAdapter);
 
         return root;
     }
 
-    public void setLibrariesPref(ArrayList<LibraryDescriptor> libraries) {
-        librariesPref = libraries;
+    public void setData(ArrayList<LibraryDescriptor> libraries, AnswerClasses.User userInfo) {
+        this.librariesPref = libraries;
+        this.userInfo = userInfo;
     }
 }
