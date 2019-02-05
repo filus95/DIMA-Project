@@ -61,6 +61,24 @@ public class MessagesFromServerHandler {
         map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
+        map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
+
+    }
+
+    private void librarianLogin() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            User res = (User) objectInputStream.readObject();
+            b.putSerializable(Constants.LIBRARIAN_LOGIN, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getWaitingListForAUser() {

@@ -15,6 +15,7 @@ import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
 import AnswerClasses.Reservation;
+import AnswerClasses.User;
 import AnswerClasses.WaitingPerson;
 
 public class MessageFromThreadHandler implements Serializable{
@@ -43,7 +44,10 @@ public class MessageFromThreadHandler implements Serializable{
         map.put(Constants.RESERVED_BOOK_TAKEN, this::reservedBookTaken);
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
+        map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
+
     }
+
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -55,6 +59,15 @@ public class MessageFromThreadHandler implements Serializable{
         intent.putExtra(Constants.QUERY_ON_BOOKS, books);
 
         //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+
+    private void librarianLogin(Bundle bundle) {
+        Intent intent = new Intent(Constants.LIBRARIAN_LOGIN);
+        intent.putExtra(Constants.LIBRARIAN_LOGIN,
+                bundle.getSerializable(Constants.LIBRARIAN_LOGIN));
+
         this.currentContext.sendBroadcast(intent);
     }
 
