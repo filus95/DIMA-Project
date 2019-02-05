@@ -153,8 +153,6 @@ public class RegisterActivity extends Activity {
     public void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        doUnbindService ();
-        this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
     }
 }

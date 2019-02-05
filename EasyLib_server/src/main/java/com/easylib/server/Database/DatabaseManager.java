@@ -464,8 +464,7 @@ public class DatabaseManager {
 
 
     public ArrayList<Book> queryAllBooks(String schema_lib, int lib_id){
-        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3," +
-                " author_1, author_2, author_3, author_4, imageLinks " +
+        String query = "select * " +
                 "from "+schema_lib+".books order by id desc";
 
         return getQueryResultsBooks(query, lib_id);
@@ -479,7 +478,7 @@ public class DatabaseManager {
      * @return it must be casted to the book data type in the calling function
      */
     public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib, int lib_id) {
-        String query = "select identifier, title, publisher, imageLinks, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
+        String query = "select * " +
                 "from "+schema_lib+".books where lower(author_1) = '"+author+"'" + " or lower(author_2) ='"+author+"'"
                 +" or lower(author_3)='"+author+"' or lower(author_4)='"+author+"'";
 

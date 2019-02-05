@@ -241,8 +241,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
         startService(new Intent(LoginActivity.this, CheckConnectionService.class));
