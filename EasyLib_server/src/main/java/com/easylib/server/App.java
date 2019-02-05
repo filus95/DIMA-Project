@@ -79,7 +79,7 @@ public class App
 
 //        dbms.insertNewReservation(reservation, "library_1");
 
-//        dbms.reservedBookReturned(reservation);
+//        dbms.removeReservation(reservation);
         //        Reservation reservation = new Reservation();
         //        reservation.setUser_id(4);
         //        reservation.setStart_res_date(new Date(2,2,2));
@@ -192,7 +192,7 @@ public class App
 //      waitingPerson.setUser_id(8);
 //      waitingPerson.setBook_identifier("8852016953");
 //      dbms.insertNewWaitingPerson(waitingPerson, dbms.getSchemaNameLib(1));
-//      dbms.reservedBookReturned(reservation);
+//      dbms.removeReservation(reservation);
 //      dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
     // TODO: DELETE FROM booksreservations
     // ciao

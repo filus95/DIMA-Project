@@ -294,24 +294,43 @@ public class DatabaseManager {
 
     }
 
-    public Boolean editPassword(User user) {
+    public Boolean editProfileInfo(User user) {
 
-        byte[] salt = pm.getNextSalt();
-        byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
-
+        boolean res;
         StringBuilder columns_name = new StringBuilder();
-        StringBuilder values = new StringBuilder();
-        int count = 0;
-        String stm = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+" " +
+        String stm = "UPDATE " + Constants.PROPIETARY_DB + "." + Constants.USERS_TABLE_NAME + " " +
                 "SET ";// +"+columns_name+" = "+values",";
         columns_name.append(stm);
+        int count = 0;
 
-        columns_name.append("hashed_pd").append(" = ").append(hashPas).append(", ");
-        columns_name.append("salt").append(" = ").append(salt);
+        if ( user.getPlainPassword() != null) {
+            byte[] salt = pm.getNextSalt();
+            byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
+
+
+
+            columns_name.append("hashed_pd").append(" = ").append(hashPas).append(", ");
+            columns_name.append("salt").append(" = ").append(salt);
+            count++;
+        }
+
+        if ( user.getName() != null ){
+            if (count > 0)
+                columns_name.append(", ");
+            columns_name.append("name").append(" = ").append(user.getName());
+            count++;
+        }
+
+        if ( user.getSurname() != null){
+            if (count > 0 )
+                columns_name.append(", ");
+            columns_name.append("surname").append(" = ").append(user.getSurname());
+
+        }
 
         columns_name.append(" where user_id = ").append(user.getUser_id());
 
-        boolean res;
+        // Statement execution
         try {
 
             PreparedStatement pstmt = conn.prepareStatement(columns_name.toString());
@@ -809,15 +828,16 @@ public class DatabaseManager {
 
     /////////////////////////////////////////////DELETION///////////////////////////////////////////////////////////////
 
-    public boolean reservedBookReturned( Reservation reservation ){
+    public boolean removeReservation(Reservation reservation, boolean book_returned ){
 
         // insert read book
-        Map<String, Object> map = new HashMap<>();
-        map.put("user_id", reservation.getUser_id());
-        map.put("book_identifier", reservation.getBook_idetifier());
-        map.put("id_lib", reservation.getIdLib());
-        insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
-
+        if ( book_returned ) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("user_id", reservation.getUser_id());
+            map.put("book_identifier", reservation.getBook_idetifier());
+            map.put("id_lib", reservation.getIdLib());
+            insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
+        }
         //set notification
         String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
         String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()),
@@ -863,6 +883,13 @@ public class DatabaseManager {
             return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
         }
         return true;
+    }
+
+    public boolean removeWaitingPerson(WaitingPersonInsert wp, String schema_name) {
+        String query = "delete from "+schema_name+"."+Constants.WAITING_LIST_TABLE_NAME+" where " +
+                "user_id = "+wp.getUser_id()+" and book_identifier = "+wp.getBook_identifier();
+
+        return queryExecution(conn, query);
     }
 
     public boolean deleteStatementUsers( User user, String tableName, String schemaName){
@@ -1083,10 +1110,10 @@ public class DatabaseManager {
         return user;
     }
 
-    public User checkCorrectPassword(User user) {
+    public User checkCorrectPassword(User user, String table_name, boolean librarian) {
         User to_ret = null;
         try {
-            to_ret = pm.isExpectedPassword(user);
+            to_ret = pm.isExpectedPassword(user, table_name, librarian);
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.print("QUERY ERROR!");

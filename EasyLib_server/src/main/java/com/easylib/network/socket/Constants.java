@@ -6,7 +6,10 @@ package com.easylib.network.socket;
  */
 public class Constants {
 
-    public static final String READ_BOOKS_TABLE = "read_books";
+    static final String LIBRARIAN_LOGIN = "librarian_login";
+    static final String EDIT_PROFILE_INFO = "edit_profile_info";
+    static final String REMOVE_RESERVATION = "remove_reservation" ;
+    static final String REMOVE_WAITING_PERSON = "remove_waiting_person";
     static final String GET_READ_BOOKS = "get_read_books";
     static final String EDIT_PASSWORD = "edit_password";
     static final String GET_EVENTS_PER_USER = "get_events_per_user";
@@ -71,6 +74,7 @@ public class Constants {
 
     public static final String SERVER_KEY = "AAAAhmRahuY:APA91bHb85Vko2UAgMKbXJuSmH7477oWLoLRuhgvknl8h1o-" +
             "M14C7OFGX99sYvVI9Aa_o0uwxZNmKu5gwKqP4y2tc5XbAKZ0uQ-PdnHXF3IL9VBS3IS8lo8GIj3pheqLmxLipS5lJrrp";
+    public static final String READ_BOOKS_TABLE = "read_books";
 
 
 

@@ -80,9 +80,9 @@ class PasswordManager {
      *
      * @return true if the given password and salt match the hashed value, false otherwise
      */
-    User isExpectedPassword(User user) throws SQLException {
+    User isExpectedPassword(User user, String table_name, boolean librarian) throws SQLException {
 
-        String sql = "SELECT users.name, surname, user_id, salt, hashed_pd FROM propietary_db.users WHERE email = ?";
+        String sql = "SELECT * FROM propietary_db."+table_name+" WHERE email = ?";
 
         PreparedStatement st = this.conn.prepareStatement(sql);
         st.setString(1, user.getEmail());
@@ -94,9 +94,17 @@ class PasswordManager {
             byte[] salt = rs.getBytes("salt");
             byte[] pwdHash = hash(user.getPlainPassword().toCharArray(), salt);
             Arrays.fill(user.getPlainPassword().toCharArray(), Character.MIN_VALUE);
-            user.setUser_id(rs.getInt("user_id"));
-            user.setName(rs.getString("name"));
-            user.setSurname(rs.getString("surname"));
+
+            if ( !librarian ) {
+                user.setUser_id(rs.getInt("user_id"));
+                user.setName(rs.getString("name"));
+                user.setSurname(rs.getString("surname"));
+            }
+
+            // in the case of the librarian the user_id is equivalent to the library_id
+            else {
+                user.setUser_id(rs.getInt("id_lib"));
+            }
 
             //check if the stored hashed password is the same of that one inserted
             for (int i = 0; i < pwdHash.length; i++) {

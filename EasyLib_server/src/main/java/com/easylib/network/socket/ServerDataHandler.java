@@ -4,13 +4,6 @@ package com.easylib.network.socket; /**
 
 import AnswerClasses.*;
 import com.easylib.server.Database.DatabaseManager;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.json.JSONObject;
-import org.json.XML;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -78,7 +71,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.EDIT_PROFILE, this::editProfile);
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
-        map.put(Constants.EDIT_PASSWORD, this::editPassword);
+        map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
+        map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
+        map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
+        map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
 
         // Add new methods
     }
@@ -168,12 +164,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     }
 
     private void newNotificationToken() {
-        Boolean res;
         try {
             User user = (User) objectInputStream.readObject();
-            res = dbms.insertNotificationToken(user);
+            dbms.insertNotificationToken(user);
             socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
-            dbms.sendNotification("test", "test", user.getNotification_token());
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -441,6 +435,36 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         socketHandler.sendViaSocket(res);
     }
 
+    private void removeWaitingPerson() {
+        boolean res;
+        try {
+
+            WaitingPersonInsert wp = (WaitingPersonInsert) objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(wp.getId_lib());
+
+            res = dbms.removeWaitingPerson(wp, schema_name);
+
+            socketHandler.sendViaSocket(Constants.REMOVE_WAITING_PERSON);
+            socketHandler.sendViaSocket(res);
+            String title;
+            String mess;
+
+            if ( res ) {
+                title =  "Deletion in waiting list confirmed";
+                mess = "You have been correctly deleted your in the waiting token!";
+            }
+            else{
+                title = "Deletion in waiting list denied";
+                mess = "Sorry, your deletion in the waiting list have been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(wp.getUser_id()));
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void insertWaitingPerson(){
         boolean res;
         try {
@@ -596,6 +620,35 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         socketHandler.sendViaSocket(res);
     }
 
+    private void removeReservation() {
+        boolean res;
+        try {
+            String title;
+            String mess;
+
+            Reservation reservation = (Reservation) objectInputStream.readObject();
+            res = dbms.removeReservation(reservation, false);
+
+            socketHandler.sendViaSocket(Constants.REMOVE_RESERVATION);
+            socketHandler.sendViaSocket(res);
+
+            if ( res ) {
+                title =  "";
+                mess = "The book's reservation have been successfully removed";
+            }
+            else{
+                title = "Removal book's reservation denied";
+                mess = "Sorry, the book's reservation removal has been denied!";
+            }
+
+            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
+
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void reservedBookReturned(){
         boolean res;
         try {
@@ -603,7 +656,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             String mess;
 
             Reservation reservation = (Reservation) objectInputStream.readObject();
-            res = dbms.reservedBookReturned(reservation);
+            res = dbms.removeReservation(reservation, true);
 
             socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
             socketHandler.sendViaSocket(res);
@@ -667,25 +720,39 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
 
-    private void userLogin(){
+
+    private void librarianLogin() {
         try {
             User user = (User) objectInputStream.readObject();
             socketHandler.sendViaSocket(Constants.USER_LOGIN);
+            String table_name = "librarians";
 
-            if ( user.getUser_id() != -1 ){
-                socketHandler.sendViaSocket(dbms.getUser(user));
-            } else
-                socketHandler.sendViaSocket(dbms.checkCorrectPassword(user));
+            socketHandler.sendViaSocket(dbms.checkCorrectPassword(user,table_name,true));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void editPassword() {
+    private void userLogin(){
         try {
             User user = (User) objectInputStream.readObject();
-            socketHandler.sendViaSocket(Constants.EDIT_PASSWORD);
-            socketHandler.sendViaSocket(dbms.editPassword(user));
+            socketHandler.sendViaSocket(Constants.USER_LOGIN);
+            String table_name = "users";
+
+            if ( user.getUser_id() != -1 ){
+                socketHandler.sendViaSocket(dbms.getUser(user));
+            } else
+                socketHandler.sendViaSocket(dbms.checkCorrectPassword(user, table_name, false));
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void editProfileInfo() {
+        try {
+            User user = (User) objectInputStream.readObject();
+            socketHandler.sendViaSocket(Constants.EDIT_PROFILE_INFO);
+            socketHandler.sendViaSocket(dbms.editProfileInfo(user));
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
