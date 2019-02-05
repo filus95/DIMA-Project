@@ -161,18 +161,21 @@ public class App
 //
 //        }
 
+        Query query = new Query();
+        query.setTitle("origin");
+        ArrayList<Book> books = dbms.queryBooksByTitle(query.getTitle(), dbms.getSchemaNameLib(1), 1);
       Reservation reservation = new Reservation();
-      reservation.setUser_id(4);
-      reservation.setBook_idetifier("8852016953");
-      reservation.setBook_title("Il simbolo perduto");
-      reservation.setIdLib(1);
-
-      WaitingPersonInsert waitingPerson = new WaitingPersonInsert();
-      waitingPerson.setId_lib(1);
-      waitingPerson.setUser_id(8);
-      waitingPerson.setBook_identifier("8852016953");
+//      reservation.setUser_id(4);
+//      reservation.setBook_idetifier("8852016953");
+//      reservation.setBook_title("Il simbolo perduto");
+//      reservation.setIdLib(1);
+//
+//      WaitingPersonInsert waitingPerson = new WaitingPersonInsert();
+//      waitingPerson.setId_lib(1);
+//      waitingPerson.setUser_id(8);
+//      waitingPerson.setBook_identifier("8852016953");
 //      dbms.insertNewWaitingPerson(waitingPerson, dbms.getSchemaNameLib(1));
-      dbms.reservedBookReturned(reservation);
+//      dbms.reservedBookReturned(reservation);
 //      dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
     // TODO: DELETE FROM booksreservations
     // ciao
@@ -187,7 +190,7 @@ public class App
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);
-        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name(), id_lib);
         ld.setLibraryContent(lc);
         return ld;
     }

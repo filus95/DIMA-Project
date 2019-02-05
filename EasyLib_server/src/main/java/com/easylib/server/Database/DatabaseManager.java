@@ -109,16 +109,16 @@ public class DatabaseManager {
         return insertStatement(map, Constants.RESERVATIONS_TABLE_NAME, schema_name);
     }
 
-    public ArrayList<Reservation> getReservations(int user_id, String schema_name) {
+    public ArrayList<Reservation> getReservations(int user_id, String schema_name, int id_lib) {
         String query = "select * from "+schema_name+"."+Constants.RESERVATIONS_TABLE_NAME+
                 " where user_id = "+user_id;
 
-        return getQueryReservations(query, schema_name);
+        return getQueryReservations(query, schema_name, id_lib);
     }
 
 
 
-    private ArrayList<Reservation> getQueryReservations(String query, String schema_lib) {
+    private ArrayList<Reservation> getQueryReservations(String query, String schema_lib, int id_lib) {
         ArrayList<Reservation> results = new ArrayList<>();
 
         try {
@@ -129,7 +129,7 @@ public class DatabaseManager {
                 Reservation queryResult = new Reservation();
                 queryResult.setReservation_id(rs.getInt("reservation_id"));
                 queryResult.setUser_id(rs.getInt("user_id"));
-                queryResult.setBook(queryBookByIdentifier(rs.getString("book_identifier"), schema_lib).get(0));
+                queryResult.setBook(queryBookByIdentifier(rs.getString("book_identifier"), schema_lib,id_lib).get(0));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
                 queryResult.setQuantity(rs.getInt("quantity"));
@@ -213,12 +213,12 @@ public class DatabaseManager {
             String query = "select * from " + schema_name + ".waitinglist where " +
                     "user_id = " + user_id;
 
-            result = getQueryResultsWaitingListUser(query, schema_name, result);
+            result = getQueryResultsWaitingListUser(query, schema_name, result, id_lib);
         }
         return result;
     }
 
-    private WaitingPerson getQueryResultsWaitingListUser(String query, String schema_name, WaitingPerson result) {
+    private WaitingPerson getQueryResultsWaitingListUser(String query, String schema_name, WaitingPerson result, int id_lib) {
 
         try {
             ArrayList<Book> books = new ArrayList<>();
@@ -227,7 +227,7 @@ public class DatabaseManager {
             boolean first = true;
             while (rs.next()){
                 Book temp = queryBookByIdentifier(rs.getString("book_identifier"),
-                        schema_name).get(0);
+                        schema_name, id_lib).get(0);
                 temp.setWaiting_position(rs.getInt("waiting_position"));
                 temp.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime());
                 temp.setQuantity_reserved(rs.getInt("quantity"));
@@ -247,11 +247,11 @@ public class DatabaseManager {
         return result;
     }
 
-    public ArrayList<WaitingPerson> getWaitingList(String book_id, String schema_name){
+    public ArrayList<WaitingPerson> getWaitingList(String book_id, String schema_name, int id_lib){
         String query = "select * from "+schema_name+".waitinglist where " +
                 "book_identifier = "+book_id;
 
-        return getQueryResultsWaitingListBook(query, schema_name);
+        return getQueryResultsWaitingListBook(query, schema_name, id_lib);
     }
 
     public boolean insertPreferences(UserPreferences up){
@@ -444,12 +444,12 @@ public class DatabaseManager {
     ///////////////////////////////////// RETRIEVING DATA FROM LIB DB///////////////////////////////////////////////////
 
 
-    public ArrayList<Book> queryAllBooks(String schema_lib){
+    public ArrayList<Book> queryAllBooks(String schema_lib, int lib_id){
         String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3," +
                 " author_1, author_2, author_3, author_4, imageLinks " +
                 "from "+schema_lib+".books order by id desc";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
     /**
@@ -459,12 +459,12 @@ public class DatabaseManager {
      * @param schema_lib
      * @return it must be casted to the book data type in the calling function
      */
-    public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib) {
+    public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib, int lib_id) {
         String query = "select identifier, title, publisher, imageLinks, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+".books where author_1 = '"+author+"'" + " or author_2='"+author+"'"
-                +" or author_3='"+author+"' or author_4='"+author+"'";
+                "from "+schema_lib+".books where lower(author_1) = '"+author+"'" + " or lower(author_2) ='"+author+"'"
+                +" or lower(author_3)='"+author+"' or lower(author_4)='"+author+"'";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> getReadBooks(int user_id) {
@@ -479,7 +479,7 @@ public class DatabaseManager {
 
             while (rs.next()){
                 read_books.add(queryBookByIdentifier(rs.getString("book_identifier"),
-                        getSchemaNameLib(rs.getInt("id_lib"))).get(0));
+                        getSchemaNameLib(rs.getInt("id_lib")),0).get(0));
 
             }
         } catch (SQLException e) {
@@ -498,12 +498,11 @@ public class DatabaseManager {
      * @param schema_lib
      * @return
      */
-    public ArrayList<Book> queryBooksByTitle(String title, String schema_lib) {
-        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3," +
-                " author_1, author_2, author_3, author_4 " +
-                "from "+schema_lib+".books where title = '"+title+"'";
+    public ArrayList<Book> queryBooksByTitle(String title, String schema_lib, int lib_id) {
+        String query = "select *" +
+                "from "+schema_lib+".books where lower(title) = '"+title+"'";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
     /**
@@ -513,54 +512,51 @@ public class DatabaseManager {
      * @param schema_lib
      * @return
      */
-    public ArrayList<Book> queryBooksByCategory(String category, String schema_lib) {
-        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4," +
-                "category_1, category_2, category_3 "+
-        "from "+schema_lib+".books where category_1 ='"+category+"' or category_2='"+category+"' or category_3='"+category+"'";
+    public ArrayList<Book> queryBooksByCategory(String category, String schema_lib, int lib_id) {
+        String query = "select * "+
+        "from "+schema_lib+".books where lower(category_1) ='"+category+"' or lower(category_2)='"+category+"' or " +
+                "lower(category_3)='"+category+"'";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
-    public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib) {
-        String query = "select identifier, title, imageLinks, publisher, author_1, auhtor_2, author_3, author_4, " +
-                "category_1, category_2, category_3 " +
-                "from "+schema_lib+".books where ( category_1 ='" + category + "' or category_2='" + category + "' " +
-                "or category_3='"
-                + category + "') and ( author_1 = '"+author+"'" + "or author_2='"+author+"'" +
-                "or author_3='"+author+"'or author_4='"+author+"')";
+    public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib, int lib_id) {
+        String query = "select *" +
+                "from "+schema_lib+".books where ( lower(category_1) ='" + category + "' or lower(category_2)='" + category + "' " +
+                "or lower(category_3)='"
+                + category + "') and ( lower(author_1) = '"+author+"'" + "or lower(author_2)='"+author+"'" +
+                "or lower(author_3)='"+author+"'or lower(author_4)='"+author+"')";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
-    public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib) {
-        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4," +
-                " category_1, category_2, category_3 " +
-                "from "+schema_lib+".books where title = '"+title+"' and ( author_1 = '"+author+"'" + " " +
-                "or author_2='"+author+"'" +
-                " or author_3='"+author+"' or author_4='"+author+"')";
+    public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib, int lib_id) {
+        String query = "select * " +
+                "from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(author_1) = '"+author+"'" + " " +
+                "or lower(author_2)='"+author+"'" +
+                " or lower(author_3)='"+author+"' or lower(author_4)='"+author+"')";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
-    public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib) {
-        String query = "select identifier, title, imageLinks, publisher, author_1, author_2, author_3, author_4, " +
-                "category_1, category_2, category_3 " +
-                " from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " " +
-                "or category_2='"+category+"'" +
-                " or category_3='"+category+"')";
+    public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib, int lib_id) {
+        String query = "select * " +
+                " from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(category_1) = '"+category+"'" + " " +
+                "or lower(category_2) ='"+category+"'" +
+                " or lower(category_3)='"+category+"')";
 
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
-    public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib) {
-        String query = "select identifier, title, publisher, imageLinks, author_1, author_2, author_3, author_4," +
-                " category_1, category_2, category_3 " +
-                "from "+schema_lib+".books where title = '"+title+"' and ( category_1 = '"+category+"'" + " or category_2='"+category+"'" +
-                " or category_3='"+category+"') and (author_1 = '"+author+"'" + " or author_2='"+author+"' or" +
-                " author_3='"+author+"' or author_4='"+author+"')";
+    public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib, int lib_id) {
+        String query = "select * " +
+                "from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(category_1) = '"+category+"'" + " or " +
+                "lower(category_2)='"+category+"'" +
+                " or lower(category_3)='"+category+"') and (lower(author_1) = '"+author+"'" + " or lower(author_2)='"+author+"' or" +
+                " lower(author_3)='"+author+"' or lower(author_4)='"+author+"')";
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
     /**
@@ -569,7 +565,7 @@ public class DatabaseManager {
      * @param query
      * @return an array of objects and who receives the result knows the real datatype and cast its content
      */
-    private ArrayList<Book> getQueryResultsBooks(String query) {
+    private ArrayList<Book> getQueryResultsBooks(String query, int lib_id) {
         ArrayList<Book> results = new ArrayList<>();
 
         try {
@@ -590,6 +586,7 @@ public class DatabaseManager {
                         (rs.getString("author_3")),
                         (rs.getString("author_4")));
 
+                queryResult.setIdLibrary(lib_id);
                 // Create JSON Array from String
                 if ( rs.getString("imageLinks") != null ) {
                     JsonParser jsonParser = new JsonParser();
@@ -630,7 +627,7 @@ public class DatabaseManager {
         return results;
     }
 
-    private ArrayList<WaitingPerson> getQueryResultsWaitingListBook(String query, String schema_name){
+    private ArrayList<WaitingPerson> getQueryResultsWaitingListBook(String query, String schema_name, int id_lib){
         ArrayList<WaitingPerson> results = new ArrayList<>();
 
         try {
@@ -640,7 +637,7 @@ public class DatabaseManager {
             while (rs.next()){
                 WaitingPerson queryResult = new WaitingPerson();
                 Book book = queryBookByIdentifier(rs.getString("book_identifier"),
-                        schema_name).get(0);
+                        schema_name, id_lib).get(0);
                 book.setWaiting_position(rs.getInt("waiting_position"));
                 book.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime());
                 book.setQuantity_reserved(rs.getInt("quantity"));
@@ -821,7 +818,8 @@ public class DatabaseManager {
 
         //set notification
         String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
-        String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()))
+        String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()),
+                reservation.getUser_id())
                 .get(0)
                 .getTitle();
         String title = "Your book is available!";
@@ -846,7 +844,8 @@ public class DatabaseManager {
                 "user_id = "+reservation.getUser_id();
 
 
-        ArrayList<WaitingPerson> waitingPeople = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib()));
+        ArrayList<WaitingPerson> waitingPeople = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib()),
+                reservation.getIdLib());
         queryExecution(conn, query);
         WaitingPerson wp;
         if ( waitingPeople.size() != 0 ){
@@ -935,8 +934,8 @@ public class DatabaseManager {
     }
 
 
-    public LibraryContent getLibraryContent(String schema_name) {
-        ArrayList<Book> books = queryAllBooks(schema_name);
+    public LibraryContent getLibraryContent(String schema_name, int id_lib) {
+        ArrayList<Book> books = queryAllBooks(schema_name, id_lib);
         ArrayList<News> news = getAllNews(schema_name);
         ArrayList<Event> events = getAllEvents(schema_name);
 
@@ -1115,15 +1114,15 @@ public class DatabaseManager {
         return user;
     }
 
-    public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib) {
+    public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib, int lib_id) {
         String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
                 "from "+schema_lib+".books where identifier = "+ identifier;
 
-        return getQueryResultsBooks(query);
+        return getQueryResultsBooks(query, lib_id);
     }
 
 
-    public ArrayList<Book> getAllUserRatedBooksForLib(Integer user_id, String schema_lib) {
+    public ArrayList<Book> getAllUserRatedBooksForLib(Integer user_id, String schema_lib, int lib_id) {
         String query = "select book_identifier from "+schema_lib+".ratings where " +
                 "user_id = "+user_id;
 
@@ -1134,7 +1133,7 @@ public class DatabaseManager {
                     " author_3, author_4 " +
                     "from " + schema_lib + ".books where identifier = "+identifier;
 
-            result.addAll(getQueryResultsBooks(query));
+            result.addAll(getQueryResultsBooks(query, lib_id));
         }
         return result;
     }
@@ -1208,7 +1207,7 @@ public class DatabaseManager {
         String query = "select * from "+getSchemaNameLib(res.getIdLib())+"."+Constants.RESERVATIONS_TABLE_NAME+
                 " where book_identifier = '"+res.getBook_idetifier()+"'";
 
-        return getQueryReservations(query, getSchemaNameLib(res.getIdLib()));
+        return getQueryReservations(query, getSchemaNameLib(res.getIdLib()), res.getIdLib());
     }
 
     public String getNotificationToken(int user_id) {

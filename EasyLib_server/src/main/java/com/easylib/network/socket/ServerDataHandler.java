@@ -158,7 +158,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             // extract the schema_name recorded in the DB of libraries related to id_lib
             String schema_lib = dbms.getSchemaNameLib(id_lib);
-            ArrayList<Book> res = dbms.queryAllBooks(schema_lib);
+            ArrayList<Book> res = dbms.queryAllBooks(schema_lib, id_lib);
             socketHandler.sendViaSocket(Constants.GET_ALL_BOOKS);
             socketHandler.sendBooks(res);
         }
@@ -189,7 +189,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             ArrayList<Integer> id_libs = dbms.getAllIdLibs();
             for (Integer id_lib: id_libs) {
                 String schema_lib = dbms.getSchemaNameLib(id_lib);
-                temp_res = dbms.getAllUserRatedBooksForLib(user_id, schema_lib);
+                temp_res = dbms.getAllUserRatedBooksForLib(user_id, schema_lib, id_lib);
                 result.addAll(temp_res);
             }
 
@@ -211,7 +211,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             for (Integer id_lib: id_libs){
                 String schema_lib = dbms.getSchemaNameLib(id_lib);
-                temp_res = bookQueryUtility(query, schema_lib);
+                temp_res = bookQueryUtility(query, schema_lib, id_lib);
                 result.addAll(temp_res);
             }
 
@@ -231,7 +231,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             Query query = (Query)objectInputStream.readObject();
             String schema_lib = dbms.getSchemaNameLib(query.getIdLib());
 
-            result = bookQueryUtility(query, schema_lib);
+            result = bookQueryUtility(query, schema_lib, query.getIdLib());
 
             socketHandler.sendViaSocket(Constants.QUERY_ON_BOOKS);
             socketHandler.sendBooks(result);
@@ -241,26 +241,26 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
 
-    private ArrayList<Book> bookQueryUtility(Query query, String schema_lib){
+    private ArrayList<Book> bookQueryUtility(Query query, String schema_lib, int lib_id){
         ArrayList<Book> result;
 
         if ( query.getIdentifier() != null ){
-            result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib);
+            result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib, lib_id);
         }
         else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
-            result = dbms.queryBooksByTitle(query.getTitle(), schema_lib);
+            result = dbms.queryBooksByTitle(query.getTitle(), schema_lib, lib_id);
         else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
-            result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib);
+            result = dbms.queryBooksByAuthor(query.getAuthor(), schema_lib, lib_id);
         else if(query.getTitle()==null && query.getAuthor() == null && query.getCategory() != null)
-            result = dbms.queryBooksByCategory(query.getCategory(), schema_lib);
+            result = dbms.queryBooksByCategory(query.getCategory(), schema_lib, lib_id);
         else if(query.getTitle()!=null && query.getAuthor() != null && query.getCategory() == null)
-            result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor(), schema_lib);
+            result = dbms.queryBooksByAuthorAndTitle(query.getTitle(), query.getAuthor(), schema_lib, lib_id);
         else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() != null)
-            result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor(), schema_lib);
+            result = dbms.queryBooksByAuthorAndCategory(query.getCategory(), query.getAuthor(), schema_lib, lib_id);
         else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() != null)
-            result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory(), schema_lib);
+            result = dbms.queryBooksByTitleAndCategory(query.getTitle(), query.getCategory(), schema_lib, lib_id);
         else
-            result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory(), schema_lib);
+            result = dbms.queryBooksByAll(query.getTitle(), query.getAuthor(),query.getCategory(), schema_lib, lib_id);
 
         return result;
     }
@@ -292,7 +292,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
     private LibraryDescriptor getLibraryDescriptor(int id_lib){
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);
-        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name());
+        LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name(), id_lib);
         ld.setLibraryContent(lc);
         return ld;
     }
@@ -338,7 +338,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             Reservation reservation = (Reservation)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
 
-            ArrayList<Reservation> res = dbms.getReservations(reservation.getUser_id(), schema_name);
+            ArrayList<Reservation> res = dbms.getReservations(reservation.getUser_id(), schema_name, reservation.getIdLib());
             socketHandler.sendViaSocket(Constants.GET_USER_RESERVATION);
             socketHandler.sendViaSocket(res);
         } catch (IOException | ClassNotFoundException e) {
@@ -479,7 +479,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             String schema_name = dbms.getSchemaNameLib(id_lib);
             String book_id = book.getIdentifier();
             socketHandler.sendViaSocket(Constants.GET_WAITING_LIST_BOOK);
-            res = dbms.getWaitingList(book_id, schema_name);
+            res = dbms.getWaitingList(book_id, schema_name, id_lib);
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
