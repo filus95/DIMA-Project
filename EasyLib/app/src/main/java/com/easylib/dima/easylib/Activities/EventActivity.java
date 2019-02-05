@@ -45,6 +45,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView description;
     private TextView availableSeatsNum;
     private ImageView image;
+    private TextView alredyJoinedText;
     private Button reserveButton;
 
     //Comunication
@@ -131,6 +132,7 @@ public class EventActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.event_activity_description);
         availableSeatsNum = (TextView) findViewById(R.id.event_activity_available_seats_num);
         image = (ImageView) findViewById(R.id.event_activity_image);
+        alredyJoinedText = (TextView) findViewById (R.id.event_activity_error_alreadyJoined);
         reserveButton = (Button) findViewById(R.id.event_activity_reservation_button);
 
         // set the components
@@ -160,6 +162,8 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void setReservationButton(Boolean isAlreadyJoined) {
+        if (isAlreadyJoined)
+            alredyJoinedText.setVisibility (View.VISIBLE);
         if (isAlreadyJoined | eventInfo.getSeats () == 0)
             reserveButton.setEnabled (false);
     }
