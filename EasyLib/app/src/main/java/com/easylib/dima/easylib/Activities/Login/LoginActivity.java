@@ -45,6 +45,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.ArrayList;
@@ -154,6 +156,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     userInfo = user;
                     callUserPreferences();
+                    // send new notification token to the server
+//                    sendNewNotificationToken(user);
                 }
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
@@ -337,30 +341,6 @@ public class LoginActivity extends AppCompatActivity {
         user.setPlainPassword(password);
         user.setUser_id(-1);
 
-        // sending identification token for Firebase notifications
-        /*FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            return;
-                        }
-
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        while(true) {
-                            if (mBoundService != null){
-                                User user = new User();
-                                user.setUser_id(25);
-                                user.setNotification_token(token);
-                                mBoundService.sendMessage(Constants.NEW_NOTIFICATION_TOKEN, user);
-                                break;
-                            }
-                        }
-                    }
-                });
-        */
 
         // try...catch used to hide keyboard after LoginActivity button pressed
         try {
@@ -513,6 +493,30 @@ public class LoginActivity extends AppCompatActivity {
                     = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+        }
+
+    // sending identification token for Firebase notifications
+    private void sendNewNotificationToken(User user){
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                return;
+                            }
+
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+
+                            while(true) {
+                                if (mBoundService != null){
+                                    user.setNotification_token(token);
+                                    mBoundService.sendMessage(Constants.NEW_NOTIFICATION_TOKEN, user);
+                                    break;
+                                }
+                            }
+                        }
+                    });
         }
 }
 

@@ -44,7 +44,6 @@ public class Constants {
     public static final String OLD_PROJECT_NAME = "android.support.multidex.MultiDexApplication";
     public static final String GET_EVENTS_PER_USER = "get_events_per_user";
     public static final String GET_READ_BOOKS = "get_read_books";
-    public static final String EDIT_PASSWORD = "edit_password";
     public static final String LIBRARIAN_LOGIN = "librarian_login";
     public static final String EDIT_PROFILE_INFO = "edit_profile_info";
     public static final String REMOVE_RESERVATION = "remove_reservation" ;
