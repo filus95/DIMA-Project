@@ -451,7 +451,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             res = dbms.insertNewWaitingPerson(wp, schema_name);
 
             socketHandler.sendViaSocket(Constants.INSERT_WAITING_PERSON);
-            socketHandler.sendViaSocket(res);String title;
+            socketHandler.sendViaSocket(res);
+            String title;
             String mess;
 
             if ( res ) {

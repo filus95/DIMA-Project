@@ -111,7 +111,7 @@ public class DatabaseManager {
 
     public ArrayList<Reservation> getReservations(int user_id, String schema_name, int id_lib) {
         String query = "select * from "+schema_name+"."+Constants.RESERVATIONS_TABLE_NAME+
-                " where user_id = "+user_id;
+                " where user_id = "+user_id+" order by id desc";
 
         return getQueryReservations(query, schema_name, id_lib);
     }
@@ -587,6 +587,8 @@ public class DatabaseManager {
                         (rs.getString("author_4")));
 
                 queryResult.setIdLibrary(lib_id);
+                queryResult.setQuantity_reserved(rs.getInt("quantity"));
+
                 // Create JSON Array from String
                 if ( rs.getString("imageLinks") != null ) {
                     JsonParser jsonParser = new JsonParser();
@@ -1002,15 +1004,15 @@ public class DatabaseManager {
         return ret;
     }
 
-    ResultSet queryUser ( User user ){
+    private ResultSet queryUser(User user){
 
         ResultSet rs;
         try {
-            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.user_id =" +
+            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.email =" +
                     "?";
 
             PreparedStatement st = conn.prepareStatement(query);
-            st.setInt(1, user.getUser_id());
+            st.setString(1, user.getEmail());
 
             rs = st.executeQuery();
         } catch (SQLException e) {

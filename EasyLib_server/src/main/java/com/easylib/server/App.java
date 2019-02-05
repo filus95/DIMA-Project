@@ -9,6 +9,8 @@ import com.easylib.server.Database.DatabaseManager;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -161,10 +163,25 @@ public class App
 //
 //        }
 
-        Query query = new Query();
-        query.setTitle("origin");
-        ArrayList<Book> books = dbms.queryBooksByTitle(query.getTitle(), dbms.getSchemaNameLib(1), 1);
-      Reservation reservation = new Reservation();
+        //UPDATE STATEMENT
+//        String query = "UPDATE library_1."+Constants.BOOKS_TABLE_NAME+" " +
+//                "SET waiting_list = false ";// +"+columns_name+" = "+values",";
+//
+//        try {
+//
+//            PreparedStatement pstmt = conn.prepareStatement(query);
+//
+//            pstmt.executeUpdate();
+//            pstmt.close();
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+        }
+
+//        Query query = new Query();
+//        query.setTitle("origin");
+//        ArrayList<Book> books = dbms.queryBooksByTitle(query.getTitle(), dbms.getSchemaNameLib(1), 1);
+//      Reservation reservation = new Reservation();
 //      reservation.setUser_id(4);
 //      reservation.setBook_idetifier("8852016953");
 //      reservation.setBook_title("Il simbolo perduto");
@@ -186,7 +203,7 @@ public class App
 //       up.setUser_id(5);
 //       up.setId_lib1(2);
 //       dbms.insertPreferences(up);
-    }
+//    }
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);
