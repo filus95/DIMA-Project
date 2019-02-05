@@ -58,8 +58,34 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.GET_EVENTS_PER_USER, this::getEventsPerUser);
         map.put(Constants.GET_READ_BOOKS, this::getReadBooks);
         map.put(Constants.EDIT_PASSWORD, this::editPassword);
+        map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
+        map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
+        map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
 
     }
+
+    private void editProfileInfo(Bundle bundle) {
+        boolean res = (boolean) bundle.getSerializable(Constants.EDIT_PROFILE_INFO);
+        Intent intent = new Intent(Constants.EDIT_PROFILE_INFO);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.EDIT_PROFILE_INFO, res);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
+    private void removeWaitingPerson(Bundle bundle) {
+        boolean res = (boolean) bundle.getSerializable(Constants.REMOVE_WAITING_PERSON);
+        Intent intent = new Intent(Constants.REMOVE_WAITING_PERSON);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.REMOVE_WAITING_PERSON, res);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
 
     // ALL THE METHODS TAKE FROM THE BUNDLE THE OBJECT, CASTING IT IN THE RIGHT WAY,
     // AND CREATE THE RIGHT CONTEXT ( LAUNCH THE ACTIVITY ) WITH THE RECEIVED DATA
@@ -137,6 +163,14 @@ public class MessageFromThreadHandler implements Serializable {
 
         this.currentContext.sendBroadcast(intent);
     }
+    private void removeReservation(Bundle bundle) {
+        Intent intent = new Intent(Constants.REMOVE_RESERVATION);
+        intent.putExtra(Constants.REMOVE_RESERVATION,
+                (boolean) bundle.getSerializable(Constants.REMOVE_RESERVATION));
+
+        this.currentContext.sendBroadcast(intent);
+    }
+
 
     private void reservedBookReturned(Bundle bundle) {
         Intent intent = new Intent(Constants.RESERVED_BOOK_RETURNED);
@@ -155,11 +189,9 @@ public class MessageFromThreadHandler implements Serializable {
     }
 
     private void bookQueryAllLib(Bundle bundle) {
-        ArrayList<Book> books = (ArrayList<Book>) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
         Intent intent = new Intent(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
-
-        //put whatever data you want to send, if any
-        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, books);
+        intent.putExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES,
+                (ArrayList<Book>) bundle.getSerializable(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
 
         this.currentContext.sendBroadcast(intent);
     }
