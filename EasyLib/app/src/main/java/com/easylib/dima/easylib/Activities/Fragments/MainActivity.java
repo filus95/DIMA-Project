@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 
 import com.easylib.dima.easylib.Activities.LibraryActivity;
+import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
 import com.easylib.dima.easylib.Activities.ReadBooksActivity;
@@ -27,7 +28,6 @@ import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Objects;
@@ -36,6 +36,7 @@ import java.util.Set;
 import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.User;
+import AnswerClasses.Event;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String BOOK_INFO = "Book Info";
     // Profile Fragment
     private static final String READ_BOOKS_ARRAY = "Read Books Array";
+    private static final String ALL_EVENTS = "All Events";
     private Boolean prefLibCalledForProfile = false;
     private Boolean readBooksCalledForProfile = false;
+    Boolean isJoinedEventsForProfile = false;
     private ArrayList<Book> readBooks;
     // Home Fragment
     private Boolean prefLibCalledForHome = false;
@@ -168,8 +171,24 @@ public class MainActivity extends AppCompatActivity {
             if (key.equals(Constants.USER_LOGIN)) {
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
                 userInfo = user;
-                ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks);
-                setFragment(fragment);
+                getJoinedEvents (true);
+
+            }
+            if (key.equals(Constants.GET_EVENTS_PER_USER)) {
+                ArrayList<Event> events = (ArrayList<Event>) intent.getSerializableExtra (Constants.GET_EVENTS_PER_USER);
+                if(isJoinedEventsForProfile) {
+                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks, events);
+                    isJoinedEventsForProfile = false;
+                    setFragment(fragment);
+                } else {
+                    Intent eventListIntent = new Intent(context, EventListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(ALL_EVENTS, events);
+                    bundle.putSerializable(USER_INFO, userInfo);
+                    eventListIntent.putExtras(bundle);
+                    doUnbindService();
+                    startActivity(eventListIntent);
+                }
             }
         }
     };
@@ -185,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -241,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
     }
 
     @Override
@@ -306,9 +327,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Called to set data when Profile Fragment has to be shown
-    public void setProfileData(User userInfo, ArrayList<LibraryDescriptor> prefLibraries, ArrayList<Book> readBooks) {
-
+    public void getJoinedEvents(Boolean isJoinedEventsForProfile) {
+        this.isJoinedEventsForProfile = isJoinedEventsForProfile;
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.GET_EVENTS_PER_USER, userInfo);
+        }
     }
 
     // Called from EditProfileActivity to set new UserInfo if changed

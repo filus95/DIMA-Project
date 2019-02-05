@@ -15,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.easylib.dima.easylib.Activities.EditProfileActivity;
+import com.easylib.dima.easylib.Adapters.ImageTitleEventAdapter;
 import com.easylib.dima.easylib.Adapters.ImageTitleLibraryAdapter;
 import com.easylib.dima.easylib.Adapters.ReadBooksAdapter;
 import com.easylib.dima.easylib.R;
@@ -31,7 +32,8 @@ public class ProfileFragment extends Fragment {
 
     private static final String USER_INFO = "User Info";
     private ArrayList<LibraryDescriptor> prefLibraries;
-    private ArrayList<Book> ratedBooks;
+    ArrayList<AnswerClasses.Event> joinedEvents;
+    private ArrayList<Book> readBooks;
     private User userInfo;
 
     private static final String LOGIN = "Login";
@@ -45,6 +47,10 @@ public class ProfileFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ImageTitleLibraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    // for Events Joined
+    private RecyclerView mRecyclerView1;
+    private ImageTitleEventAdapter mAdapter1;
+    private RecyclerView.LayoutManager mLayoutManager1;
     // for Rated Books
     private RecyclerView mRecyclerView2;
     private ReadBooksAdapter mAdapter2;
@@ -64,6 +70,15 @@ public class ProfileFragment extends Fragment {
             public void onClick(View v)
             {
                 ((MainActivity)getActivity()).getPrefLibraries (false, false);
+            }
+        });
+        Button button4 = (Button) root.findViewById(R.id.profile_fragment_events_button);
+        button4.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ((MainActivity)getActivity()).getJoinedEvents (false);
             }
         });
         Button button1 = (Button) root.findViewById(R.id.profile_fragment_rated_books_button);
@@ -121,7 +136,19 @@ public class ProfileFragment extends Fragment {
         mAdapter = new ImageTitleLibraryAdapter(getContext(), prefLibraries);
         mRecyclerView.setAdapter(mAdapter);
 
-        // Recycle setup Favourite Libraries
+        // Recycle setup Joined Events
+        mRecyclerView1 = (RecyclerView) root.findViewById(R.id.profile_events_recycle);
+        // improve performance
+        mRecyclerView1.setHasFixedSize(true);
+        // used linear layout
+        mLayoutManager1 = new GridLayoutManager(getContext(), 3);
+        mRecyclerView1.setLayoutManager(mLayoutManager1);
+        mRecyclerView1.setItemAnimator(new DefaultItemAnimator());
+        // specify an adapter
+        mAdapter1 = new ImageTitleEventAdapter(getContext(), joinedEvents, userInfo);
+        mRecyclerView1.setAdapter(mAdapter1);
+
+        // Recycle setup Read Books
         mRecyclerView2 = (RecyclerView) root.findViewById(R.id.profile_rated_books_recycle);
         // improve performance
         mRecyclerView2.setHasFixedSize(true);
@@ -130,15 +157,16 @@ public class ProfileFragment extends Fragment {
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter2 = new ReadBooksAdapter (getContext(), ratedBooks);
+        mAdapter2 = new ReadBooksAdapter (getContext(), readBooks);
         mRecyclerView2.setAdapter(mAdapter2);
 
         return root;
     }
 
-    public void setData (User userInfo, ArrayList<LibraryDescriptor> prefLibraries, ArrayList<Book> ratedBooks) {
+    public void setData (User userInfo, ArrayList<LibraryDescriptor> prefLibraries, ArrayList<Book> readBooks, ArrayList<AnswerClasses.Event> joinedEvents) {
         this.userInfo = userInfo;
         this.prefLibraries = prefLibraries;
-        this.ratedBooks = ratedBooks;
+        this.joinedEvents = joinedEvents;
+        this.readBooks = readBooks;
     }
 }
