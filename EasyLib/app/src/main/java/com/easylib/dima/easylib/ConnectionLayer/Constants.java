@@ -48,6 +48,7 @@ public class Constants {
     public static final String EDIT_PROFILE_INFO = "edit_profile_info";
     public static final String REMOVE_RESERVATION = "remove_reservation" ;
     public static final String REMOVE_WAITING_PERSON = "remove_waiting_person";
+    public static final String REMOVE_EVENT_PARTECIPANT = "remove_partecipant";
 
 
 

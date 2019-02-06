@@ -60,8 +60,22 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
         map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
         map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
+        map.put(Constants.REMOVE_EVENT_PARTECIPANT, this::removeEventPartecipant);
 
     }
+
+    private void removeEventPartecipant(Bundle bundle) {
+
+        boolean res = (boolean) bundle.getSerializable(Constants.REMOVE_EVENT_PARTECIPANT);
+        Intent intent = new Intent(Constants.REMOVE_EVENT_PARTECIPANT);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.REMOVE_EVENT_PARTECIPANT, res);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
+
 
     private void editProfileInfo(Bundle bundle) {
         boolean res = (boolean) bundle.getSerializable(Constants.EDIT_PROFILE_INFO);

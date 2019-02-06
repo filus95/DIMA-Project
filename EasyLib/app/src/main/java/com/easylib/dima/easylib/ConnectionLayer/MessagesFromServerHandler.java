@@ -75,7 +75,24 @@ public class MessagesFromServerHandler {
         map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
         map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
         map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
+        map.put(Constants.REMOVE_EVENT_PARTECIPANT, this::removeEventPartecipant);
 
+    }
+
+    private void removeEventPartecipant() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.REMOVE_EVENT_PARTECIPANT, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void removeReservation() {
