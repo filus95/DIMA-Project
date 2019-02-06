@@ -887,7 +887,7 @@ public class DatabaseManager {
 
     public boolean removeEventParticipant(Event_partecipant participant, String schema_name) {
         String query = "delete from "+schema_name+"."+Constants.EVENT_PARTICIPANT_TABLE_NAME +" where " +
-                "user_id = "+participant.getPartecipant_id()+" and event_id = "+participant.getEvent_id();
+                "partecipant_id = "+participant.getPartecipant_id()+" and event_id = "+participant.getEvent_id();
 
         return queryExecution(conn, query);
     }
