@@ -58,6 +58,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
             books.add(library.getLibraryContent().getBooks().get(i));
         }
 
+        // Set idLib to all News
+        for (Event event : library.getLibraryContent ().getEvents ()){
+            event.setIdLib (library.getId_lib ());
+        }
+
         // improve performance
         holder.recycleNews.setHasFixedSize(true);
         holder.recycleEvent.setHasFixedSize(true);
