@@ -43,6 +43,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.GET_LIBRARY_CONN_INFO, this:: librayConnInfo);
         map.put(Constants.INSERT_RESERVATION, this::insertReservation);
         map.put(Constants.INSERT_EVENT_PARTICIPANT, this::insertEventPartecipant);
+        map.put(Constants.REMOVE_EVENT_PARTECIPANT, this::removeEventPartecipant);
         map.put(Constants.INSERT_EVENT, this::insertEvent);
         map.put(Constants.INSERT_NEWS, this::insertNews);
         map.put(Constants.INSERT_WAITING_PERSON, this::insertWaitingPerson);
@@ -340,6 +341,37 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             socketHandler.sendViaSocket(null);
         }
     }
+
+    private void removeEventPartecipant() {
+        boolean res;
+
+        try {
+            String title;
+            String mess;
+            Event_partecipant partecipant = (Event_partecipant) objectInputStream.readObject();
+            String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
+            res = dbms.removeEventParticipant(partecipant, schema_name);
+
+            socketHandler.sendViaSocket(Constants.REMOVE_EVENT_PARTECIPANT);
+            socketHandler.sendViaSocket(res);
+
+            if (res) {
+                title = "Event participation cancelled";
+                mess = "You have correctly cancelled your event participation!";
+            } else {
+                title = "Event participation deletion denied";
+                mess = "Sorry, your attempt of delete your " +
+                        "event participation have been denied!";
+            }
+
+            dbms.sendNotification(title, mess, dbms.getNotificationToken(partecipant.getPartecipant_id()));
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+
+        }
+    }
+
 
     private void insertEventPartecipant(){
         boolean res;

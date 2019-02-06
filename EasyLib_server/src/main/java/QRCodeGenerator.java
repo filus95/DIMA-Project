@@ -22,7 +22,7 @@ public class QRCodeGenerator {
 
     public static void main(String[] args) {
         try {
-            generateQRCodeImage("8852068317", 350, 350, QR_CODE_IMAGE_PATH);
+            generateQRCodeImage("8830430714", 350, 350, QR_CODE_IMAGE_PATH);
         } catch (WriterException e) {
             System.out.println("Could not generate QR Code, WriterException :: " + e.getMessage());
         } catch (IOException e) {

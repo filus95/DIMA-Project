@@ -6,6 +6,7 @@ package com.easylib.network.socket;
  */
 public class Constants {
 
+    static final String REMOVE_EVENT_PARTECIPANT = "remove_partecipant";
     static final String LIBRARIAN_LOGIN = "librarian_login";
     static final String EDIT_PROFILE_INFO = "edit_profile_info";
     static final String REMOVE_RESERVATION = "remove_reservation" ;
@@ -66,7 +67,7 @@ public class Constants {
     //LIBRARY DB
     public static final String BOOKS_TABLE_NAME = "books";
     public static final String RESERVATIONS_TABLE_NAME = "booksreservations";
-    public static final String EVENT_PARTECIPANT_TABLE_NAME = "event_partecipants";
+    public static final String EVENT_PARTICIPANT_TABLE_NAME = "event_partecipants";
     public static final String EVENTS_TABLE_NAME = "events";
     public static final String NEWS_TABLE_NAME = "news";
     public static final String RATINGS_TABLE_NAME = "ratings";

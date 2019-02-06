@@ -49,6 +49,13 @@ public class App
         Connection conn = db.startConnection();
 
         DatabaseManager dbms = new DatabaseManager();
+
+        Reservation reservation = new Reservation();
+        reservation.setUser_id(1000);
+        reservation.setQuantity(1);
+        reservation.setBook_idetifier("0385542690");
+        reservation.setBook_title("nonoooo");
+        dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
         // todo: always use SimpleDateFormat for dates since windows sucks...
 
 //        int id_lib = 1;
@@ -178,14 +185,11 @@ public class App
 //            e.printStackTrace();
         }
 
+
 //        Query query = new Query();
 //        query.setTitle("origin");
 //        ArrayList<Book> books = dbms.queryBooksByTitle(query.getTitle(), dbms.getSchemaNameLib(1), 1);
-//      Reservation reservation = new Reservation();
-//      reservation.setUser_id(4);
-//      reservation.setBook_idetifier("8852016953");
-//      reservation.setBook_title("Il simbolo perduto");
-//      reservation.setIdLib(1);
+
 //
 //      WaitingPersonInsert waitingPerson = new WaitingPersonInsert();
 //      waitingPerson.setId_lib(1);
@@ -203,7 +207,6 @@ public class App
 //       up.setUser_id(5);
 //       up.setId_lib1(2);
 //       dbms.insertPreferences(up);
-//    }
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);

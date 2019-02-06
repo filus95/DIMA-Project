@@ -158,7 +158,7 @@ public class DatabaseManager {
 
         map = partecipant.getMapAttribute(columnsName);
 
-        return insertStatement(map, Constants.EVENT_PARTECIPANT_TABLE_NAME, schema_name);
+        return insertStatement(map, Constants.EVENT_PARTICIPANT_TABLE_NAME, schema_name);
     }
 
 
@@ -882,6 +882,13 @@ public class DatabaseManager {
             return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
         }
         return true;
+    }
+
+    public boolean removeEventParticipant(Event_partecipant participant, String schema_name) {
+        String query = "delete from "+schema_name+"."+Constants.EVENT_PARTICIPANT_TABLE_NAME +" where " +
+                "user_id = "+participant.getPartecipant_id()+" and event_id = "+participant.getEvent_id();
+
+        return queryExecution(conn, query);
     }
 
     public boolean removeWaitingPerson(WaitingPersonInsert wp, String schema_name) {
