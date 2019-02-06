@@ -22,7 +22,9 @@ import java.util.ArrayList;
 public class QueueFragment extends Fragment
         implements QueueRecyclerItemTouchHelper.QueueRecyclerItemTouchHelperListener {
 
-    private ArrayList<Book> books = new ArrayList<Book>();
+    private static final String USER_INFO = "User Info";
+    private ArrayList<Book> waitingBooks;
+    private AnswerClasses.User userInfo;
 
     private RecyclerView mRecyclerView;
     private QueueAdapter mAdapter;
@@ -33,12 +35,6 @@ public class QueueFragment extends Fragment
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_queue, container, false);
-
-        // JUST FOR TEST
-        int i;
-        for(i=0; i<15; i++) {
-            books.add(new Book("Title"+i,"Author "+i, "Via non lo so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
-        }
 
         // RecycleView setup
         mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);
@@ -55,7 +51,7 @@ public class QueueFragment extends Fragment
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new QueueAdapter(getContext(), books);
+        mAdapter = new QueueAdapter(getContext(), waitingBooks);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -69,14 +65,19 @@ public class QueueFragment extends Fragment
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         if (viewHolder instanceof QueueAdapter.QueueHolder) {
             // get the removed item name to display it in snack bar
-            String name = books.get(viewHolder.getAdapterPosition()).getTitle();
+            String name = waitingBooks.get(viewHolder.getAdapterPosition()).getTitle();
 
             // backup of removed item for undo purpose
-            final Book deletedItem = books.get(viewHolder.getAdapterPosition());
+            final Book deletedItem = waitingBooks.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
             mAdapter.removeItem(viewHolder.getAdapterPosition());
         }
+    }
+
+    public void setData(ArrayList<Book> books, AnswerClasses.User userInfo) {
+        this.waitingBooks = books;
+        this.userInfo = userInfo;
     }
 }

@@ -64,10 +64,6 @@ public class BookActivity extends AppCompatActivity {
     ConnectionService mBoundService;
     private boolean mIsBound;
 
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-
     //For the communication Service
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override

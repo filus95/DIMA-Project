@@ -27,6 +27,8 @@ import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -235,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.scan_item :
-                        fragment = new ScanFragment();
+                        scan ();
                         break;
 
                     case R.id.queue_item :
@@ -346,5 +348,18 @@ public class MainActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         doUnbindService ();
         startActivity(intent);
+    }
+
+    public void scan() {
+        IntentIntegrator integrator = new IntentIntegrator(this);
+        integrator.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
+        if (scanResult != null) {
+            // handle scan result
+        }
+        // else continue with any other code you need in the method
     }
 }
