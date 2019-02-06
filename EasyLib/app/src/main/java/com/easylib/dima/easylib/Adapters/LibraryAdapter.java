@@ -43,6 +43,11 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryAdapter.LibraryH
         holder.name.setText(library.getLib_name());
         holder.location.setText(library.getAddress());
 
+        // Set idLib to all News
+        for (AnswerClasses.Event event : library.getLibraryContent ().getEvents ()){
+            event.setIdLib (library.getId_lib ());
+        }
+
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
