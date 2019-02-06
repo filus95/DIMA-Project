@@ -715,21 +715,21 @@ public class DatabaseManager {
         return to_ret;
     }
 
-    public ArrayList<Event> getAllEvents(String schema_name){
+    public ArrayList<Event> getAllEvents(String schema_name, int id_lib){
         ArrayList<Event> to_ret = new ArrayList<>();
         String query = "select * from "+schema_name+".events order by" +
                 "  id desc";
 
-        to_ret = createEventsObject(to_ret, query);
+        to_ret = createEventsObject(to_ret, query, id_lib);
         return to_ret;
     }
 
-    public ArrayList<Event> getEvents(String schema_name, int limit){
+    public ArrayList<Event> getEvents(String schema_name, int limit, int id_lib){
         ArrayList<Event> to_ret = new ArrayList<>();
         String query = "select * from "+schema_name+".events order by" +
                 "  id desc LIMIT "+limit;
 
-        to_ret = createEventsObject(to_ret, query);
+        to_ret = createEventsObject(to_ret, query, id_lib);
         return to_ret;
     }
 
@@ -751,7 +751,7 @@ public class DatabaseManager {
                 String query1 = "select * from " + schema_name + ".events" +
                         " where id = "+event_id+" order by" +
                         "  id desc";
-                to_ret = createEventsObject(to_ret, query1);
+                to_ret = createEventsObject(to_ret, query1, lib_id);
             }
         }
 
@@ -774,7 +774,7 @@ public class DatabaseManager {
         return to_ret;
     }
 
-    private ArrayList<Event> createEventsObject(ArrayList<Event> to_ret, String query) {
+    private ArrayList<Event> createEventsObject(ArrayList<Event> to_ret, String query, int lib_id) {
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
@@ -788,6 +788,7 @@ public class DatabaseManager {
                 elem.setDate(rs.getTimestamp("date").toLocalDateTime());
                 elem.setSeats((Integer.parseInt(rs.getString("seats"))));
                 elem.setImage_link(rs.getString("image_link"));
+                elem.setIdLib(lib_id);
                 to_ret.add(elem);
             }
         } catch (SQLException e) {
@@ -972,7 +973,7 @@ public class DatabaseManager {
     public LibraryContent getLibraryContent(String schema_name, int id_lib) {
         ArrayList<Book> books = queryAllBooks(schema_name, id_lib);
         ArrayList<News> news = getAllNews(schema_name);
-        ArrayList<Event> events = getAllEvents(schema_name);
+        ArrayList<Event> events = getAllEvents(schema_name, id_lib);
 
         LibraryContent lc = new LibraryContent();
         lc.setBooks(books);

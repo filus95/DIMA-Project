@@ -428,7 +428,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             int limit = 5;
             socketHandler.sendViaSocket(Constants.GET_EVENTS);
-            res = dbms.getEvents(schema_name, limit);
+            res = dbms.getEvents(schema_name, limit, id_lib);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
             res = null;
