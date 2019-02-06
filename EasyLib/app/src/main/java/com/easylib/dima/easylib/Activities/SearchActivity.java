@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -115,12 +116,28 @@ public class SearchActivity extends AppCompatActivity {
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);
+                advancesSearchLay.setVisibility (View.INVISIBLE);
+                searchBt.setColorFilter(R.color.colorGray);
+                // try...catch used to hide keyboard after LoginActivity button pressed
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
             }
             if (key.equals(Constants.QUERY_ON_BOOKS)) {
                 books = (ArrayList<Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);
+                advancesSearchLay.setVisibility (View.INVISIBLE);
+                searchBt.setColorFilter(R.color.colorGray);
+                // try...catch used to hide keyboard after LoginActivity button pressed
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
             }
         }
     };
