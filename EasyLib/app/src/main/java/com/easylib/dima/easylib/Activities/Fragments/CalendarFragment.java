@@ -41,14 +41,18 @@ public class CalendarFragment extends Fragment {
         }
         // Fill dates ArrayList with distinct dates
         for (AnswerClasses.Reservation r : reservations) {
-            for (String d : dates) {
-                if (r.isTaken () == true) {
-                    if (d == r.getEnd_res_date ().toString ().replace ("T", "  ")){
+            Boolean isDateToAdd = true;
+            if (r.isTaken ()) {
+                for (String d : dates) {
+                    if (r.getEnd_res_date ().toString ().replace ("T", "  ").equals (d)) {
+                        isDateToAdd = false;
                         break;
                     }
                 }
+                if (isDateToAdd) {
+                    dates.add (r.getEnd_res_date ().toString ().replace ("T", "  "));
+                }
             }
-            dates.add (r.getEnd_res_date ().toString ().replace ("T", "  "));
         }
 
         // RecycleView setup

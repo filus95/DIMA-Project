@@ -109,6 +109,8 @@ public class EventActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_EVENT_PARTICIPANT);
                 if (bool) {
                     Toast.makeText (context, "Seat Reserved", Toast.LENGTH_LONG).show ();
+                    availableSeatsNum.setText (String.valueOf (eventInfo.getSeats ()-1));
+                    eventInfo.setSeats (eventInfo.getSeats ()-1);
                     setReservationButton (true);
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
@@ -117,6 +119,8 @@ public class EventActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_EVENT_PARTECIPANT);
                 if (bool) {
                     Toast.makeText (context, "Reserved Seat Removed", Toast.LENGTH_LONG).show ();
+                    availableSeatsNum.setText (String.valueOf (eventInfo.getSeats ()+1));
+                    eventInfo.setSeats (eventInfo.getSeats ()+1);
                     setReservationButton (false);
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();

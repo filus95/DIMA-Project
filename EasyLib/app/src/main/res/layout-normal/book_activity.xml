@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".Activities.BookActivity">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,6 +32,7 @@
                 android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:overScrollMode="never"
+                android:scrollbarSize="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -121,10 +123,12 @@
                         android:textAlignment="center" />
 
                     <LinearLayout
+                        android:id="@+id/book_activity_rate_layout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/textView8"
@@ -140,30 +144,68 @@
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:ems="10"
-                            android:inputType="number"
                             android:background="@color/Transparent"
-                            android:imeOptions="actionSearch"
-                            android:text="Set here.."
+                            android:ems="10"
+                            android:imeOptions="actionSend"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:text="Set 0-10"
                             android:textAlignment="center"
                             android:textColor="@android:color/darker_gray" />
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/textView17"
+                    <LinearLayout
+                        android:id="@+id/book_activity_reserved_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Available in these Libraries"
-                        android:textAlignment="center"
-                        android:textSize="16sp" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/book_activity_lib_recycle"
+                        <TextView
+                            android:id="@+id/book_activity_reserved_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="24dp"
+                            android:singleLine="true"
+                            android:textAlignment="center"
+                            android:textColor="@android:color/holo_red_dark"
+                            android:textSize="16sp" />
+
+                        <Button
+                            android:id="@+id/book_activity_reserved_button"
+                            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:onClick="removeReservation"
+                            android:text="Remove Reservation"
+                            android:textSize="18sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/book_activity_available_libraries_layout"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        tools:listitem="@layout/book_activity_lib_recycle_item" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/textView17"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:singleLine="true"
+                            android:text="Available in these Libraries"
+                            android:textAlignment="center"
+                            android:textSize="16sp" />
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/book_activity_lib_recycle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            tools:listitem="@layout/book_activity_lib_recycle_item" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>
