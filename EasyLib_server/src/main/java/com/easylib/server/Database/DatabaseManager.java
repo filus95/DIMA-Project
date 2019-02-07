@@ -592,6 +592,7 @@ public class DatabaseManager {
 
             while (rs.next()){
                 Book queryResult = new Book();
+                queryResult.setBookId_lib(getSchemaNameLib(lib_id));
                 queryResult.setIdentifier(rs.getString("identifier"));
                 queryResult.setTitle(rs.getString("title"));
                 queryResult.setPublisher((rs.getString("publisher")));
