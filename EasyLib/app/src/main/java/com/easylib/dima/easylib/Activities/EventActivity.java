@@ -109,14 +109,7 @@ public class EventActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_EVENT_PARTICIPANT);
                 if (bool) {
                     Toast.makeText (context, "Seat Reserved", Toast.LENGTH_LONG).show ();
-                    reserveButton.setText("Remove Reservation");
-                    reserveButton.setTextColor(Color.RED);
-                    reserveButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            removeReservation ();
-                        }
-                    });
+                    setReservationButton (true);
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
@@ -124,14 +117,7 @@ public class EventActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_EVENT_PARTECIPANT);
                 if (bool) {
                     Toast.makeText (context, "Reserved Seat Removed", Toast.LENGTH_LONG).show ();
-                    reserveButton.setText("Reserve Seat");
-                    reserveButton.setTextColor(Color.GREEN);
-                    reserveButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            reserveSeat ();
-                        }
-                    });
+                    setReservationButton (false);
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
@@ -192,6 +178,8 @@ public class EventActivity extends AppCompatActivity {
         if(isAlreadyJoined) {
             reserveButton.setText("Remove Reservation");
             reserveButton.setTextColor(Color.RED);
+            errorText.setText ("Already Reserved !");
+            errorText.setVisibility (View.VISIBLE);
             reserveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -201,11 +189,13 @@ public class EventActivity extends AppCompatActivity {
         } else if (eventInfo.getSeats () == 0) {
             reserveButton.setText("Reserve Seat");
             reserveButton.setTextColor(Color.GRAY);
+            errorText.setText ("No more Seats !");
             reserveButton.setEnabled (false);
             errorText.setVisibility (View.VISIBLE);
         } else {
                 reserveButton.setText("Reserve Seat");
                 reserveButton.setTextColor(Color.GREEN);
+                errorText.setVisibility (View.GONE);
                 reserveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
