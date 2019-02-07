@@ -78,9 +78,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
         map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
         map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
-
+        map.put(Constants.LIBRARIES_FOR_BOOK, this::libraryForBook);
         // Add new methods
     }
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //TODO: METHODS THAT CALLS GOOGLE BOOKS OR DBMS METHODS WITH THE PARAMETERS ARRIVED FROM THE CLIENT AND CALL
@@ -244,9 +245,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private ArrayList<Book> bookQueryUtility(Query query, String schema_lib, int lib_id){
         ArrayList<Book> result;
 
-        if ( query.getIdentifier() != null ){
+        if ( query.getIdentifier() != null )
             result = dbms.queryBookByIdentifier(query.getIdentifier(), schema_lib, lib_id);
-        }
         else if (query.getTitle()!=null && query.getAuthor() == null && query.getCategory() == null)
             result = dbms.queryBooksByTitle(query.getTitle(), schema_lib, lib_id);
         else if (query.getTitle()==null && query.getAuthor() != null && query.getCategory() == null)
@@ -275,6 +275,27 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
         socketHandler.sendViaSocket(Constants.GET_ALL_LIBRARIES);
         socketHandler.sendViaSocket(libraries);
+    }
+
+    private void libraryForBook(){
+
+        try {
+            String identifier = (String)objectInputStream.readObject();
+
+            ArrayList<Integer> id_libs = dbms.getAllIdLibs();
+            ArrayList<LibraryDescriptor> libraries = new ArrayList<>();
+
+            for (Integer elem: id_libs){
+                if (dbms.getLibraryForAbook(dbms.getSchemaNameLib(elem), identifier))
+                    libraries.add(getLibraryDescriptor(elem));
+            }
+
+            socketHandler.sendViaSocket(Constants.LIBRARIES_FOR_BOOK);
+            socketHandler.sendViaSocket(libraries);
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getLibraryInfo(){

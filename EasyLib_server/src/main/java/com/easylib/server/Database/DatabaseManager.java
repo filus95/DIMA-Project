@@ -133,6 +133,7 @@ public class DatabaseManager {
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
                 queryResult.setQuantity(rs.getInt("quantity"));
+                queryResult.setTaken(rs.getBoolean("taken"));
 
                 if ( rs.getDate("starting_reservation_date") != null)
                     queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
@@ -1392,6 +1393,24 @@ public class DatabaseManager {
             return false;
         }
         return true;
+    }
+
+
+    public boolean getLibraryForAbook(String schemaNameLib, String identifier) {
+        String query = "select * from "+schemaNameLib+".books where " +
+                "identifier = '"+identifier+"'";
+
+        Statement st = null;
+        try {
+            st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            if ( rs.next() )
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
 

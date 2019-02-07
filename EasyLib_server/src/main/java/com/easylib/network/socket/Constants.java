@@ -6,6 +6,7 @@ package com.easylib.network.socket;
  */
 public class Constants {
 
+    static final String LIBRARIES_FOR_BOOK = "library_for_book";
     static final String REMOVE_EVENT_PARTECIPANT = "remove_partecipant";
     static final String LIBRARIAN_LOGIN = "librarian_login";
     static final String EDIT_PROFILE_INFO = "edit_profile_info";

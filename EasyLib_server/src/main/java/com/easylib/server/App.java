@@ -50,12 +50,9 @@ public class App
 
         DatabaseManager dbms = new DatabaseManager();
 
+//        ArrayList<LibraryDescriptor> res = dbms.getLibraryForAbook("library_1", "0743277716");
         Reservation reservation = new Reservation();
-        reservation.setUser_id(1000);
-        reservation.setQuantity(1);
-        reservation.setBook_idetifier("0385542690");
-        reservation.setBook_title("nonoooo");
-        dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
+        System.out.print("ciao");
         // todo: always use SimpleDateFormat for dates since windows sucks...
 
 //        int id_lib = 1;
