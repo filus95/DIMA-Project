@@ -171,7 +171,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         try {
             User user = (User) objectInputStream.readObject();
             dbms.insertNotificationToken(user);
-            socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
+//            socketHandler.sendViaSocket(Constants.NEW_NOTIFICATION_TOKEN);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

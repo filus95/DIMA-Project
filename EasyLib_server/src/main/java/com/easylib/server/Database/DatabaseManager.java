@@ -1153,7 +1153,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib, int lib_id) {
-        String query = "select identifier, title, imageLinks, publisher, category_1, category_2, category_3, author_1, author_2, author_3, author_4 " +
+        String query = "select * " +
                 "from "+schema_lib+".books where identifier = "+ identifier;
 
         return getQueryResultsBooks(query, lib_id);
@@ -1195,7 +1195,7 @@ public class DatabaseManager {
 
     public Boolean insertNotificationToken(User user) {
         String query = "UPDATE "+Constants.PROPIETARY_DB+"."+Constants.USERS_TABLE_NAME+
-                " SET messaging_token = "+user.getNotification_token()+" WHERE " +
+                " SET messaging_token = '"+user.getNotification_token()+"' WHERE " +
                 "user_id = "+ user.getUser_id() +";";
 
         return performStatement(query);
