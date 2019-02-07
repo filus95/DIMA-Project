@@ -359,10 +359,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void removeFromWaitingList(int lib_id) {
+    public void removeFromWaitingList(int lib_id, String book_id) {
         AnswerClasses.WaitingPersonInsert wp = new WaitingPersonInsert ();
         wp.setUser_id (userInfo.getUser_id ());
         wp.setId_lib (lib_id);
+        wp.setBook_identifier (book_id);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.REMOVE_WAITING_PERSON, wp);
