@@ -23,8 +23,6 @@ public class QueueFragment extends Fragment
 
     private static final String USER_INFO = "User Info";
     private ArrayList<AnswerClasses.Book> waitingBooks;
-    private ArrayList<Integer> waitingUsers;
-    private ArrayList<String> waitingLocations;
     private AnswerClasses.User userInfo;
 
     private RecyclerView mRecyclerView;
@@ -52,7 +50,7 @@ public class QueueFragment extends Fragment
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new QueueAdapter(getContext(), waitingBooks, waitingUsers, waitingLocations, userInfo);
+        mAdapter = new QueueAdapter(getContext(), waitingBooks, userInfo);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -77,19 +75,8 @@ public class QueueFragment extends Fragment
         }
     }
 
-    public void setUserInfo(AnswerClasses.User userInfo) {
+    public void setData(AnswerClasses.User userInfo, ArrayList<AnswerClasses.Book> waitingBooks) {
         this.userInfo = userInfo;
-    }
-
-    public void setWaitingBooks(ArrayList<AnswerClasses.Book> waitingBooks) {
         this.waitingBooks = waitingBooks;
-    }
-
-    public void setWaitingUsers(ArrayList<Integer> waitingUsers) {
-        this.waitingUsers = waitingUsers;
-    }
-
-    public void setWaitingLocations(ArrayList<String> waitingLocations) {
-        this.waitingLocations = waitingLocations;
     }
 }

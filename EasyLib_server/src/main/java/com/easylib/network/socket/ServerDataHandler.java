@@ -8,11 +8,11 @@ import com.easylib.server.Database.DatabaseManager;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static java.util.stream.Collectors.toMap;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * This class receive the message from "SocketPlayerHandler" and call a method back on that class according to the
@@ -214,7 +214,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             }
 
             //todo: filtro dei libri
-            result.stream().collect(toMap(Book::getIdentifier, b -> b,(b, c) -> b)).values();
+            result = result.stream().filter(distinctByKey(p -> p.getIdentifier())).collect(Collectors.toCollection(ArrayList::new));
 
             socketHandler.sendViaSocket(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
             socketHandler.sendBooks(result);
@@ -222,6 +222,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor)
+    {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     private void bookQuery(){
