@@ -76,7 +76,24 @@ public class MessagesFromServerHandler {
         map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
         map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
         map.put(Constants.REMOVE_EVENT_PARTECIPANT, this::removeEventPartecipant);
+        map.put(Constants.LIBRARIES_FOR_BOOK, this::librariesForAbook);
 
+    }
+
+    private void librariesForAbook() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>) objectInputStream.readObject();
+            b.putSerializable(Constants.LIBRARIES_FOR_BOOK, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void removeEventPartecipant() {

@@ -61,7 +61,19 @@ public class MessageFromThreadHandler implements Serializable {
         map.put(Constants.REMOVE_WAITING_PERSON, this::removeWaitingPerson);
         map.put(Constants.EDIT_PROFILE_INFO, this::editProfileInfo);
         map.put(Constants.REMOVE_EVENT_PARTECIPANT, this::removeEventPartecipant);
+        map.put(Constants.LIBRARIES_FOR_BOOK, this::librariesForAbook);
 
+    }
+
+    private void librariesForAbook(Bundle bundle) {
+        ArrayList<LibraryDescriptor> res = (ArrayList<LibraryDescriptor>) bundle.getSerializable(Constants.LIBRARIES_FOR_BOOK);
+        Intent intent = new Intent(Constants.LIBRARIES_FOR_BOOK);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.LIBRARIES_FOR_BOOK, res);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
     }
 
     private void removeEventPartecipant(Bundle bundle) {

@@ -157,7 +157,13 @@ public class LoginActivity extends AppCompatActivity {
                     userInfo = user;
                     callUserPreferences();
                     // send new notification token to the server
-//                    sendNewNotificationToken(user);
+//                    new Handler().postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            sendNewNotificationToken(user);
+//                        }
+//                    }, 1000);
+
                 }
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
