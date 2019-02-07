@@ -156,13 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     userInfo = user;
                     callUserPreferences();
-                    // send new notification token to the server
-//                    new Handler().postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            sendNewNotificationToken(user);
-//                        }
-//                    }, 1000);
+//                    sendNewNotificationToken(user);
 
                 }
             }
@@ -344,7 +338,6 @@ public class LoginActivity extends AppCompatActivity {
         user.setEmail(email);
         user.setPlainPassword(password);
         user.setUser_id(-1);
-
 
         // try...catch used to hide keyboard after LoginActivity button pressed
         try {

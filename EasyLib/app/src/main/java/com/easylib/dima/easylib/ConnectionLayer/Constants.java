@@ -50,8 +50,7 @@ public class Constants {
     public static final String REMOVE_WAITING_PERSON = "remove_waiting_person";
     public static final String REMOVE_EVENT_PARTECIPANT = "remove_partecipant";
     public static final String LIBRARIES_FOR_BOOK = "library_for_book";
-
-
+    public static final String NOTIFICATION = "notification";
 
 
     // Communication strings

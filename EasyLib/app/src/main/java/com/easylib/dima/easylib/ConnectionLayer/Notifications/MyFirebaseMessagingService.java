@@ -22,9 +22,11 @@ import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 
 //import com.easylib.dima.easylib.R;
+import com.easylib.dima.easylib.ConnectionLayer.MyApplication;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
@@ -77,8 +79,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 //        RemoteMessage.Notification notification = remoteMessage.getNotification();
         super.onMessageReceived(remoteMessage);
         Map<String, String> data = remoteMessage.getData();
-        System.out.print("");        //
-//        String title = remoteMessage.getData().get(“title”);
+
+        Intent intent;
+        intent = new Intent(Constants.NOTIFICATION);
+        ArrayList<String> message = new ArrayList<>();
+        message.add(data.get("title"));
+        message.add(data.get("body"));
+        intent.putExtra(Constants.NOTIFICATION, message);
+        MyApplication.getAppContext().sendBroadcast(intent);
+
+
+        //        String title = remoteMessage.getData().get(“title”);
 //        String body = remoteMessage.getData().get(“body”);
 //        String objectId = remoteMessage.getData().get("object_id");
 //        String objectType = remoteMessage.getData().get(objectType”);
