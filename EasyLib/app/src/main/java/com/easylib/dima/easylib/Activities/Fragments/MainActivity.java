@@ -382,6 +382,7 @@ public class MainActivity extends AppCompatActivity {
     public void getReservations() {
         AnswerClasses.Reservation reservation = new Reservation ();
         reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setIdLib (-1);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_USER_RESERVATION, reservation);
