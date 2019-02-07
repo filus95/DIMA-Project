@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static java.util.stream.Collectors.toMap;
+
 /**
  * This class receive the message from "SocketPlayerHandler" and call a method back on that class according to the
  * String received
@@ -209,6 +211,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
                 temp_res = bookQueryUtility(query, schema_lib, id_lib);
                 result.addAll(temp_res);
             }
+
+            //todo: filtro dei libri
+            result.stream().collect(toMap(Book::getIdentifier, b -> b,(b, c) -> b)).values();
 
             socketHandler.sendViaSocket(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
             socketHandler.sendBooks(result);
