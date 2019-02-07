@@ -82,7 +82,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText eText;
     private EditText pText;
+    private TextView errorText;
     private ConstraintLayout loadingLayout;
+    private ImageButton loginButton;
+    private ImageButton regButton;
     private ImageButton googleButton;
     private ImageButton facebookButton;
 
@@ -189,8 +192,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(loginPrefIntent);
             }
             if (key.equals(Constants.NETWORK_STATE_UP)){
-              startService(new Intent(LoginActivity.this, ConnectionService.class));
-              Toast.makeText(context,"NETWORK IS UP!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"NETWORK IS UP!", Toast.LENGTH_LONG).show();
+                startApp ();
             }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Toast.makeText(context,"NETWORK IS DOWN!", Toast.LENGTH_LONG).show();
@@ -245,6 +248,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.login);
         startService(new Intent(LoginActivity.this, CheckConnectionService.class));
 
+        startApp ();
+    }
+
+    private void startApp() {
         if ( isNetworkAvailable() ) {
             setView();
             startService(new Intent(LoginActivity.this, ConnectionService.class));
@@ -280,6 +287,7 @@ public class LoginActivity extends AppCompatActivity {
             Handler handler = new Handler();
             if (!sp.contains(USER_ID)) {
                 loadingLayout.setVisibility(View.INVISIBLE);
+                makeItemsTouchable (true);
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -307,16 +315,20 @@ public class LoginActivity extends AppCompatActivity {
         }else {
             setView();
         }
-
-
     }
 
-    void setView(){
+    private void setView(){
         eText = (EditText) findViewById(R.id.email);
         pText = (EditText) findViewById(R.id.password);
+        errorText = (TextView) findViewById (R.id.login_text_error);
         loadingLayout = (ConstraintLayout) findViewById(R.id.login_load_layout);
+        loginButton = (ImageButton) findViewById (R.id.login_bt);
+        regButton = (ImageButton) findViewById (R.id.reg_bt);
         googleButton = (ImageButton) findViewById(R.id.g_bt);
         facebookButton = (ImageButton) findViewById(R.id.fb_bt);
+
+        // Make the Layout not clickable
+        makeItemsTouchable (false);
 
         // Change Enter key in Done key when password is typed
         pText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -329,6 +341,16 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    public void makeItemsTouchable(Boolean areTouchable) {
+        eText.setEnabled (areTouchable);
+        pText.setEnabled (areTouchable);
+        googleButton.setEnabled (areTouchable);
+        loginButton.setEnabled (areTouchable);
+        regButton.setEnabled (areTouchable);
+        googleButton.setEnabled (areTouchable);
+        facebookButton.setEnabled (areTouchable);
     }
 
     public void login(View view) {
@@ -346,10 +368,10 @@ public class LoginActivity extends AppCompatActivity {
         } catch (Exception e) {
         }
 
-        if( email.length() == 0 || password.length() == 0)
-            findViewById(R.id.text_error).setVisibility(View.VISIBLE);
-
-        else {
+        if( email.length() == 0 || password.length() == 0) {
+            errorText.setVisibility (View.VISIBLE);
+            errorText.setText ("Fields not filled up !");
+        } else {
 
             loadingLayout.setVisibility(View.VISIBLE);
 
