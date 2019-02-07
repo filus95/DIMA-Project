@@ -28,7 +28,6 @@ import android.widget.TextView;
 import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     private static final String USER_INFO = "User Info";
     private AnswerClasses.User userInfo;
     private ArrayList<AnswerClasses.LibraryDescriptor> allLibraries;
-    private ArrayList<Book> books;
+    private ArrayList<AnswerClasses.Book> books;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -112,7 +111,7 @@ public class SearchActivity extends AppCompatActivity {
                 allLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_ALL_LIBRARIES);
             }
             if (key.equals(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
-                books = (ArrayList<Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
+                books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);
@@ -126,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
             if (key.equals(Constants.QUERY_ON_BOOKS)) {
-                books = (ArrayList<Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
+                books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);

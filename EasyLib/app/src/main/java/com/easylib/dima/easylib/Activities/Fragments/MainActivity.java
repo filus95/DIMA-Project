@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
@@ -39,6 +40,8 @@ import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.User;
 import AnswerClasses.Event;
+import AnswerClasses.WaitingPerson;
+import AnswerClasses.WaitingPersonInsert;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -65,6 +68,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Book> readBooks;
     // Home Fragment
     private Boolean prefLibCalledForHome = false;
+    // Queue Fragment
+    private int counter = 0;
+    ArrayList<Book> waitingListBooks;
+    ArrayList<Integer> waitingListUsers = new ArrayList<Integer> ();
+    ArrayList<String> waitingListLocations = new ArrayList<String> ();
 
     //Comunication
     ConnectionService mBoundService;
@@ -192,6 +200,41 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(eventListIntent);
                 }
             }
+            if (key.equals (Constants.GET_WAITING_LIST_USER)) {
+                AnswerClasses.WaitingPerson waitingPerson = (WaitingPerson) intent.getSerializableExtra (Constants.GET_WAITING_LIST_USER);
+                waitingListBooks = waitingPerson.getBooksInWaitingList ();
+                ((QueueFragment)fragment).setUserInfo (userInfo);
+                ((QueueFragment)fragment).setWaitingBooks (waitingListBooks);
+                getWaitingListUsersForEachBook (waitingListBooks);
+            }
+            if (key.equals (Constants.GET_WAITING_LIST_BOOK)) {
+                counter--;
+                ArrayList<WaitingPerson> waitingPeople = (ArrayList<WaitingPerson>) intent.getSerializableExtra (Constants.GET_WAITING_LIST_BOOK);
+                waitingListUsers.add (waitingPeople.size ());
+                if (counter == 0) {
+                    ((QueueFragment)fragment).setWaitingUsers (waitingListUsers);
+                    getWaitingListLocationsForEachBook (waitingListBooks);
+                }
+            }
+            if (key.equals (Constants.GET_LIBRARY_INFO)) {
+                counter--;
+                LibraryDescriptor library = (LibraryDescriptor) intent.getSerializableExtra (Constants.GET_LIBRARY_INFO);
+                waitingListLocations.add (library.getAddress ());
+                if (counter == 0) {
+                    ((QueueFragment)fragment).setWaitingLocations (waitingListLocations);
+                    waitingListLocations.clear ();
+                    waitingListUsers.clear ();
+                    waitingListBooks.clear ();
+                    setFragment(fragment);
+                }
+            }
+            if (key.equals (Constants.REMOVE_WAITING_PERSON)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_WAITING_PERSON);
+                if (bool)
+                    Toast.makeText (context, "Removed", Toast.LENGTH_LONG).show ();
+                else
+                    Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
+            }
         }
     };
 
@@ -207,6 +250,10 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -242,6 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.queue_item :
                         fragment = new QueueFragment();
+                        getWaitingListBooks ();
                         break;
 
                     case R.id.profile_item :
@@ -264,6 +312,10 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
     }
 
     @Override
@@ -334,6 +386,43 @@ public class MainActivity extends AppCompatActivity {
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_EVENTS_PER_USER, userInfo);
+        }
+    }
+
+    public void getWaitingListBooks() {
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
+        }
+    }
+
+    public void getWaitingListUsersForEachBook(ArrayList<Book> waitingListBooks) {
+        counter = waitingListBooks.size ();
+        for (Book b : waitingListBooks) {
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(getApplicationContext());
+                mBoundService.sendMessage(Constants.GET_WAITING_LIST_BOOK, b);
+            }
+        }
+    }
+
+    public void getWaitingListLocationsForEachBook(ArrayList<Book> waitingListBooks) {
+        counter = waitingListBooks.size ();
+        for (Book b : waitingListBooks) {
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(getApplicationContext());
+                mBoundService.sendMessage(Constants.GET_LIBRARY_INFO, b.getIdLibrary ());
+            }
+        }
+    }
+
+    public void removeFromWaitingList(int lib_id) {
+        AnswerClasses.WaitingPersonInsert wp = new WaitingPersonInsert ();
+        wp.setUser_id (userInfo.getUser_id ());
+        wp.setId_lib (lib_id);
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.REMOVE_WAITING_PERSON, wp);
         }
     }
 

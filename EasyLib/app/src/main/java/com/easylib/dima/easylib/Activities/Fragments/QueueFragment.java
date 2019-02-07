@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import com.easylib.dima.easylib.Adapters.QueueAdapter;
 import com.easylib.dima.easylib.Adapters.QueueRecyclerItemTouchHelper;
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -23,7 +22,9 @@ public class QueueFragment extends Fragment
         implements QueueRecyclerItemTouchHelper.QueueRecyclerItemTouchHelperListener {
 
     private static final String USER_INFO = "User Info";
-    private ArrayList<Book> waitingBooks;
+    private ArrayList<AnswerClasses.Book> waitingBooks;
+    private ArrayList<Integer> waitingUsers;
+    private ArrayList<String> waitingLocations;
     private AnswerClasses.User userInfo;
 
     private RecyclerView mRecyclerView;
@@ -51,7 +52,7 @@ public class QueueFragment extends Fragment
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new QueueAdapter(getContext(), waitingBooks);
+        mAdapter = new QueueAdapter(getContext(), waitingBooks, waitingUsers, waitingLocations, userInfo);
         mRecyclerView.setAdapter(mAdapter);
 
         // adding item touch helper
@@ -68,7 +69,7 @@ public class QueueFragment extends Fragment
             String name = waitingBooks.get(viewHolder.getAdapterPosition()).getTitle();
 
             // backup of removed item for undo purpose
-            final Book deletedItem = waitingBooks.get(viewHolder.getAdapterPosition());
+            final AnswerClasses.Book deletedItem = waitingBooks.get(viewHolder.getAdapterPosition());
             final int deletedIndex = viewHolder.getAdapterPosition();
 
             // remove the item from recycler view
@@ -76,8 +77,19 @@ public class QueueFragment extends Fragment
         }
     }
 
-    public void setData(ArrayList<Book> books, AnswerClasses.User userInfo) {
-        this.waitingBooks = books;
+    public void setUserInfo(AnswerClasses.User userInfo) {
         this.userInfo = userInfo;
+    }
+
+    public void setWaitingBooks(ArrayList<AnswerClasses.Book> waitingBooks) {
+        this.waitingBooks = waitingBooks;
+    }
+
+    public void setWaitingUsers(ArrayList<Integer> waitingUsers) {
+        this.waitingUsers = waitingUsers;
+    }
+
+    public void setWaitingLocations(ArrayList<String> waitingLocations) {
+        this.waitingLocations = waitingLocations;
     }
 }

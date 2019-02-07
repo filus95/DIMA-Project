@@ -7,21 +7,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarHolder> {
 
-    ArrayList<Book> books;
+    ArrayList<AnswerClasses.Book> books;
     Context context;
     ArrayList<String> dates;
     // Set the RecycleView of the single date
-    private QueueAdapter mAdapter;
+    private BookAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     public CalendarAdapter(Context context, ArrayList books) {
@@ -54,7 +52,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         holder.recycleBooks.setLayoutManager(mLayoutManager);
         holder.recycleBooks.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new QueueAdapter(context, books);
+        mAdapter = new BookAdapter (context, books);
         holder.recycleBooks.setAdapter(mAdapter);
     }
 
