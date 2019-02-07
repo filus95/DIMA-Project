@@ -19,7 +19,8 @@ import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
 
-    private ArrayList<AnswerClasses.Book> books = new ArrayList<AnswerClasses.Book>();
+    private ArrayList<AnswerClasses.Reservation> reservations;
+    private AnswerClasses.User userInfo;
     private ArrayList<String> dates = new ArrayList<String>();
 
     // Dates RecycleView
@@ -31,8 +32,24 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        // Inizialize first item with books to take
+        for (AnswerClasses.Reservation r : reservations) {
+            if (r.isTaken () == false)
+                dates.add ("To Take");
+        }
+        // Fill dates ArrayList with distinct dates
+        for (AnswerClasses.Reservation r : reservations) {
+            for (String d : dates) {
+                if (r.isTaken () == true) {
+                    if (d == r.getEnd_res_date ().toString ().replace ("T", "  ")){
+                        break;
+                    }
+                }
+            }
+            dates.add (r.getEnd_res_date ().toString ().replace ("T", "  "));
+        }
 
         // RecycleView setup
         mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_calendar_recycle);
@@ -49,9 +66,14 @@ public class CalendarFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new CalendarAdapter(getContext(), books);
+        mAdapter = new CalendarAdapter(getContext(), reservations, dates, userInfo);
         mRecyclerView.setAdapter(mAdapter);
 
         return root;
+    }
+
+    public void setData(ArrayList<AnswerClasses.Reservation> reservations, AnswerClasses.User userInfo) {
+        this.reservations = reservations;
+        this.userInfo = userInfo;
     }
 }

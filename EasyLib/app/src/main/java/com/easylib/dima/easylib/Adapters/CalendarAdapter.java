@@ -11,25 +11,27 @@ import android.widget.TextView;
 
 import com.easylib.dima.easylib.R;
 
+import java.net.UnknownServiceException;
 import java.util.ArrayList;
+
+import AnswerClasses.Book;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarHolder> {
 
-    ArrayList<AnswerClasses.Book> books;
+    AnswerClasses.User userInfo;
+    ArrayList<AnswerClasses.Reservation> reservations;
     Context context;
     ArrayList<String> dates;
+
     // Set the RecycleView of the single date
     private BookAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    public CalendarAdapter(Context context, ArrayList books) {
+    public CalendarAdapter(Context context, ArrayList<AnswerClasses.Reservation> reservations, ArrayList<String> dates, AnswerClasses.User userInfo) {
         this.context = context;
-        this.books = books;
-
-        // FOR TEST TODO : get all DIFFERENT DATES and fill the dates ArrayList
-        dates = new ArrayList<String>();
-        this.dates.add("00/00/0000");
-        this.dates.add("11/11/1111");
+        this.reservations = reservations;
+        this.dates = dates;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -43,7 +45,22 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     public void onBindViewHolder(CalendarHolder holder, int position) {
         // set the data in items
         String date = dates.get(position);
-        // TODO : get the books corresponding to that DATE
+        ArrayList<AnswerClasses.Book> booksForDate = new ArrayList<Book> ();
+
+        holder.date.setText (date);
+        if (date.equals ("To Take")) {
+            for (AnswerClasses.Reservation r : reservations) {
+                if (r.isTaken () == false){
+                    booksForDate.add (r.getBook ());
+                }
+            }
+        } else {
+            for (AnswerClasses.Reservation r : reservations) {
+                if (date == r.getEnd_res_date ().toString ().replace ("T", "  ")){
+                    booksForDate.add (r.getBook ());
+                }
+            }
+        }
 
         // improve performance
         holder.recycleBooks.setHasFixedSize(true);
@@ -52,7 +69,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         holder.recycleBooks.setLayoutManager(mLayoutManager);
         holder.recycleBooks.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new BookAdapter (context, books);
+        mAdapter = new BookAdapter (context, booksForDate, userInfo);
         holder.recycleBooks.setAdapter(mAdapter);
     }
 
