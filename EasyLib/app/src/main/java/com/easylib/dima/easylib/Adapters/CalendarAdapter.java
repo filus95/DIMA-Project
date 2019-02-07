@@ -48,16 +48,18 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
         ArrayList<AnswerClasses.Book> booksForDate = new ArrayList<Book> ();
 
         holder.date.setText (date);
-        if (date.equals ("To Take")) {
+        if (position == 0 & date.equals ("To Take")) {
             for (AnswerClasses.Reservation r : reservations) {
-                if (r.isTaken () == false){
+                if (!r.isTaken ()){
                     booksForDate.add (r.getBook ());
                 }
             }
         } else {
             for (AnswerClasses.Reservation r : reservations) {
-                if (date == r.getEnd_res_date ().toString ().replace ("T", "  ")){
-                    booksForDate.add (r.getBook ());
+                if (r.isTaken ()) {
+                    if (date.equals (r.getEnd_res_date ().toString ().replace ("T", "  "))) {
+                        booksForDate.add (r.getBook ());
+                    }
                 }
             }
         }
