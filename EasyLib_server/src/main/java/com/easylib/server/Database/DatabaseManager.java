@@ -111,7 +111,7 @@ public class DatabaseManager {
 
     public ArrayList<Reservation> getReservations(int user_id, String schema_name, int id_lib) {
         String query = "select * from "+schema_name+"."+Constants.RESERVATIONS_TABLE_NAME+
-                " where user_id = "+user_id+" order by id desc";
+                " where user_id = "+user_id+" order by user_id desc";
 
         return getQueryReservations(query, schema_name, id_lib);
     }
