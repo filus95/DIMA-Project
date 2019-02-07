@@ -57,6 +57,7 @@ public class App
         reservation.setUser_id(14);
         ArrayList<Reservation> res = new ArrayList<>();
         ArrayList<Integer> idLibs = dbms.getAllIdLibs();
+        res = dbms.getReservations(reservation.getUser_id(), dbms.getSchemaNameLib(1),1);
         for (Integer idLib : idLibs) {
             String schema_name = dbms.getSchemaNameLib(idLib);
             res.addAll(dbms.getReservations(reservation.getUser_id(), schema_name, idLib));
