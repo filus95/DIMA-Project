@@ -113,11 +113,11 @@
                     </LinearLayout>
 
                     <TextView
-                        android:id="@+id/event_activity_error_alreadyJoined"
+                        android:id="@+id/event_activity_error_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="Already Reserved"
+                        android:text="No More Seats"
                         android:textAlignment="center"
                         android:textColor="@android:color/holo_red_light"
                         android:textSize="18sp"
@@ -128,10 +128,10 @@
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="setReservation"
                         android:text="Reserve Seat"
                         android:textColor="@android:color/holo_green_light"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
             </ScrollView>

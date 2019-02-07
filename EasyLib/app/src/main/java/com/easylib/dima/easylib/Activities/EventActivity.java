@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -17,10 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class EventActivity extends AppCompatActivity {
     private TextView description;
     private TextView availableSeatsNum;
     private ImageView image;
-    private TextView alredyJoinedText;
+    private TextView errorText;
     private Button reserveButton;
 
     //Comunication
@@ -99,7 +98,7 @@ public class EventActivity extends AppCompatActivity {
             if (key.equals(Constants.GET_EVENTS_PER_USER)) {
                 joinedEvents = (ArrayList<Event>) intent.getSerializableExtra (Constants.GET_EVENTS_PER_USER);
                 for (Event event : joinedEvents) {
-                    if (event.getId () == eventInfo.getId ()) {
+                    if (event.getId () == eventInfo.getId () & event.getIdLib () == eventInfo.getIdLib ()) {
                         setReservationButton (true);
                         return;
                     }
@@ -107,8 +106,34 @@ public class EventActivity extends AppCompatActivity {
                 setReservationButton (false);
             }
             if (key.equals (Constants.INSERT_EVENT_PARTICIPANT)) {
-                Toast.makeText (context, "Registered", Toast.LENGTH_LONG).show ();
-                // TODO change button color and Text
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_EVENT_PARTICIPANT);
+                if (bool) {
+                    Toast.makeText (context, "Seat Reserved", Toast.LENGTH_LONG).show ();
+                    reserveButton.setText("Remove Reservation");
+                    reserveButton.setTextColor(Color.RED);
+                    reserveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            removeReservation ();
+                        }
+                    });
+                } else
+                    Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
+            }
+            if (key.equals (Constants.REMOVE_EVENT_PARTECIPANT)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_EVENT_PARTECIPANT);
+                if (bool) {
+                    Toast.makeText (context, "Reserved Seat Removed", Toast.LENGTH_LONG).show ();
+                    reserveButton.setText("Reserve Seat");
+                    reserveButton.setTextColor(Color.GREEN);
+                    reserveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            reserveSeat ();
+                        }
+                    });
+                } else
+                    Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
         }
     };
@@ -122,6 +147,8 @@ public class EventActivity extends AppCompatActivity {
         doBindService ();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_EVENT_PARTICIPANT));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_EVENT_PARTECIPANT));
+
 
         eventInfo = (Event) getIntent ().getSerializableExtra(EVENT_INFO);
         userInfo = (User) getIntent ().getSerializableExtra (USER_INFO);
@@ -132,7 +159,7 @@ public class EventActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.event_activity_description);
         availableSeatsNum = (TextView) findViewById(R.id.event_activity_available_seats_num);
         image = (ImageView) findViewById(R.id.event_activity_image);
-        alredyJoinedText = (TextView) findViewById (R.id.event_activity_error_alreadyJoined);
+        errorText = (TextView) findViewById (R.id.event_activity_error_text);
         reserveButton = (Button) findViewById(R.id.event_activity_reservation_button);
 
         // set the components
@@ -162,13 +189,34 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void setReservationButton(Boolean isAlreadyJoined) {
-        if (isAlreadyJoined)
-            alredyJoinedText.setVisibility (View.VISIBLE);
-        if (isAlreadyJoined | eventInfo.getSeats () == 0)
+        if(isAlreadyJoined) {
+            reserveButton.setText("Remove Reservation");
+            reserveButton.setTextColor(Color.RED);
+            reserveButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    removeReservation ();
+                }
+            });
+        } else if (eventInfo.getSeats () == 0) {
+            reserveButton.setText("Reserve Seat");
+            reserveButton.setTextColor(Color.GRAY);
             reserveButton.setEnabled (false);
+            errorText.setVisibility (View.VISIBLE);
+        } else {
+                reserveButton.setText("Reserve Seat");
+                reserveButton.setTextColor(Color.GREEN);
+                reserveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        reserveSeat ();
+                    }
+                });
+        }
+        reserveButton.setVisibility (View.VISIBLE);
     }
 
-    public void setReservation(View view) {
+    public void reserveSeat() {
         AnswerClasses.Event_partecipant event_partecipant = new Event_partecipant ();
         event_partecipant.setEvent_id (eventInfo.getId ());
         event_partecipant.setIdLib (eventInfo.getIdLib ());
@@ -180,6 +228,13 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void removeReservation() {
-        // TODO
+        AnswerClasses.Event_partecipant event_partecipant = new Event_partecipant ();
+        event_partecipant.setEvent_id (eventInfo.getId ());
+        event_partecipant.setIdLib (eventInfo.getIdLib ());
+        event_partecipant.setPartecipant_id (userInfo.getUser_id ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.REMOVE_EVENT_PARTECIPANT, event_partecipant);
+        }
     }
 }

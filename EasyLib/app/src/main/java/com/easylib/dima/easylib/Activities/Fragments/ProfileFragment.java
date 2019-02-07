@@ -124,6 +124,20 @@ public class ProfileFragment extends Fragment {
         email.setText(userInfo.getEmail());
         userID.setText(String.valueOf(userInfo.getUser_id()));
 
+        // get first 3 items of news, events, books
+        int i;
+        ArrayList<LibraryDescriptor> fewPrefLibraries = new ArrayList<LibraryDescriptor>();
+        ArrayList<AnswerClasses.Event> fewJoinedEvents = new ArrayList<AnswerClasses.Event>();
+        ArrayList<Book> fewReadBooks = new ArrayList<Book>();
+        for(i=0; i<3; i++) {
+            if (i < prefLibraries.size ())
+                fewPrefLibraries.add(prefLibraries.get(i));
+            if (i < joinedEvents.size ())
+                fewJoinedEvents.add(joinedEvents.get(i));
+            if (i < readBooks.size ())
+                fewReadBooks.add(readBooks.get(i));
+        }
+
         // Recycle setup Favourite Libraries
         mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_fav_lib_recycle);
         // improve performance
@@ -133,7 +147,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new ImageTitleLibraryAdapter(getContext(), prefLibraries);
+        mAdapter = new ImageTitleLibraryAdapter(getContext(), fewPrefLibraries);
         mRecyclerView.setAdapter(mAdapter);
 
         // Recycle setup Joined Events
@@ -145,7 +159,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView1.setLayoutManager(mLayoutManager1);
         mRecyclerView1.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter1 = new ImageTitleEventAdapter(getContext(), joinedEvents, userInfo);
+        mAdapter1 = new ImageTitleEventAdapter(getContext(), fewJoinedEvents, userInfo);
         mRecyclerView1.setAdapter(mAdapter1);
 
         // Recycle setup Read Books
@@ -157,7 +171,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter2 = new ReadBooksAdapter (getContext(), readBooks);
+        mAdapter2 = new ReadBooksAdapter (getContext(), fewReadBooks);
         mRecyclerView2.setAdapter(mAdapter2);
 
         return root;

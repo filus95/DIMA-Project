@@ -10,19 +10,26 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.easylib.dima.easylib.Model.Book;
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
 public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder> {
 
-    ArrayList<Book> queue_books;
+    private static final String USER_INFO = "User Info";
+    private ArrayList<AnswerClasses.Book> waitingBooks;
+    private ArrayList<Integer> waitingUsers;
+    private ArrayList<String> waitingLocations;
+    private AnswerClasses.User userInfo;
     Context context;
 
-    public QueueAdapter(Context context, ArrayList queue_books) {
+    public QueueAdapter(Context context, ArrayList<AnswerClasses.Book> waitingBooks, ArrayList<Integer> waitingUsers, ArrayList<String> waitingLocations, AnswerClasses.User userInfo) {
         this.context = context;
-        this.queue_books = queue_books;
+        this.waitingBooks = waitingBooks;
+        this.userInfo = userInfo;
+        this.waitingUsers = waitingUsers;
+        this.waitingLocations = waitingLocations;
     }
 
     @Override
@@ -35,43 +42,39 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
     @Override
     public void onBindViewHolder(QueueHolder holder, int position) {
         // set the data in items
-        Book book = queue_books.get(position);
+        AnswerClasses.Book book = waitingBooks.get(position);
         Glide.with(context)
-                .load(book.getImage())
+                .load(book.getImageLink ())
                 .into(holder.image);
-        holder.title.setText(book.getTitle());
-        holder.author.setText(book.getAuthor());
-        holder.location.setText(book.getLocation());
-        holder.num.setText(String.valueOf(book.getQueue()));
+        holder.title.setText(book.getTitle ());
+        holder.location.setText(waitingLocations.get (position));
+        holder.num.setText(String.valueOf(waitingUsers.get (position)));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // TODO: call method to see book_activity activity
-                //Intent intent = new Intent(context, MainActivity.class);
-                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                //context.startActivity(intent);
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return queue_books.size();
+        return waitingBooks.size();
     }
 
     public void removeItem(int position) {
-        queue_books.remove(position);
+        waitingBooks.remove(position);
         // notify the item removed by position
         // to perform recyclerview delete animations
         notifyItemRemoved(position);
+        ((MainActivity)context).removeFromWaitingList (waitingBooks.get (position).getIdLibrary ());
     }
 
     static public class QueueHolder extends RecyclerView.ViewHolder {
         protected ImageView image;
         protected TextView title;
-        protected TextView author;
         protected TextView location;
         protected TextView num;
 
@@ -81,7 +84,6 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
             super(v);
             image = v.findViewById(R.id.queue_img);
             title = v.findViewById(R.id.queue_title);
-            author = v.findViewById(R.id.queue_author);
             location = v.findViewById(R.id.queue_location);
             num = v.findViewById(R.id.queue_num);
             viewBackground = v.findViewById(R.id.queue_background);

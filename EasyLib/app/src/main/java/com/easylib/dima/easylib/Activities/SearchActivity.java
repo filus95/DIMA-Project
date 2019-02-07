@@ -19,6 +19,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -27,7 +28,6 @@ import android.widget.TextView;
 import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class SearchActivity extends AppCompatActivity {
     private static final String USER_INFO = "User Info";
     private AnswerClasses.User userInfo;
     private ArrayList<AnswerClasses.LibraryDescriptor> allLibraries;
-    private ArrayList<Book> books;
+    private ArrayList<AnswerClasses.Book> books;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -111,16 +111,32 @@ public class SearchActivity extends AppCompatActivity {
                 allLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_ALL_LIBRARIES);
             }
             if (key.equals(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
-                books = (ArrayList<Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
+                books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);
+                advancesSearchLay.setVisibility (View.INVISIBLE);
+                searchBt.setColorFilter(R.color.colorGray);
+                // try...catch used to hide keyboard after LoginActivity button pressed
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
             }
             if (key.equals(Constants.QUERY_ON_BOOKS)) {
-                books = (ArrayList<Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
+                books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
                 // specify an adapter
                 mAdapter = new BookAdapter(getApplicationContext (), books);
                 mRecyclerView.setAdapter(mAdapter);
+                advancesSearchLay.setVisibility (View.INVISIBLE);
+                searchBt.setColorFilter(R.color.colorGray);
+                // try...catch used to hide keyboard after LoginActivity button pressed
+                try {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                }
             }
         }
     };

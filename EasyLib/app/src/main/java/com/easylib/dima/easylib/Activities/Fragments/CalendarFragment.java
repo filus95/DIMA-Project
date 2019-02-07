@@ -12,8 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.easylib.dima.easylib.Adapters.CalendarAdapter;
-import com.easylib.dima.easylib.Adapters.QueueAdapter;
-import com.easylib.dima.easylib.Model.Book;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
@@ -21,7 +19,7 @@ import java.util.ArrayList;
 
 public class CalendarFragment extends Fragment {
 
-    private ArrayList<Book> books = new ArrayList<Book>();
+    private ArrayList<AnswerClasses.Book> books = new ArrayList<AnswerClasses.Book>();
     private ArrayList<String> dates = new ArrayList<String>();
 
     // Dates RecycleView
@@ -35,12 +33,6 @@ public class CalendarFragment extends Fragment {
         // Inflate the layout for this fragment
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_calendar, container, false);
-
-        // JUST FOR TEST
-        int i;
-        for(i=0; i<3; i++) {
-            books.add(new Book("Title"+i,"Author "+i, "Via non lo so (MI)", "https://upload.wikimedia.org/wikipedia/en/thumb/7/70/Brisingr_book_cover.png/220px-Brisingr_book_cover.png", i));
-        }
 
         // RecycleView setup
         mRecyclerView = (RecyclerView) root.findViewById(R.id.fragment_calendar_recycle);

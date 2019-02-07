@@ -202,6 +202,11 @@ public class LibraryActivity extends AppCompatActivity {
         phone.setText(libraryInfo.getTelephone_number());
         setFavourite.setVisibility (View.INVISIBLE);
 
+        // Set idLib to all News
+        for (Event event : libraryInfo.getLibraryContent ().getEvents ()){
+            event.setIdLib (libraryInfo.getId_lib ());
+        }
+
         // get 3 elements of each arrayList news, events, books
         int i;
         ArrayList<News> newsList = new ArrayList<News>();
