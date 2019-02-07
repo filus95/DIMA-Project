@@ -61,11 +61,11 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
     }
 
     public void removeItem(int position) {
+        ((MainActivity)context).removeFromWaitingList (waitingBooks.get (position).getIdLibrary (), waitingBooks.get (position).getIdentifier ());
         waitingBooks.remove(position);
         // notify the item removed by position
         // to perform recyclerview delete animations
         notifyItemRemoved(position);
-        ((MainActivity)context).removeFromWaitingList (waitingBooks.get (position).getIdLibrary ());
     }
 
     static public class QueueHolder extends RecyclerView.ViewHolder {

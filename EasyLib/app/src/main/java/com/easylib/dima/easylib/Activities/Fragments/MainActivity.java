@@ -38,6 +38,7 @@ import java.util.Set;
 
 import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.Reservation;
 import AnswerClasses.User;
 import AnswerClasses.Event;
 import AnswerClasses.WaitingPerson;
@@ -208,6 +209,11 @@ public class MainActivity extends AppCompatActivity {
                 else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
+            if (key.equals (Constants.GET_USER_RESERVATION)) {
+                ArrayList<Reservation> reservations = (ArrayList<Reservation>) intent.getSerializableExtra (Constants.GET_USER_RESERVATION);
+                ((CalendarFragment)fragment).setData (reservations, userInfo);
+                setFragment (fragment);
+            }
         }
     };
 
@@ -225,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -252,6 +259,7 @@ public class MainActivity extends AppCompatActivity {
 
                     case R.id.calendar_item :
                         fragment = new CalendarFragment();
+                        getReservations ();
                         break;
 
                     case R.id.scan_item :
@@ -285,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
     }
 
     private void setFragment(Fragment fragment) {
@@ -359,13 +368,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void removeFromWaitingList(int lib_id) {
+    public void removeFromWaitingList(int lib_id, String book_id) {
         AnswerClasses.WaitingPersonInsert wp = new WaitingPersonInsert ();
         wp.setUser_id (userInfo.getUser_id ());
         wp.setId_lib (lib_id);
+        wp.setBook_identifier (book_id);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.REMOVE_WAITING_PERSON, wp);
+        }
+    }
+
+    public void getReservations() {
+        AnswerClasses.Reservation reservation = new Reservation ();
+        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setIdLib (-1);
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.GET_USER_RESERVATION, reservation);
         }
     }
 

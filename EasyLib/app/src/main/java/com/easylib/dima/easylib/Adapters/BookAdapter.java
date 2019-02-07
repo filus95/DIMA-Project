@@ -15,12 +15,14 @@ import java.util.ArrayList;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookHolder> {
 
+    AnswerClasses.User userInfo;
     ArrayList<AnswerClasses.Book> books;
     Context context;
 
-    public BookAdapter(Context context, ArrayList books) {
+    public BookAdapter(Context context, ArrayList books, AnswerClasses.User userInfo) {
         this.context = context;
         this.books = books;
+        this.userInfo = userInfo;
     }
 
     @Override

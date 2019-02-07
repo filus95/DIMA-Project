@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class BookListActivity extends AppCompatActivity {
 
+    private AnswerClasses.User userInfo;
     private ArrayList<AnswerClasses.Book> books = new ArrayList<AnswerClasses.Book>();
 
     // recycle view
@@ -33,7 +34,7 @@ public class BookListActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter = new BookAdapter(this, books);
+        mAdapter = new BookAdapter(this, books, userInfo);
         mRecyclerView.setAdapter(mAdapter);
     }
 }

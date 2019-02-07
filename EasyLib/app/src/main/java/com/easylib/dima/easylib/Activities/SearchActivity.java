@@ -113,7 +113,7 @@ public class SearchActivity extends AppCompatActivity {
             if (key.equals(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
                 books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
                 // specify an adapter
-                mAdapter = new BookAdapter(getApplicationContext (), books);
+                mAdapter = new BookAdapter(getApplicationContext (), books, userInfo);
                 mRecyclerView.setAdapter(mAdapter);
                 advancesSearchLay.setVisibility (View.INVISIBLE);
                 searchBt.setColorFilter(R.color.colorGray);
@@ -127,7 +127,7 @@ public class SearchActivity extends AppCompatActivity {
             if (key.equals(Constants.QUERY_ON_BOOKS)) {
                 books = (ArrayList<AnswerClasses.Book>) intent.getSerializableExtra(Constants.QUERY_ON_BOOKS);
                 // specify an adapter
-                mAdapter = new BookAdapter(getApplicationContext (), books);
+                mAdapter = new BookAdapter(getApplicationContext (), books, userInfo);
                 mRecyclerView.setAdapter(mAdapter);
                 advancesSearchLay.setVisibility (View.INVISIBLE);
                 searchBt.setColorFilter(R.color.colorGray);
