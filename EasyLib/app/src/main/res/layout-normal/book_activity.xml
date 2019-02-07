@@ -169,7 +169,8 @@
                             android:singleLine="true"
                             android:textAlignment="center"
                             android:textColor="@android:color/holo_red_dark"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:visibility="invisible" />
 
                         <Button
                             android:id="@+id/book_activity_reserved_button"
@@ -179,7 +180,8 @@
                             android:layout_marginTop="8dp"
                             android:onClick="removeReservation"
                             android:text="Remove Reservation"
-                            android:textSize="18sp" />
+                            android:textSize="18sp"
+                            android:visibility="invisible" />
                     </LinearLayout>
 
                     <LinearLayout

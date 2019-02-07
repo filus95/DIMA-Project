@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
@@ -39,6 +42,8 @@ import java.util.Set;
 
 import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.Rating;
+import AnswerClasses.Reservation;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -61,6 +66,7 @@ public class BookActivity extends AppCompatActivity {
 
     // Needed variable
     private ArrayList<AnswerClasses.LibraryDescriptor> availableLibraries;
+    private int libraryWhereIsRead;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -115,7 +121,98 @@ public class BookActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String key = extractKey(intent);
 
-            if (key.equals(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
+            if (key.equals(Constants.GET_READ_BOOKS)) {
+                ArrayList<Book> readBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_READ_BOOKS);
+                Boolean isRead = false;
+                for (Book b : readBooks) {
+                    if (bookInfo.getIdentifier ().equals (b.getIdentifier ())) {
+                        isRead = true;
+                        libraryWhereIsRead = b.getIdLibrary ();
+                        break;
+                    }
+                }
+                if (isRead) {
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id ());
+                    }
+                }
+            }
+            if (key.equals (Constants.GET_USER_RATED_BOOKS)) {
+                ArrayList<Book> ratedBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_USER_RATED_BOOKS);
+                Boolean isRated = false;
+                for (Book b : ratedBooks) {
+                    if (bookInfo.getIdentifier ().equals (b.getIdentifier ())) {
+                        isRated = true;
+                        break;
+                    }
+                }
+                if (!isRated) {
+                    rateLayout.setVisibility (View.VISIBLE);
+                }
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
+                }
+            }
+            if (key.equals (Constants.INSERT_RATING)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_RATING);
+                if (bool) {
+                    Toast.makeText(context,"Rate Inserted", Toast.LENGTH_LONG).show();
+                    rateLayout.setVisibility (View.GONE);
+                }
+                else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
+            }
+            if (key.equals (Constants.GET_WAITING_LIST_USER)) {
+                AnswerClasses.WaitingPerson waitingPerson = (AnswerClasses.WaitingPerson) intent.getSerializableExtra (Constants.GET_WAITING_LIST_USER);
+                Boolean isInWaitingList = false;
+                for (Book b : waitingPerson.getBooksInWaitingList ()) {
+                    if (bookInfo.getIdentifier ().equals (b.getIdentifier ())) {
+                        isInWaitingList = true;
+                        break;
+                    }
+                }
+                if (isInWaitingList) {
+                    reservedLayout.setVisibility (View.VISIBLE);
+                    reservedText.setVisibility (View.VISIBLE);
+                    reservedText.setText ("On Waiting List");
+                } else {
+                    AnswerClasses.Reservation reservation = new AnswerClasses.Reservation ();
+                    reservation.setUser_id (userInfo.getUser_id ());
+                    reservation.setIdLib (-1);
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.GET_USER_RESERVATION, reservation);
+                    }
+                }
+            }
+            if (key.equals (Constants.GET_USER_RESERVATION)) {
+                ArrayList<AnswerClasses.Reservation> reservations = (ArrayList<AnswerClasses.Reservation>) intent.getSerializableExtra (Constants.GET_USER_RESERVATION);
+                Boolean isInReservationList = false;
+                AnswerClasses.Reservation res = new Reservation ();
+                for (AnswerClasses.Reservation r : reservations) {
+                    if (bookInfo.getIdentifier ().equals (r.getBook_idetifier ())) {
+                        isInReservationList = true;
+                        res = r;
+                        break;
+                    }
+                }
+                if (isInReservationList) {
+                    if (res.isTaken ()) {
+                        reservedLayout.setVisibility (View.VISIBLE);
+                        reservedText.setVisibility (View.VISIBLE);
+                        reservedText.setText ("Already Taken");
+                    } else {
+                        reservedLayout.setVisibility (View.VISIBLE);
+                        reservedText.setVisibility (View.VISIBLE);
+                        reservedText.setText ("On Reservation List");
+                        reservedButton.setVisibility (View.VISIBLE);
+                    }
+                } else {
+                    // TODO : call LIBRARIES_FOR_A_BOOK
+                }
             }
         }
     };
@@ -187,19 +284,10 @@ public class BookActivity extends AppCompatActivity {
             public void run() {
                 if (mBoundService != null) {
                     mBoundService.setCurrentContext(getApplicationContext());
-                    mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id ());
+                    mBoundService.sendMessage(Constants.GET_READ_BOOKS, userInfo);
                 }
             }
         }, 1000);
-    }
-
-    public void insertRate() {
-        // TODO : check rate is between 0 and 10
-        // TODO : call service
-    }
-
-    public void removeReservation(View view) {
-        // TODO
     }
 
     public void setLibrariesRecycler() {
@@ -207,5 +295,26 @@ public class BookActivity extends AppCompatActivity {
         // TODO : change adapter construction
         mAdapter = new BookAvailableLibAdapter(this, true, "string", new ArrayList<Book>());
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void insertRate() {
+        int rate = Integer.parseInt (userRate.getText ().toString ());
+        if (rate >= 0 && rate<= 10) {
+            AnswerClasses.Rating rateObj = new Rating ();
+            rateObj.setBook_identifier (bookInfo.getIdentifier ());
+            rateObj.setRating (rate);
+            rateObj.setUser_id (userInfo.getUser_id ());
+            rateObj.setIdLib (libraryWhereIsRead);
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(getApplicationContext());
+                mBoundService.sendMessage(Constants.INSERT_RATING, userInfo);
+            }
+        } else {
+            userRate.setTextColor (Color.RED);
+        }
+    }
+
+    public void removeReservation(View view) {
+        // TODO
     }
 }
