@@ -51,18 +51,10 @@ public class App
 
         DatabaseManager dbms = new DatabaseManager();
 
-//        ArrayList<LibraryDescriptor> res = dbms.getLibraryForAbook("library_1", "0743277716");
-        Reservation reservation = new Reservation();
-        reservation.setIdLib(-1);
-        reservation.setUser_id(14);
-        ArrayList<Reservation> res = new ArrayList<>();
-        ArrayList<Integer> idLibs = dbms.getAllIdLibs();
-        res = dbms.getReservations(reservation.getUser_id(), dbms.getSchemaNameLib(1),1);
-        for (Integer idLib : idLibs) {
-            String schema_name = dbms.getSchemaNameLib(idLib);
-            res.addAll(dbms.getReservations(reservation.getUser_id(), schema_name, idLib));
-        // todo: always use SimpleDateFormat for dates since windows sucks...
-        System.out.print("ciao");
+        WaitingPerson waitingPerson = new WaitingPerson();
+        waitingPerson.setUser_id(1);
+
+        WaitingPerson wp = dbms.getWaitingListUser(1, dbms.getAllIdLibs());
 //        int id_lib = 1;
 //        int limit = 3;
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
@@ -212,7 +204,7 @@ public class App
 //       up.setUser_id(5);
 //       up.setId_lib1(2);
 //       dbms.insertPreferences(up);
-    }
+
 
     private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);

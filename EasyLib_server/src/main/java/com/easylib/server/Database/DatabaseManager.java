@@ -227,7 +227,9 @@ public class DatabaseManager {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
             boolean first = true;
+            boolean zero = true;
             while (rs.next()){
+                zero = false;
                 Book temp = queryBookByIdentifier(rs.getString("book_identifier"),
                         schema_name, id_lib).get(0);
                 temp.setWaiting_position(rs.getInt("waiting_position"));
@@ -241,7 +243,11 @@ public class DatabaseManager {
                 }
             }
 
-            result.setBooksInWaitingList(books);
+            if(result.getBooksInWaitingList()!= null) {
+                books.addAll(result.getBooksInWaitingList());
+                result.setBooksInWaitingList(books);
+            } else
+                result.setBooksInWaitingList(books);
         } catch (SQLException e) {
             e.printStackTrace();
             result = null;
