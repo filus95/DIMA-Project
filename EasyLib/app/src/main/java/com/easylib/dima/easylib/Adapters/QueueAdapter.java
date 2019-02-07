@@ -19,17 +19,13 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
 
     private static final String USER_INFO = "User Info";
     private ArrayList<AnswerClasses.Book> waitingBooks;
-    private ArrayList<Integer> waitingUsers;
-    private ArrayList<String> waitingLocations;
     private AnswerClasses.User userInfo;
     Context context;
 
-    public QueueAdapter(Context context, ArrayList<AnswerClasses.Book> waitingBooks, ArrayList<Integer> waitingUsers, ArrayList<String> waitingLocations, AnswerClasses.User userInfo) {
+    public QueueAdapter(Context context, ArrayList<AnswerClasses.Book> waitingBooks, AnswerClasses.User userInfo) {
         this.context = context;
         this.waitingBooks = waitingBooks;
         this.userInfo = userInfo;
-        this.waitingUsers = waitingUsers;
-        this.waitingLocations = waitingLocations;
     }
 
     @Override
@@ -47,8 +43,8 @@ public class QueueAdapter extends RecyclerView.Adapter<QueueAdapter.QueueHolder>
                 .load(book.getImageLink ())
                 .into(holder.image);
         holder.title.setText(book.getTitle ());
-        holder.location.setText(waitingLocations.get (position));
-        holder.num.setText(String.valueOf(waitingUsers.get (position)));
+        holder.location.setText(book.getLib_name ());
+        holder.num.setText(String.valueOf(book.getWaiting_position ()));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {

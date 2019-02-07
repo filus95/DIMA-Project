@@ -68,11 +68,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Book> readBooks;
     // Home Fragment
     private Boolean prefLibCalledForHome = false;
-    // Queue Fragment
-    private int counter = 0;
-    ArrayList<Book> waitingListBooks;
-    ArrayList<Integer> waitingListUsers = new ArrayList<Integer> ();
-    ArrayList<String> waitingListLocations = new ArrayList<String> ();
 
     //Comunication
     ConnectionService mBoundService;
@@ -202,31 +197,9 @@ public class MainActivity extends AppCompatActivity {
             }
             if (key.equals (Constants.GET_WAITING_LIST_USER)) {
                 AnswerClasses.WaitingPerson waitingPerson = (WaitingPerson) intent.getSerializableExtra (Constants.GET_WAITING_LIST_USER);
-                waitingListBooks = waitingPerson.getBooksInWaitingList ();
-                ((QueueFragment)fragment).setUserInfo (userInfo);
-                ((QueueFragment)fragment).setWaitingBooks (waitingListBooks);
-                getWaitingListUsersForEachBook (waitingListBooks);
-            }
-            if (key.equals (Constants.GET_WAITING_LIST_BOOK)) {
-                counter--;
-                ArrayList<WaitingPerson> waitingPeople = (ArrayList<WaitingPerson>) intent.getSerializableExtra (Constants.GET_WAITING_LIST_BOOK);
-                waitingListUsers.add (waitingPeople.size ());
-                if (counter == 0) {
-                    ((QueueFragment)fragment).setWaitingUsers (waitingListUsers);
-                    getWaitingListLocationsForEachBook (waitingListBooks);
-                }
-            }
-            if (key.equals (Constants.GET_LIBRARY_INFO)) {
-                counter--;
-                LibraryDescriptor library = (LibraryDescriptor) intent.getSerializableExtra (Constants.GET_LIBRARY_INFO);
-                waitingListLocations.add (library.getAddress ());
-                if (counter == 0) {
-                    ((QueueFragment)fragment).setWaitingLocations (waitingListLocations);
-                    waitingListLocations.clear ();
-                    waitingListUsers.clear ();
-                    waitingListBooks.clear ();
-                    setFragment(fragment);
-                }
+                ArrayList<Book> waitingListBooks = waitingPerson.getBooksInWaitingList ();
+                ((QueueFragment)fragment).setData (userInfo, waitingListBooks);
+                setFragment (fragment);
             }
             if (key.equals (Constants.REMOVE_WAITING_PERSON)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_WAITING_PERSON);
@@ -251,8 +224,6 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_BOOK));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
@@ -313,15 +284,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_BOOK));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy ();
-        doUnbindService();
     }
 
     private void setFragment(Fragment fragment) {
@@ -393,26 +356,6 @@ public class MainActivity extends AppCompatActivity {
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
-        }
-    }
-
-    public void getWaitingListUsersForEachBook(ArrayList<Book> waitingListBooks) {
-        counter = waitingListBooks.size ();
-        for (Book b : waitingListBooks) {
-            if (mBoundService != null) {
-                mBoundService.setCurrentContext(getApplicationContext());
-                mBoundService.sendMessage(Constants.GET_WAITING_LIST_BOOK, b);
-            }
-        }
-    }
-
-    public void getWaitingListLocationsForEachBook(ArrayList<Book> waitingListBooks) {
-        counter = waitingListBooks.size ();
-        for (Book b : waitingListBooks) {
-            if (mBoundService != null) {
-                mBoundService.setCurrentContext(getApplicationContext());
-                mBoundService.sendMessage(Constants.GET_LIBRARY_INFO, b.getIdLibrary ());
-            }
         }
     }
 
