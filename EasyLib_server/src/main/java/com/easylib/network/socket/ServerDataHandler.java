@@ -363,9 +363,18 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         try {
 
             Reservation reservation = (Reservation)objectInputStream.readObject();
-            String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
-
-            ArrayList<Reservation> res = dbms.getReservations(reservation.getUser_id(), schema_name, reservation.getIdLib());
+            ArrayList<Reservation> res;
+            if ( reservation.getIdLib() == -1){
+                ArrayList<Integer> idLibs = dbms.getAllIdLibs();
+                res = new ArrayList<>();
+                for (Integer idLib: idLibs) {
+                    String schema_name = dbms.getSchemaNameLib(idLib);
+                    res.addAll(dbms.getReservations(reservation.getUser_id(), schema_name, idLib));
+                }
+            } else {
+                String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
+                res = dbms.getReservations(reservation.getUser_id(), schema_name, reservation.getIdLib());
+            }
             socketHandler.sendViaSocket(Constants.GET_USER_RESERVATION);
             socketHandler.sendViaSocket(res);
         } catch (IOException | ClassNotFoundException e) {
