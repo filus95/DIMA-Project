@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#212121</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#d81b60</color>
+    <color name="colorAccent">#D81B60</color>
 
     <color name="Transparent">#00ffffff</color>
 
@@ -11,9 +11,9 @@
     <color name="colorDarkWhite">#dadada</color>
     <color name="colorGray">#cccccc</color>
 
-    <color name="colorYellow">#ffd416</color>
+    <color name="colorYellow">#FFD416</color>
     <color name="RedDelete">#f92525</color>
 
-    <color name="colorDarkBlueTransparent">#dc212d42</color>
+    <color name="colorDarkBlueTransparent">#DC212D42</color>
     <color name="blackBar">#252525</color>
 </resources>

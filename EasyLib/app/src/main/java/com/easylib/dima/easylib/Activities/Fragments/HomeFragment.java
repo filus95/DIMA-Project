@@ -54,7 +54,6 @@ public class HomeFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        // TODO : change adapter construction
         mAdapter = new HomeAdapter(getContext(), librariesPref, userInfo);
         mRecyclerView.setAdapter(mAdapter);
 

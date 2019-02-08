@@ -41,6 +41,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
@@ -51,7 +52,7 @@
                         android:singleLine="true"
                         android:text="Title of the Book"
                         android:textAlignment="center"
-                        android:textSize="26sp"
+                        android:textSize="30sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +63,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:singleLine="true"
-                        android:text="Name Surname"
                         android:textAlignment="center"
                         android:textSize="18sp"
                         android:textStyle="italic"
@@ -70,49 +70,63 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/book_activity_title" />
 
-                    <FrameLayout
+                    <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <com.makeramen.roundedimageview.RoundedImageView
-                            android:id="@+id/book_activity_image"
-                            android:layout_width="200dp"
-                            android:layout_height="250dp"
-                            android:layout_marginStart="55dp"
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:layout_marginEnd="55dp"
-                            app:riv_corner_radius="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="40dp"
-                            android:layout_height="25dp"
-                            android:layout_marginStart="200dp"
-                            android:layout_marginTop="235dp"
-                            android:layout_marginEnd="55dp"
-                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent">
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/book_activity_average_rate"
-                                android:layout_width="wrap_content"
-                                android:layout_height="25dp"
-                                android:layout_weight="3"
-                                android:fontFamily="monospace"
-                                android:text="0"
-                                android:textAlignment="center"
-                                android:textColor="@color/colorYellow"
-                                android:textSize="20sp" />
+                            <com.makeramen.roundedimageview.RoundedImageView
+                                android:id="@+id/book_activity_image"
+                                android:layout_width="200dp"
+                                android:layout_height="250dp"
+                                android:scaleType="fitXY"
+                                app:riv_corner_radius="10dp"
+                                tools:layout_editor_absoluteX="55dp"
+                                tools:layout_editor_absoluteY="16dp" />
 
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:layout_marginTop="3dp"
-                                android:layout_weight="1"
-                                android:scaleType="fitCenter"
-                                app:srcCompat="@drawable/ic_star" />
-                        </LinearLayout>
-                    </FrameLayout>
+                            <LinearLayout
+                                android:layout_width="60dp"
+                                android:layout_height="35dp"
+                                android:layout_marginStart="120dp"
+                                android:layout_marginTop="205dp"
+                                android:background="@drawable/round_label_gray"
+                                android:gravity="center"
+                                android:orientation="horizontal"
+                                android:paddingBottom="8dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent">
+
+                                <TextView
+                                    android:id="@+id/book_activity_average_rate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="9"
+                                    android:fontFamily="monospace"
+                                    android:singleLine="true"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textColor="@color/colorAccent"
+                                    android:textSize="18sp" />
+
+                                <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:layout_weight="1"
+                                    android:scaleType="fitCenter"
+                                    app:srcCompat="@drawable/ic_star" />
+                            </LinearLayout>
+                        </FrameLayout>
+
+                    </android.support.constraint.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/book_activity_description"
@@ -195,11 +209,12 @@
                             android:id="@+id/textView17"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="20dp"
                             android:singleLine="true"
                             android:text="Available in these Libraries"
                             android:textAlignment="center"
-                            android:textSize="16sp" />
+                            android:textSize="20sp"
+                            android:textStyle="bold|italic" />
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/book_activity_lib_recycle"

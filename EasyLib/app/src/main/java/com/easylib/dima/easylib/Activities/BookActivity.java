@@ -67,6 +67,8 @@ public class BookActivity extends AppCompatActivity {
     // Needed variable
     private ArrayList<AnswerClasses.LibraryDescriptor> availableLibraries;
     private int libraryWhereIsRead;
+    private int counterForBooksWaitingLists = 0;
+    private int whereBookIsReserved;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -136,6 +138,11 @@ public class BookActivity extends AppCompatActivity {
                         mBoundService.setCurrentContext(getApplicationContext());
                         mBoundService.sendMessage(Constants.GET_USER_RATED_BOOKS, userInfo.getUser_id ());
                     }
+                } else {
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
+                    }
                 }
             }
             if (key.equals (Constants.GET_USER_RATED_BOOKS)) {
@@ -196,6 +203,7 @@ public class BookActivity extends AppCompatActivity {
                     if (bookInfo.getIdentifier ().equals (r.getBook_idetifier ())) {
                         isInReservationList = true;
                         res = r;
+                        whereBookIsReserved = r.getIdLib ();
                         break;
                     }
                 }
@@ -211,7 +219,52 @@ public class BookActivity extends AppCompatActivity {
                         reservedButton.setVisibility (View.VISIBLE);
                     }
                 } else {
-                    // TODO : call LIBRARIES_FOR_A_BOOK
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.LIBRARIES_FOR_BOOK, bookInfo.getIdentifier ());
+                    }
+                }
+            }
+            if (key.equals (Constants.REMOVE_RESERVATION)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_RESERVATION);
+                if (bool) {
+                    Toast.makeText(context,"Reservation Removed", Toast.LENGTH_LONG).show();
+                    reservedText.setVisibility (View.INVISIBLE);
+                    reservedButton.setVisibility (View.INVISIBLE);
+                    reservedLayout.setVisibility (View.GONE);
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.LIBRARIES_FOR_BOOK, bookInfo.getIdentifier ());
+                    }
+                }
+                else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
+            }
+            if (key.equals (Constants.LIBRARIES_FOR_BOOK)) {
+                availableLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra (Constants.LIBRARIES_FOR_BOOK);
+                filterBooksList ();
+            }
+            if (key.equals (Constants.GET_WAITING_LIST_BOOK)) {
+                ArrayList<AnswerClasses.WaitingPerson> waitingPeople = (ArrayList<AnswerClasses.WaitingPerson>) intent.getSerializableExtra (Constants.GET_WAITING_LIST_BOOK);
+                availableLibraries.get (availableLibraries.size () - counterForBooksWaitingLists).getLibraryContent ().getBooks ().get (0).setWaitingQueueLength (waitingPeople.size ());
+                counterForBooksWaitingLists--;
+                if (counterForBooksWaitingLists == 0) {
+                    setLibrariesRecycler ();
+                }
+            }
+            if (key.equals (Constants.INSERT_RESERVATION)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_RESERVATION);
+                if (bool) {
+                    Toast.makeText(context,"Reservation Inserted", Toast.LENGTH_LONG).show();
+                    librariesLayout.setVisibility (View.GONE);
+                    reservedLayout.setVisibility (View.VISIBLE);
+                    reservedText.setVisibility (View.VISIBLE);
+                    reservedText.setText ("On Reservation List");
+                    reservedButton.setVisibility (View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -229,8 +282,10 @@ public class BookActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RATING));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_RESERVATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.LIBRARIES_FOR_BOOK));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RATED_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);
@@ -250,11 +305,15 @@ public class BookActivity extends AppCompatActivity {
 
         // set the components
         title.setText(bookInfo.getTitle());
-        for(String author : bookInfo.getAuthors()){
-            authors.setText(authors + ", " + author);
+        for(int i=0; i<bookInfo.getAuthors ().size (); i++){
+            if (i == 0) {
+                authors.setText (authors.getText ().toString () + bookInfo.getAuthors ().get (i));
+            } else {
+                authors.setText (authors.getText ().toString () + ", " + bookInfo.getAuthors ().get (i));
+            }
         }
         description.setText(bookInfo.getDescription());
-        avgRate.setText(bookInfo.getAverageRating().intValue());
+        avgRate.setText(String.valueOf (bookInfo.getAverageRating ().intValue ()));
         Glide.with(this)
                 .load(bookInfo.getImageLink())
                 .into(image);
@@ -290,11 +349,17 @@ public class BookActivity extends AppCompatActivity {
         }, 1000);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+    }
+
     public void setLibrariesRecycler() {
         // specify an adapter
-        // TODO : change adapter construction
-        mAdapter = new BookAvailableLibAdapter(this, true, "string", new ArrayList<Book>());
+        mAdapter = new BookAvailableLibAdapter(this, availableLibraries);
         mRecyclerView.setAdapter(mAdapter);
+        librariesLayout.setVisibility (View.VISIBLE);
     }
 
     public void insertRate() {
@@ -315,6 +380,70 @@ public class BookActivity extends AppCompatActivity {
     }
 
     public void removeReservation(View view) {
+        Reservation reservation = new Reservation ();
+        reservation.setIdLib (whereBookIsReserved);
+        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.REMOVE_RESERVATION, reservation);
+        }
+    }
+
+    public void filterBooksList() {
+        for (LibraryDescriptor l : availableLibraries) {
+            Book b = new Book ();
+            for (Book book : l.getLibraryContent ().getBooks ()) {
+                if (book.getIdentifier ().equals (bookInfo.getIdentifier ())) {
+                    b = book;
+                    break;
+                }
+            }
+            l.getLibraryContent ().getBooks ().clear ();
+            l.getLibraryContent ().getBooks ().add (b);
+        }
+        numOfBooksToGetWaitingList ();
+    }
+
+    public void numOfBooksToGetWaitingList() {
+        for (LibraryDescriptor l : availableLibraries) {
+            if (l.getLibraryContent ().getBooks ().get (0).getQuantity_reserved () == 0) {
+                counterForBooksWaitingLists++;
+            }
+        }
+        if (counterForBooksWaitingLists == 0) {
+            setLibrariesRecycler ();
+        } else {
+            callWaitingListsForBooks ();
+        }
+    }
+
+    public void callWaitingListsForBooks() {
+        for (LibraryDescriptor l : availableLibraries) {
+            if (l.getLibraryContent ().getBooks ().get (0).getQuantity_reserved () == 0) {
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_WAITING_LIST_BOOK, l.getLibraryContent ().getBooks ().get (0));
+                }
+            }
+        }
+    }
+
+    public void addUserToBookWaitingList(LibraryDescriptor library) {
         // TODO
+    }
+
+    public void addUserToBookReservationList(LibraryDescriptor library) {
+        // Need to set if the user next calls Remove Reservation... in order to have a reference
+        whereBookIsReserved = library.getId_lib ();
+        
+        Reservation reservation = new Reservation ();
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setIdLib (library.getId_lib ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.INSERT_RESERVATION, reservation);
+        }
     }
 }
