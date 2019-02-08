@@ -374,11 +374,6 @@ public class LoginActivity extends AppCompatActivity {
         } else {
 
             loadingLayout.setVisibility(View.VISIBLE);
-
-            //TODO: Make the call to Server
-            // Get username & password
-//          Integer num = 1;
-
             // Send Login Info to Server
             if (mBoundService != null) {
                 mBoundService.setCurrentContext(this);
