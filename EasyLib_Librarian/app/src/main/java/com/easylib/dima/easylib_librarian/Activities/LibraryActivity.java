@@ -86,7 +86,7 @@ public class LibraryActivity extends AppCompatActivity {
     };
 
     public void doBindService() {
-        bindService(new Intent(LoginActivity.this, ConnectionService.class), mConnection,
+        bindService(new Intent(LibraryActivity.this, ConnectionService.class), mConnection,
                 Context.BIND_AUTO_CREATE);
         mIsBound = true;
         if(mBoundService!=null){
