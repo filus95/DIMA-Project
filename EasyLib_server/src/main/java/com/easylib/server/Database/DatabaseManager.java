@@ -625,6 +625,7 @@ public class DatabaseManager {
                 //todo: should i add these columns in DB?
 //                queryResult.setReserved(rs.getBoolean("reserved"));
 //                queryResult.setWaiting_list(rs.getBoolean("waiting_list"));
+                queryResult.setDescription(rs.getString("description"));
                 queryResult.setAverageRating(rs.getFloat("averageRating"));
                 results.add(queryResult);
             }
