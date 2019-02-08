@@ -60,6 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -74,6 +75,7 @@
                             android:layout_height="250dp"
                             android:layout_marginStart="55dp"
                             android:layout_marginTop="16dp"
+                            android:layout_marginBottom="16dp"
                             android:layout_marginEnd="55dp"
                             android:layout_weight="0"
                             app:riv_corner_radius="10dp" />
@@ -156,6 +158,16 @@
                         android:text="Description"
                         android:textAlignment="center"
                         android:textSize="20sp" />
+
+                    <Button
+                        android:id="@+id/library_activity_logout_button"
+                        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="24dp"
+                        android:onClick="logout"
+                        android:text="LOGOUT"
+                        android:textSize="22sp" />
 
                 </LinearLayout>
 
