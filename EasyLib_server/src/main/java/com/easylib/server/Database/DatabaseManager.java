@@ -89,6 +89,9 @@ public class DatabaseManager {
      */
     public boolean insertNewReservation(Reservation reservInfo, String schema_name){
 
+        if (zeroQuantity(reservInfo,schema_name,Constants.RESERVATIONS_TABLE_NAME,"quantity"))
+            return false;
+
         Map<String, Object> map = new HashMap<>();
         ArrayList<String> columnsName = new ArrayList<>();
         columnsName.add("user_id");
@@ -107,6 +110,37 @@ public class DatabaseManager {
         map = reservInfo.getMapAttribute(columnsName);
 
         return insertStatement(map, Constants.RESERVATIONS_TABLE_NAME, schema_name);
+    }
+
+    private boolean zeroQuantity(Reservation res, String schema_name, String table_name, String column){
+
+        String query = "select quantity from "+schema_name+"."+table_name+" where" +
+                column+" = '"+res.getBook_idetifier()+"'";
+
+        return queryExecute(query, "quantity");
+    }
+
+    private boolean zeroSeats(Event_partecipant ep, String schema_name, String table_name, String column){
+
+        String query = "select seats from "+schema_name+"."+table_name+" where" +
+                column+" = '"+ep.getEvent_id()+"'";
+
+        return queryExecute(query, "seats");
+    }
+
+    private boolean queryExecute(String query, String quantity) {
+        Statement st;
+        try {
+            st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            if (rs.next())
+                if (rs.getInt(quantity) == 0)
+                    return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public ArrayList<Reservation> getReservations(int user_id, String schema_name, int id_lib) {
@@ -135,6 +169,7 @@ public class DatabaseManager {
                 queryResult.setBook_title(rs.getString("book_title"));
                 queryResult.setQuantity(rs.getInt("quantity"));
                 queryResult.setTaken(rs.getBoolean("taken"));
+                queryResult.setIdLib(id_lib);
 
                 if ( rs.getDate("starting_reservation_date") != null)
                     queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate().toString());
@@ -152,6 +187,9 @@ public class DatabaseManager {
     }
 
     public boolean insertNewEventPartecipant(Event_partecipant partecipant, String schema_name){
+
+        if (zeroSeats(partecipant, schema_name,Constants.EVENT_PARTICIPANT_TABLE_NAME, "seats"))
+            return false;
 
         Map<String, Object> map = new HashMap<>();
         ArrayList<String> columnsName = new ArrayList<>();
@@ -861,13 +899,7 @@ public class DatabaseManager {
 
         // Waiting list flow
         String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist " +
-                "where library_1.waitinglist.waiting_position = 1";
-
-
-//                "" +
-//                "where " +
-//                "(book_identifier = '"+reservation.getBook_idetifier()+"'"+" and" +
-//                " waiting_position = 1";
+                "where waiting_position = 1 and book_identifier = '"+reservation.getBook_idetifier()+"'";
 
         // Delete old reservation
         String query = "delete from "+getSchemaNameLib(reservation.getIdLib())+"."+
