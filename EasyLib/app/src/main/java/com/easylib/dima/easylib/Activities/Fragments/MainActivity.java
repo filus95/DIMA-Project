@@ -19,6 +19,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.easylib.dima.easylib.Activities.BookActivity;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
@@ -39,6 +40,7 @@ import java.util.Set;
 
 import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
+import AnswerClasses.Query;
 import AnswerClasses.Reservation;
 import AnswerClasses.User;
 import AnswerClasses.Event;
@@ -215,6 +217,17 @@ public class MainActivity extends AppCompatActivity {
                 ((CalendarFragment)fragment).setData (reservations, userInfo);
                 setFragment (fragment);
             }
+            if (key.equals (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
+                ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS);
+                Book b = books.get (0);
+                Intent bookIntent = new Intent (context, BookActivity.class);
+                Bundle bundle = new Bundle ();
+                bundle.putSerializable(BOOK_INFO, b);
+                bundle.putSerializable (USER_INFO, userInfo);
+                bookIntent.putExtras(bundle);
+                doUnbindService ();
+                context.startActivity(bookIntent);
+            }
         }
     };
 
@@ -222,17 +235,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_READ_BOOKS));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         prefLibraries = (ArrayList<LibraryDescriptor>) getIntent().getSerializableExtra(USER_PREFERENCES);
@@ -295,6 +297,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
 
         // Reload fragment content on resume
         if (fragment instanceof ProfileFragment) {
@@ -425,8 +428,12 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
-            // handle scan result
+            Query q = new Query ();
+            q.setIdentifier (scanResult.getContents ());
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(getApplicationContext());
+                mBoundService.sendMessage(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, q);
+            }
         }
-        // else continue with any other code you need in the method
     }
 }
