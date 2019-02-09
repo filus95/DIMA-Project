@@ -158,6 +158,9 @@ public class LibraryActivity extends AppCompatActivity {
                     });
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
+            } if (key.equals(Constants.NOTIFICATION)){
+                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
+                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -175,6 +178,7 @@ public class LibraryActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);

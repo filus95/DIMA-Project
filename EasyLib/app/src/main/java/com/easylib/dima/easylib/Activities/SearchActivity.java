@@ -24,6 +24,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easylib.dima.easylib.Adapters.BookAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
@@ -137,6 +138,9 @@ public class SearchActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
                 }
+            } if (key.equals(Constants.NOTIFICATION)){
+                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
+                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -151,6 +155,7 @@ public class SearchActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
 

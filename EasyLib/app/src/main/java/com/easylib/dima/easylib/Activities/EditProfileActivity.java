@@ -89,6 +89,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(context, "Update Failed", Toast.LENGTH_LONG).show();
                 }
+            } if (key.equals(Constants.NOTIFICATION)){
+                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
+                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -101,6 +104,7 @@ public class EditProfileActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.EDIT_PROFILE_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
 

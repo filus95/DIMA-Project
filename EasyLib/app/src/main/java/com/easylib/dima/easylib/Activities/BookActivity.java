@@ -257,7 +257,7 @@ public class BookActivity extends AppCompatActivity {
             if (key.equals (Constants.INSERT_RESERVATION)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_RESERVATION);
                 if (bool) {
-                    Toast.makeText(context,"Reservation Inserted", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context,"Reservation Inserted", Toast.LENGTH_LONG).show();
                     librariesLayout.setVisibility (View.GONE);
                     reservedLayout.setVisibility (View.VISIBLE);
                     reservedText.setVisibility (View.VISIBLE);
@@ -285,10 +285,17 @@ public class BookActivity extends AppCompatActivity {
                     reservedText.setText ("On Waiting List");
                     reservedText.setVisibility (View.VISIBLE);
                 }
-                else {
-                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
-                }
             }
+            if (key.equals(Constants.NOTIFICATION)){
+                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
+                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
+            }
+
+//            else
+//                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+
+
+
         }
     };
 
@@ -309,6 +316,7 @@ public class BookActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_WAITING_PERSON));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);

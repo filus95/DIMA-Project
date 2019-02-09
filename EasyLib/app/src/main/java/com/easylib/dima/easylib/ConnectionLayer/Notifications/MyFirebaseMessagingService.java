@@ -83,15 +83,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
         Intent intent;
         intent = new Intent(Constants.NOTIFICATION);
-        ArrayList<String> message = new ArrayList<>();
-        message.add(data.get("title"));
-        message.add(data.get("body"));
 
+        String message = data.get("message");
         intent.putExtra(Constants.NOTIFICATION, message);
-        MyApplication.getAppContext().sendBroadcast(intent);
+        Context context = MyApplication.getAppContext();
+        context.sendBroadcast(intent);
 
 
-        //        String title = remoteMessage.getData().get(“title”);
 //        String body = remoteMessage.getData().get(“body”);
 //        String objectId = remoteMessage.getData().get("object_id");
 //        String objectType = remoteMessage.getData().get(objectType”);
