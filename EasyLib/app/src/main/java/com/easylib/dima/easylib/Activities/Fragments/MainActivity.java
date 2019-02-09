@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 setFragment (fragment);
             }
             if (key.equals (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
-                ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS);
+                ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
                 Book b = books.get (0);
                 Intent bookIntent = new Intent (context, BookActivity.class);
                 Bundle bundle = new Bundle ();
