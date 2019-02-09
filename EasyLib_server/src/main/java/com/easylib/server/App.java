@@ -52,7 +52,7 @@ public class App
 
         Reservation reservation = new Reservation();
         reservation.setIdLib(2);
-        reservation.setUser_id(5);
+        reservation.setUser_id(1);
         reservation.setBook_idetifier("8822712951");
 
         dbms.removeReservation(reservation, false);

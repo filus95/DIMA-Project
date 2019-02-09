@@ -886,16 +886,6 @@ public class DatabaseManager {
             map.put("id_lib", reservation.getIdLib());
             insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
         }
-        //set notification
-        String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
-        String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()),
-                reservation.getUser_id())
-                .get(0)
-                .getTitle();
-        String title = "Your book is available!";
-        String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
-
-        sendNotification(title,mess, getNotificationToken(reservation.getUser_id()));
 
         // Waiting list flow
         String query_1 = "select * from "+getSchemaNameLib(reservation.getIdLib())+".waitinglist " +
@@ -910,6 +900,18 @@ public class DatabaseManager {
 
         ArrayList<WaitingPerson> waitingPeople = getQueryResultsWaitingListBook(query_1, getSchemaNameLib(reservation.getIdLib()),
                 reservation.getIdLib());
+
+        //set notification
+        String library_name = getLibraryInfo(reservation.getIdLib()).getLib_name();
+        String book_title =queryBookByIdentifier(reservation.getBook_idetifier(), getSchemaNameLib(reservation.getIdLib()),
+                reservation.getUser_id())
+                .get(0)
+                .getTitle();
+        String title = "Your book is available!";
+        String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
+
+        sendNotification(title,mess, getNotificationToken(waitingPeople.get(0).getUser_id()));
+
         queryExecution(conn, query);
         WaitingPerson wp;
         if ( waitingPeople.size() != 0 ){
