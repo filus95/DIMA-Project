@@ -17,8 +17,6 @@ import AnswerClasses.User;
 
 public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservationsAdapter.BookAvailableLibHolder> {
 
-    // TODO : decide vhich parameters to pass... need also to know number of user on waiting list for each book
-
     ArrayList<Reservation> reservations;
     Context context;
 
@@ -37,8 +35,8 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
     @Override
     public void onBindViewHolder(BookAvailableLibHolder holder, int position) {
         // set the data in items TODO
-        User user = users.get(position);
-        holder.userEmail.setText(user.getEmail());
+        Reservation reservation = reservations.get(position);
+        holder.userEmail.setText(String.valueOf (reservation.getUser_id ()));
 
         // implemented onClickListener event
         holder.button.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +50,7 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return reservations.size();
     }
 
     static class BookAvailableLibHolder extends RecyclerView.ViewHolder {
@@ -61,7 +59,7 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
 
         public BookAvailableLibHolder(View v) {
             super(v);
-            button = v.findViewById(R.id.book_activity_reservation_item_button);
+            button = v.findViewById(R.id.book_activity_reservation_item_reserve_button);
             userEmail = v.findViewById(R.id.book_activity_reservation_item_name);
         }
     }
