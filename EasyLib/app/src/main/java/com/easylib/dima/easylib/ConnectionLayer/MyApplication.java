@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
 
-@SuppressLint("Registered")
+//@SuppressLint("Registered")
 public class MyApplication extends Application {
 
     private static Context context;

@@ -11,6 +11,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    dexOptions {
+        preDexLibraries false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -56,6 +59,7 @@ dependencies {
     implementation 'com.gongwen:swipeback:1.0.2'
     implementation 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
     implementation 'com.google.zxing:core:3.2.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'
