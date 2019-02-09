@@ -145,6 +145,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
 
+        startService(new Intent(LoginActivity.this, ConnectionService.class));
+
         // get components
         email = (EditText) findViewById (R.id.email);
         password = (EditText) findViewById (R.id.password);
