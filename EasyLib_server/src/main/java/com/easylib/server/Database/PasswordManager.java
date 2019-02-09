@@ -104,6 +104,11 @@ class PasswordManager {
             // in the case of the librarian the user_id is equivalent to the library_id
             else {
                 user.setUser_id(rs.getInt("id_lib"));
+                if ( user.getPlainPassword().equals(rs.getString("hashed_pd"))){
+                    user.setPlainPassword(null);
+                    return user;
+                }
+
             }
 
             //check if the stored hashed password is the same of that one inserted

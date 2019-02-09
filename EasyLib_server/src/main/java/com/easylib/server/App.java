@@ -49,12 +49,14 @@ public class App
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
 
-        DatabaseManager dbms = new DatabaseManager();
 
-        WaitingPerson waitingPerson = new WaitingPerson();
-        waitingPerson.setUser_id(1);
-
-        WaitingPerson wp = dbms.getWaitingListUser(1, dbms.getAllIdLibs());
+//
+//        DatabaseManager dbms = new DatabaseManager();
+//
+//        WaitingPerson waitingPerson = new WaitingPerson();
+//        waitingPerson.setUser_id(1);
+//
+//        WaitingPerson wp = dbms.getWaitingListUser(1, dbms.getAllIdLibs());
 //        int id_lib = 1;
 //        int limit = 3;
 //        String schema_name = dbms.getSchemaNameLib(id_lib);
