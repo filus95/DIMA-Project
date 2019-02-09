@@ -137,10 +137,10 @@ public class DatabaseManager {
                 queryResult.setTaken(rs.getBoolean("taken"));
 
                 if ( rs.getDate("starting_reservation_date") != null)
-                    queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate());
+                    queryResult.setStart_res_date(rs.getDate("starting_reservation_date").toLocalDate().toString());
 
                 if ( rs.getDate("ending_reservation_date") != null)
-                    queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate());
+                    queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate().toString());
 
                 results.add(queryResult);
             }
@@ -233,7 +233,7 @@ public class DatabaseManager {
                 Book temp = queryBookByIdentifier(rs.getString("book_identifier"),
                         schema_name, id_lib).get(0);
                 temp.setWaiting_position(rs.getInt("waiting_position"));
-                temp.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime());
+                temp.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime().toString());
                 temp.setQuantity_reserved(rs.getInt("quantity"));
                 books.add(temp);
 
@@ -669,7 +669,7 @@ public class DatabaseManager {
                 Book book = queryBookByIdentifier(rs.getString("book_identifier"),
                         schema_name, id_lib).get(0);
                 book.setWaiting_position(rs.getInt("waiting_position"));
-                book.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime());
+                book.setReservation_date(rs.getTimestamp("reservation_date").toLocalDateTime().toString());
                 book.setQuantity_reserved(rs.getInt("quantity"));
                 ArrayList<Book> books = new ArrayList<>();
                 books.add(book);
@@ -693,7 +693,7 @@ public class DatabaseManager {
             while (rs.next()){
                 News elem = new News();
                 elem.setTitle(rs.getString("title"));
-                elem.setPost_date(rs.getTimestamp("post_date").toLocalDateTime());
+                elem.setPost_date(rs.getTimestamp("post_date").toLocalDateTime().toString());
                 elem.setContent(rs.getString("content"));
                 elem.setImage_link(rs.getString("image_link"));
                 to_ret.add(elem);
@@ -795,7 +795,7 @@ public class DatabaseManager {
                 elem.setId(rs.getInt("id"));
                 elem.setTitle(rs.getString("title"));
                 elem.setDescription(rs.getString("description"));
-                elem.setDate(rs.getTimestamp("date").toLocalDateTime());
+                elem.setDate(rs.getTimestamp("date").toLocalDateTime().toString());
                 elem.setSeats((Integer.parseInt(rs.getString("seats"))));
                 elem.setImage_link(rs.getString("image_link"));
                 elem.setIdLib(lib_id);
