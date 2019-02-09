@@ -44,6 +44,7 @@ import AnswerClasses.Book;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.Rating;
 import AnswerClasses.Reservation;
+import AnswerClasses.WaitingPersonInsert;
 
 public class BookActivity extends AppCompatActivity {
 
@@ -183,8 +184,8 @@ public class BookActivity extends AppCompatActivity {
                 }
                 if (isInWaitingList) {
                     reservedLayout.setVisibility (View.VISIBLE);
-                    reservedText.setVisibility (View.VISIBLE);
                     reservedText.setText ("On Waiting List");
+                    reservedText.setVisibility (View.VISIBLE);
                 } else {
                     AnswerClasses.Reservation reservation = new AnswerClasses.Reservation ();
                     reservation.setUser_id (userInfo.getUser_id ());
@@ -210,12 +211,12 @@ public class BookActivity extends AppCompatActivity {
                 if (isInReservationList) {
                     if (res.isTaken ()) {
                         reservedLayout.setVisibility (View.VISIBLE);
-                        reservedText.setVisibility (View.VISIBLE);
                         reservedText.setText ("Already Taken");
+                        reservedText.setVisibility (View.VISIBLE);
                     } else {
                         reservedLayout.setVisibility (View.VISIBLE);
-                        reservedText.setVisibility (View.VISIBLE);
                         reservedText.setText ("On Reservation List");
+                        reservedText.setVisibility (View.VISIBLE);
                         reservedButton.setVisibility (View.VISIBLE);
                     }
                 } else {
@@ -267,6 +268,19 @@ public class BookActivity extends AppCompatActivity {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
                 }
             }
+            if (key.equals (Constants.INSERT_WAITING_PERSON)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_WAITING_PERSON);
+                if (bool) {
+                    Toast.makeText(context,"Added on Queue", Toast.LENGTH_LONG).show();
+                    librariesLayout.setVisibility (View.GONE);
+                    reservedLayout.setVisibility (View.VISIBLE);
+                    reservedText.setText ("On Waiting List");
+                    reservedText.setVisibility (View.VISIBLE);
+                }
+                else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     };
 
@@ -286,6 +300,7 @@ public class BookActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.LIBRARIES_FOR_BOOK));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_WAITING_PERSON));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);
@@ -430,7 +445,13 @@ public class BookActivity extends AppCompatActivity {
     }
 
     public void addUserToBookWaitingList(LibraryDescriptor library) {
-        // TODO
+        WaitingPersonInsert waitingPersonInsert = new WaitingPersonInsert ();
+        waitingPersonInsert.setUser_id (userInfo.getUser_id ());
+        waitingPersonInsert.setId_lib (library.getId_lib ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.INSERT_WAITING_PERSON, waitingPersonInsert);
+        }
     }
 
     public void addUserToBookReservationList(LibraryDescriptor library) {
