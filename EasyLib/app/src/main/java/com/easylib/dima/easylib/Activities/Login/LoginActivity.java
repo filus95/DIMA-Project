@@ -169,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (libraries.size() == 0) {
                     callAllLibraries();
                 } else {
+                    sendNewNotificationToken(userInfo);
                     mainIntent = new Intent(context, MainActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(USER_PREFERENCES, libraries);
@@ -181,6 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             if (key.equals(Constants.GET_ALL_LIBRARIES)) {
+                sendNewNotificationToken(userInfo);
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_ALL_LIBRARIES);
                 loginPrefIntent = new Intent(context, LoginPreferenceActivity.class);
                 Bundle bundle = new Bundle();

@@ -15,6 +15,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
@@ -85,6 +86,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         ArrayList<String> message = new ArrayList<>();
         message.add(data.get("title"));
         message.add(data.get("body"));
+
         intent.putExtra(Constants.NOTIFICATION, message);
         MyApplication.getAppContext().sendBroadcast(intent);
 

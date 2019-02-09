@@ -441,6 +441,7 @@ public class BookActivity extends AppCompatActivity {
         reservation.setBook_idetifier (bookInfo.getIdentifier ());
         reservation.setUser_id (userInfo.getUser_id ());
         reservation.setIdLib (library.getId_lib ());
+        reservation.setBook_title(bookInfo.getTitle());
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.INSERT_RESERVATION, reservation);
