@@ -151,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user.getUser_id() == -1) {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
                     loadingLayout.setVisibility (View.INVISIBLE);
+                    makeItemsTouchable (true);
                 } else {
                     SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
                     if(!sp.contains(USER_ID)) {
