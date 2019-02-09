@@ -119,6 +119,15 @@ public class LibraryActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             String key = extractKey(intent);
 
+            if (key.equals (Constants.GET_LIBRARY_INFO)) {
+                libraryInfo = (LibraryDescriptor) intent.getSerializableExtra (Constants.GET_LIBRARY_INFO);
+                setAdapters ();
+                // Get user Preferences from Server to see if this library is Prefered
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id ());
+                }
+            }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 ArrayList<LibraryDescriptor> prefLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
                 Boolean libraryIsPref;
@@ -179,6 +188,7 @@ public class LibraryActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
@@ -204,8 +214,52 @@ public class LibraryActivity extends AppCompatActivity {
         description.setText(libraryInfo.getDescription());
         email.setText(libraryInfo.getEmail());
         phone.setText(libraryInfo.getTelephone_number());
-        setFavourite.setVisibility (View.INVISIBLE);
 
+        // setup recycleViews
+        newsRec.setHasFixedSize(true);
+        eventsRec.setHasFixedSize(true);
+        booksRec.setHasFixedSize(true);
+        // used grid layout
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
+        newsRec.setLayoutManager(mLayoutManager);
+        newsRec.setItemAnimator(new DefaultItemAnimator());
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 3);
+        eventsRec.setLayoutManager(mLayoutManager2);
+        eventsRec.setItemAnimator(new DefaultItemAnimator());
+        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, 3);
+        booksRec.setLayoutManager(mLayoutManager3);
+        booksRec.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
+
+        // Get Library info from Server
+        new Handler ().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_LIBRARY_INFO, libraryInfo.getId_lib ());
+                }
+            }
+        }, 1000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+    }
+
+    public void setAdapters() {
         // Set idLib to all News
         for (Event event : libraryInfo.getLibraryContent ().getEvents ()){
             event.setIdLib (libraryInfo.getId_lib ());
@@ -222,20 +276,6 @@ public class LibraryActivity extends AppCompatActivity {
             booksList.add(libraryInfo.getLibraryContent().getBooks().get(i));
         }
 
-        // setup recycleViews
-        newsRec.setHasFixedSize(true);
-        eventsRec.setHasFixedSize(true);
-        booksRec.setHasFixedSize(true);
-        // used grid layout
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
-        newsRec.setLayoutManager(mLayoutManager);
-        newsRec.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 3);
-        eventsRec.setLayoutManager(mLayoutManager2);
-        eventsRec.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, 3);
-        booksRec.setLayoutManager(mLayoutManager3);
-        booksRec.setItemAnimator(new DefaultItemAnimator());
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(this, newsList);
         newsRec.setAdapter(newsAdapter);
@@ -243,33 +283,6 @@ public class LibraryActivity extends AppCompatActivity {
         eventsRec.setAdapter(eventsAdapter);
         ImageTitleBookAdapter booksAdapter = new ImageTitleBookAdapter(this, booksList, userInfo);
         booksRec.setAdapter(booksAdapter);
-
-        // Get user Preferences from Server to see if this library is Prefered
-        new Handler ().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (mBoundService != null) {
-                    mBoundService.setCurrentContext(getApplicationContext());
-                    mBoundService.sendMessage(Constants.GET_USER_PREFERENCES, userInfo.getUser_id ());
-                }
-            }
-        }, 1000);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy ();
-        doUnbindService();
     }
 
     // setPreference Button setup based on the fact that library is already a favourite or not

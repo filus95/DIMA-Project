@@ -247,13 +247,14 @@
 
                     <Button
                         android:id="@+id/library_activity_fav_lib_button"
-                        android:layout_marginTop="8dp"
                         style="@style/Widget.AppCompat.Button.Borderless.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:text="Set Favourite"
                         android:textColor="@android:color/holo_green_light"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:visibility="invisible" />
 
                 </LinearLayout>
             </ScrollView>
