@@ -12,18 +12,19 @@ import com.easylib.dima.easylib_librarian.R;
 
 import java.util.ArrayList;
 
+import AnswerClasses.Reservation;
 import AnswerClasses.User;
 
 public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservationsAdapter.BookAvailableLibHolder> {
 
     // TODO : decide vhich parameters to pass... need also to know number of user on waiting list for each book
 
-    ArrayList<User> users;
+    ArrayList<Reservation> reservations;
     Context context;
 
-    public BookReservationsAdapter(Context context, ArrayList<User> users) {
+    public BookReservationsAdapter(Context context, ArrayList<Reservation> reservations) {
         this.context = context;
-        this.users = users;
+        this.reservations = reservations;
     }
 
     @Override

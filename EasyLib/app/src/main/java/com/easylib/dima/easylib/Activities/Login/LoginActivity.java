@@ -240,7 +240,6 @@ public class LoginActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN_GOOGLE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_SILENT_LOGIN_GOOGLE));
-
     }
 
     @Override

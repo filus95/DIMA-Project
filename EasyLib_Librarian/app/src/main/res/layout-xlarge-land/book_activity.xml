@@ -145,7 +145,8 @@
                         android:layout_marginTop="32dp"
                         android:text="Reservations"
                         android:textAlignment="center"
-                        android:textSize="24sp" />
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/book_activity_reservations_recycler"
