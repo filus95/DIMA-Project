@@ -101,6 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 User user = (User) intent.getSerializableExtra(Constants.LIBRARIAN_LOGIN);
                 if (user.getUser_id() == -1) {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
+                    loadingLayout.setVisibility (View.INVISIBLE);
                 } else {
                     SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
                     if(!sp.contains(USER_ID)) {
