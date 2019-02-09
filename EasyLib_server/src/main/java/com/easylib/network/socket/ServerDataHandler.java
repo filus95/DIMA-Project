@@ -413,7 +413,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         }
     }
 
-
     private void insertEventPartecipant(){
         boolean res;
 

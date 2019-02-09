@@ -89,7 +89,7 @@ public class DatabaseManager {
      */
     public boolean insertNewReservation(Reservation reservInfo, String schema_name){
 
-        if (zeroQuantity(reservInfo,schema_name,Constants.RESERVATIONS_TABLE_NAME,"quantity"))
+        if (zeroQuantity(reservInfo,schema_name,Constants.BOOKS_TABLE_NAME,"identifier"))
             return false;
 
         Map<String, Object> map = new HashMap<>();
@@ -114,7 +114,7 @@ public class DatabaseManager {
 
     private boolean zeroQuantity(Reservation res, String schema_name, String table_name, String column){
 
-        String query = "select quantity from "+schema_name+"."+table_name+" where" +
+        String query = "select quantity from "+schema_name+"."+table_name+" where " +
                 column+" = '"+res.getBook_idetifier()+"'";
 
         return queryExecute(query, "quantity");
@@ -122,7 +122,7 @@ public class DatabaseManager {
 
     private boolean zeroSeats(Event_partecipant ep, String schema_name, String table_name, String column){
 
-        String query = "select seats from "+schema_name+"."+table_name+" where" +
+        String query = "select seats from "+schema_name+"."+table_name+" where " +
                 column+" = '"+ep.getEvent_id()+"'";
 
         return queryExecute(query, "seats");
@@ -188,7 +188,7 @@ public class DatabaseManager {
 
     public boolean insertNewEventPartecipant(Event_partecipant partecipant, String schema_name){
 
-        if (zeroSeats(partecipant, schema_name,Constants.EVENT_PARTICIPANT_TABLE_NAME, "seats"))
+        if (zeroSeats(partecipant, schema_name,Constants.EVENTS_TABLE_NAME, "id"))
             return false;
 
         Map<String, Object> map = new HashMap<>();
@@ -1320,6 +1320,7 @@ public class DatabaseManager {
             JSONObject message = new JSONObject();
 
             message.put("message", mess);
+            message.put("title", title);
 
             JSONObject protocol = new JSONObject();
             protocol.put("to", message_sender_id);
@@ -1340,6 +1341,7 @@ public class DatabaseManager {
             HttpResponse response = httpClient.execute(request);
             System.out.println(response.toString());
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -1381,18 +1383,31 @@ public class DatabaseManager {
 
     public User silentGoogleLogin(User user) {
 
-        String sql = "SELECT * FROM propietary_db.users WHERE google_id_token = ?";
+        String sql = "SELECT * FROM propietary_db.users WHERE email = ?";
 
         PreparedStatement st = null;
         try {
             st = this.conn.prepareStatement(sql);
 
-            st.setString(1, user.getGoogle_id_token());
+            st.setString(1, user.getEmail());
             ResultSet rs = st.executeQuery();
             user.setUser_id(-1);
 
             if (rs.next()){
                 user.setUser_id(rs.getInt("user_id"));
+                if ( rs.getString("google_id_token") != user.getGoogle_id_token()){
+                    String query = "update propietary_db.users " +
+                            "set google_id_token = ? where email = ?";
+
+                    PreparedStatement preparedStmt = null;
+
+                    preparedStmt = conn.prepareStatement(query);
+                    preparedStmt.setString(1, user.getGoogle_id_token());
+                    preparedStmt.setString(2, user.getEmail());
+                    preparedStmt.executeUpdate();
+
+                }
+
                 return user;
             }
 

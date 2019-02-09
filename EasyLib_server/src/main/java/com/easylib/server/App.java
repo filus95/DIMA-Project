@@ -48,8 +48,14 @@ public class App
 
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
+        DatabaseManager dbms = new DatabaseManager();
 
+        Reservation reservation = new Reservation();
+        reservation.setIdLib(2);
+        reservation.setUser_id(5);
+        reservation.setBook_idetifier("8822712951");
 
+        dbms.removeReservation(reservation, false);
 //
 //        DatabaseManager dbms = new DatabaseManager();
 //
