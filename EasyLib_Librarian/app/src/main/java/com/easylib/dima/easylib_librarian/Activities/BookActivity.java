@@ -115,7 +115,7 @@ public class BookActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.library);
+        setContentView(R.layout.book_activity);
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);

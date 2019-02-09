@@ -73,6 +73,7 @@
                             android:id="@+id/book_activity_image"
                             android:layout_width="200dp"
                             android:layout_height="250dp"
+                            android:scaleType="fitXY"
                             app:riv_corner_radius="10dp" />
 
                         <LinearLayout

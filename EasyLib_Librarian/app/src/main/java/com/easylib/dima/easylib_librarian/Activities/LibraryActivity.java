@@ -19,8 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib_librarian.Adapters.ImageTitleBookAdapter;
 import com.easylib.dima.easylib_librarian.Adapters.ImageTitleEventAdapter;
 import com.easylib.dima.easylib_librarian.Adapters.ImageTitleNewsAdapter;
@@ -66,9 +66,6 @@ public class LibraryActivity extends AppCompatActivity {
     private RecyclerView booksRec;
     private Button booksButton;
     private FloatingActionButton scanButton;
-    private Button logoutButton;
-
-    RecyclerView.LayoutManager mLayoutManager;
 
     //Comunication
     ConnectionService mBoundService;
@@ -118,6 +115,7 @@ public class LibraryActivity extends AppCompatActivity {
                 Intent bookIntent = new Intent(context, BookActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(BOOK_INFO, b);
+                bundle.putSerializable (LIBRARY_INFO, libraryInfo);
                 bundle.putSerializable(USER_INFO, userInfo);
                 bookIntent.putExtras(bundle);
                 doUnbindService();
@@ -141,10 +139,6 @@ public class LibraryActivity extends AppCompatActivity {
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         libraryInfo = (LibraryDescriptor) getIntent().getSerializableExtra(LIBRARY_INFO);
 
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
-
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
         location = (TextView) findViewById(R.id.library_activity_location);
@@ -159,8 +153,16 @@ public class LibraryActivity extends AppCompatActivity {
         booksRec = (RecyclerView) findViewById(R.id.library_activity_books_recycle);
         booksButton = (Button) findViewById(R.id.library_activity_all_books_button);
         scanButton = (FloatingActionButton) findViewById(R.id.library_activity_scan_button);
-        logoutButton = (Button) findViewById (R.id.library_activity_logout_button);
 
+        // set the components
+        name.setText(libraryInfo.getLib_name ());
+        location.setText (libraryInfo.getAddress ());
+        Glide.with(this)
+                .load(libraryInfo.getImage_link ())
+                .into(image);
+        description.setText(libraryInfo.getDescription());
+        email.setText (libraryInfo.getEmail ());
+        phone.setText (libraryInfo.getTelephone_number ());
         scanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -197,18 +199,25 @@ public class LibraryActivity extends AppCompatActivity {
         eventsRec.setHasFixedSize(true);
         booksRec.setHasFixedSize(true);
         // used grid layout
+        RecyclerView.LayoutManager mLayoutManager0 = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager1 = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 3);
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             // used linear layout
-            mLayoutManager = new GridLayoutManager(this, 6);
+            mLayoutManager0 = new GridLayoutManager(this, 6);
+            mLayoutManager1 = new GridLayoutManager(this, 6);
+            mLayoutManager2 = new GridLayoutManager(this, 6);
         } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             // used grid layout
-            mLayoutManager = new GridLayoutManager(this, 3);
+            mLayoutManager0 = new GridLayoutManager(this, 3);
+            mLayoutManager1 = new GridLayoutManager(this, 3);
+            mLayoutManager2 = new GridLayoutManager(this, 3);
         }
-        newsRec.setLayoutManager(mLayoutManager);
+        newsRec.setLayoutManager(mLayoutManager0);
         newsRec.setItemAnimator(new DefaultItemAnimator());
-        eventsRec.setLayoutManager(mLayoutManager);
+        eventsRec.setLayoutManager(mLayoutManager1);
         eventsRec.setItemAnimator(new DefaultItemAnimator());
-        booksRec.setLayoutManager(mLayoutManager);
+        booksRec.setLayoutManager(mLayoutManager2);
         booksRec.setItemAnimator(new DefaultItemAnimator());
         // specify adapters
         ImageTitleNewsAdapter newsAdapter = new ImageTitleNewsAdapter(this, newsList);
@@ -220,11 +229,17 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onStart() {
+        super.onStart ();
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService ();
     }
 
     public void goToScanActivity() {
