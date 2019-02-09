@@ -213,6 +213,14 @@ public class LibraryActivity extends AppCompatActivity {
         booksRec.setAdapter(booksAdapter);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
+    }
+
     public void goToScanActivity() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.initiateScan();
