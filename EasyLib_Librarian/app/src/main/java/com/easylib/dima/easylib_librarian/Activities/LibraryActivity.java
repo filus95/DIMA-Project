@@ -181,9 +181,15 @@ public class LibraryActivity extends AppCompatActivity {
         ArrayList<Event> eventsList = new ArrayList<Event>();
         ArrayList<Book> booksList = new ArrayList<Book>();
         for(i=0; i<size; i++) {
-            newsList.add(libraryInfo.getLibraryContent().getNews().get(i));
-            eventsList.add(libraryInfo.getLibraryContent().getEvents().get(i));
-            booksList.add(libraryInfo.getLibraryContent().getBooks().get(i));
+            if (i < libraryInfo.getLibraryContent ().getNews ().size ()) {
+                newsList.add (libraryInfo.getLibraryContent ().getNews ().get (i));
+            }
+            if (i < libraryInfo.getLibraryContent ().getEvents ().size ()) {
+                eventsList.add (libraryInfo.getLibraryContent ().getEvents ().get (i));
+            }
+            if (i < libraryInfo.getLibraryContent ().getBooks ().size ()) {
+                booksList.add (libraryInfo.getLibraryContent ().getBooks ().get (i));
+            }
         }
 
         // setup recycleViews
