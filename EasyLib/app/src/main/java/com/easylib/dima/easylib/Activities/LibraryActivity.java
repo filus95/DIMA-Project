@@ -323,6 +323,7 @@ public class LibraryActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ALL_EVENTS, libraryInfo.getLibraryContent ().getEvents ());
         bundle.putSerializable (USER_INFO, userInfo);
+        bundle.putSerializable (LIBRARY_INFO, libraryInfo);
         eventIntent.putExtras(bundle);
         doUnbindService();
         startActivity(eventIntent);
