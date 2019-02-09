@@ -39,6 +39,7 @@ import AnswerClasses.Book;
 import AnswerClasses.Event;
 import AnswerClasses.LibraryDescriptor;
 import AnswerClasses.News;
+import AnswerClasses.Query;
 import AnswerClasses.User;
 
 public class LibraryActivity extends AppCompatActivity {
@@ -47,6 +48,7 @@ public class LibraryActivity extends AppCompatActivity {
     private static final String USER_INFO = "User Info";
     private static final String LOGIN = "Login";
     private static final String LIBRARY_INFO = "Library Info";
+    private static final String BOOK_INFO = "Book Info";
     private User userInfo;
     private LibraryDescriptor libraryInfo;
 
@@ -111,6 +113,15 @@ public class LibraryActivity extends AppCompatActivity {
             String key = extractKey(intent);
 
             if ( key.equals(Constants.QUERY_ON_BOOKS)) {
+                ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS);
+                Book b = books.get (0);
+                Intent bookIntent = new Intent(context, BookActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(BOOK_INFO, b);
+                bundle.putSerializable(USER_INFO, userInfo);
+                bookIntent.putExtras(bundle);
+                doUnbindService();
+                startActivity(bookIntent);
             }
         }
     };
@@ -210,9 +221,14 @@ public class LibraryActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
         if (scanResult != null) {
-            // handle scan result
+            Query q = new Query ();
+            q.setIdLib (libraryInfo.getId_lib ());
+            q.setIdentifier (scanResult.getContents ());
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(getApplicationContext());
+                mBoundService.sendMessage(Constants.QUERY_ON_BOOKS, q);
+            }
         }
-        // else continue with any other code you need in the method
     }
 
     public void logout(View view) {
