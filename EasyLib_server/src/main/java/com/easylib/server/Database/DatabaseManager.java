@@ -1051,12 +1051,20 @@ public class DatabaseManager {
     private ResultSet queryUser(User user){
 
         ResultSet rs;
+        String query;
         try {
-            String query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.email =" +
+            if ( user.getEmail() == null){
+                query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.user_id =" +
+                        "?";
+            }else
+                query = "select * from "+Constants.PROPIETARY_DB+".users where "+Constants.PROPIETARY_DB+".users.email =" +
                     "?";
-
             PreparedStatement st = conn.prepareStatement(query);
-            st.setString(1, user.getEmail());
+
+            if ( user.getEmail() == null)
+                st.setInt(1, user.getUser_id());
+            else
+                st.setString(1, user.getEmail());
 
             rs = st.executeQuery();
         } catch (SQLException e) {
