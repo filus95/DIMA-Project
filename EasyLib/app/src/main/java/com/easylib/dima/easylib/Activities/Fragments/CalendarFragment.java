@@ -36,8 +36,10 @@ public class CalendarFragment extends Fragment {
 
         // Inizialize first item with books to take
         for (AnswerClasses.Reservation r : reservations) {
-            if (r.isTaken () == false)
+            if (!r.isTaken ()) {
                 dates.add ("To Take");
+                break;
+            }
         }
         // Fill dates ArrayList with distinct dates
         for (AnswerClasses.Reservation r : reservations) {
