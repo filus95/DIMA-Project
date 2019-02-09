@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.easylib.dima.easylib_librarian">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,5 +24,7 @@
 
         <activity android:name=".Activities.LibraryActivity"/>
         <activity android:name=".Activities.BookActivity"/>
+
+        <service android:name=".ConnectionLayer.ConnectionService" />
     </application>
 </manifest>

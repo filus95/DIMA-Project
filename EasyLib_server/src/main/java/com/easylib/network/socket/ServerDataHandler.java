@@ -797,7 +797,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void librarianLogin() {
         try {
             User user = (User) objectInputStream.readObject();
-            socketHandler.sendViaSocket(Constants.USER_LOGIN);
+            socketHandler.sendViaSocket(Constants.LIBRARIAN_LOGIN);
             String table_name = "librarians";
 
             socketHandler.sendViaSocket(dbms.checkCorrectPassword(user,table_name,true));
