@@ -266,6 +266,14 @@ public class BookActivity extends AppCompatActivity {
                 }
                 else {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                    //aggiunto io qui
+                    AnswerClasses.Reservation reservation = new AnswerClasses.Reservation ();
+                    reservation.setUser_id (userInfo.getUser_id ());
+                    reservation.setIdLib (-1);
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.GET_USER_RESERVATION, reservation);
+                    }
                 }
             }
             if (key.equals (Constants.INSERT_WAITING_PERSON)) {
@@ -448,6 +456,8 @@ public class BookActivity extends AppCompatActivity {
         WaitingPersonInsert waitingPersonInsert = new WaitingPersonInsert ();
         waitingPersonInsert.setUser_id (userInfo.getUser_id ());
         waitingPersonInsert.setId_lib (library.getId_lib ());
+        waitingPersonInsert.setBook_identifier(bookInfo.getIdentifier());
+        waitingPersonInsert.setQuantity(1);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.INSERT_WAITING_PERSON, waitingPersonInsert);
@@ -463,6 +473,7 @@ public class BookActivity extends AppCompatActivity {
         reservation.setUser_id (userInfo.getUser_id ());
         reservation.setIdLib (library.getId_lib ());
         reservation.setBook_title(bookInfo.getTitle());
+        reservation.setQuantity(1);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.INSERT_RESERVATION, reservation);
