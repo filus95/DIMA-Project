@@ -48,6 +48,7 @@ public class BookActivity extends AppCompatActivity {
     private TextView title;
     private TextView authors;
     private TextView avgRate;
+    private TextView numBooksAvailable;
     private TextView description;
     private ImageView image;
 
@@ -120,13 +121,10 @@ public class BookActivity extends AppCompatActivity {
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);
         libraryInfo = (LibraryDescriptor) getIntent().getSerializableExtra(LIBRARY_INFO);
 
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_RESERVATIONS_FOR_BOOK));
-
         // get components
         title = (TextView) findViewById(R.id.book_activity_title);
         authors = (TextView) findViewById(R.id.book_activity_authors);
+        numBooksAvailable = (TextView) findViewById (R.id.book_activity_books_num);
         description = (TextView) findViewById(R.id.book_activity_description);
         avgRate = (TextView) findViewById(R.id.book_activity_average_rate);
         image = (ImageView) findViewById(R.id.book_activity_image);
@@ -140,6 +138,7 @@ public class BookActivity extends AppCompatActivity {
                 authors.setText (authors.getText ().toString () + ", " + bookInfo.getAuthors ().get (i));
             }
         }
+        numBooksAvailable.setText (String.valueOf (bookInfo.getQuantity_reserved ()));
         description.setText(bookInfo.getDescription());
         avgRate.setText(String.valueOf (bookInfo.getAverageRating ().intValue ()));
         Glide.with(this)
@@ -153,6 +152,15 @@ public class BookActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Communication
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_RESERVATIONS_FOR_BOOK));
 
         // Send Login Info to Server
         new Handler ().postDelayed(new Runnable() {
@@ -169,15 +177,27 @@ public class BookActivity extends AppCompatActivity {
         }, 1000);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy ();
+        doUnbindService();
+    }
+
     public void setReservationsAdapter() {
         // specify an adapter
         mAdapter = new BookReservationsAdapter(this, reservationsList);
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy ();
-        doUnbindService();
+    public void setBookReturned() {
+        // TODO
+    }
+
+    public void removeReservation() {
+        // TODO
+    }
+
+    public void confirmReservation() {
+        // TODO
     }
 }
