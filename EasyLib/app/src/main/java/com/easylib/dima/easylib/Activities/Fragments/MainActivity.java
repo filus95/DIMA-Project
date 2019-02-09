@@ -25,6 +25,7 @@ import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
 import com.easylib.dima.easylib.Activities.ReadBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
+import com.easylib.dima.easylib.Adapters.HomeAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
@@ -294,6 +295,20 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_WAITING_LIST_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
+
+        // Reload fragment content on resume
+        if (fragment instanceof ProfileFragment) {
+            fragment = new ProfileFragment();
+            getPrefLibraries(true, false);
+        }
+        if (fragment instanceof HomeFragment) {
+            fragment = new HomeFragment();
+            getPrefLibraries (false, true);
+        }
+        if (fragment instanceof CalendarFragment) {
+            fragment = new CalendarFragment();
+            getReservations ();
+        }
     }
 
     private void setFragment(Fragment fragment) {

@@ -166,7 +166,8 @@ public class LoginActivity extends AppCompatActivity {
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
-                if (libraries.size() == 0) {
+                SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
+                if (libraries.size() == 0 & !sp.contains(USER_ID)) {
                     callAllLibraries();
                 } else {
                     sendNewNotificationToken(userInfo);
