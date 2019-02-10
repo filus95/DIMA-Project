@@ -177,6 +177,7 @@ public class DatabaseManager {
                 if ( rs.getDate("ending_reservation_date") != null)
                     queryResult.setEnd_res_date(rs.getDate("ending_reservation_date").toLocalDate().toString());
 
+                queryResult.setReservation_time(rs.getDate("reservation_date").toLocalDate().toString());
                 results.add(queryResult);
             }
         } catch (SQLException e) {
