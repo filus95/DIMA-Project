@@ -344,45 +344,53 @@ public class DatabaseManager {
 
         boolean res;
         StringBuilder columns_name = new StringBuilder();
+        StringBuilder columns_name1 = new StringBuilder();
         String stm = "UPDATE " + Constants.PROPIETARY_DB + "." + Constants.USERS_TABLE_NAME + " " +
                 "SET ";// +"+columns_name+" = "+values",";
         columns_name.append(stm);
-        int count = 0;
+        Map<String,Object> map = new HashMap<>();
+        PreparedStatement preparedStatement = null;
 
-        if ( user.getPlainPassword() != null) {
-            byte[] salt = pm.getNextSalt();
-            byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
-
-
-
-            columns_name.append("hashed_pd").append(" = ").append(hashPas).append(", ");
-            columns_name.append("salt").append(" = ").append(salt);
-            count++;
-        }
-
-        if ( user.getName() != null ){
-            if (count > 0)
-                columns_name.append(", ");
-            columns_name.append("name").append(" = '").append(user.getName()).append("'");
-            count++;
-        }
-
-        if ( user.getSurname() != null){
-            if (count > 0 )
-                columns_name.append(", ");
-            columns_name.append("surname").append(" = '").append(user.getSurname()).append("'");
-
-        }
-
-        columns_name.append(" where user_id = ").append(user.getUser_id());
-
-        // Statement execution
         try {
 
-            PreparedStatement pstmt = conn.prepareStatement(columns_name.toString());
+            if (user.getPlainPassword() != null) {
+                byte[] salt = pm.getNextSalt();
+                byte[] hashPas = pm.generatePassword(user.getPlainPassword(), salt);
 
-            pstmt.executeUpdate();
-            pstmt.close();
+                columns_name1 = columns_name;
+                columns_name1.append("hashed_pd = ? where user_id = ").append(user.getUser_id());
+                preparedStatement = conn.prepareStatement(columns_name1.toString());
+                preparedStatement.setObject(1, hashPas);
+                preparedStatement.executeUpdate();
+
+                columns_name1 = new StringBuilder();
+                columns_name1.append(stm);
+                columns_name1.append(" salt = ? where user_id = ").append(user.getUser_id());
+                preparedStatement = conn.prepareStatement(columns_name1.toString());
+                preparedStatement.setObject(1, salt);
+                preparedStatement.executeUpdate();
+            }
+
+            if (user.getName() != null) {
+                columns_name1 = new StringBuilder();
+                columns_name1.append(stm);
+                columns_name1.append(" name = ? where user_id = ").append(user.getUser_id());
+                preparedStatement = conn.prepareStatement(columns_name1.toString());
+                preparedStatement.setObject(1, user.getName());
+                preparedStatement.executeUpdate();
+            }
+
+            if (user.getSurname() != null) {
+                columns_name1 = new StringBuilder();
+                columns_name1.append(stm);
+                columns_name1.append(" surname = ? where user_id = ").append(user.getUser_id());
+                preparedStatement = conn.prepareStatement(columns_name1.toString());
+                preparedStatement.setObject(1, user.getSurname());
+                preparedStatement.executeUpdate();
+            }
+
+            // Statement execution
+            preparedStatement.close();
             res = true;
 
         } catch (SQLException e) {
@@ -910,7 +918,8 @@ public class DatabaseManager {
         String title = "Your book is available!";
         String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
 
-        sendNotification(title,mess, getNotificationToken(waitingPeople.get(0).getUser_id()));
+        if ( waitingPeople.size() != 0)
+            sendNotification(title,mess, getNotificationToken(waitingPeople.get(0).getUser_id()));
 
         queryExecution(conn, query);
         WaitingPerson wp;

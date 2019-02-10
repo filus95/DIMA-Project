@@ -52,10 +52,10 @@ public class App
 
         Reservation reservation = new Reservation();
         reservation.setIdLib(2);
-        reservation.setUser_id(1);
-        reservation.setBook_idetifier("8822712951");
+        reservation.setUser_id(47);
+        reservation.setBook_idetifier("8854158852");
 
-        dbms.removeReservation(reservation, false);
+        dbms.removeReservation(reservation, true);
 //
 //        DatabaseManager dbms = new DatabaseManager();
 //
