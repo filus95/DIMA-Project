@@ -112,14 +112,16 @@ public class LibraryActivity extends AppCompatActivity {
 
             if ( key.equals(Constants.QUERY_ON_BOOKS)) {
                 ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS);
-                Book b = books.get (0);
-                Intent bookIntent = new Intent(context, BookActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(BOOK_INFO, b);
-                bundle.putSerializable (LIBRARY_INFO, libraryInfo);
-                bundle.putSerializable(USER_INFO, userInfo);
-                bookIntent.putExtras(bundle);
-                startActivity(bookIntent);
+                if (books.size () != 0) {
+                    Book b = books.get (0);
+                    Intent bookIntent = new Intent (context, BookActivity.class);
+                    Bundle bundle = new Bundle ();
+                    bundle.putSerializable (BOOK_INFO, b);
+                    bundle.putSerializable (LIBRARY_INFO, libraryInfo);
+                    bundle.putSerializable (USER_INFO, userInfo);
+                    bookIntent.putExtras (bundle);
+                    startActivity (bookIntent);
+                }
             }
         }
     };
