@@ -171,7 +171,7 @@ public class ProfileFragment extends Fragment {
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
-        mAdapter2 = new ReadBooksAdapter (getContext(), fewReadBooks);
+        mAdapter2 = new ReadBooksAdapter (getContext(), fewReadBooks, userInfo);
         mRecyclerView2.setAdapter(mAdapter2);
 
         return root;

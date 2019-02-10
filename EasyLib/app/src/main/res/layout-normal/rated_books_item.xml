@@ -20,10 +20,14 @@
         app:riv_corner_radius="4dp" />
 
     <LinearLayout
-        android:layout_width="40dp"
-        android:layout_height="20dp"
+        android:layout_width="55dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/round_rect_shadow"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -32,18 +36,18 @@
             android:id="@+id/rated_books_item_rate"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_weight="3"
+            android:layout_weight="0.4"
             android:fontFamily="monospace"
             android:text="0"
             android:textAlignment="center"
-            android:textColor="@color/colorYellow"
+            android:textColor="@color/colorDarkBlueTransparent"
             android:textSize="16sp" />
 
         <ImageView
             android:id="@+id/imageView3"
-            android:layout_width="15dp"
-            android:layout_height="20dp"
-            android:layout_weight="1"
+            android:layout_width="1dp"
+            android:layout_height="18dp"
+            android:layout_weight="0.5"
             android:scaleType="fitCenter"
             app:srcCompat="@drawable/ic_star" />
     </LinearLayout>

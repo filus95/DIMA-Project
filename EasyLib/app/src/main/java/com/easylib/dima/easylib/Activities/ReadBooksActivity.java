@@ -41,7 +41,7 @@ public class ReadBooksActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager (mLayoutManager);
         mRecyclerView.setItemAnimator (new DefaultItemAnimator ());
         // specify an adapter
-        mAdapter = new ReadBooksAdapter (this, books);
+        mAdapter = new ReadBooksAdapter (this, books, userInfo);
         mRecyclerView.setAdapter (mAdapter);
     }
 }

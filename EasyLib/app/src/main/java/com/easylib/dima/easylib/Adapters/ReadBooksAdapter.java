@@ -1,6 +1,8 @@
 package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,20 +11,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.BookActivity;
+import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
+import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
 import AnswerClasses.Book;
+import AnswerClasses.User;
 
 public class ReadBooksAdapter extends RecyclerView.Adapter<ReadBooksAdapter.RatedBooksHolder> {
 
+    private static final String BOOK_INFO = "Book Info";
+    private static final String USER_INFO = "User Info";
     ArrayList<Book> books;
+    User userInfo;
     Context context;
 
-    public ReadBooksAdapter(Context context, ArrayList books) {
+    public ReadBooksAdapter(Context context, ArrayList books, User userInfo) {
         this.context = context;
         this.books = books;
+        this.userInfo = userInfo;
     }
 
     @Override
@@ -39,13 +49,18 @@ public class ReadBooksAdapter extends RecyclerView.Adapter<ReadBooksAdapter.Rate
         Glide.with(context)
                 .load(book.getImageLink())
                 .into(holder.image);
-        holder.rate.setText(Float.toString(7.4f));
+        holder.rate.setText(String.valueOf (book.getAverageRating ().intValue ()));
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO : onClick set Preference
+                Intent bookIntent = new Intent (context, BookActivity.class);
+                Bundle bundle = new Bundle ();
+                bundle.putSerializable(BOOK_INFO, book);
+                bundle.putSerializable (USER_INFO, userInfo);
+                bookIntent.putExtras(bundle);
+                context.startActivity(bookIntent);
             }
         });
     }
