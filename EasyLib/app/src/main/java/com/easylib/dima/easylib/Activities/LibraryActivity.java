@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.easylib.dima.easylib.Activities.Lists.BookListActivity;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.NewsListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
@@ -328,7 +329,12 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     public void showAllBooks(View view) {
-        // TODO
+        Intent booksIntent = new Intent (this, BookListActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ALL_BOOKS, libraryInfo.getLibraryContent ().getBooks ());
+        bundle.putSerializable (USER_INFO, userInfo);
+        booksIntent.putExtras(bundle);
+        startActivity(booksIntent);
     }
 
     public void setFavourite() {

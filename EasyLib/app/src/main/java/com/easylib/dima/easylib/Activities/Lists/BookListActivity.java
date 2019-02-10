@@ -11,10 +11,15 @@ import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
 
+import AnswerClasses.Book;
+import AnswerClasses.User;
+
 public class BookListActivity extends AppCompatActivity {
 
+    private static final String ALL_BOOKS = "All Books";
+    private static final String USER_INFO = "User Info";
     private AnswerClasses.User userInfo;
-    private ArrayList<AnswerClasses.Book> books = new ArrayList<AnswerClasses.Book>();
+    private ArrayList<AnswerClasses.Book> books;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -25,6 +30,9 @@ public class BookListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_activity);
+
+        books = (ArrayList<Book>) getIntent().getSerializableExtra(ALL_BOOKS);
+        userInfo = (User) getIntent ().getSerializableExtra (USER_INFO);
 
         // Recycle View Settings
         mRecyclerView = (RecyclerView) findViewById(R.id.list_recycle);
