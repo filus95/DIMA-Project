@@ -164,7 +164,6 @@
                             android:imeOptions="actionSend"
                             android:inputType="number"
                             android:singleLine="true"
-                            android:text="Set 0-10"
                             android:textAlignment="center"
                             android:textColor="@android:color/darker_gray" />
                     </LinearLayout>

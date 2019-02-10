@@ -353,7 +353,7 @@ public class BookActivity extends AppCompatActivity {
         userRate.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
                     insertRate ();
                     return true;
                 }
@@ -403,7 +403,7 @@ public class BookActivity extends AppCompatActivity {
             rateObj.setIdLib (libraryWhereIsRead);
             if (mBoundService != null) {
                 mBoundService.setCurrentContext(getApplicationContext());
-                mBoundService.sendMessage(Constants.INSERT_RATING, userInfo);
+                mBoundService.sendMessage(Constants.INSERT_RATING, rateObj);
             }
         } else {
             userRate.setTextColor (Color.RED);
