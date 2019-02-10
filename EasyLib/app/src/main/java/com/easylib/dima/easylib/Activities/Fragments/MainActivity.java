@@ -135,7 +135,6 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putSerializable(USER_INFO, userInfo);
                 bundle.putSerializable(LIBRARIES_LIST, allLibrariesList);
                 librariesListIntent.putExtras(bundle);
-                doUnbindService();
                 startActivity(librariesListIntent);
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
@@ -153,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(USER_INFO, userInfo);
                     bundle.putSerializable(LIBRARIES_LIST, prefLibraries);
                     prefLibsIntent.putExtras(bundle);
-                    doUnbindService();
                     startActivity(prefLibsIntent);
                 }
             }
@@ -174,7 +172,6 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(READ_BOOKS_ARRAY, readBooks);
                     bundle.putSerializable(USER_INFO, userInfo);
                     readBooksIntent.putExtras(bundle);
-                    doUnbindService();
                     startActivity(readBooksIntent);
                 }
             }
@@ -196,7 +193,6 @@ public class MainActivity extends AppCompatActivity {
                     bundle.putSerializable(ALL_EVENTS, events);
                     bundle.putSerializable(USER_INFO, userInfo);
                     eventListIntent.putExtras(bundle);
-                    doUnbindService();
                     startActivity(eventListIntent);
                 }
             }
@@ -226,7 +222,6 @@ public class MainActivity extends AppCompatActivity {
                 bundle.putSerializable(BOOK_INFO, b);
                 bundle.putSerializable (USER_INFO, userInfo);
                 bookIntent.putExtras(bundle);
-                doUnbindService ();
                 context.startActivity(bookIntent);
             }
         }
@@ -315,6 +310,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        doUnbindService ();
+    }
+
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
@@ -327,7 +328,6 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable(USER_INFO, userInfo);
         intent.putExtras(bundle);
-        doUnbindService ();
         startActivity(intent);
     }
 
@@ -351,7 +351,6 @@ public class MainActivity extends AppCompatActivity {
         bundle.putSerializable(LIBRARY_INFO, library);
         bundle.putSerializable(USER_INFO, userInfo);
         libraryActivityIntent.putExtras(bundle);
-        doUnbindService();
         startActivity(libraryActivityIntent);
     }
 
@@ -417,7 +416,6 @@ public class MainActivity extends AppCompatActivity {
     public void goToLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        doUnbindService ();
         startActivity(intent);
     }
 

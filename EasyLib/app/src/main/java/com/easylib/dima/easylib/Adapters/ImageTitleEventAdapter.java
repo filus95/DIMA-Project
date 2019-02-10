@@ -59,10 +59,6 @@ public class ImageTitleEventAdapter extends RecyclerView.Adapter<ImageTitleEvent
                 bundle.putSerializable(EVENT_INFO, event);
                 bundle.putSerializable (USER_INFO, userInfo);
                 eventIntent.putExtras(bundle);
-                if(context instanceof MainActivity)
-                    ((MainActivity)context).doUnbindService ();
-                if(context instanceof LibraryActivity)
-                    ((LibraryActivity)context).doUnbindService ();
                 context.startActivity(eventIntent);
             }
         });

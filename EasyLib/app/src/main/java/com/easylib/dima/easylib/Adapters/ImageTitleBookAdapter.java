@@ -59,10 +59,6 @@ public class ImageTitleBookAdapter extends RecyclerView.Adapter<ImageTitleBookAd
                 bundle.putSerializable(BOOK_INFO, book);
                 bundle.putSerializable (USER_INFO, userInfo);
                 bookIntent.putExtras(bundle);
-                if(context instanceof MainActivity)
-                    ((MainActivity)context).doUnbindService ();
-                if(context instanceof LibraryActivity)
-                    ((LibraryActivity)context).doUnbindService ();
                 context.startActivity(bookIntent);
             }
         });
