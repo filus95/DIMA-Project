@@ -129,8 +129,10 @@ public class LoginActivity extends AppCompatActivity {
         if (mIsBound) {
             // Detach our existing connection.
             unbindService(mConnection);
+            unbindService (mConnection2);
             mIsBound = false;
         }
+        unregisterReceiver(mMessageReceiver);
     }
 
     private String extractKey(Intent intent){
@@ -178,8 +180,6 @@ public class LoginActivity extends AppCompatActivity {
                     bundle.putSerializable(USER_INFO, userInfo);
                     mainIntent.putExtras(bundle);
                     mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    doUnbindService();
-                    unregisterReceiver(mMessageReceiver);
                     startActivity(mainIntent);
                 }
             }
@@ -192,8 +192,6 @@ public class LoginActivity extends AppCompatActivity {
                 bundle.putSerializable(LOGIN_ALL_LIBRARIES, libraries);
                 loginPrefIntent.putExtras(bundle);
                 loginPrefIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                doUnbindService();
-                unregisterReceiver(mMessageReceiver);
                 startActivity(loginPrefIntent);
             }
             if (key.equals(Constants.NETWORK_STATE_UP)){
@@ -253,6 +251,12 @@ public class LoginActivity extends AppCompatActivity {
         startService(new Intent(LoginActivity.this, CheckConnectionService.class));
 
         startApp ();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        doUnbindService ();
     }
 
     private void startApp() {
