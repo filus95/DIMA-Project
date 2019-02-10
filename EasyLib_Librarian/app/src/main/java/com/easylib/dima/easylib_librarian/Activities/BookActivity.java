@@ -13,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib_librarian.Adapters.BookReservationsAdapter;
@@ -36,7 +38,6 @@ public class BookActivity extends AppCompatActivity {
 
     // Needed
     private static final String USER_INFO = "User Info";
-    private static final String LOGIN = "Login";
     private static final String BOOK_INFO = "Book Info";
     private static final String LIBRARY_INFO = "Library Info";
     private User userInfo;
@@ -102,6 +103,21 @@ public class BookActivity extends AppCompatActivity {
             if ( key.equals(Constants.GET_ALL_RESERVATIONS_FOR_BOOK)) {
                 reservationsList = (ArrayList<Reservation>) intent.getSerializableExtra (Constants.GET_ALL_RESERVATIONS_FOR_BOOK);
                 setReservationsAdapter ();
+            }
+            if (key.equals (Constants.RESERVED_BOOK_RETURNED)) {
+                // TODO if ok call again for refresh
+            }
+            if (key.equals (Constants.RESERVED_BOOK_TAKEN)) {
+                // TODO if ok call again for refresh
+            }
+            if (key.equals (Constants.REMOVE_RESERVATION)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_RESERVATION);
+                if (bool) {
+                    // TODO if ok call again for refresh
+                }
+                else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
             }
         }
     };
@@ -190,14 +206,35 @@ public class BookActivity extends AppCompatActivity {
     }
 
     public void setBookReturned() {
-        // TODO
+        Reservation reservation = new Reservation ();
+        reservation.setIdLib (libraryInfo.getId_lib ());
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        reservation.setUser_id (userInfo.getUser_id ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.RESERVED_BOOK_RETURNED, reservation);
+        }
     }
 
     public void removeReservation() {
-        // TODO
+        Reservation reservation = new Reservation ();
+        reservation.setIdLib (libraryInfo.getId_lib ());
+        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.REMOVE_RESERVATION, reservation);
+        }
     }
 
     public void confirmReservation() {
-        // TODO
+        Reservation reservation = new Reservation ();
+        reservation.setIdLib (libraryInfo.getId_lib ());
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        reservation.setUser_id (userInfo.getUser_id ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.RESERVED_BOOK_TAKEN, reservation);
+        }
     }
 }
