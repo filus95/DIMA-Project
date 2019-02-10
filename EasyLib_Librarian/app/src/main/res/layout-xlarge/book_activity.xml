@@ -29,6 +29,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="serif"
                 android:singleLine="true"
+                android:layout_marginTop="8dp"
                 android:text="Title of the Book"
                 android:textAlignment="center"
                 android:textSize="36sp"
@@ -40,7 +41,7 @@
                 android:id="@+id/book_activity_authors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:singleLine="true"
                 android:textAlignment="center"
                 android:textSize="28sp"
@@ -52,7 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:orientation="horizontal">
 
                 <android.support.constraint.ConstraintLayout
@@ -146,7 +147,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="32dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="16dp"
                         android:layout_weight="0.5"
@@ -161,7 +162,7 @@
                 android:id="@+id/textView17"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="48dp"
                 android:text="Reservations"
                 android:textAlignment="center"
                 android:textSize="26sp"
@@ -171,6 +172,7 @@
                 android:id="@+id/book_activity_reservations_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:overScrollMode="never"
                 android:layout_marginTop="32dp"
                 tools:listitem="@layout/book_activity_reservation_item" />
 

@@ -45,7 +45,7 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
             holder.returnedButton.setOnClickListener (new View.OnClickListener () {
                 @Override
                 public void onClick(View v) {
-                    ((BookActivity)context).setBookReturned ();
+                    ((BookActivity)context).setBookReturned (reservation.getUser_id ());
                 }
             });
         } else {
@@ -55,7 +55,7 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
             holder.reserveButton.setOnClickListener (new View.OnClickListener () {
                 @Override
                 public void onClick(View v) {
-                    ((BookActivity)context).confirmReservation ();
+                    ((BookActivity)context).confirmReservation (reservation.getUser_id ());
                 }
             });
             holder.removeButton.setVisibility (View.VISIBLE);
@@ -63,7 +63,7 @@ public class BookReservationsAdapter extends RecyclerView.Adapter<BookReservatio
             holder.removeButton.setOnClickListener (new View.OnClickListener () {
                 @Override
                 public void onClick(View v) {
-                    ((BookActivity)context).removeReservation ();
+                    ((BookActivity)context).removeReservation (reservation.getUser_id ());
                 }
             });
         }
