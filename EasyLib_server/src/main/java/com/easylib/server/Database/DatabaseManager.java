@@ -105,7 +105,6 @@ public class DatabaseManager {
 //        // todo: correct bug in jar, there is a duplicated user id
 //        columnsName.add("user_id");
 
-
         // Columns name passed must be in the order of the DB columns
         map = reservInfo.getMapAttribute(columnsName);
 
@@ -541,7 +540,7 @@ public class DatabaseManager {
     }
 
     public ArrayList<Book> getReadBooks(int user_id) {
-        String query = "select book_identifier, id_lib from "+Constants.PROPIETARY_DB+".read_books" +
+        String query = "select * from "+Constants.PROPIETARY_DB+".read_books" +
                 " where user_id = "+user_id;
 
         ArrayList<Book> read_books = new ArrayList<>();
@@ -552,7 +551,7 @@ public class DatabaseManager {
 
             while (rs.next()){
                 read_books.add(queryBookByIdentifier(rs.getString("book_identifier"),
-                        getSchemaNameLib(rs.getInt("id_lib")),0).get(0));
+                        getSchemaNameLib(rs.getInt("id_lib")),rs.getInt("id_lib")).get(0));
 
             }
         } catch (SQLException e) {

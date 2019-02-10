@@ -50,12 +50,8 @@ public class App
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
 
-        Reservation reservation = new Reservation();
-        reservation.setIdLib(2);
-        reservation.setUser_id(47);
-        reservation.setBook_idetifier("8854158852");
+        Rating rating = new Rating();
 
-        dbms.removeReservation(reservation, true);
 //
 //        DatabaseManager dbms = new DatabaseManager();
 //
