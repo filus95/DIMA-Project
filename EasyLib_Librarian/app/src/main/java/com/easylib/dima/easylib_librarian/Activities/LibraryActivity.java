@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -118,7 +119,6 @@ public class LibraryActivity extends AppCompatActivity {
                 bundle.putSerializable (LIBRARY_INFO, libraryInfo);
                 bundle.putSerializable(USER_INFO, userInfo);
                 bookIntent.putExtras(bundle);
-                doUnbindService();
                 startActivity(bookIntent);
             }
         }
@@ -229,16 +229,16 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart ();
+    protected void onResume() {
+        super.onResume ();
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService ();
     }
 
@@ -253,19 +253,22 @@ public class LibraryActivity extends AppCompatActivity {
             Query q = new Query ();
             q.setIdLib (libraryInfo.getId_lib ());
             q.setIdentifier (scanResult.getContents ());
-            if (mBoundService != null) {
-                mBoundService.setCurrentContext(getApplicationContext());
-                mBoundService.sendMessage(Constants.QUERY_ON_BOOKS, q);
-            }
+            // Get Book Info from server
+            new Handler ().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mBoundService != null) {
+                        mBoundService.setCurrentContext(getApplicationContext());
+                        mBoundService.sendMessage(Constants.QUERY_ON_BOOKS, q);
+                    }
+                }
+            }, 1000);
         }
     }
 
     public void logout(View view) {
-        SharedPreferences sp = this.getSharedPreferences(LOGIN, MODE_PRIVATE);
-        sp.edit().clear().apply();
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        doUnbindService ();
         startActivity(intent);
     }
 }

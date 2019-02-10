@@ -35,7 +35,6 @@ public class ConnectionService extends Service implements Serializable{
     private final IBinder myBinder = new LocalBinder();
 
     public void IsBoundable() {
-        Toast.makeText(this,"I bind like butter", Toast.LENGTH_LONG).show();
     }
 
     public class LocalBinder extends Binder {

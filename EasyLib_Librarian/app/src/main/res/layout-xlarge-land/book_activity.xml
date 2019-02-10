@@ -30,6 +30,7 @@
                 android:fontFamily="serif"
                 android:singleLine="true"
                 android:text="Title of the Book"
+                android:layout_marginTop="8dp"
                 android:textAlignment="center"
                 android:textSize="36sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +41,7 @@
                 android:id="@+id/book_activity_authors"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:singleLine="true"
                 android:textAlignment="center"
                 android:textSize="28sp"
@@ -52,7 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginRight="8dp"
                 android:gravity="center|center_horizontal|center_vertical"
                 android:orientation="horizontal">
@@ -128,6 +129,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="80dp"
                             android:layout_weight="0.5"
+                            android:layout_marginTop="16dp"
                             android:gravity="center|center_vertical"
                             android:orientation="horizontal">
 
@@ -155,7 +157,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="32dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_marginTop="24dp"
                             android:layout_marginRight="16dp"
                             android:layout_marginBottom="16dp"
                             android:layout_weight="0.5"
