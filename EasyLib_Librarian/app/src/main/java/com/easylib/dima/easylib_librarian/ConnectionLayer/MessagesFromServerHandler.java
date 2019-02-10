@@ -62,7 +62,23 @@ public class MessagesFromServerHandler {
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
         map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
+        map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
+    }
 
+    private void removeReservation() {
+        try {
+            Bundle b = new Bundle();
+            Message message = handler.obtainMessage();
+
+            boolean res = (boolean) objectInputStream.readObject();
+            b.putSerializable(Constants.REMOVE_RESERVATION, res );
+
+            message.obj = b;
+            message.sendToTarget();
+
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void librarianLogin() {

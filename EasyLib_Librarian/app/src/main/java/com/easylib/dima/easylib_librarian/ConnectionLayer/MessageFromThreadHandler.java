@@ -45,6 +45,7 @@ public class MessageFromThreadHandler implements Serializable{
         map.put(Constants.RESERVED_BOOK_RETURNED, this::reservedBookReturned);
         map.put(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, this::getAllReservationsForBook);
         map.put(Constants.LIBRARIAN_LOGIN, this::librarianLogin);
+        map.put(Constants.REMOVE_RESERVATION, this::removeReservation);
 
     }
 
@@ -62,6 +63,16 @@ public class MessageFromThreadHandler implements Serializable{
         this.currentContext.sendBroadcast(intent);
     }
 
+    private void removeReservation(Bundle bundle) {
+        boolean res = (boolean)bundle.getSerializable(Constants.REMOVE_RESERVATION);
+        Intent intent = new Intent(Constants.REMOVE_RESERVATION);
+
+        //put whatever data you want to send, if any
+        intent.putExtra(Constants.REMOVE_RESERVATION, res);
+
+        //send broadcast
+        this.currentContext.sendBroadcast(intent);
+    }
 
     private void librarianLogin(Bundle bundle) {
         Intent intent = new Intent(Constants.LIBRARIAN_LOGIN);

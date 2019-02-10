@@ -27,4 +27,6 @@ public class Constants {
     static public final String GET_ALL_BOOKS = "get_all_books";
     static public final String NEW_NOTIFICATION_TOKEN = "new_notification_token";
     static public final String LIBRARIAN_LOGIN = "librarian_login";
+    public static final String REMOVE_RESERVATION = "remove_reservation" ;
+
 }
