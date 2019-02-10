@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.easylib.dima.easylib.Adapters.QueueAdapter;
 import com.easylib.dima.easylib.Adapters.QueueRecyclerItemTouchHelper;
@@ -25,6 +26,8 @@ public class QueueFragment extends Fragment
     private ArrayList<AnswerClasses.Book> waitingBooks;
     private AnswerClasses.User userInfo;
 
+    private TextView noBooksText;
+
     private RecyclerView mRecyclerView;
     private QueueAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -35,27 +38,34 @@ public class QueueFragment extends Fragment
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_queue, container, false);
 
-        // RecycleView setup
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.recycle_queue);
-        // improve performance
-        mRecyclerView.setHasFixedSize(true);
-        // used linear layout
-        if((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
-            // used linear layout
-            mLayoutManager = new LinearLayoutManager(getContext());
-        } else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
-            // used grid layout
-            mLayoutManager = new GridLayoutManager(getContext(), 2);
-        }
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        // specify an adapter
-        mAdapter = new QueueAdapter(getContext(), waitingBooks, userInfo);
-        mRecyclerView.setAdapter(mAdapter);
+        noBooksText = (TextView) root.findViewById (R.id.fragment_queue_nobooks);
 
-        // adding item touch helper
-        ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new QueueRecyclerItemTouchHelper(0, ItemTouchHelper.RIGHT, this);
-        new ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(mRecyclerView);
+        if (waitingBooks.size () != 0) {
+            // RecycleView setup
+            mRecyclerView = (RecyclerView) root.findViewById (R.id.recycle_queue);
+            mRecyclerView.setVisibility (View.VISIBLE);
+            // improve performance
+            mRecyclerView.setHasFixedSize (true);
+            // used linear layout
+            if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+                // used linear layout
+                mLayoutManager = new LinearLayoutManager (getContext ());
+            } else if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+                // used grid layout
+                mLayoutManager = new GridLayoutManager (getContext (), 2);
+            }
+            mRecyclerView.setLayoutManager (mLayoutManager);
+            mRecyclerView.setItemAnimator (new DefaultItemAnimator ());
+            // specify an adapter
+            mAdapter = new QueueAdapter (getContext (), waitingBooks, userInfo);
+            mRecyclerView.setAdapter (mAdapter);
+
+            // adding item touch helper
+            ItemTouchHelper.SimpleCallback itemTouchHelperCallback = new QueueRecyclerItemTouchHelper (0, ItemTouchHelper.RIGHT, this);
+            new ItemTouchHelper (itemTouchHelperCallback).attachToRecyclerView (mRecyclerView);
+        } else {
+            noBooksText.setVisibility (View.VISIBLE);
+        }
 
         return root;
     }
