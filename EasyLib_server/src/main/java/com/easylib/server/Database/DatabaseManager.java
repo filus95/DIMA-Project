@@ -1226,8 +1226,7 @@ public class DatabaseManager {
         ArrayList<Integer> book_identifiers = getIdRatedBooks(query);
         ArrayList<Book> result = new ArrayList<>();
         for (Integer identifier: book_identifiers) {
-            query = "select identifier, title, publisher, category_1, category_2, category_3, author_1, author_2," +
-                    " author_3, author_4 " +
+            query = "select * " +
                     "from " + schema_lib + ".books where identifier = "+identifier;
 
             result.addAll(getQueryResultsBooks(query, lib_id));

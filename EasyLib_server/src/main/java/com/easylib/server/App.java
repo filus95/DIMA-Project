@@ -50,10 +50,9 @@ public class App
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
 
-        Rating rating = new Rating();
-
+        ArrayList<Book> books = dbms.getReadBooks(2);
 //
-//        DatabaseManager dbms = new DatabaseManager();
+        DatabaseManager dms = new DatabaseManager();
 //
 //        WaitingPerson waitingPerson = new WaitingPerson();
 //        waitingPerson.setUser_id(1);
