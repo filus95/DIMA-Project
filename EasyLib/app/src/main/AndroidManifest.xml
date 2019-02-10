@@ -68,6 +68,8 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.EditProfileActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.JoinedEventsActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.Notifications.MyFirebaseMessagingService">
             <intent-filter>

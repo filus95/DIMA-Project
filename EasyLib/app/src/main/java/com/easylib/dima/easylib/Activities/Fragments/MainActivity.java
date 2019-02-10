@@ -20,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.easylib.dima.easylib.Activities.BookActivity;
+import com.easylib.dima.easylib.Activities.JoinedEventsActivity;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
@@ -190,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                     isJoinedEventsForProfile = false;
                     setFragment(fragment);
                 } else {
-                    Intent eventListIntent = new Intent(context, EventListActivity.class);
+                    Intent eventListIntent = new Intent(context, JoinedEventsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(ALL_EVENTS, events);
                     bundle.putSerializable(USER_INFO, userInfo);
