@@ -55,10 +55,6 @@ public class ImageTitleNewsAdapter extends RecyclerView.Adapter<ImageTitleNewsAd
                     Bundle bundle = new Bundle ();
                     bundle.putSerializable(NEWS_INFO, news);
                     newsIntent.putExtras(bundle);
-                    if(context instanceof MainActivity)
-                        ((MainActivity)context).doUnbindService ();
-                    if(context instanceof LibraryActivity)
-                        ((LibraryActivity)context).doUnbindService ();
                     context.startActivity(newsIntent);
                 }
             });

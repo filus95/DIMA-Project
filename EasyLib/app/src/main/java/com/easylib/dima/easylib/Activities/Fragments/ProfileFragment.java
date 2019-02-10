@@ -111,7 +111,6 @@ public class ProfileFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable(USER_INFO, userInfo);
                 editProfileIntent.putExtras(bundle);
-                ((MainActivity)getActivity ()).doUnbindService ();
                 startActivity(editProfileIntent);
             }
         });

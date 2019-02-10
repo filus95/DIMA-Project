@@ -730,7 +730,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             Reservation reservation = (Reservation) objectInputStream.readObject();
             res = dbms.removeReservation(reservation, true);
 
-            socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
+            socketHandler.sendViaSocket(Constants.RESERVED_BOOK_RETURNED);
             socketHandler.sendViaSocket(res);
 
             if ( res ) {

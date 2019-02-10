@@ -56,8 +56,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsHolder> {
                 Bundle bundle = new Bundle ();
                 bundle.putSerializable(NEWS_INFO, news);
                 newsIntent.putExtras(bundle);
-                if(context instanceof LibraryActivity)
-                    ((LibraryActivity)context).doUnbindService ();
                 context.startActivity(newsIntent);
             }
         });

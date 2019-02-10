@@ -254,8 +254,8 @@ public class LibraryActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 
@@ -314,7 +314,6 @@ public class LibraryActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ALL_NEWS, libraryInfo.getLibraryContent ().getNews ());
         newsIntent.putExtras(bundle);
-        doUnbindService();
         startActivity(newsIntent);
     }
 
@@ -325,7 +324,6 @@ public class LibraryActivity extends AppCompatActivity {
         bundle.putSerializable (USER_INFO, userInfo);
         bundle.putSerializable (LIBRARY_INFO, libraryInfo);
         eventIntent.putExtras(bundle);
-        doUnbindService();
         startActivity(eventIntent);
     }
 
