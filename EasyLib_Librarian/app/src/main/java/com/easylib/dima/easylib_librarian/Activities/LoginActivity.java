@@ -102,14 +102,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user.getUser_id() == -1) {
                     Toast.makeText(context, "Login Failed", Toast.LENGTH_LONG).show();
                     loadingLayout.setVisibility (View.INVISIBLE);
-                    makeItemsTouchable (true);
                 } else {
-                    SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
-                    if(!sp.contains(USER_ID)) {
-                        SharedPreferences.Editor Ed = sp.edit();
-                        Ed.putInt(USER_ID, user.getUser_id());
-                        Ed.commit();
-                    }
                     userInfo = user;
                     getLibraryInfo ();
                 }
@@ -156,9 +149,6 @@ public class LoginActivity extends AppCompatActivity {
         loadingLayout = (ConstraintLayout) findViewById (R.id.login_load_layout);
         errotText = (TextView) findViewById (R.id.text_error);
 
-        // Make the Layout not clickable
-        makeItemsTouchable (false);
-
         // Change Enter key in Done key when password is typed
         password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -175,32 +165,6 @@ public class LoginActivity extends AppCompatActivity {
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.LIBRARIAN_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_LIBRARY_INFO));
-
-        // Check if Info are saved
-        SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
-        if (!sp.contains(USER_ID)) {
-            loadingLayout.setVisibility(View.INVISIBLE);
-            makeItemsTouchable (true);
-        } else {
-            User user = new User();
-            user.setUser_id(sp.getInt(USER_ID, -1));
-            // Send Login Info to Server
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (mBoundService != null) {
-                        mBoundService.setCurrentContext(getApplicationContext());
-                        mBoundService.sendMessage(Constants.LIBRARIAN_LOGIN, user);
-                    }
-                }
-            }, 1000);
-        }
-    }
-
-    public void makeItemsTouchable(Boolean areTouchable) {
-        email.setEnabled (areTouchable);
-        password.setEnabled (areTouchable);
-        loginButton.setEnabled (areTouchable);
     }
 
     public void login(View view) {
