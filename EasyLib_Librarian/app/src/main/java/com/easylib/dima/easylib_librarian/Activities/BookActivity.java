@@ -190,6 +190,9 @@ public class BookActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_RESERVATIONS_FOR_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.RESERVED_BOOK_RETURNED));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.RESERVED_BOOK_TAKEN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_RESERVATION));
 
         // Send Login Info to Server
         new Handler ().postDelayed(new Runnable() {
