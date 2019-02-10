@@ -105,15 +105,28 @@ public class BookActivity extends AppCompatActivity {
                 setReservationsAdapter ();
             }
             if (key.equals (Constants.RESERVED_BOOK_RETURNED)) {
-                // TODO if ok call again for refresh
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.RESERVED_BOOK_RETURNED);
+                if (bool) {
+                    Toast.makeText(context,"Book Returned", Toast.LENGTH_LONG).show();
+                    getAllReservations ();
+                } else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
             }
             if (key.equals (Constants.RESERVED_BOOK_TAKEN)) {
-                // TODO if ok call again for refresh
+                Boolean bool = (Boolean) intent.getSerializableExtra (Constants.RESERVED_BOOK_TAKEN);
+                if (bool) {
+                    Toast.makeText(context,"Book Taken", Toast.LENGTH_LONG).show();
+                    getAllReservations ();
+                } else {
+                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
+                }
             }
             if (key.equals (Constants.REMOVE_RESERVATION)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_RESERVATION);
                 if (bool) {
-                    // TODO if ok call again for refresh
+                    Toast.makeText(context,"Removed Reservation", Toast.LENGTH_LONG).show();
+                    getAllReservations ();
                 }
                 else {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
@@ -182,13 +195,7 @@ public class BookActivity extends AppCompatActivity {
         new Handler ().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Reservation reservation = new Reservation ();
-                reservation.setIdLib (libraryInfo.getId_lib ());
-                reservation.setBook_idetifier (bookInfo.getIdentifier ());
-                if (mBoundService != null) {
-                    mBoundService.setCurrentContext(getApplicationContext());
-                    mBoundService.sendMessage(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, reservation);
-                }
+                getAllReservations ();
             }
         }, 1000);
     }
@@ -205,21 +212,31 @@ public class BookActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void setBookReturned() {
+    public void getAllReservations() {
         Reservation reservation = new Reservation ();
         reservation.setIdLib (libraryInfo.getId_lib ());
         reservation.setBook_idetifier (bookInfo.getIdentifier ());
-        reservation.setUser_id (userInfo.getUser_id ());
+        if (mBoundService != null) {
+            mBoundService.setCurrentContext(getApplicationContext());
+            mBoundService.sendMessage(Constants.GET_ALL_RESERVATIONS_FOR_BOOK, reservation);
+        }
+    }
+
+    public void setBookReturned(int userId) {
+        Reservation reservation = new Reservation ();
+        reservation.setIdLib (libraryInfo.getId_lib ());
+        reservation.setBook_idetifier (bookInfo.getIdentifier ());
+        reservation.setUser_id (userId);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.RESERVED_BOOK_RETURNED, reservation);
         }
     }
 
-    public void removeReservation() {
+    public void removeReservation( int userId) {
         Reservation reservation = new Reservation ();
         reservation.setIdLib (libraryInfo.getId_lib ());
-        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setUser_id (userId);
         reservation.setBook_idetifier (bookInfo.getIdentifier ());
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
@@ -227,11 +244,11 @@ public class BookActivity extends AppCompatActivity {
         }
     }
 
-    public void confirmReservation() {
+    public void confirmReservation(int userId) {
         Reservation reservation = new Reservation ();
         reservation.setIdLib (libraryInfo.getId_lib ());
         reservation.setBook_idetifier (bookInfo.getIdentifier ());
-        reservation.setUser_id (userInfo.getUser_id ());
+        reservation.setUser_id (userId);
         if (mBoundService != null) {
             mBoundService.setCurrentContext(getApplicationContext());
             mBoundService.sendMessage(Constants.RESERVED_BOOK_TAKEN, reservation);
