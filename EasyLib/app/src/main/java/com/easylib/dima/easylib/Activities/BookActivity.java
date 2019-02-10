@@ -157,10 +157,13 @@ public class BookActivity extends AppCompatActivity {
                 }
                 if (!isRated) {
                     rateLayout.setVisibility (View.VISIBLE);
-                }
-                if (mBoundService != null) {
-                    mBoundService.setCurrentContext(getApplicationContext());
-                    mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
+                    reservedLayout.setVisibility (View.VISIBLE);
+                    reservedText.setText ("Already Read !");
+                    reservedText.setVisibility (View.VISIBLE);
+                } else {
+                    reservedLayout.setVisibility (View.VISIBLE);
+                    reservedText.setText ("Already Read & Rated !");
+                    reservedText.setVisibility (View.VISIBLE);
                 }
             }
             if (key.equals (Constants.INSERT_RATING)) {
