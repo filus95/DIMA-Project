@@ -154,8 +154,6 @@ public class LoginPreferenceActivity extends AppCompatActivity {
         bundle.putSerializable(USER_INFO, userInfo);
         mainIntent.putExtras(bundle);
         mainIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-        doUnbindService();
-        unregisterReceiver(mMessageReceiver);
         startActivity(mainIntent);
     }
 
