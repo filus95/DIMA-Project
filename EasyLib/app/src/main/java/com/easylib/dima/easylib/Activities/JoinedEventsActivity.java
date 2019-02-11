@@ -93,6 +93,10 @@ public class JoinedEventsActivity extends AppCompatActivity {
                 joinedEvents = (ArrayList<Event>) intent.getSerializableExtra (Constants.GET_EVENTS_PER_USER);
                 setAdapter ();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -130,6 +134,7 @@ public class JoinedEventsActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_EVENTS_PER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
 
         // Get Library info from Server if activity resumed
         if (!firstTimeCalledActivity) {

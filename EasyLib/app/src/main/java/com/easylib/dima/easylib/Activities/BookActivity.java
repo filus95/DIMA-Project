@@ -293,12 +293,10 @@ public class BookActivity extends AppCompatActivity {
                 String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
                 Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
-
-//            else
-//                    Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
-
-
-
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -306,20 +304,6 @@ public class BookActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_activity);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RATED_BOOKS));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_READ_BOOKS));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RATING));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RESERVATION));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_RESERVATION));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.LIBRARIES_FOR_BOOK));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_WAITING_PERSON));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
         bookInfo = (Book) getIntent().getSerializableExtra(BOOK_INFO);
@@ -371,7 +355,27 @@ public class BookActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume ();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RATED_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_READ_BOOKS));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RATING));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.LIBRARIES_FOR_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_WAITING_PERSON));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
+
+        // start check for book status
         new Handler ().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -384,8 +388,8 @@ public class BookActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 

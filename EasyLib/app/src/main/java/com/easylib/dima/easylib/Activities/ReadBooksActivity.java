@@ -1,5 +1,9 @@
 package com.easylib.dima.easylib.Activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -7,9 +11,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.easylib.dima.easylib.Adapters.ReadBooksAdapter;
+import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
 
 import AnswerClasses.Book;
 import AnswerClasses.User;
@@ -24,6 +32,26 @@ public class ReadBooksActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
+
+    //This is the handler that will manager to process the broadcast intent
+    //This has to be created inside each activity that needs it ( almost anyone )
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key = extractKey(intent);
+
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
+        }
+    };
+
+    private String extractKey(Intent intent){
+        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
+        Iterator iterator = keySet.iterator();
+        return (String)iterator.next();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,5 +71,17 @@ public class ReadBooksActivity extends AppCompatActivity {
         // specify an adapter
         mAdapter = new ReadBooksAdapter (this, books, userInfo);
         mRecyclerView.setAdapter (mAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume ();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        unregisterReceiver(mMessageReceiver);
     }
 }

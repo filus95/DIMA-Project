@@ -142,6 +142,10 @@ public class SearchActivity extends AppCompatActivity {
                 String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
                 Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -149,13 +153,6 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_LIBRARIES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
 
@@ -245,11 +242,13 @@ public class SearchActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 

@@ -128,6 +128,10 @@ public class EventActivity extends AppCompatActivity {
                 String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
                 Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -135,14 +139,6 @@ public class EventActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_activity);
-
-        // Communication
-        doBindService ();
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_EVENT_PARTICIPANT));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_EVENT_PARTECIPANT));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
-
 
         eventInfo = (Event) getIntent ().getSerializableExtra(EVENT_INFO);
         userInfo = (User) getIntent ().getSerializableExtra (USER_INFO);
@@ -164,7 +160,20 @@ public class EventActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(eventInfo.getImage_link())
                 .into(image);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume ();
+        // Communication
+        doBindService ();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_EVENT_PARTICIPANT));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_EVENT_PARTECIPANT));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
+
+        // check if already reserved a seta on event
         new Handler ().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -177,8 +186,8 @@ public class EventActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 

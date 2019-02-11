@@ -93,6 +93,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
                 Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -100,11 +104,6 @@ public class EditProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.edit_profile_activity);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.EDIT_PROFILE_INFO));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
 
         userInfo = (AnswerClasses.User) getIntent().getSerializableExtra(USER_INFO);
 
@@ -120,8 +119,18 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onResume() {
+        super.onResume ();
+        // Communication
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.EDIT_PROFILE_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 

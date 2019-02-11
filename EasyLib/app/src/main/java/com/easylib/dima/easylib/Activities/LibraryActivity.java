@@ -172,6 +172,10 @@ public class LibraryActivity extends AppCompatActivity {
                 String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
                 Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -182,14 +186,6 @@ public class LibraryActivity extends AppCompatActivity {
 
         userInfo = (User) getIntent().getSerializableExtra(USER_INFO);
         libraryInfo = (LibraryDescriptor) getIntent().getSerializableExtra(LIBRARY_INFO);
-
-        // Communication
-        doBindService();
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_USER_PREFERENCES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
 
         // get layout components references
         name = (TextView) findViewById(R.id.library_activity_name);
@@ -241,6 +237,8 @@ public class LibraryActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NOTIFICATION));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
 
         // Get Library info from Server
         new Handler ().postDelayed(new Runnable() {
