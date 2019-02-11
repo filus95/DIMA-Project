@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.Properties;
 
 public class MailClass {
-    private final String serverMail = "neofy2018@gmail.com";
-    private final String serverPassword = "neofy1995";
+    private final String serverMail = "easylib2k18@gmail.com";
+    private final String serverPassword = "progettodima2018";
 
     public void sendMail( String to, String newPassword){
         try{
