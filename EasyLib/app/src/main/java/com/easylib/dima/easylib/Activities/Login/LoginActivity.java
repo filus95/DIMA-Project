@@ -23,6 +23,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -88,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton regButton;
     private ImageButton googleButton;
     private ImageButton facebookButton;
+    private Button resetPassButton;
 
     //For the communication Service
     private ServiceConnection mConnection2 = new ServiceConnection() {
@@ -164,7 +166,15 @@ public class LoginActivity extends AppCompatActivity {
                     userInfo = user;
                     callUserPreferences();
 //                    sendNewNotificationToken(user);
-
+                }
+            }
+            if ( key.equals(Constants.PASSWORD_FORGOT)) {
+                Boolean bool = (Boolean) intent.getSerializableExtra(Constants.PASSWORD_FORGOT);
+                loadingLayout.setVisibility(View.INVISIBLE);
+                if (bool) {
+                    Toast.makeText(context, "Password Reset !", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, "Error...", Toast.LENGTH_LONG).show();
                 }
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
@@ -238,6 +248,7 @@ public class LoginActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.PASSWORD_FORGOT));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_UP));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN_GOOGLE));
@@ -283,13 +294,6 @@ public class LoginActivity extends AppCompatActivity {
 
             mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-            doBindService();
-
-            // for Multiple Filters call this multiple times
-            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN));
-            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_PREFERENCES));
-            this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_ALL_LIBRARIES));
-
             // Check if Info are saved
             SharedPreferences sp = getSharedPreferences(LOGIN, MODE_PRIVATE);
             Handler handler = new Handler();
@@ -334,6 +338,7 @@ public class LoginActivity extends AppCompatActivity {
         regButton = (ImageButton) findViewById (R.id.reg_bt);
         googleButton = (ImageButton) findViewById(R.id.g_bt);
         facebookButton = (ImageButton) findViewById(R.id.fb_bt);
+        resetPassButton = (Button) findViewById (R.id.login_activity_resetpass_button);
 
         // Make the Layout not clickable
         makeItemsTouchable (false);
@@ -359,6 +364,7 @@ public class LoginActivity extends AppCompatActivity {
         regButton.setEnabled (areTouchable);
         googleButton.setEnabled (areTouchable);
         facebookButton.setEnabled (areTouchable);
+        resetPassButton.setEnabled (areTouchable);
     }
 
     public void login(View view) {
@@ -407,10 +413,25 @@ public class LoginActivity extends AppCompatActivity {
     public void register(View view) {
         mBoundService.setCurrentContext(this);
         Intent intent = new Intent(this, RegisterActivity.class);
-
-        doUnbindService();
-        this.unregisterReceiver(mMessageReceiver);
         startActivity(intent);
+    }
+
+    public void resetPassword(View view) {
+        String email = eText.getText().toString();
+        if( email.length() == 0) {
+            errorText.setVisibility (View.VISIBLE);
+            errorText.setText ("Fill Email field !");
+        } else {
+            User user = new User();
+            user.setEmail(email);
+            user.setUser_id(-1);
+            loadingLayout.setVisibility(View.VISIBLE);
+            // Send Login Info to Server
+            if (mBoundService != null) {
+                mBoundService.setCurrentContext(this);
+                mBoundService.sendMessage(Constants.PASSWORD_FORGOT, user);
+            }
+        }
     }
 
     private void safeUnbinding(){
