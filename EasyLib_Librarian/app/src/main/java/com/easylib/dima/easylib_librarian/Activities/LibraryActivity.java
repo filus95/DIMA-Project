@@ -251,7 +251,7 @@ public class LibraryActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
+        if (scanResult.getContents () != null) {
             Query q = new Query ();
             q.setIdLib (libraryInfo.getId_lib ());
             q.setIdentifier (scanResult.getContents ());

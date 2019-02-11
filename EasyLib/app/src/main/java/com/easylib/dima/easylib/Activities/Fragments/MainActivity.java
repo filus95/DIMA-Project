@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -303,16 +304,16 @@ public class MainActivity extends AppCompatActivity {
 
         // Reload fragment content on resume
         if (fragment instanceof ProfileFragment) {
-            fragment = new ProfileFragment();
-            getPrefLibraries(true, false);
+            mMainNav.setSelectedItemId (R.id.profile_item);
         }
         if (fragment instanceof HomeFragment) {
-            fragment = new HomeFragment();
-            getPrefLibraries (false, true);
+            mMainNav.setSelectedItemId (R.id.home_item);
         }
         if (fragment instanceof CalendarFragment) {
-            fragment = new CalendarFragment();
-            getReservations ();
+            mMainNav.setSelectedItemId (R.id.calendar_item);
+        }
+        if (fragment instanceof QueueFragment) {
+            mMainNav.setSelectedItemId (R.id.queue_item);
         }
     }
 
@@ -432,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, intent);
-        if (scanResult != null) {
+        if (scanResult.getContents () != null) {
             Query q = new Query ();
             q.setIdentifier (scanResult.getContents ());
             if (mBoundService != null) {
