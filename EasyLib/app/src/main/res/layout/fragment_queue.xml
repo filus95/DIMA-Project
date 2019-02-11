@@ -5,9 +5,8 @@
     android:id="@+id/frameLayout9"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Fragments.QueueFragment">
+    tools:context=".Activities.Fragments.MainActivity">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView13"
         android:layout_width="0dp"
