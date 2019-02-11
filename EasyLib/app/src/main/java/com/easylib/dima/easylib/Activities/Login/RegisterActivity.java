@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
@@ -82,6 +83,10 @@ public class RegisterActivity extends Activity {
                     goToLogin();
                 }
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -97,6 +102,7 @@ public class RegisterActivity extends Activity {
         doBindService();
         setContentView(R.layout.register);
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
 
         sText = (EditText) findViewById(R.id.surname);
         nText = (EditText) findViewById(R.id.name);
@@ -117,8 +123,16 @@ public class RegisterActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onResume() {
+        super.onResume ();
+        doBindService();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
         unregisterReceiver(mMessageReceiver);
     }

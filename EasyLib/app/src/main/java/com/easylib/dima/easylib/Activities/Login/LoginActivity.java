@@ -29,6 +29,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.ConnectionLayer.CheckConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton facebookButton;
     private Button resetPassButton;
 
-    //For the communication Service
+    //For the communication Service Network Up or Down
     private ServiceConnection mConnection2 = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -204,12 +205,9 @@ public class LoginActivity extends AppCompatActivity {
                 loginPrefIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(loginPrefIntent);
             }
-            if (key.equals(Constants.NETWORK_STATE_UP)){
-                Toast.makeText(context,"NETWORK IS UP!", Toast.LENGTH_LONG).show();
-                startApp ();
-            }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
-                Toast.makeText(context,"NETWORK IS DOWN!", Toast.LENGTH_LONG).show();
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
             }
             if (key.equals(Constants.USER_LOGIN_GOOGLE)){
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN_GOOGLE);
@@ -230,17 +228,6 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onStart() {
-        super.onStart();
-//        String email = mAuth.getCurrentUser().getEmail();
-//        if ( email != null ){
-//
-//        }
-//        if ( isNetworkAvailable())
-//            mAuth.addAuthStateListener(mAuthListener);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         // Communication
@@ -253,6 +240,13 @@ public class LoginActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_LOGIN_GOOGLE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.USER_SILENT_LOGIN_GOOGLE));
+        startApp ();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        doUnbindService ();
     }
 
     @Override
@@ -262,12 +256,6 @@ public class LoginActivity extends AppCompatActivity {
         startService(new Intent(LoginActivity.this, CheckConnectionService.class));
 
         startApp ();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause ();
-        doUnbindService ();
     }
 
     private void startApp() {

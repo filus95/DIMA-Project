@@ -85,6 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         intent = new Intent(Constants.NOTIFICATION);
 
         String message = data.get("message");
+        // TODO call notification uotside
         intent.putExtra(Constants.NOTIFICATION, message);
         Context context = MyApplication.getAppContext();
         context.sendBroadcast(intent);
