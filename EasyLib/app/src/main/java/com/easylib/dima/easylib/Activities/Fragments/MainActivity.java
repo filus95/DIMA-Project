@@ -25,6 +25,7 @@ import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.Activities.ReadBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.Adapters.HomeAdapter;
@@ -224,6 +225,10 @@ public class MainActivity extends AppCompatActivity {
                 bookIntent.putExtras(bundle);
                 context.startActivity(bookIntent);
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -294,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REMOVE_WAITING_PERSON));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
 
         // Reload fragment content on resume
         if (fragment instanceof ProfileFragment) {

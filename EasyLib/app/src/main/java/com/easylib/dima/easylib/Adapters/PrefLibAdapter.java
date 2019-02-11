@@ -48,7 +48,6 @@ public class PrefLibAdapter extends RecyclerView.Adapter<PrefLibAdapter.PrefLibH
 
         // implemented onClickListener event
         holder.itemView.setOnClickListener(new OnClickListener() {
-            // TODO : onClick set Preference
             @Override
             public void onClick(View v) {
                 if(context instanceof LoginPreferenceActivity){

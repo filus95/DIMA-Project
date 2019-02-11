@@ -99,10 +99,7 @@ public class RegisterActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        doBindService();
         setContentView(R.layout.register);
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.REGISTER_USER));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
 
         sText = (EditText) findViewById(R.id.surname);
         nText = (EditText) findViewById(R.id.name);

@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ArrayAdapter;
 
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.Adapters.EventAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -98,6 +99,10 @@ public class EventListActivity extends AppCompatActivity {
                 events = libraryInfo.getLibraryContent ().getEvents ();
                 setAdapters ();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -125,6 +130,7 @@ public class EventListActivity extends AppCompatActivity {
         // Communication
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_LIBRARY_INFO));
+        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
 
         // Get Library info from Server
         new Handler ().postDelayed(new Runnable() {
@@ -139,8 +145,8 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy ();
+    protected void onPause() {
+        super.onPause ();
         doUnbindService();
     }
 

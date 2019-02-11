@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.Activities.LibraryActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginPreferenceActivity;
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.Adapters.LibraryAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -42,6 +43,26 @@ public class LibraryListActivity extends AppCompatActivity {
     private LibraryAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
+    //This is the handler that will manager to process the broadcast intent
+    //This has to be created inside each activity that needs it ( almost anyone )
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String key = extractKey(intent);
+
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
+        }
+    };
+
+    private String extractKey(Intent intent){
+        Set<String> keySet = Objects.requireNonNull(intent.getExtras()).keySet();
+        Iterator iterator = keySet.iterator();
+        return (String)iterator.next();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +81,18 @@ public class LibraryListActivity extends AppCompatActivity {
         // specify an adapter
         mAdapter = new LibraryAdapter(this, libraries);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume ();
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        unregisterReceiver(mMessageReceiver);
     }
 
     public void showLibrary(LibraryDescriptor library) {

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
+import com.easylib.dima.easylib.Activities.NoInternetActivity;
 import com.easylib.dima.easylib.Adapters.PrefLibAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
@@ -95,6 +96,10 @@ public class LoginPreferenceActivity extends AppCompatActivity {
             if (key.equals(Constants.INSERT_PREFERENCE)) {
                 goToMainActivty();
             }
+            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+                Intent internetIntent = new Intent (context, NoInternetActivity.class);
+                startActivity (internetIntent);
+            }
         }
     };
 
@@ -122,10 +127,20 @@ public class LoginPreferenceActivity extends AppCompatActivity {
             mLayoutManager = new GridLayoutManager(this, 2);
         }
         mRecyclerView.setLayoutManager(mLayoutManager);
+    }
 
-        // Communication
+    @Override
+    protected void onResume() {
+        super.onResume ();
         doBindService();
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+        doUnbindService();
+        unregisterReceiver(mMessageReceiver);
     }
 
     public void skipOnClick(View view) {
