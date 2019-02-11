@@ -954,7 +954,7 @@ public class DatabaseManager {
 
     public boolean deleteStatementUsers( User user, String tableName, String schemaName){
         String query = "delete from "+schemaName+"."+tableName+" where " +
-                tableName+".username = "+user.getUsername();
+                tableName+".email = "+user.getEmail();
 
         return queryExecution(conn, query);
 
