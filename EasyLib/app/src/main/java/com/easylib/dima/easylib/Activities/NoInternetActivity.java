@@ -25,6 +25,8 @@ public class NoInternetActivity extends AppCompatActivity {
     ConnectionService mBoundService;
     CheckConnectionService mCheckConnService;
 
+    private boolean isSafe = false;
+
     //For the communication Service Network Up or Down
     private ServiceConnection mConnection2 = new ServiceConnection() {
         @Override
@@ -52,6 +54,7 @@ public class NoInternetActivity extends AppCompatActivity {
 
             if (key.equals(Constants.NETWORK_STATE_UP)){
                 startService(new Intent(NoInternetActivity.this, ConnectionService.class));
+                isSafe = true;
                 finish ();
             }
         }
@@ -67,7 +70,16 @@ public class NoInternetActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy ();
-        unregisterReceiver(mMessageReceiver);
+        if (isSafe) {
+            super.onDestroy ();
+            unregisterReceiver (mMessageReceiver);
+        } else {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        // nothing
     }
 }
