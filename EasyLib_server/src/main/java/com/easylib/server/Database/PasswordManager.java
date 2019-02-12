@@ -141,6 +141,7 @@ class PasswordManager {
         map.put("messaging_token", user.getNotification_token());
         map.put("salt", newSalt);
         map.put("hashed_pd", newHashPass);
+        map.put("user_id", user.getUser_id());
 
         String schemaName = "propietary_db";
         String tableName = "users";

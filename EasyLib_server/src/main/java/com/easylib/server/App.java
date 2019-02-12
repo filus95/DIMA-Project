@@ -50,9 +50,12 @@ public class App
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
 
-        ArrayList<Book> books = dbms.getReadBooks(2);
-//
-        DatabaseManager dms = new DatabaseManager();
+        WaitingPersonInsert waitingPersonInsert = new WaitingPersonInsert();
+        waitingPersonInsert.setBook_identifier("1");
+        waitingPersonInsert.setUser_id(5);
+
+
+        dbms.removeWaitingPerson(waitingPersonInsert, "library_2");
 //
 //        WaitingPerson waitingPerson = new WaitingPerson();
 //        waitingPerson.setUser_id(1);

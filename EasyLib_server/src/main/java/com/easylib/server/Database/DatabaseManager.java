@@ -533,8 +533,8 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where lower(author_1) = '"+author+"'" + " or lower(author_2) ='"+author+"'"
-                +" or lower(author_3)='"+author+"' or lower(author_4)='"+author+"'";
+                "from "+schema_lib+".books where lower(author_1) like  '"+author+"%'" + " or lower(author_2) like'"+author+"%'"
+                +" or lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -572,7 +572,7 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByTitle(String title, String schema_lib, int lib_id) {
         String query = "select *" +
-                "from "+schema_lib+".books where lower(title) = '"+title+"'";
+                "from "+schema_lib+".books where lower(title) like '"+title+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -586,36 +586,36 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByCategory(String category, String schema_lib, int lib_id) {
         String query = "select * "+
-        "from "+schema_lib+".books where lower(category_1) ='"+category+"' or lower(category_2)='"+category+"' or " +
-                "lower(category_3)='"+category+"'";
+        "from "+schema_lib+".books where lower(category_1) like '"+category+"%' or lower(category_2) like '"+category+"%' or " +
+                "lower(category_3) like '"+category+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib, int lib_id) {
         String query = "select *" +
-                "from "+schema_lib+".books where ( lower(category_1) ='" + category + "' or lower(category_2)='" + category + "' " +
-                "or lower(category_3)='"
-                + category + "') and ( lower(author_1) = '"+author+"'" + "or lower(author_2)='"+author+"'" +
-                "or lower(author_3)='"+author+"'or lower(author_4)='"+author+"')";
+                "from "+schema_lib+".books where ( lower(category_1) like '" + category + "%' or lower(category_2) like '" + category + "%' " +
+                "or lower(category_3) like'"
+                + category + "%') and ( lower(author_1) like '"+author+"%'" + "or lower(author_2) like '"+author+"%'" +
+                "or lower(author_3) like '"+author+"%'or lower(author_4)like '"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(author_1) = '"+author+"'" + " " +
-                "or lower(author_2)='"+author+"'" +
-                " or lower(author_3)='"+author+"' or lower(author_4)='"+author+"')";
+                "from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(author_1) like '"+author+"%'" + " " +
+                "or lower(author_2) like '"+author+"%'" +
+                " or lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib, int lib_id) {
         String query = "select * " +
-                " from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(category_1) = '"+category+"'" + " " +
-                "or lower(category_2) ='"+category+"'" +
-                " or lower(category_3)='"+category+"')";
+                " from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(category_1) like '"+category+"%'" + " " +
+                "or lower(category_2) like '"+category+"%'" +
+                " or lower(category_3) like '"+category+"%')";
 
 
         return getQueryResultsBooks(query, lib_id);
@@ -623,10 +623,10 @@ public class DatabaseManager {
 
     public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where lower(title) = '"+title+"' and ( lower(category_1) = '"+category+"'" + " or " +
-                "lower(category_2)='"+category+"'" +
-                " or lower(category_3)='"+category+"') and (lower(author_1) = '"+author+"'" + " or lower(author_2)='"+author+"' or" +
-                " lower(author_3)='"+author+"' or lower(author_4)='"+author+"')";
+                "from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(category_1) like '"+category+"%'" + " or " +
+                "lower(category_2) like '"+category+"%'" +
+                " or lower(category_3) like '"+category+"%') and (lower(author_1) like '"+author+"%'" + " or lower(author_2) like '"+author+"%' or" +
+                " lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -946,15 +946,37 @@ public class DatabaseManager {
     }
 
     public boolean removeWaitingPerson(WaitingPersonInsert wp, String schema_name) {
+        String query_waiting_to_delete = "select waiting_position from "+schema_name+"."+Constants.WAITING_LIST_TABLE_NAME
+                + " where user_id = "+wp.getUser_id()+" and book_identifier = "+wp.getBook_identifier();
+
+        Integer wpDelUser = null;
+        Statement st = null;
+        try {
+            st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query_waiting_to_delete);
+
+            while (rs.next())
+                wpDelUser = rs.getInt("waiting_position");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         String query = "delete from "+schema_name+"."+Constants.WAITING_LIST_TABLE_NAME+" where " +
                 "user_id = "+wp.getUser_id()+" and book_identifier = "+wp.getBook_identifier();
 
+        queryExecution(conn, query);
+
+        query = "update "+schema_name+"."+Constants.WAITING_LIST_TABLE_NAME+" " +
+                "set "+schema_name+"."+Constants.WAITING_LIST_TABLE_NAME+".waiting_position" +
+                " = waiting_position - 1" +
+                " where waiting_position > "+wpDelUser;
+
         return queryExecution(conn, query);
+
     }
 
     public boolean deleteStatementUsers( User user, String tableName, String schemaName){
         String query = "delete from "+schemaName+"."+tableName+" where " +
-                tableName+".email = "+user.getEmail();
+                tableName+".email = '"+user.getEmail()+"'";
 
         return queryExecution(conn, query);
 
@@ -1131,7 +1153,7 @@ public class DatabaseManager {
             }
 
             System.out.print("deleting old row...");
-            deleteStatementUsers(user, Constants.USERS_TABLE_NAME, Constants.PROPIETARY_DB);
+            Boolean bo = deleteStatementUsers(user, Constants.USERS_TABLE_NAME, Constants.PROPIETARY_DB);
             System.out.print("changing forgotten password..");
             res = pm.changeForgottenPassword(user);
         } catch (SQLException e) {
