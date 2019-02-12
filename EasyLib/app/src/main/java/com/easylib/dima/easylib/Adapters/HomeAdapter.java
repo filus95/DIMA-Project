@@ -1,8 +1,10 @@
 package com.easylib.dima.easylib.Adapters;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
     AnswerClasses.User userInfo;
     ArrayList<LibraryDescriptor> libraries;
     Context context;
+    private int size = 0;
 
     public HomeAdapter(Context context, ArrayList libraries, AnswerClasses.User userInfo) {
         this.context = context;
@@ -47,15 +50,28 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
 
         holder.libraryTitle.setText(library.getLib_name());
 
+        // check screen size
+        if ((context.getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            size = 3;
+        } else if ((context.getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            size = 6;
+        }
+
         // get first 3 items of news, events, books
         int i;
         ArrayList<News> news = new ArrayList<News>();
         ArrayList<Event> events = new ArrayList<Event>();
         ArrayList<Book> books = new ArrayList<Book>();
-        for(i=0; i<3; i++) {
-            news.add(library.getLibraryContent().getNews().get(i));
-            events.add(library.getLibraryContent().getEvents().get(i));
-            books.add(library.getLibraryContent().getBooks().get(i));
+        for(i=0; i<size; i++) {
+            if (i < library.getLibraryContent ().getNews ().size ()) {
+                news.add (library.getLibraryContent ().getNews ().get (i));
+            }
+            if (i < library.getLibraryContent ().getEvents ().size ()) {
+                events.add (library.getLibraryContent ().getEvents ().get (i));
+            }
+            if (i < library.getLibraryContent ().getBooks ().size ()) {
+                books.add (library.getLibraryContent ().getBooks ().get (i));
+            }
         }
 
         // Set idLib to all News
@@ -68,13 +84,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeHolder> {
         holder.recycleEvent.setHasFixedSize(true);
         holder.recycleBooks.setHasFixedSize(true);
         // used grid layout
-        RecyclerView.LayoutManager mLayoutManager1 = new GridLayoutManager(context, 3);
+        RecyclerView.LayoutManager mLayoutManager1 = new GridLayoutManager(context, size);
         holder.recycleNews.setLayoutManager(mLayoutManager1);
         holder.recycleNews.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(context, 3);
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(context, size);
         holder.recycleEvent.setLayoutManager(mLayoutManager2);
         holder.recycleEvent.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(context, 3);
+        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(context, size);
         holder.recycleBooks.setLayoutManager(mLayoutManager3);
         holder.recycleBooks.setItemAnimator(new DefaultItemAnimator());
         // specify adapters

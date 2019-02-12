@@ -2,6 +2,7 @@ package com.easylib.dima.easylib.Activities.Fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ public class ProfileFragment extends Fragment {
     private User userInfo;
 
     private static final String LOGIN = "Login";
+    private int size = 0;
 
     // User info components
     private TextView name;
@@ -123,12 +125,31 @@ public class ProfileFragment extends Fragment {
         email.setText(userInfo.getEmail());
         userID.setText(String.valueOf(userInfo.getUser_id()));
 
-        // get first 3 items of news, events, books
+        // Recycle setup Favourite Libraries
+        mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_fav_lib_recycle);
+        // improve performance
+        mRecyclerView.setHasFixedSize(true);
+        // Recycle setup Joined Events
+        mRecyclerView1 = (RecyclerView) root.findViewById(R.id.profile_events_recycle);
+        // improve performance
+        mRecyclerView1.setHasFixedSize(true);
+        // Recycle setup Read Books
+        mRecyclerView2 = (RecyclerView) root.findViewById(R.id.profile_rated_books_recycle);
+        // improve performance
+        mRecyclerView2.setHasFixedSize(true);
+
+        // check screen size
+        if ((getContext ().getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            size = 3;
+        } else if ((getContext ().getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            size = 6;
+        }
+
         int i;
         ArrayList<LibraryDescriptor> fewPrefLibraries = new ArrayList<LibraryDescriptor>();
         ArrayList<AnswerClasses.Event> fewJoinedEvents = new ArrayList<AnswerClasses.Event>();
         ArrayList<Book> fewReadBooks = new ArrayList<Book>();
-        for(i=0; i<3; i++) {
+        for(i=0; i<size; i++) {
             if (i < prefLibraries.size ())
                 fewPrefLibraries.add(prefLibraries.get(i));
             if (i < joinedEvents.size ())
@@ -136,37 +157,19 @@ public class ProfileFragment extends Fragment {
             if (i < readBooks.size ())
                 fewReadBooks.add(readBooks.get(i));
         }
-
-        // Recycle setup Favourite Libraries
-        mRecyclerView = (RecyclerView) root.findViewById(R.id.profile_fav_lib_recycle);
-        // improve performance
-        mRecyclerView.setHasFixedSize(true);
-        // used linear layout
-        mLayoutManager = new GridLayoutManager(getContext(), 3);
+        mLayoutManager = new GridLayoutManager(getContext(), size);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
         mAdapter = new ImageTitleLibraryAdapter(getContext(), fewPrefLibraries);
         mRecyclerView.setAdapter(mAdapter);
-
-        // Recycle setup Joined Events
-        mRecyclerView1 = (RecyclerView) root.findViewById(R.id.profile_events_recycle);
-        // improve performance
-        mRecyclerView1.setHasFixedSize(true);
-        // used linear layout
-        mLayoutManager1 = new GridLayoutManager(getContext(), 3);
+        mLayoutManager1 = new GridLayoutManager(getContext(), size);
         mRecyclerView1.setLayoutManager(mLayoutManager1);
         mRecyclerView1.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter
         mAdapter1 = new ImageTitleEventAdapter(getContext(), fewJoinedEvents, userInfo);
         mRecyclerView1.setAdapter(mAdapter1);
-
-        // Recycle setup Read Books
-        mRecyclerView2 = (RecyclerView) root.findViewById(R.id.profile_rated_books_recycle);
-        // improve performance
-        mRecyclerView2.setHasFixedSize(true);
-        // used linear layout
-        mLayoutManager2 = new GridLayoutManager(getContext(), 3);
+        mLayoutManager2 = new GridLayoutManager(getContext(), size);
         mRecyclerView2.setLayoutManager(mLayoutManager2);
         mRecyclerView2.setItemAnimator(new DefaultItemAnimator());
         // specify an adapter

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -51,6 +53,7 @@ public class LibraryActivity extends AppCompatActivity {
     private LibraryDescriptor libraryInfo;
     private User userInfo;
     private Boolean isLibraryFavourite;
+    private int size = 0;
 
     // For List Activities
     private static final String ALL_NEWS = "All News";
@@ -216,14 +219,21 @@ public class LibraryActivity extends AppCompatActivity {
         newsRec.setHasFixedSize(true);
         eventsRec.setHasFixedSize(true);
         booksRec.setHasFixedSize(true);
+
+        // check screen size
+        if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            size = 3;
+        } else if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            size = 6;
+        }
         // used grid layout
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager (this, size);
         newsRec.setLayoutManager(mLayoutManager);
         newsRec.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager2 = new GridLayoutManager(this, size);
         eventsRec.setLayoutManager(mLayoutManager2);
         eventsRec.setItemAnimator(new DefaultItemAnimator());
-        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, 3);
+        RecyclerView.LayoutManager mLayoutManager3 = new GridLayoutManager(this, size);
         booksRec.setLayoutManager(mLayoutManager3);
         booksRec.setItemAnimator(new DefaultItemAnimator());
     }
@@ -269,10 +279,16 @@ public class LibraryActivity extends AppCompatActivity {
         ArrayList<News> newsList = new ArrayList<News>();
         ArrayList<Event> eventsList = new ArrayList<Event>();
         ArrayList<Book> booksList = new ArrayList<Book>();
-        for(i=0; i<3; i++) {
-            newsList.add(libraryInfo.getLibraryContent().getNews().get(i));
-            eventsList.add(libraryInfo.getLibraryContent().getEvents().get(i));
-            booksList.add(libraryInfo.getLibraryContent().getBooks().get(i));
+        for(i=0; i<size; i++) {
+            if (i < libraryInfo.getLibraryContent ().getNews ().size ()) {
+                newsList.add (libraryInfo.getLibraryContent ().getNews ().get (i));
+            }
+            if (i < libraryInfo.getLibraryContent ().getEvents ().size ()) {
+                eventsList.add (libraryInfo.getLibraryContent ().getEvents ().get (i));
+            }
+            if (i < libraryInfo.getLibraryContent ().getBooks ().size ()) {
+                booksList.add (libraryInfo.getLibraryContent ().getBooks ().get (i));
+            }
         }
 
         // specify adapters

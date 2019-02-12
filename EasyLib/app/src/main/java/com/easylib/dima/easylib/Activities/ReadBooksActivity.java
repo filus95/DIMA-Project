@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -64,8 +65,12 @@ public class ReadBooksActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById (R.id.list_recycle);
         // improve performance
         mRecyclerView.setHasFixedSize (true);
-        // used linear layout
-        mLayoutManager = new GridLayoutManager (this, 3);
+        // Set Layout
+        if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            mLayoutManager = new GridLayoutManager (this, 3);
+        } else if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            mLayoutManager = new GridLayoutManager (this, 6);
+        }
         mRecyclerView.setLayoutManager (mLayoutManager);
         mRecyclerView.setItemAnimator (new DefaultItemAnimator ());
         // specify an adapter

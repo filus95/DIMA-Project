@@ -82,8 +82,8 @@
                 android:id="@+id/queue_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginRight="8dp"
+                android:layout_weight="1"
                 android:singleLine="true"
                 android:text="Location"
                 android:textAlignment="center"
@@ -95,9 +95,9 @@
             android:id="@+id/queue_num"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="0"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="13dp"
+            android:layout_weight="0"
             android:text="9"
             android:textSize="40sp" />
     </LinearLayout>

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -112,7 +113,12 @@ public class JoinedEventsActivity extends AppCompatActivity {
         // improve performance
         mRecyclerView.setHasFixedSize (true);
         // used linear layout
-        mLayoutManager = new GridLayoutManager (this, 3);
+        // Set Layout
+        if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+            mLayoutManager = new GridLayoutManager (this, 3);
+        } else if ((getResources ().getConfiguration ().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            mLayoutManager = new GridLayoutManager (this, 6);
+        }
         mRecyclerView.setLayoutManager (mLayoutManager);
         mRecyclerView.setItemAnimator (new DefaultItemAnimator ());
 
