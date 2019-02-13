@@ -1,18 +1,22 @@
 package com.easylib.dima.easylib.ConnectionLayer.Notifications;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
@@ -24,6 +28,7 @@ import com.easylib.dima.easylib.ConnectionLayer.Constants;
 
 //import com.easylib.dima.easylib.R;
 import com.easylib.dima.easylib.ConnectionLayer.MyApplication;
+import com.easylib.dima.easylib.R;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -85,11 +90,46 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         intent = new Intent(Constants.NOTIFICATION);
 
         String message = data.get("message");
-        // TODO call notification uotside
-        intent.putExtra(Constants.NOTIFICATION, message);
-        Context context = MyApplication.getAppContext();
-        context.sendBroadcast(intent);
 
+        /**Creates an explicit intent for an Activity in your app**/
+        Intent resultIntent = new Intent(getApplicationContext () , LoginActivity.class);
+        resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent resultPendingIntent = PendingIntent.getActivity(getApplicationContext (),
+                0 /* Request code */, resultIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        String channel = "10001";
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext (), channel);
+        mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
+        mBuilder.setContentTitle("Notification")
+                .setContentText(message)
+                .setAutoCancel(false)
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                .setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager = (NotificationManager) getApplicationContext ().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
+        {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel notificationChannel = new NotificationChannel(channel, "NOTIFICATION_CHANNEL_NAME", importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            assert mNotificationManager != null;
+            mBuilder.setChannelId(channel);
+            mNotificationManager.createNotificationChannel(notificationChannel);
+        }
+        assert mNotificationManager != null;
+        mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
+
+        // call shared Preferences
+        SharedPreferences sp = getSharedPreferences("Login", MODE_PRIVATE);
+        int i = sp.getInt("User ID", -1);
+        int h = 0;
 
 //        String body = remoteMessage.getData().get(“body”);
 //        String objectId = remoteMessage.getData().get("object_id");
@@ -173,6 +213,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 //        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 //        notificationManager.notify(0, notificationBuilder.build());
 //    }
-//
 }
 
