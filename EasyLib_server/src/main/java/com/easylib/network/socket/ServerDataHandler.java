@@ -599,11 +599,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             if ( res ) {
                 title =  "Book delivering confirmed";
-                mess = "Your book has been correctly delivered... have a good read!";
+                mess = reservation.getBook_title() + " delivered. Have a good read!";
             }
             else{
+
                 title = "Book delivering denied";
-                mess = "Sorry, the book delivering has been denied!";
+                mess = reservation.getBook_title()+" delivered has been denied!";
             }
 
             dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
@@ -658,7 +659,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             if ( res ) {
                 title =  "Book returning confirmed";
-                mess = "You have correctly returned your book. Come to visit us soon!";
+                mess = reservation.getBook_title()+" returned. Come to visit us soon!";
             }
             else{
                 title = "Book returning confirmed";
