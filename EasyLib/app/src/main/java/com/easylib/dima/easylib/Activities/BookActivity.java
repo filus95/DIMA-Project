@@ -289,10 +289,6 @@ public class BookActivity extends AppCompatActivity {
                     reservedText.setVisibility (View.VISIBLE);
                 }
             }
-            if (key.equals(Constants.NOTIFICATION)){
-                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
-                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
-            }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
                 startActivity (internetIntent);
@@ -372,7 +368,6 @@ public class BookActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_WAITING_LIST_BOOK));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_RESERVATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_WAITING_PERSON));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
 
         // start check for book status

@@ -171,9 +171,6 @@ public class LibraryActivity extends AppCompatActivity {
                     });
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
-            } if (key.equals(Constants.NOTIFICATION)){
-                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
-                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
@@ -247,7 +244,6 @@ public class LibraryActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.INSERT_PREFERENCE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.EDIT_PROFILE));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_LIBRARY_INFO));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NOTIFICATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
 
         // Get Library info from Server
