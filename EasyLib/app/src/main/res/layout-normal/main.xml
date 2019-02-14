@@ -61,7 +61,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"></FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navbar"
@@ -70,14 +70,14 @@
         android:background="@drawable/botnav_back"
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
-        app:itemBackground="@android:color/transparent"
+        android:paddingTop="2dp"
+        app:itemBackground="@color/Transparent"
         app:itemIconSize="33dp"
         app:itemIconTint="@color/nav_item"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_items">
-    </android.support.design.widget.BottomNavigationView>
+        app:menu="@menu/bottom_nav_items" />
 
 </android.support.constraint.ConstraintLayout>
