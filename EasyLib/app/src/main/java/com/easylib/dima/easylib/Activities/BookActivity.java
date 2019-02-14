@@ -171,6 +171,7 @@ public class BookActivity extends AppCompatActivity {
                 if (bool) {
                     Toast.makeText(context,"Rate Inserted", Toast.LENGTH_LONG).show();
                     rateLayout.setVisibility (View.GONE);
+                    reservedText.setText ("Already Read & Rated !");
                 }
                 else {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
