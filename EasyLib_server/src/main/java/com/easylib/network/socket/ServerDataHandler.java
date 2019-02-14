@@ -334,7 +334,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         try {
             Reservation reservation = (Reservation)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
-
+            reservation.setQuantity(1);
             res = dbms.insertNewReservation(reservation, schema_name);
 
             socketHandler.sendViaSocket(Constants.INSERT_RESERVATION);
@@ -592,6 +592,7 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             String mess;
 
             Reservation reservation = (Reservation) objectInputStream.readObject();
+            reservation.setQuantity(1);
             res = dbms.reservedBookTaken(reservation);
 
             socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);

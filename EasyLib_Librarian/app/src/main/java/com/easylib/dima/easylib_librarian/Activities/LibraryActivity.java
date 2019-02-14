@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.easylib.dima.easylib_librarian.Adapters.ImageTitleBookAdapter;
@@ -121,6 +122,8 @@ public class LibraryActivity extends AppCompatActivity {
                     bundle.putSerializable (USER_INFO, userInfo);
                     bookIntent.putExtras (bundle);
                     startActivity (bookIntent);
+                } else {
+                    Toast.makeText(context,"Book not found", Toast.LENGTH_LONG).show();
                 }
             }
         }
