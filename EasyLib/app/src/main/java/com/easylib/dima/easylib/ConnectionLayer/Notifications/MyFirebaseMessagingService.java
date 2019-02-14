@@ -103,7 +103,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext (), channel);
         mBuilder.setSmallIcon(R.mipmap.ic_launcher_round);
-        mBuilder.setContentTitle("Notification")
+        mBuilder.setContentTitle("EasyLib")
                 .setContentText(message)
                 .setAutoCancel(false)
                 .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
