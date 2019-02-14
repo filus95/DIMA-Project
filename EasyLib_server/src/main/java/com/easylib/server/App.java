@@ -6,6 +6,7 @@ import com.easylib.network.socket.ServerDataHandler;
 import com.easylib.server.API.GoogleBooks;
 import com.easylib.server.Database.DatabaseConnection;
 import com.easylib.server.Database.DatabaseManager;
+import com.easylib.server.Database.MailClass;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,11 +25,9 @@ import java.util.ResourceBundle;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args ) throws ParseException {
+public class App {
+    public static void main(String[] args) throws ParseException {
 
 /**
  Connection conn = new DatabaseConnection().startConnection();
@@ -50,12 +49,11 @@ public class App
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
 
-        WaitingPersonInsert waitingPersonInsert = new WaitingPersonInsert();
-        waitingPersonInsert.setBook_identifier("1");
-        waitingPersonInsert.setUser_id(5);
+        User user = new User();
+        user.setUser_id(56);
 
-
-        dbms.removeWaitingPerson(waitingPersonInsert, "library_2");
+        MailClass mailClass = new MailClass();
+        mailClass.sendMessage("raffaele.bongo95@libero.it", "ciao");
 //
 //        WaitingPerson waitingPerson = new WaitingPerson();
 //        waitingPerson.setUser_id(1);
@@ -90,36 +88,36 @@ public class App
 //        dbms.insertNewReservation(reservation, "library_1");
 
 //        dbms.removeReservation(reservation);
-            //        Reservation reservation = new Reservation();
-            //        reservation.setUser_id(4);
-            //        reservation.setStart_res_date(new Date(2,2,2));
-            //        reservation.setQuantity(1);
-            //        reservation.setReservation_date(new Date());
-            //        String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
+        //        Reservation reservation = new Reservation();
+        //        reservation.setUser_id(4);
+        //        reservation.setStart_res_date(new Date(2,2,2));
+        //        reservation.setQuantity(1);
+        //        reservation.setReservation_date(new Date());
+        //        String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
 
-            //        res = dbms.insertNewReservation(reservation, schema_name);
-            //        GoogleBooks googleBooks = new GoogleBooks();
-            //
-            //        String query = "La cattedrale del mare";
-            //        query = correctQueryString(query);
-            //        googleBooks.apiCallAndFillDB(query, "books", "library_2");
+        //        res = dbms.insertNewReservation(reservation, schema_name);
+        //        GoogleBooks googleBooks = new GoogleBooks();
+        //
+        //        String query = "La cattedrale del mare";
+        //        query = correctQueryString(query);
+        //        googleBooks.apiCallAndFillDB(query, "books", "library_2");
 
-            //        ArrayList<News> res = dbms.getAllNews("library_1", 3);
-            //        printQueryResult(res);
-            //        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
-            //        libraryDescriptor.setLib_name("Biblioteca Lambrate");
-            //        libraryDescriptor.setSchema_name("library_2");
-            //        libraryDescriptor.setImage_link("qqqq");
-            //        libraryDescriptor.setTelephone_number("021994492");
-            //        libraryDescriptor.setAddress("Lambrate, 6");
-            //        libraryDescriptor.setEmail("lambrate@poli.it");
-            //        libraryDescriptor.setDescription("siamo piu forti");
-            //        dbms.insertNewLibrary(libraryDescriptor, "propietary_db");
-            //        GoogleBooks gb = new GoogleBooks();
-            //        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
-            //                "library_1");
+        //        ArrayList<News> res = dbms.getAllNews("library_1", 3);
+        //        printQueryResult(res);
+        //        LibraryDescriptor libraryDescriptor = new LibraryDescriptor();
+        //        libraryDescriptor.setLib_name("Biblioteca Lambrate");
+        //        libraryDescriptor.setSchema_name("library_2");
+        //        libraryDescriptor.setImage_link("qqqq");
+        //        libraryDescriptor.setTelephone_number("021994492");
+        //        libraryDescriptor.setAddress("Lambrate, 6");
+        //        libraryDescriptor.setEmail("lambrate@poli.it");
+        //        libraryDescriptor.setDescription("siamo piu forti");
+        //        dbms.insertNewLibrary(libraryDescriptor, "propietary_db");
+        //        GoogleBooks gb = new GoogleBooks();
+        //        gb.apiCallAndFillDB(query.replaceAll("\\s", "+"), "books",
+        //                "library_1");
 
-            // TODO: ADD INTO booksreservations
+        // TODO: ADD INTO booksreservations
 //        java.util.Date dt = new java.util.Date();
 //        java.text.SimpleDateFormat reservation_date =
 //                new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -173,7 +171,7 @@ public class App
 //
 //        }
 
-            //UPDATE STATEMENT
+        //UPDATE STATEMENT
 //        String query = "UPDATE library_1."+Constants.BOOKS_TABLE_NAME+" " +
 //                "SET waiting_list = false ";// +"+columns_name+" = "+values",";
 //
@@ -186,7 +184,7 @@ public class App
 //
 //        } catch (SQLException e) {
 //            e.printStackTrace();
-        }
+    }
 
 
 //        Query query = new Query();
@@ -201,18 +199,18 @@ public class App
 //      dbms.insertNewWaitingPerson(waitingPerson, dbms.getSchemaNameLib(1));
 //      dbms.removeReservation(reservation);
 //      dbms.insertNewReservation(reservation, dbms.getSchemaNameLib(1));
-        // TODO: DELETE FROM booksreservations
-        // ciao
-        //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
-        //                "library_1.booksreservations");
-        //        System.out.print(res);
+    // TODO: DELETE FROM booksreservations
+    // ciao
+    //        boolean res = dbms.deleteStatementReservations("1909430188", "15",
+    //                "library_1.booksreservations");
+    //        System.out.print(res);
 //       UserPreferences up = new UserPreferences();
 //       up.setUser_id(5);
 //       up.setId_lib1(2);
 //       dbms.insertPreferences(up);
 
 
-    private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms){
+    private static LibraryDescriptor getLibraryDescriptor(int id_lib, DatabaseManager dbms) {
         LibraryDescriptor ld = dbms.getLibraryInfo(id_lib);
         LibraryContent lc = dbms.getLibraryContent(ld.getSchema_name(), id_lib);
         ld.setLibraryContent(lc);
@@ -231,16 +229,16 @@ public class App
         return result;
     }
 
-    private static void printQueryResult(ArrayList<News> res){
-        if (res.size()==0)
+    private static void printQueryResult(ArrayList<News> res) {
+        if (res.size() == 0)
             System.out.print("Sorry, no book responding to this title found.");
-            for (News to_ret: res){
-                if ( to_ret == null)
-                    continue;
-                System.out.print(to_ret.getTitle()+" ");
-            }
-            System.out.print("\n");
+        for (News to_ret : res) {
+            if (to_ret == null)
+                continue;
+            System.out.print(to_ret.getTitle() + " ");
         }
+        System.out.print("\n");
+    }
 
 
     /**
@@ -249,7 +247,7 @@ public class App
      * @param query string to correct
      * @return corrected string
      */
-    public static String correctQueryString(String query){
+    public static String correctQueryString(String query) {
 
         return query.replaceAll("\\s", "+");
     }

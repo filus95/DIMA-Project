@@ -146,7 +146,7 @@ class PasswordManager {
         String schemaName = "propietary_db";
         String tableName = "users";
         dbms.insertStatement(map, tableName, schemaName);
-        mail.sendMail(user.getEmail(), newPassword);
+        mail.sendMessage(user.getEmail(), newPassword);
         return true;
     }
     /**

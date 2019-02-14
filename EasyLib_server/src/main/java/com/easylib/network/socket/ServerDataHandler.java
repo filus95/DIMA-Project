@@ -332,8 +332,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void insertReservation(){
         boolean res;
         try {
-            String title;
-            String mess;
             Reservation reservation = (Reservation)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(reservation.getIdLib());
 
@@ -341,17 +339,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             socketHandler.sendViaSocket(Constants.INSERT_RESERVATION);
             socketHandler.sendViaSocket(res);
-
-            if ( res ) {
-                title = "Reservation confirmation";
-                mess = "Your book reservation have been completed with success!";
-            }
-            else{
-                title = "Reservation denied";
-                mess = "Sorry, your reservation have been denied!";
-            }
-
-            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -387,25 +374,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         boolean res;
 
         try {
-            String title;
-            String mess;
             Event_partecipant partecipant = (Event_partecipant) objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
             res = dbms.removeEventParticipant(partecipant, schema_name);
 
             socketHandler.sendViaSocket(Constants.REMOVE_EVENT_PARTECIPANT);
             socketHandler.sendViaSocket(res);
-
-            if (res) {
-                title = "Event participation cancelled";
-                mess = "You have correctly cancelled your event participation!";
-            } else {
-                title = "Event participation deletion denied";
-                mess = "Sorry, your attempt of delete your " +
-                        "event participation have been denied!";
-            }
-
-            dbms.sendNotification(title, mess, dbms.getNotificationToken(partecipant.getPartecipant_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -417,25 +391,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
         boolean res;
 
         try {
-            String title;
-            String mess;
             Event_partecipant partecipant = (Event_partecipant)objectInputStream.readObject();
             String schema_name = dbms.getSchemaNameLib(partecipant.getIdLib());
             res = dbms.insertNewEventPartecipant(partecipant, schema_name);
 
             socketHandler.sendViaSocket(Constants.INSERT_EVENT_PARTICIPANT);
             socketHandler.sendViaSocket(res);
-
-            if ( res ) {
-                title = "Event partecipation confirmed";
-                mess = "You have correctly booked your seat for the event!";
-            }
-            else{
-                title = "Event partecipation denied";
-                mess = "Sorry, your event participation have been denied!";
-            }
-
-            dbms.sendNotification(title,mess, dbms.getNotificationToken(partecipant.getPartecipant_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -518,19 +479,8 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             socketHandler.sendViaSocket(Constants.REMOVE_WAITING_PERSON);
             socketHandler.sendViaSocket(res);
-            String title;
-            String mess;
 
-            if ( res ) {
-                title =  "Deletion in waiting list confirmed";
-                mess = "You have been correctly deleted your in the waiting token!";
-            }
-            else{
-                title = "Deletion in waiting list denied";
-                mess = "Sorry, your deletion in the waiting list have been denied!";
-            }
 
-            dbms.sendNotification(title,mess, dbms.getNotificationToken(wp.getUser_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -548,19 +498,6 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
             socketHandler.sendViaSocket(Constants.INSERT_WAITING_PERSON);
             socketHandler.sendViaSocket(res);
-            String title;
-            String mess;
-
-            if ( res ) {
-                title =  "Insertion in waiting list confirmed";
-                mess = "You have been correctly inserted in the waiting list!";
-            }
-            else{
-                title = "Insertion in waiting list denied";
-                mess = "Sorry, your insertion in the waiting list have been denied!";
-            }
-
-            dbms.sendNotification(title,mess, dbms.getNotificationToken(wp.getUser_id()));
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -695,26 +632,12 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
     private void removeReservation() {
         boolean res;
         try {
-            String title;
-            String mess;
 
             Reservation reservation = (Reservation) objectInputStream.readObject();
             res = dbms.removeReservation(reservation, false);
 
             socketHandler.sendViaSocket(Constants.REMOVE_RESERVATION);
             socketHandler.sendViaSocket(res);
-
-            if ( res ) {
-                title =  "";
-                mess = "The book's reservation have been successfully removed";
-            }
-            else{
-                title = "Removal book's reservation denied";
-                mess = "Sorry, the book's reservation removal has been denied!";
-            }
-
-            dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
-
 
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

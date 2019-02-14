@@ -915,6 +915,7 @@ public class DatabaseManager {
                 reservation.getUser_id())
                 .get(0)
                 .getTitle();
+
         String title = "Your book is available!";
         String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
 
@@ -974,7 +975,7 @@ public class DatabaseManager {
 
     }
 
-    public boolean deleteStatementUsers( User user, String tableName, String schemaName){
+    private boolean deleteStatementUsers(User user, String tableName, String schemaName){
         String query = "delete from "+schemaName+"."+tableName+" where " +
                 tableName+".email = '"+user.getEmail()+"'";
 
