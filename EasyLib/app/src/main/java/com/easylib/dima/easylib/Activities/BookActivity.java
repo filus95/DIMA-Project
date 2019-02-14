@@ -165,6 +165,11 @@ public class BookActivity extends AppCompatActivity {
                     reservedText.setText ("Already Read & Rated !");
                     reservedText.setVisibility (View.VISIBLE);
                 }
+                // call if the user wants to read the book again
+                if (mBoundService != null) {
+                    mBoundService.setCurrentContext(getApplicationContext());
+                    mBoundService.sendMessage(Constants.GET_WAITING_LIST_USER, userInfo);
+                }
             }
             if (key.equals (Constants.INSERT_RATING)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.INSERT_RATING);
