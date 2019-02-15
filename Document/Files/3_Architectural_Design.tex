@@ -69,6 +69,22 @@ The data layer is composed by a multi-table MySQL database that allow to persist
 The Database is composed by two main schemas: proprietary-db and library-x. The former contains the information about the users and librarians’ identity, the libraries’ info needed to distinguish them, the book read by all the users and their favourite libraries.\\
 The latter contains all the information strictly related with a single library. The x stands for an integer and represents the id related with the library. It contains information about the books, the news, the events and their participants, the books reserved and the queue for them and the ratings related to the book read in that library.\\
 Some of the tables in these schemas contains triggers used to maintain the consistence of the data and to build more meaningful information to show to the final user. 
+
+
+\vspace*{0cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.50]{Images/Diagrams/proprietary_db_UML}
+	\caption{Proprietary database}
+\end{figure}
+
+\vspace*{0cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.50]{Images/Diagrams/library_db_UML}
+	\caption{Library database}
+\end{figure}
+
 \mysubsubsection{Triggers}
 In order to maintain the data consistency after that users perform state changing operations, we have implemented 9 triggers distributed between the various schemas and tables. We list all of them below along with the description of their behaviour.
 
