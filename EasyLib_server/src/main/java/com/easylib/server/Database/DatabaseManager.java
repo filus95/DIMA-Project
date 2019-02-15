@@ -919,7 +919,7 @@ public class DatabaseManager {
                 .getTitle();
 
         String title = "Your book is available!";
-        String mess = "The copy of "+book_title+" for what you were waiting is available in "+library_name;
+        String mess = ""+book_title+" is available in "+library_name;
 
         if ( waitingPeople.size() != 0)
             sendNotification(title,mess, getNotificationToken(waitingPeople.get(0).getUser_id()));
@@ -1291,26 +1291,26 @@ public class DatabaseManager {
         String query = "select book_identifier from "+schema_lib+".ratings where " +
                 "user_id = "+user_id;
 
-        ArrayList<Integer> book_identifiers = getIdRatedBooks(query);
+        ArrayList<String> book_identifiers = getIdRatedBooks(query);
         ArrayList<Book> result = new ArrayList<>();
-        for (Integer identifier: book_identifiers) {
+        for (String identifier: book_identifiers) {
             query = "select * " +
-                    "from " + schema_lib + ".books where identifier = "+identifier;
+                    "from " + schema_lib + ".books where identifier = '"+identifier+"'";
 
             result.addAll(getQueryResultsBooks(query, lib_id));
         }
         return result;
     }
 
-    private ArrayList<Integer> getIdRatedBooks(String query) {
-        ArrayList<Integer> results = new ArrayList<>();
+    private ArrayList<String> getIdRatedBooks(String query) {
+        ArrayList<String> results = new ArrayList<>();
 
         try {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next())
-                results.add(rs.getInt("book_identifier"));
+                results.add(rs.getString("book_identifier"));
 
         } catch (SQLException e) {
             e.printStackTrace();

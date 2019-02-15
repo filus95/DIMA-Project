@@ -148,7 +148,7 @@ class PasswordManager {
         dbms.sendNotification("", "Your temporary password is : "+newPassword,
                 dbms.getNotificationToken(dbms.getUserId(user).getUser_id()));
 
-        //        MailClass mail = new MailClass();
+                MailClass mail = new MailClass();
         //        mail.sendMessage(user.getEmail(), newPassword);
         return true;
     }
