@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.ConnectionLayer.Notifications;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -36,6 +37,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -134,9 +137,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         assert mNotificationManager != null;
         mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
 
-        // call shared Preferences
-        String currentTime = Calendar.getInstance().getTime().toString().replace ("T", "  ");
+        // Create Notification Object
+        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat ("dd-MM-yyyy'  'HH:mm");
+        String currentTime = df.format(Calendar.getInstance().getTime());
         NotificationObj obj = new NotificationObj (currentTime, message, true);
+        // Called Shared Preferences
         SharedPreferences sp = getSharedPreferences(NOTIFICATIONS, MODE_PRIVATE);
         //Retrieve the values
         Gson gson = new Gson();
