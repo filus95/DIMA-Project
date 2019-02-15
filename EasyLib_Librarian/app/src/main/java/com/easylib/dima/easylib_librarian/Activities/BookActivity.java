@@ -52,6 +52,7 @@ public class BookActivity extends AppCompatActivity {
     private TextView numBooksAvailable;
     private TextView description;
     private ImageView image;
+    private TextView noReservations;
 
     // recycle view
     private RecyclerView mRecyclerView;
@@ -102,12 +103,21 @@ public class BookActivity extends AppCompatActivity {
 
             if ( key.equals(Constants.GET_ALL_RESERVATIONS_FOR_BOOK)) {
                 reservationsList = (ArrayList<Reservation>) intent.getSerializableExtra (Constants.GET_ALL_RESERVATIONS_FOR_BOOK);
-                setReservationsAdapter ();
+                if (reservationsList.size () > 0) {
+                    mRecyclerView.setVisibility (View.VISIBLE);
+                    setReservationsAdapter ();
+                } else {
+                    noReservations.setVisibility (View.VISIBLE);
+                }
             }
             if (key.equals (Constants.RESERVED_BOOK_RETURNED)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.RESERVED_BOOK_RETURNED);
                 if (bool) {
                     Toast.makeText(context,"Book Returned", Toast.LENGTH_LONG).show();
+                    mRecyclerView.setVisibility (View.GONE);
+                    noReservations.setVisibility (View.GONE);
+                    bookInfo.setQuantity_reserved (bookInfo.getQuantity_reserved () + 1);
+                    numBooksAvailable.setText (String.valueOf (bookInfo.getQuantity_reserved ()));
                     getAllReservations ();
                 } else {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
@@ -117,6 +127,8 @@ public class BookActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.RESERVED_BOOK_TAKEN);
                 if (bool) {
                     Toast.makeText(context,"Book Taken", Toast.LENGTH_LONG).show();
+                    mRecyclerView.setVisibility (View.GONE);
+                    noReservations.setVisibility (View.GONE);
                     getAllReservations ();
                 } else {
                     Toast.makeText(context,"ERROR..", Toast.LENGTH_LONG).show();
@@ -126,6 +138,10 @@ public class BookActivity extends AppCompatActivity {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_RESERVATION);
                 if (bool) {
                     Toast.makeText(context,"Removed Reservation", Toast.LENGTH_LONG).show();
+                    mRecyclerView.setVisibility (View.GONE);
+                    noReservations.setVisibility (View.GONE);
+                    bookInfo.setQuantity_reserved (bookInfo.getQuantity_reserved () + 1);
+                    numBooksAvailable.setText (String.valueOf (bookInfo.getQuantity_reserved ()));
                     getAllReservations ();
                 }
                 else {
@@ -157,6 +173,7 @@ public class BookActivity extends AppCompatActivity {
         description = (TextView) findViewById(R.id.book_activity_description);
         avgRate = (TextView) findViewById(R.id.book_activity_average_rate);
         image = (ImageView) findViewById(R.id.book_activity_image);
+        noReservations = (TextView) findViewById (R.id.book_activity_no_reservations);
 
         // set the components
         title.setText(bookInfo.getTitle ());

@@ -86,9 +86,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         super.onMessageReceived(remoteMessage);
         Map<String, String> data = remoteMessage.getData();
 
-        Intent intent;
-        intent = new Intent(Constants.NOTIFICATION);
-
         String message = data.get("message");
 
         /**Creates an explicit intent for an Activity in your app**/

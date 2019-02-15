@@ -124,9 +124,6 @@ public class EventActivity extends AppCompatActivity {
                     setReservationButton (false);
                 } else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
-            }if (key.equals(Constants.NOTIFICATION)){
-                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
-                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
@@ -170,7 +167,6 @@ public class EventActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_EVENTS_PER_USER));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.INSERT_EVENT_PARTICIPANT));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.REMOVE_EVENT_PARTECIPANT));
-        this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NOTIFICATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
 
         // check if already reserved a seta on event

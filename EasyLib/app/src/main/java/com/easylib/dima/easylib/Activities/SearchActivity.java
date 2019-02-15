@@ -138,9 +138,6 @@ public class SearchActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 } catch (Exception e) {
                 }
-            } if (key.equals(Constants.NOTIFICATION)){
-                String message = (String) intent.getSerializableExtra(Constants.NOTIFICATION);
-                Toast.makeText(context,message, Toast.LENGTH_LONG).show();
             }
             if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
@@ -242,7 +239,6 @@ public class SearchActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.GET_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
-        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NOTIFICATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter (Constants.NETWORK_STATE_DOWN));
     }
 
