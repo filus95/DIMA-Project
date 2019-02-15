@@ -658,6 +658,9 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             socketHandler.sendViaSocket(Constants.RESERVED_BOOK_RETURNED);
             socketHandler.sendViaSocket(res);
 
+            reservation.setBook_title(dbms.queryBookByIdentifier(reservation.getBook_idetifier(),
+                    dbms.getSchemaNameLib(reservation.getIdLib()), reservation.getIdLib()).get(0).getTitle());
+
             if ( res ) {
                 title =  "Book returning confirmed";
                 mess = reservation.getBook_title()+" returned. Come to visit us soon!";

@@ -1259,6 +1259,26 @@ public class DatabaseManager {
         return user;
     }
 
+    public User getUserId(User user) {
+        String sql = "SELECT * FROM propietary_db.users WHERE email = ?";
+
+        PreparedStatement st = null;
+        try {
+            st = this.conn.prepareStatement(sql);
+            st.setString(1,user.getEmail());
+            ResultSet rs = st.executeQuery();
+
+
+            if (rs.next()) {
+                user.setNotification_token(rs.getString("messaging_token"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib, int lib_id) {
         String query = "select * " +
                 "from "+schema_lib+".books where identifier = "+ identifier;
