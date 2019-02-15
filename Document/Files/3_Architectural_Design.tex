@@ -7,13 +7,28 @@ In this section we describe the architectural arrangement that we designed for E
 The proposed architecture is composed by three tiers:
 
 \begin{itemize}
-\item \emph{Presentation Tier: it’s represented by the tablet and the Mobile Android App;  they constitutes the view part of our system.}
-\item \emph{Business Tier: it’s represented by the Socket Server, which responds to the user’s requests, and the Application Server, which contains all the Business Logic. The application server communicates with the DBMS of the MySQL Database contained in the Database Tier.}
-\item \emph{Database Tier: it’s represented by the DB Server, that contains and manages persistent data in an efficient way. }
+\item \emph{Presentation Tier:} it’s represented by the tablet and the Mobile Android App;  they constitutes the view part of our system.
+\item \emph{Business Tier:} it’s represented by the Socket Server, which responds to the user’s requests, and the Application Server, which contains all the Business Logic. The application server communicates with the DBMS of the MySQL Database contained in the Database Tier.
+\item \emph{Database Tier:} it’s represented by the DB Server, that contains and manages persistent data in an efficient way.
 \end{itemize}
 
+\vspace*{0cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{Images/Diagrams/High_level_System_Architecture}
+	\caption{High level system architecture}
+\end{figure}
+
+\newpage
 \mysubsection{High Level Component View}
 The system is divided in three main layers: Presentation Layer, Business Layer and Data Layer. The presentation layer is both mobile and tablet application. For both we have a very thin client with the main aim of performing requests to the application server in the Business layer and receives the demanded information to manage and show locally.
+
+\vspace*{0cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.35]{Images/Diagrams/Component_diagram}
+	\caption{Component View}
+\end{figure}
 
 \mysubsubsection{Client-side Application}
 In this section we are going to illustrate the general architecture of our client application. The EasyLib app can be fairly considered a thin client. In fact, the most application logic is kept in the server-side. The biggest part of the logic implemented in the client is devoted to front-end purposed, that is receiving the packaged data from the server and manipulate them in order have the most intuitive and pleasant possible screen view.\\ 
@@ -66,8 +81,12 @@ In order to make the communication easier and the data transmission between the 
 \mysubsection{Deployment View}
 Here we provide a deployment strategy for our system.
 
-\color{red} mettere immagine
-\color{black}
+\vspace*{0cm}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.55]{Images/Diagrams/Deployment_view_EasyLib}
+	\caption{Deployment view EasyLib}
+\end{figure}
 
 \mysubsection{Non-Functional Requirements}
 Here we state some non functional requirements that our system must respect during the execution.
