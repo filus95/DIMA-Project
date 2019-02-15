@@ -49,11 +49,11 @@ public class App {
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
 
-        User user = new User();
-        user.setUser_id(56);
-
-        MailClass mailClass = new MailClass();
-        mailClass.sendMessage("raffaele.bongo95@libero.it", "ciao");
+        Reservation reservation = new Reservation();
+        reservation.setIdLib(1);
+        reservation.setUser_id(1);
+        reservation.setBook_idetifier("0385542690");
+        dbms.removeReservation(reservation, true);
 //
 //        WaitingPerson waitingPerson = new WaitingPerson();
 //        waitingPerson.setUser_id(1);

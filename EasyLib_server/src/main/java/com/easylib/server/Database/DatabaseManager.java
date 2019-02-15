@@ -888,11 +888,13 @@ public class DatabaseManager {
 
         // insert read book
         if ( book_returned ) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("user_id", reservation.getUser_id());
-            map.put("book_identifier", reservation.getBook_idetifier());
-            map.put("id_lib", reservation.getIdLib());
-            insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
+            if ( !bookAlreadyRead(reservation.getUser_id(), reservation.getBook_idetifier())) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("user_id", reservation.getUser_id());
+                map.put("book_identifier", reservation.getBook_idetifier());
+                map.put("id_lib", reservation.getIdLib());
+                insertStatement(map, Constants.READ_BOOKS_TABLE, Constants.PROPIETARY_DB);
+            }
         }
 
         // Waiting list flow
@@ -937,6 +939,29 @@ public class DatabaseManager {
             return insertNewReservation(res, getSchemaNameLib(reservation.getIdLib()));
         }
         return true;
+    }
+
+    private boolean bookAlreadyRead(int user_id, String book_idetifier) {
+        String query = "select * from "+Constants.PROPIETARY_DB+"."+Constants.READ_BOOKS_TABLE+"" +
+                " where book_identifier = '"+book_idetifier+"' and " +
+                "user_id = "+user_id;
+
+        return checkOneResult(query);
+
+    }
+
+    private boolean checkOneResult(String query) {
+        Statement st;
+        try {
+            st = conn.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            if (rs.next())
+                return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean removeEventParticipant(Event_partecipant participant, String schema_name) {
@@ -1497,15 +1522,7 @@ public class DatabaseManager {
                 "identifier = '"+identifier+"'";
 
         Statement st = null;
-        try {
-            st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            if ( rs.next() )
-                return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        if (checkOneResult(query)) return true;
         return false;
     }
 }
