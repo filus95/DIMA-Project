@@ -1251,10 +1251,12 @@ public class DatabaseManager {
             user.setEmail(rs.getString("email"));
             user.setName(rs.getString("name"));
             user.setSurname(rs.getString("surname"));
-        }
+        } else
+            user.setUser_id(-1);
 
         } catch (SQLException e) {
             e.printStackTrace();
+            user.setUser_id(-1);
         }
         return user;
     }
