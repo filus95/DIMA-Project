@@ -171,13 +171,11 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
             if ( key.equals(Constants.PASSWORD_FORGOT)) {
-                Boolean bool = (Boolean) intent.getSerializableExtra(Constants.PASSWORD_FORGOT);
+                String newPass = (String) intent.getSerializableExtra(Constants.PASSWORD_FORGOT);
                 loadingLayout.setVisibility(View.INVISIBLE);
-                if (bool) {
-                    Toast.makeText(context, "Password Reset !", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, "Error...", Toast.LENGTH_LONG).show();
-                }
+                errorText.setVisibility (View.VISIBLE);
+                errorText.setText (newPass);
+                Toast.makeText(context, "Login with the new password", Toast.LENGTH_LONG).show();
             }
             if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 libraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);

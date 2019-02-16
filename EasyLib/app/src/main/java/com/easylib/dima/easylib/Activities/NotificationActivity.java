@@ -13,6 +13,8 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.easylib.dima.easylib.Adapters.NewsAdapter;
 import com.easylib.dima.easylib.Adapters.NotificationItemAdapter;
@@ -105,6 +107,10 @@ public class NotificationActivity extends AppCompatActivity {
             // specify an adapter
             mAdapter = new NotificationItemAdapter (this, allNotifications);
             mRecyclerView.setAdapter (mAdapter);
+        } else {
+            mRecyclerView.setVisibility (View.GONE);
+            TextView textView = (TextView) findViewById (R.id.activity_list_text);
+            textView.setVisibility (View.VISIBLE);
         }
     }
 
