@@ -23,15 +23,16 @@ The proposed architecture is composed by three tiers:
 \mysubsection{High Level Component View}
 The system is divided in three main layers: Presentation Layer, Business Layer and Data Layer. The presentation layer is both mobile and tablet application. For both we have a very thin client with the main aim of performing requests to the application server in the Business layer and receives the demanded information to manage and show locally.
 
-\vspace*{0cm}
+\vspace*{0.5cm}
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.35]{Images/Diagrams/Component_diagram}
+	\includegraphics[scale=0.65]{Images/Diagrams/Component_diagram}
 	\caption{Component View}
 \end{figure}
-
+\vspace*{0cm}
 \mysubsubsection{Client-side Application}
-In this section we are going to illustrate the general architecture of our client application. The EasyLib app can be fairly considered a thin client. In fact, the most application logic is kept in the server-side. The biggest part of the logic implemented in the client is devoted to front-end purposed, that is receiving the packaged data from the server and manipulate them in order have the most intuitive and pleasant possible screen view.\\ 
+In this section we are going to illustrate the general architecture of our client application.EasyLib can be fairly considered in the middle between a thin and a fat client. The data are requested client side and correctly retrieved with the work performed by the application server and the DBMS. Nonetheless, on the client side the data are checked, filtered and formatted in order to give the most pleasant screen view.
+\\ 
 In order to accomplish efficiently the communication task, the client exploits two different android services: 
 
 \begin{itemize}
@@ -53,14 +54,16 @@ Our application server is divided in three parts: socket connection layer, reque
 \end{itemize}
 
 
-\mysubsubsection{External Services}
+\mysubsubsection{External Services and libraries}
 EasyLib exploits some external services to accomplish its main tasks.
 
 \begin{itemize}
 \item \emph{Google sign in:}we use google sign in API to allow the user to identify himself in our system with his google credentials.
 \item \emph{Firebase Cloud Messaging: } we use Firebase Cloud Messaging system to manage the notification that our server needs to send to the user.
-\item \emph{Google Books API:}we use google books API to fill the books schema of the libraries’ database.
+\item \emph{Google Books API:}we use google books API to fill the books schema of the libraries’ database.\\
 \end{itemize}
+
+Furthemore, one of the most interesting feature of our application is to exploit the camera in order to decode a QRCode and look for the book related to it. To perform this operation, we exploit the potential of \emph{Zxing} library.
 
 \mysubsection{Data Layer}
 The data layer is composed by a multi-table MySQL database that allow to persistently store all the data that the application need to provide its services. In the current moment it is composed by three schemas: the proprietary\_db, library\_1 and library\_2. The EasyLib system is designed to be scalable and include any number of libraries that want to join our project. The only constraint that they have to follow is to homologate their database to our scheme, in order to provide the access to their information to the application. 
