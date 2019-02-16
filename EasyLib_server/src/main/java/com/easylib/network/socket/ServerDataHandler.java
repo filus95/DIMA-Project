@@ -598,14 +598,17 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
             socketHandler.sendViaSocket(Constants.RESERVED_BOOK_TAKEN);
             socketHandler.sendViaSocket(res);
 
+
             if ( res ) {
-                title =  "Book delivering confirmed";
-                mess = reservation.getBook_title() + " delivered. Have a good read!";
+                title =  dbms.queryBookByIdentifier(reservation.getBook_idetifier(),
+                        dbms.getSchemaNameLib(reservation.getIdLib()), reservation.getIdLib()).get(0).getTitle()+"Book delivering confirmed";
+                mess = " delivered. Have a good read!";
             }
             else{
 
                 title = "Book delivering denied";
-                mess = reservation.getBook_title()+" delivered has been denied!";
+                mess = dbms.queryBookByIdentifier(reservation.getBook_idetifier(),
+                        dbms.getSchemaNameLib(reservation.getIdLib()), reservation.getIdLib()).get(0).getTitle()+" delivered has been denied!";
             }
 
             dbms.sendNotification(title,mess, dbms.getNotificationToken(reservation.getUser_id()));
