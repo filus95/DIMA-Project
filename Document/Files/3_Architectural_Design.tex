@@ -63,10 +63,10 @@ EasyLib exploits some external services to accomplish its main tasks.
 \end{itemize}
 
 \mysubsection{Data Layer}
-The data layer is composed by a multi-table MySQL database that allow to persistently store all the data that the application need to provide its services. In the current moment it is composed by three schemas: the proprietary-db, library-1 and library-2. The EasyLib system is designed to be scalable and include any number of libraries that want to join our project. The only constraint that they have to follow is to homologate their database to our scheme, in order to provide the access to their information to the application. 
+The data layer is composed by a multi-table MySQL database that allow to persistently store all the data that the application need to provide its services. In the current moment it is composed by three schemas: the proprietary\_db, library\_1 and library\_2. The EasyLib system is designed to be scalable and include any number of libraries that want to join our project. The only constraint that they have to follow is to homologate their database to our scheme, in order to provide the access to their information to the application. 
 
 \mysubsubsection{Database structure}
-The Database is composed by two main schemas: proprietary-db and library-x. The former contains the information about the users and librarians’ identity, the libraries’ info needed to distinguish them, the book read by all the users and their favourite libraries.\\
+The Database is composed by two main schemas: proprietary\_db and library\_x. The former contains the information about the users and librarians’ identity, the libraries’ info needed to distinguish them, the book read by all the users and their favourite libraries.\\
 The latter contains all the information strictly related with a single library. The x stands for an integer and represents the id related with the library. It contains information about the books, the news, the events and their participants, the books reserved and the queue for them and the ratings related to the book read in that library.\\
 Some of the tables in these schemas contains triggers used to maintain the consistence of the data and to build more meaningful information to show to the final user. 
 
@@ -88,8 +88,125 @@ Some of the tables in these schemas contains triggers used to maintain the consi
 \mysubsubsection{Triggers}
 In order to maintain the data consistency after that users perform state changing operations, we have implemented 9 triggers distributed between the various schemas and tables. We list all of them below along with the description of their behaviour.
 
-\color{red} FARE TABELLINA PER I TRIGGER
-\color{black}
+\mysubsubsection{Library schema}
+
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} On\_insert\_rating  & ratings & after insert \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It computes the updated average rating of a book including the inserted rating and store it in the table ratings of the proprietary\_db if it does not exist or update a currently existing record.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_count\_on
+	\_delivering  & booksreservations & after delete \\
+	\hline
+\end{tabular}
+ \vspace{0.8cm}\\
+It updates the count of available copies for a book in books table in library\_x schema after that one of them has been delivered. If the current available number of copy result to be zero after the action, the Boolean reserved is set to true.
+
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} waiting\_list\_flowing  & booksreservations & after delete \\
+	\hline
+\end{tabular}
+ \vspace{0.8cm}\\
+It updates the position of the users in line of the book with the identifier equal to that one of the record deleted in the booksreservations table and remove the first waiting user for the book since it has to be inserted in the bookreservations table.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_on\_reservation  & booksreservations & after insert \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+
+It updates the count of available copies for a book in books table in library\_x schema after that one of them has been returned to the librarian of library x.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_on\_reservation  & booksreservations & after insert \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It updates the count of available copies for a book in books table in library\_x schema after that one of them has been returned to the librarian of library x.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_available\_
+	seats\_ins  & event\_partecipants & after insert \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It updates the count of available seats for an event after a registration for it has been performed.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_available\_
+	seats\_del  & event\_partecipants & after delete \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It updates the count of available seats for an event after that a registration for it has been removed.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} on\_insert\_waiting\_
+	person  & waitinglist & before insert \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It sets the position in the waiting list of the new user inserted in the table for a book.
+
+\vspace{0.8cm}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} update\_waitinglist\_
+	position  & waitinglist & after delete \\
+	\hline
+\end{tabular}
+\vspace{0.8cm}
+\\
+It updates the position of the users in line for a book after that a user in line has deleted is presence in the queue.
+
+\mysubsubsection{Proprietary schema}
+\begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
+	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
+	\hline
+	\rule{0pt}{4ex} on\_insert\_rating
+	\_propDB  & ratings & after insert \\
+	\hline
+\end{tabular}
+\vspace{0.4cm}
+\\
+It updates the average rating for the considered book in all the libraries of the system.
+\vspace{0.4cm}
+
+
 
 \mysubsubsection{Internal customized data structures}
 In order to make the communication easier and the data transmission between the clients and the application server manageable, we have created few serializable data structures that are sent over the internet. They are 13 java classes designed with the purpose of containing all the information that server and clients need to exchange such as: books information, reservation details, events schedule, etc. 
@@ -103,7 +220,6 @@ Here we provide a deployment strategy for our system.
 	\includegraphics[scale=0.55]{Images/Diagrams/Deployment_view_EasyLib}
 	\caption{Deployment view EasyLib}
 \end{figure}
-
 \mysubsection{Non-Functional Requirements}
 Here we state some non functional requirements that our system must respect during the execution.
 
