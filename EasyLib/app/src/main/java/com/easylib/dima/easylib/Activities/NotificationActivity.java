@@ -90,7 +90,7 @@ public class NotificationActivity extends AppCompatActivity {
             allNotifications.addAll (oldNotifiations);
         }
 
-        if (allNotifications != null) {
+        if (allNotifications.size () != 0) {
             // Recycle View Settings
             mRecyclerView = (RecyclerView) findViewById (R.id.list_recycle);
             mRecyclerView.setHasFixedSize (true);
@@ -108,6 +108,7 @@ public class NotificationActivity extends AppCompatActivity {
             mAdapter = new NotificationItemAdapter (this, allNotifications);
             mRecyclerView.setAdapter (mAdapter);
         } else {
+            mRecyclerView = (RecyclerView) findViewById (R.id.list_recycle);
             mRecyclerView.setVisibility (View.GONE);
             TextView textView = (TextView) findViewById (R.id.activity_list_text);
             textView.setVisibility (View.VISIBLE);
