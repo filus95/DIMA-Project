@@ -1,11 +1,76 @@
 \vspace*{-5mm}
 \mysection{User Interface Design}
 
-\color{red} general description + made 2 types of screen resolution normal + xlarge
-\color{black}
+The two Android applications are available for multiple screen sizes.\par
+In particular :
+\begin{itemize}
+	\item \emph{EasyLib :} is available for normal and xlarge sizes, so this means for smartphone around 5" and tablet of 10". Moreover it's available only on portrait orientation.
+	\item \emph{EasyLib - Librarian :} for now, it's only provided for tablet (so xlarge size), but it has portrait and landscape orientation, in order to improve the usability.
+\end{itemize}
 
 
-\mysubsection{Special Android Features used for UI}
+\mysubsection{Distinct Features used for UI}
+We have created and used some customized components in order to improve the usability and look of our applications ( \emph{Better Look \& Feel} ).\par
+Here are some of the main aspects :
+\begin{itemize}
+	\item \emph{Customized Adapters :} we have used different adapters for different recyclerViews in order to distinguish different element types and make our app less monotonous. There are some very simple ones and others more complex and challenging to make (like the one that has recyclerViews inside other recyclerViews).
+	\item \emph{Transparent Theme :} we have created a theme, associated to the single activities, that makes their background transparent instead of the "white" default one. This allows us to let the MainActivity, that after the Login, is the activity at the bottom of the stack, to fit all the screen size. While we make all the other activities, that comes after, look like pop-ups, with a black background with 80\% of opacity, that looks like shadow.
+	\item \emph{SwipeBack Gesture :} for the "pop-up" activities, previously described, we added the "swipe right" gesture that actually destroys the activity.
+\end{itemize}
 
+\newpage
+\mysubsection{App Functions \& UI}
 
-\mysubsection{Functions Flow}
+\vspace{5mm}
+\mysubsubsection{Register \& Login}
+When the app opens up the user can Login filling up the form with his Email or Password (Figure 1) or he can Register opening the Register Activity and filling that form (Figure 2). In other cases it can happen that the user needs to reset his password cause he has forgotten it or maybe his already logged in so the app will show just a Loading (Figure 3).
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.15]{Images/UI/Login_Register/1}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Login_Register/2}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Login_Register/3}
+	\caption{Login \& Registration - UI}
+\end{figure}
+
+\vspace{3mm}
+\mysubsubsection{Libraries + Set Favourite}
+On MainActivity with the Home Fragment (Figure 1) the user can see the Libraries that he has set as favourite and open them in order to see their content. Otherwise he can tap on "All Libraries" button and the list of the all available ones will appear (Figure 2).\par
+Once a library is select the LibraryActivity will open up showing at the top the library information and underneath its contents (news, events, books). At the end a button will be shown in order to make the user able to set the library as Favourite / remove it from Favourites (Figure 3).
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.15]{Images/UI/Libraries/1}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Libraries/2}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Libraries/3}
+	\caption{Libraries + Set Favourite - UI}
+\end{figure}
+
+\newpage
+\mysubsubsection{Events + Reserve Seat}
+As previously seen, inside the LibraryActivity are shown the events organized by the library so the user can open them and see their info (Figure 1). Moreover in case there are still available seats he can reserve a seat.\par
+All the events joined by the user are shown on the Profile (Figure 2).
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.15]{Images/UI/Events/1}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Events/2}
+	\caption{Events + Reserve Seat - UI}
+\end{figure}
+
+\newpage
+\mysubsubsection{Search Books}
+There are 2 ways to search for a book :
+\begin{itemize}
+	\item \emph{By Title/Author/Genre :} the user can tap the "Search Icon" on top of the MainActivity (shown on the previous figures) and fill the Title field or activate the Advanced Search fields (Figure 1).
+	\item \emph{QR code :} in the bottom NavBar on MainActivity there is a "Scan Icon" that when tapped opens up an activity that activates the camera and scans the qr-code (Figure 2).
+\end{itemize}
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.15]{Images/UI/Search/1}
+	\hspace{0.5cm}
+	\includegraphics[scale=0.15]{Images/UI/Search/2}
+	\caption{Search Books - UI}
+\end{figure}
