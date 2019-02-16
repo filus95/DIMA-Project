@@ -90,7 +90,6 @@ public class LoginActivity extends AppCompatActivity {
     private ImageButton loginButton;
     private ImageButton regButton;
     private ImageButton googleButton;
-    private ImageButton facebookButton;
     private Button resetPassButton;
 
     //For the communication Service Network Up or Down
@@ -324,7 +323,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = (ImageButton) findViewById (R.id.login_bt);
         regButton = (ImageButton) findViewById (R.id.reg_bt);
         googleButton = (ImageButton) findViewById(R.id.g_bt);
-        facebookButton = (ImageButton) findViewById(R.id.fb_bt);
         resetPassButton = (Button) findViewById (R.id.login_activity_resetpass_button);
 
         // Make the Layout not clickable
@@ -350,7 +348,6 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setEnabled (areTouchable);
         regButton.setEnabled (areTouchable);
         googleButton.setEnabled (areTouchable);
-        facebookButton.setEnabled (areTouchable);
         resetPassButton.setEnabled (areTouchable);
     }
 
@@ -479,12 +476,6 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    public void loginFb(View view) {
-        //TODO: call Facebook LoginActivity API
-
-
     }
 
     /**

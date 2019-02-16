@@ -12,7 +12,7 @@
         android:id="@+id/reg_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
         android:onClick="register"
         android:src="@drawable/sign_in"
@@ -22,32 +22,17 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/fb_bt"
-        android:layout_width="245dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
-        android:background="@android:color/transparent"
-        android:onClick="loginFb"
-        android:scaleType="fitXY"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.553"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/fb_icon" />
-
-    <ImageButton
         android:id="@+id/g_bt"
         android:layout_width="245dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="16dp"
         android:background="@android:color/transparent"
         android:onClick="loginGoogle"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fb_bt"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/g_icon" />
 
     <Button
@@ -55,6 +40,7 @@
         style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-medium"
         android:onClick="resetPassword"
         android:text="Password Forgotten ? RESET"
@@ -139,6 +125,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.55"
@@ -151,7 +138,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.37" />
+        app:layout_constraintGuide_percent="0.38" />
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/login_load_layout"
