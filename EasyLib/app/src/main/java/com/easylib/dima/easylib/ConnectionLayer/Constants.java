@@ -51,6 +51,7 @@ public class Constants {
     public static final String REMOVE_EVENT_PARTECIPANT = "remove_partecipant";
     public static final String LIBRARIES_FOR_BOOK = "library_for_book";
     public static final String NOTIFICATION = "notification";
+    public static final String FACEBOOK_TOKEN = "facebook_token";
 
 
     // Communication strings

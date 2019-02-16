@@ -35,6 +35,7 @@ import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.Activities.Fragments.MainActivity;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -484,6 +485,8 @@ public class LoginActivity extends AppCompatActivity {
 
     public void loginFb(View view) {
         //TODO: call Facebook LoginActivity API
+
+
     }
 
     /**

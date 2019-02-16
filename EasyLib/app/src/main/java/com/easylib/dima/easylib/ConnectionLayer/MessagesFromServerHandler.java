@@ -497,7 +497,7 @@ public class MessagesFromServerHandler {
             Bundle b = new Bundle();
             Message message = handler.obtainMessage();
 
-            boolean res = (boolean) objectInputStream.readObject();
+            String res = (String) objectInputStream.readObject();
             b.putSerializable(Constants.PASSWORD_FORGOT, res );
 
             message.obj = b;

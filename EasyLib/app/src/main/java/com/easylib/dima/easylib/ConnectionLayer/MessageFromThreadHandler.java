@@ -309,7 +309,7 @@ public class MessageFromThreadHandler implements Serializable {
     private void passwordForgot(Bundle bundle) {
         Intent intent = new Intent(Constants.PASSWORD_FORGOT);
         intent.putExtra(Constants.PASSWORD_FORGOT,
-                (boolean) bundle.getSerializable(Constants.PASSWORD_FORGOT));
+                (String) bundle.getSerializable(Constants.PASSWORD_FORGOT));
 
         this.currentContext.sendBroadcast(intent);
     }
