@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -27,17 +29,24 @@ import com.easylib.dima.easylib.Activities.Lists.EventListActivity;
 import com.easylib.dima.easylib.Activities.Lists.LibraryListActivity;
 import com.easylib.dima.easylib.Activities.Login.LoginActivity;
 import com.easylib.dima.easylib.Activities.NoInternetActivity;
+import com.easylib.dima.easylib.Activities.NotificationActivity;
 import com.easylib.dima.easylib.Activities.ReadBooksActivity;
 import com.easylib.dima.easylib.Activities.SearchActivity;
 import com.easylib.dima.easylib.Adapters.HomeAdapter;
 import com.easylib.dima.easylib.ConnectionLayer.ConnectionService;
 import com.easylib.dima.easylib.ConnectionLayer.Constants;
 import com.easylib.dima.easylib.R;
+import com.easylib.dima.easylib.Utils.NotificationObj;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -59,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<LibraryDescriptor> prefLibraries;
     private ArrayList<LibraryDescriptor> allLibrariesList;
     private Fragment fragment;
+
+    // for Notifications
+    private static final String NOTIFICATIONS = "Notifications";
 
     // Library List Activity
     private Intent librariesListIntent;
@@ -85,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout mMainFrame;
     // SearchActivity items
     private ImageButton searchBt;
+    private ImageButton notifBt;
 
     //For the communication Service
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -230,6 +243,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
                 startActivity (internetIntent);
             }
+            if (key.equals(Constants.NOTIFICATION)){
+                checkNotifications ();
+            }
         }
     };
 
@@ -246,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
         mMainNav = (BottomNavigationView) findViewById(R.id.bottom_navbar);
         // SearchActivity items
         searchBt = (ImageButton) findViewById(R.id.search_icon);
+        notifBt = (ImageButton) findViewById (R.id.notification_icon);
 
         // Set Initial Fragment to be visualized
         fragment = new HomeFragment();
@@ -301,6 +318,10 @@ public class MainActivity extends AppCompatActivity {
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.GET_USER_RESERVATION));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES));
         this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NETWORK_STATE_DOWN));
+        this.registerReceiver(mMessageReceiver, new IntentFilter(Constants.NOTIFICATION));
+
+        // Reload Notifications
+        checkNotifications ();
 
         // Reload fragment content on resume
         if (fragment instanceof ProfileFragment) {
@@ -340,7 +361,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Method called when the Notification icon is clicked
     public void goToNofitication(View view) {
-        // TODO : make the call to Notification Activity
+        Intent intent = new Intent(this, NotificationActivity.class);
+        startActivity(intent);
     }
 
     // Get all Libraries from Home
@@ -440,6 +462,21 @@ public class MainActivity extends AppCompatActivity {
                 mBoundService.setCurrentContext(getApplicationContext());
                 mBoundService.sendMessage(Constants.QUERY_ON_BOOKS_ALL_LIBRARIES, q);
             }
+        }
+    }
+
+    public void checkNotifications() {
+        // call shared Preferences
+        SharedPreferences sp = getSharedPreferences(NOTIFICATIONS, MODE_PRIVATE);
+        //Retrieve the values
+        Gson gson = new Gson();
+        String jsonText = sp.getString("New Notifications", null);
+        Type type = new TypeToken<List<NotificationObj>> (){}.getType();
+        ArrayList<NotificationObj> notificationObjsList = gson.fromJson(jsonText, type);
+        if (notificationObjsList != null) {
+            notifBt.setColorFilter (getResources ().getColor (R.color.colorYellow));
+        } else {
+            notifBt.setColorFilter (getResources ().getColor (R.color.colorWhite));
         }
     }
 }

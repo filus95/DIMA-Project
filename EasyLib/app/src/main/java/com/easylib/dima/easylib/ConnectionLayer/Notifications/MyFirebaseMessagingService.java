@@ -1,5 +1,6 @@
 package com.easylib.dima.easylib.ConnectionLayer.Notifications;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -29,16 +30,28 @@ import com.easylib.dima.easylib.ConnectionLayer.Constants;
 //import com.easylib.dima.easylib.R;
 import com.easylib.dima.easylib.ConnectionLayer.MyApplication;
 import com.easylib.dima.easylib.R;
+import com.easylib.dima.easylib.Utils.NotificationObj;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static android.support.constraint.Constraints.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService
 {
+
+    private static final String NOTIFICATIONS = "Notifications";
 
     ConnectionService mBoundService;
     private boolean mIsBound;
@@ -88,6 +101,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
 
         String message = data.get("message");
 
+
         /**Creates an explicit intent for an Activity in your app**/
         Intent resultIntent = new Intent(getApplicationContext () , LoginActivity.class);
         resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -123,10 +137,33 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService
         assert mNotificationManager != null;
         mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
 
-        // call shared Preferences
-        SharedPreferences sp = getSharedPreferences("Login", MODE_PRIVATE);
-        int i = sp.getInt("User ID", -1);
-        int h = 0;
+        // Create Notification Object
+        @SuppressLint("SimpleDateFormat") DateFormat df = new SimpleDateFormat ("dd-MM-yyyy'  'HH:mm");
+        String currentTime = df.format(Calendar.getInstance().getTime());
+        NotificationObj obj = new NotificationObj (currentTime, message, true);
+        // Called Shared Preferences
+        SharedPreferences sp = getSharedPreferences(NOTIFICATIONS, MODE_PRIVATE);
+        //Retrieve the values
+        Gson gson = new Gson();
+        String jsonText = sp.getString("New Notifications", null);
+        Type type = new TypeToken<List<NotificationObj>> (){}.getType();
+        ArrayList<NotificationObj> notificationObjsList = gson.fromJson(jsonText, type);
+        // Insert Notification on SP
+        if (notificationObjsList != null) {
+            notificationObjsList.add (obj);
+        } else {
+            notificationObjsList = new ArrayList<NotificationObj> ();
+            notificationObjsList.add (obj);
+        }
+        SharedPreferences.Editor spEditor = sp.edit ();
+        String json = gson.toJson(notificationObjsList, type);
+        spEditor.putString ("New Notifications", json);
+        spEditor.commit ();
+
+        // Send Notificaiton on Broadcast
+        Intent intent = new Intent (Constants.NOTIFICATION);
+        intent.putExtra (Constants.NOTIFICATION, message);
+        MyApplication.getAppContext ().sendBroadcast (intent);
 
 //        String body = remoteMessage.getData().get(“body”);
 //        String objectId = remoteMessage.getData().get("object_id");

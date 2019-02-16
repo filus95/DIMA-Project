@@ -72,6 +72,8 @@
             android:theme="@style/AppTheme.TransparentWindow"/>
         <activity android:name=".Activities.NoInternetActivity"
             android:theme="@style/AppTheme.TransparentWindow"/>
+        <activity android:name=".Activities.NotificationActivity"
+            android:theme="@style/AppTheme.TransparentWindow"/>
 
         <service android:name=".ConnectionLayer.Notifications.MyFirebaseMessagingService">
             <intent-filter>
