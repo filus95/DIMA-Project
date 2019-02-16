@@ -163,7 +163,10 @@ public class DatabaseManager {
                 Reservation queryResult = new Reservation();
                 queryResult.setReservation_id(rs.getInt("reservation_id"));
                 queryResult.setUser_id(rs.getInt("user_id"));
-                queryResult.setBook(queryBookByIdentifier(rs.getString("book_identifier"), schema_lib,id_lib).get(0));
+                String book_identifier = rs.getString("book_identifier");
+                ArrayList<Book> books = queryBookByIdentifier(book_identifier, schema_lib,id_lib);
+                if ( books.size() != 0)
+                    queryResult.setBook(books.get(0));
                 queryResult.setBook_idetifier(rs.getString("book_identifier"));
                 queryResult.setBook_title(rs.getString("book_title"));
                 queryResult.setQuantity(rs.getInt("quantity"));
@@ -519,7 +522,7 @@ public class DatabaseManager {
 
     public ArrayList<Book> queryAllBooks(String schema_lib, int lib_id){
         String query = "select * " +
-                "from "+schema_lib+".books order by id desc";
+                "from "+schema_lib+".books";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -1283,7 +1286,7 @@ public class DatabaseManager {
 
     public ArrayList<Book> queryBookByIdentifier(String identifier, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where identifier = "+ identifier;
+                "from "+schema_lib+".books where identifier = '"+ identifier+"'";
 
         return getQueryResultsBooks(query, lib_id);
     }
