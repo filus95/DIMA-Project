@@ -18,31 +18,30 @@ USE `library_1`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `events`
+-- Table structure for table `news`
 --
 
-DROP TABLE IF EXISTS `events`;
+DROP TABLE IF EXISTS `news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `events` (
+CREATE TABLE `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `image_link` varchar(255) DEFAULT NULL,
-  `seats` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `post_date` datetime NOT NULL,
+  `content` mediumtext NOT NULL,
+  `image_link` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `events`
+-- Dumping data for table `news`
 --
 
-LOCK TABLES `events` WRITE;
-/*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'SEeeeee','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(2,'banane gratis','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(3,'banane a pagamento','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(4,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-03 00:00:00'),(5,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-03 00:00:00'),(6,'Viva il Papa!','Parliamo del Papa.','ccacaa',55,'2018-12-27 17:30:00');
-/*!40000 ALTER TABLE `events` ENABLE KEYS */;
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+INSERT INTO `news` VALUES (1,'Opening time changed','2018-11-30 14:35:00','We have changed the opening time. Take a look for them on the library page in the EasyLib app!','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC.mipiacitu.it'),(2,'New opening!','2017-06-26 10:00:00','The library is opening a new physical shop in Bergamo. Come to visit us, we have prepared for you some drinks and free food and applied a 10% of discount on all your buying only for today!','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC'),(3,'New books available!','2019-02-11 13:00:00','There are many new books that you can discover in our library! Come to visit us or consult our catalogue in the app.','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC'),(6,'New coffee distributor','2019-01-12 17:03:13','The library has a new technological coffee distributor. For the first week the prices will be halved! Try it and give us a feedback. Your contribution is important for us. ','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC');
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:07
+-- Dump completed on 2019-02-16 15:46:09

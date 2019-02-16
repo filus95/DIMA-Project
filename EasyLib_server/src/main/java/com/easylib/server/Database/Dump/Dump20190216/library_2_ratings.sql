@@ -28,9 +28,10 @@ CREATE TABLE `ratings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `book_identifier` varchar(255) NOT NULL,
+  `id_lib` int(11) DEFAULT NULL,
   `rating` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,6 +40,7 @@ CREATE TABLE `ratings` (
 
 LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
+INSERT INTO `ratings` VALUES (15,57,'8830430714',2,8),(27,60,'8830430714',2,2),(28,61,'8830430714',2,10);
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -53,15 +55,17 @@ DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating` AFTER INSERT ON `ratings` FOR EACH ROW begin
 
     declare ratings int;
+    declare rating int;
     select count(*) into ratings from propietary_db.ratings
     where NEW.book_identifier = propietary_db.ratings.book_identifier;
 
     if ratings > 0 then
-      update propietary_db.ratings set rating = (rating*number_of_ratings
-                                                   + NEW.rating) / (number_of_ratings + 1)
+
+      update propietary_db.ratings set propietary_db.ratings.rating = (propietary_db.ratings.rating*propietary_db.ratings.number_of_ratings
+                                                   + NEW.rating) / (propietary_db.ratings.number_of_ratings + 1)
       where book_identifier = new.book_identifier;
 
-      update propietary_db.ratings set number_of_ratings = number_of_ratings + 1
+      update propietary_db.ratings set propietary_db.ratings.number_of_ratings = propietary_db.ratings.number_of_ratings + 1
       where book_identifier = new.book_identifier;
 
     end if;
@@ -70,6 +74,7 @@ DELIMITER ;;
       insert into propietary_db.ratings (book_identifier, rating, number_of_ratings)
       values (NEW.book_identifier, NEW.rating, 1);
     end if;
+
 
   end */;;
 DELIMITER ;
@@ -87,4 +92,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:07
+-- Dump completed on 2019-02-16 15:46:10

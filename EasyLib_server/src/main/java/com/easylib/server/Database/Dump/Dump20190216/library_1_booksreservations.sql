@@ -36,7 +36,7 @@ CREATE TABLE `booksreservations` (
   `taken` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`reservation_id`),
   UNIQUE KEY `table_name_reservation_id_uindex` (`reservation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,7 @@ CREATE TABLE `booksreservations` (
 
 LOCK TABLES `booksreservations` WRITE;
 /*!40000 ALTER TABLE `booksreservations` DISABLE KEYS */;
-INSERT INTO `booksreservations` VALUES (5,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(6,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(7,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(8,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(9,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(10,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(11,14,'1909430188','Andrea Pirlo: I Think Therefore I Play','1901-02-01 00:00:00','2018-12-03 00:00:00','2018-12-30 00:00:00',0,0),(25,101,'8852068317','Il codice Del Piero','2019-01-21 00:45:37',NULL,NULL,1,0);
+INSERT INTO `booksreservations` VALUES (60,58,'1626366543','Maradona','2019-02-16 15:30:31',NULL,NULL,1,0),(61,47,'0385542690','Origin','2019-02-16 15:44:10',NULL,NULL,1,0);
 /*!40000 ALTER TABLE `booksreservations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -59,62 +59,17 @@ UNLOCK TABLES;
 DELIMITER ;;
 /*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_on_reservation` AFTER INSERT ON `booksreservations` FOR EACH ROW BEGIN
      declare q int;
+
+     select library_1.books.quantity into q from library_1.books
+                where library_1.books.identifier = NEW.book_identifier;
      
-     select library_1.books.quantity into q from library_1.books 
-                where library_1.books.book_identifier = NEW.book_identifier;
+     update library_1.books set quantity = quantity - NEW.quantity
+     where library_1.books.identifier = NEW.book_identifier;
      
-     if (q = 0) then 
-        update library_1.books set quantity = quantity - NEW.quantity and
-                                           books.reserved = true
+     if (q = 0) then
+        update library_1.books set books.reserved = true
         where library_1.books.identifier = NEW.book_identifier;
     end if; 
-  end */;;
-DELIMITER ;
-/*!50003 SET sql_mode              = @saved_sql_mode */ ;
-/*!50003 SET character_set_client  = @saved_cs_client */ ;
-/*!50003 SET character_set_results = @saved_cs_results */ ;
-/*!50003 SET collation_connection  = @saved_col_connection */ ;
-/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
-/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
-/*!50003 SET @saved_col_connection = @@collation_connection */ ;
-/*!50003 SET character_set_client  = utf8mb4 */ ;
-/*!50003 SET character_set_results = utf8mb4 */ ;
-/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
-/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
-/*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
-DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `insert_new_reserved_person` BEFORE DELETE ON `booksreservations` FOR EACH ROW begin
-
-    declare cond integer;
-    declare id_user integer;
-    declare v_reservation_date DATETIME;
-    declare start_res_date DATE;
-    declare end_res_date DATE;
-    declare v_quantity integer;
-
-    select waiting_position into cond from library_1.waitinglist where waitinglist.book_identifier =
-                                                                       OLD.book_identifier and waiting_position = 1;
-
-    if cond > 0 then
-
-      select user_id into id_user from waitinglist where waitinglist.book_identifier =
-                                                         OLD.book_identifier and waiting_position = 1;
-
-      select waitinglist.reservation_date into v_reservation_date from waitinglist where waitinglist.book_identifier =
-                                                                                         OLD.book_identifier and waiting_position = 1;
-
-      select waitinglist.quantity into v_quantity from library_1.waitinglist where library_1.waitinglist.book_identifier =
-                                                                                 OLD.book_identifier and waiting_position = 1;
-
-#        insert into booksreservations (library_1.booksreservations.user_id,
-#                                     library_1.booksreservations.book_identifier,
-#                                     library_1.booksreservations.reservation_date,
-#                                     library_1.booksreservations.quantity)
-# 
-#        values (id_user, old.book_identifier, v_reservation_date, v_quantity );
-
-    end if;
-
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -206,4 +161,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:05
+-- Dump completed on 2019-02-16 15:46:09

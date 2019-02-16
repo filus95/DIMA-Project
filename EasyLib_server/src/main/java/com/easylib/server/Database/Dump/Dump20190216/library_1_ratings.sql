@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `propietary_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `propietary_db`;
+CREATE DATABASE  IF NOT EXISTS `library_1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `library_1`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: propietary_db
+-- Host: 127.0.0.1    Database: library_1
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -25,11 +25,13 @@ DROP TABLE IF EXISTS `ratings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE `ratings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
   `book_identifier` varchar(255) NOT NULL,
-  `rating` float NOT NULL DEFAULT '0',
-  `number_of_ratings` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`book_identifier`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `rating` int(11) NOT NULL,
+  `id_lib` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +40,7 @@ CREATE TABLE `ratings` (
 
 LOCK TABLES `ratings` WRITE;
 /*!40000 ALTER TABLE `ratings` DISABLE KEYS */;
-INSERT INTO `ratings` VALUES ('1408827727',2.09091,11);
+INSERT INTO `ratings` VALUES (1,1,'1408827727',5,1),(2,1,'1408827727',5,1),(3,1,'1408827727',5,1),(4,1,'1408827727',5,1),(5,1,'1408827727',1,1),(6,1,'1408827727',1,1),(7,1,'1408827727',1,1),(8,1,'1408827727',1,1),(9,1,'1408827727',1,1),(10,1,'1408827727',1,1),(11,1,'1408827727',1,1),(12,1,'1408827727',1,1),(13,57,'1626366543',2,1);
 /*!40000 ALTER TABLE `ratings` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -50,12 +52,29 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating_propDB` AFTER INSERT ON `ratings` FOR EACH ROW begin
-    update library_1.books set averageRating = NEW.rating
-      where books.identifier = NEW.book_identifier;
-    
-    update library_2.books set averageRating = NEW.rating
-      where books.identifier = NEW.book_identifier;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_rating` AFTER INSERT ON `ratings` FOR EACH ROW begin
+
+    declare ratings int;
+    declare rating int;
+    select count(*) into ratings from propietary_db.ratings
+    where NEW.book_identifier = propietary_db.ratings.book_identifier;
+
+    if ratings > 0 then
+
+      update propietary_db.ratings set propietary_db.ratings.rating = (propietary_db.ratings.rating*propietary_db.ratings.number_of_ratings
+                                                                         + NEW.rating) / (propietary_db.ratings.number_of_ratings + 1)
+      where book_identifier = new.book_identifier;
+
+      update propietary_db.ratings set propietary_db.ratings.number_of_ratings = propietary_db.ratings.number_of_ratings + 1
+      where book_identifier = new.book_identifier;
+
+    end if;
+
+    if ratings <= 0 then
+      insert into propietary_db.ratings (book_identifier, rating, number_of_ratings)
+      values (NEW.book_identifier, NEW.rating, 1);
+    end if;
+
 
   end */;;
 DELIMITER ;
@@ -73,4 +92,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:01
+-- Dump completed on 2019-02-16 15:46:08

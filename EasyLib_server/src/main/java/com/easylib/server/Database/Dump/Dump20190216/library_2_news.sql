@@ -18,31 +18,30 @@ USE `library_2`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `events`
+-- Table structure for table `news`
 --
 
-DROP TABLE IF EXISTS `events`;
+DROP TABLE IF EXISTS `news`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `events` (
+CREATE TABLE `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `image_link` varchar(255) DEFAULT NULL,
-  `seats` int(11) NOT NULL,
-  `date` datetime NOT NULL,
+  `post_date` datetime NOT NULL,
+  `content` mediumtext NOT NULL,
+  `image_link` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `events`
+-- Dumping data for table `news`
 --
 
-LOCK TABLES `events` WRITE;
-/*!40000 ALTER TABLE `events` DISABLE KEYS */;
-INSERT INTO `events` VALUES (1,'SEeeeee','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(2,'Viva l\'italia!!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00'),(3,'Forza Juve!','Tutto vero','www.nonessite.ciao',15,'2018-12-31 00:00:00');
-/*!40000 ALTER TABLE `events` ENABLE KEYS */;
+LOCK TABLES `news` WRITE;
+/*!40000 ALTER TABLE `news` DISABLE KEYS */;
+INSERT INTO `news` VALUES (1,'New books available!','2018-06-27 16:00:00','There are many new books that you can discover in our library! Come to visit us or consult our catalogue in the app.','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC'),(2,'Opening time changed','2018-12-27 15:00:00','We have changed the opening time. Take a look for them on the library page in the EasyLib app!','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC'),(3,'New coffee distributor','2019-02-18 15:00:00','The library has a new technological coffee distributor. For the first week the prices will be halved! Try it and give us a feedback. Your contribution is important for us. ','https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ-PiVSbeLQvh576nohHbz4WnkVaVVqnqdexG9rK0UYqBvA-hC');
+/*!40000 ALTER TABLE `news` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -54,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:10
+-- Dump completed on 2019-02-16 15:46:10

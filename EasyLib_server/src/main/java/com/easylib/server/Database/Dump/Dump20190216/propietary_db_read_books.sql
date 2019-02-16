@@ -18,34 +18,29 @@ USE `propietary_db`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `libraries`
+-- Table structure for table `read_books`
 --
 
-DROP TABLE IF EXISTS `libraries`;
+DROP TABLE IF EXISTS `read_books`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `libraries` (
-  `id_lib` int(11) NOT NULL AUTO_INCREMENT,
-  `lib_name` varchar(255) NOT NULL,
-  `schema_name` varchar(255) NOT NULL,
-  `image_link` varchar(255) NOT NULL,
-  `telephone_number` varchar(255) DEFAULT NULL,
-  `address` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `description` mediumtext,
-  PRIMARY KEY (`id_lib`),
-  UNIQUE KEY `libraries_schema_name_uindex` (`schema_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `read_books` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `book_identifier` varchar(255) NOT NULL,
+  `id_lib` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `libraries`
+-- Dumping data for table `read_books`
 --
 
-LOCK TABLES `libraries` WRITE;
-/*!40000 ALTER TABLE `libraries` DISABLE KEYS */;
-INSERT INTO `libraries` VALUES (1,'BCA','library_1','https://www.trumba.com/i/DgD2Go5hDnjQbhfM4iT5WsEM.jpg','021994492','via Ampere, 2','bca@poli.it','siamo forti'),(2,'Biblioteca Lambrate','library_2','https://findingtimetowrite.files.wordpress.com/2018/09/unilibbristolwills-memorial-library.jpg','021994492','Lambrate, 6','lambrate@poli.it','siamo piu forti');
-/*!40000 ALTER TABLE `libraries` ENABLE KEYS */;
+LOCK TABLES `read_books` WRITE;
+/*!40000 ALTER TABLE `read_books` DISABLE KEYS */;
+INSERT INTO `read_books` VALUES (19,4,'8852016953',1),(20,4,'8852016953',1),(21,4,'8852016953',1),(22,4,'8852016953',1),(23,4,'8852016953',1),(24,2,'8822712951',2),(25,1,'8822712951',2),(26,47,'8854158852',2),(27,47,'8854158852',2),(28,1,'0385542690',1),(29,57,'8830430714',2),(30,58,'8830430714',2),(31,57,'1626366543',1);
+/*!40000 ALTER TABLE `read_books` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -57,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:01
+-- Dump completed on 2019-02-16 15:46:08

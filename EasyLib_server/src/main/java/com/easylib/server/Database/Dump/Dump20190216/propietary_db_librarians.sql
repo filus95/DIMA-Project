@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `library_2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `library_2`;
+CREATE DATABASE  IF NOT EXISTS `propietary_db` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `propietary_db`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: library_2
+-- Host: 127.0.0.1    Database: propietary_db
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,30 +18,30 @@ USE `library_2`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `news`
+-- Table structure for table `librarians`
 --
 
-DROP TABLE IF EXISTS `news`;
+DROP TABLE IF EXISTS `librarians`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `news` (
+CREATE TABLE `librarians` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `post_date` datetime NOT NULL,
-  `content` mediumtext NOT NULL,
-  `image_link` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `hashed_pd` varchar(1000) NOT NULL,
+  `salt` blob NOT NULL,
+  `id_lib` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `news`
+-- Dumping data for table `librarians`
 --
 
-LOCK TABLES `news` WRITE;
-/*!40000 ALTER TABLE `news` DISABLE KEYS */;
-INSERT INTO `news` VALUES (1,'Capelli golosi','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(2,'Libri gratis per due ore','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it'),(3,'Ciro Esposito di gomorra qui!','2018-12-31 00:00:00','Pasquaaa, è pronto a tavolaaa!','www.mipiacitu.it');
-/*!40000 ALTER TABLE `news` ENABLE KEYS */;
+LOCK TABLES `librarians` WRITE;
+/*!40000 ALTER TABLE `librarians` DISABLE KEYS */;
+INSERT INTO `librarians` VALUES (1,'ciao','ciao',_binary 'ciao',1),(2,'bye','bye',_binary 'bye',2);
+/*!40000 ALTER TABLE `librarians` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:09
+-- Dump completed on 2019-02-16 15:46:07

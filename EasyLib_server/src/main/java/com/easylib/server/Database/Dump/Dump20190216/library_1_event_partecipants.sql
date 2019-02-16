@@ -1,8 +1,8 @@
-CREATE DATABASE  IF NOT EXISTS `library_2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
-USE `library_2`;
+CREATE DATABASE  IF NOT EXISTS `library_1` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */;
+USE `library_1`;
 -- MySQL dump 10.13  Distrib 8.0.12, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: library_2
+-- Host: 127.0.0.1    Database: library_1
 -- ------------------------------------------------------
 -- Server version	8.0.12
 
@@ -18,32 +18,29 @@ USE `library_2`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `waitinglist`
+-- Table structure for table `event_partecipants`
 --
 
-DROP TABLE IF EXISTS `waitinglist`;
+DROP TABLE IF EXISTS `event_partecipants`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
  SET character_set_client = utf8mb4 ;
-CREATE TABLE `waitinglist` (
-  `reservation_id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `book_identifier` varchar(255) NOT NULL,
-  `waiting_position` int(11) NOT NULL,
-  `reservation_date` datetime NOT NULL,
-  `starting_reservation_date` date NOT NULL,
-  `ending_reservation_date` date NOT NULL,
-  `quantity` int(11) NOT NULL,
-  PRIMARY KEY (`reservation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `event_partecipants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event_id` int(11) NOT NULL,
+  `partecipant_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `event_partecipants_events_id_fk` (`event_id`),
+  CONSTRAINT `event_partecipants_events_id_fk` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `waitinglist`
+-- Dumping data for table `event_partecipants`
 --
 
-LOCK TABLES `waitinglist` WRITE;
-/*!40000 ALTER TABLE `waitinglist` DISABLE KEYS */;
-/*!40000 ALTER TABLE `waitinglist` ENABLE KEYS */;
+LOCK TABLES `event_partecipants` WRITE;
+/*!40000 ALTER TABLE `event_partecipants` DISABLE KEYS */;
+/*!40000 ALTER TABLE `event_partecipants` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
 /*!50003 SET @saved_cs_results     = @@character_set_results */ ;
@@ -54,20 +51,11 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `on_insert_waiting_person` BEFORE INSERT ON `waitinglist` FOR EACH ROW begin
-    declare count int;
-
-    select count(*) into count from waitinglist where book_identifier = new.book_identifier;
-
-    if count != 0 then
-      set new.waiting_position = count + 1;
-    end if;
-
-    if count = 0 then
-      set NEW.waiting_position = 1;
-      update library_2.books set library_2.books.waiting_list = true where library_2.books.identifier = NEW.book_identifier;
-    end if;
-
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_available_seats_ins` AFTER INSERT ON `event_partecipants` FOR EACH ROW begin
+    
+    update library_1.events set library_1.events.seats = library_1.events.seats - 1
+    where library_1.events.id = NEW.event_id;
+    
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -83,15 +71,11 @@ DELIMITER ;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_waitinglist_position` AFTER DELETE ON `waitinglist` FOR EACH ROW begin
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `update_available_seats_del` AFTER DELETE ON `event_partecipants` FOR EACH ROW begin
 
-    if OLD.waiting_position = 1 then
-
-      update library_2.books set library_2.books.waiting_list = false
-      where library_2.books.identifier = OLD.book_identifier;
-
-    end if;
-
+    update library_1.events set library_1.events.seats = library_1.events.seats + 1
+    where library_1.events.id = OLD.event_id;
+    
   end */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -108,4 +92,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-04 17:07:08
+-- Dump completed on 2019-02-16 15:46:09

@@ -48,17 +48,11 @@ public class App {
         DatabaseConnection db = new DatabaseConnection();
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
-
-        Reservation reservation = new Reservation();
-        reservation.setIdLib(2);
-        reservation.setUser_id(58);
-        reservation.setBook_idetifier("8830430714");
-        Rating rating = new Rating();
-        rating.setRating(10);
-        rating.setBook_identifier("8830430714");
-        rating.setIdLib(2);
-        rating.setUser_id(61);
-        dbms.insertRating(rating, dbms.getSchemaNameLib(2));
+        Reservation reservation =  new Reservation();
+        reservation.setBook_idetifier("1626366543");
+        reservation.setUser_id(57);
+        reservation.setIdLib(1);
+        dbms.removeReservation(reservation,true);
 //
 //        WaitingPerson waitingPerson = new WaitingPerson();
 //        waitingPerson.setUser_id(1);
