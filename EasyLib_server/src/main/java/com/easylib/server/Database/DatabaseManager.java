@@ -1165,8 +1165,8 @@ public class DatabaseManager {
         return rs;
     }
 
-    public boolean passwordChangeAfterForgot(User user) {
-        boolean res;
+    public String passwordChangeAfterForgot(User user) {
+        String res;
         try {
             ResultSet rs = queryUser(user);
 
@@ -1184,7 +1184,7 @@ public class DatabaseManager {
             res = pm.changeForgottenPassword(user);
         } catch (SQLException e) {
             e.printStackTrace();
-            res = false;
+            res = null;
         }
         return res;
     }

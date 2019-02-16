@@ -128,7 +128,7 @@ class PasswordManager {
         return user;
     }
 
-    boolean changeForgottenPassword( User user ){
+    String changeForgottenPassword( User user ){
         String newPassword = generateRandomPassword(16);
         byte[] newSalt = getNextSalt();
         byte[] newHashPass = generatePassword( newPassword, newSalt);
@@ -145,12 +145,8 @@ class PasswordManager {
         String schemaName = "propietary_db";
         String tableName = "users";
         dbms.insertStatement(map, tableName, schemaName);
-        dbms.sendNotification("", "Your temporary password is : "+newPassword,
-                dbms.getNotificationToken(dbms.getUserId(user).getUser_id()));
 
-                MailClass mail = new MailClass();
-        //        mail.sendMessage(user.getEmail(), newPassword);
-        return true;
+        return newPassword;
     }
     /**
      * Generates a random password of a given length, using letters and digits.
