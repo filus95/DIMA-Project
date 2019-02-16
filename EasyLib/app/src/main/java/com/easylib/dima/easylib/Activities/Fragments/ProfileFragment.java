@@ -37,6 +37,7 @@ public class ProfileFragment extends Fragment {
     private ArrayList<Book> readBooks;
     private User userInfo;
 
+    private static final String NOTIFICATIONS = "Notifications";
     private static final String LOGIN = "Login";
     private int size = 0;
 
@@ -100,6 +101,8 @@ public class ProfileFragment extends Fragment {
             {
                 SharedPreferences sp = getContext().getSharedPreferences(LOGIN, MODE_PRIVATE);
                 sp.edit().clear().apply();
+                SharedPreferences sp2 = getContext ().getSharedPreferences(NOTIFICATIONS, MODE_PRIVATE);
+                sp.edit ().clear ().apply ();
                 ((MainActivity)getActivity ()).goToLogin ();
             }
         });
