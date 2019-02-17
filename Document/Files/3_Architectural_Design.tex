@@ -88,10 +88,10 @@ Some of the tables in these schemas contains triggers used to maintain the consi
 	\caption{Library database}
 \end{figure}
 
-\mysubsubsection{Triggers}
 In order to maintain the data consistency after that users perform state changing operations, we have implemented 9 triggers distributed between the various schemas and tables. We list all of them below along with the description of their behaviour.
 
-\mysubsubsection{Library schema}
+\newpage
+\mysubsubsection{Triggers - Library schema}
 
 \begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
 	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
@@ -196,7 +196,7 @@ It sets the position in the waiting list of the new user inserted in the table f
 \\
 It updates the position of the users in line for a book after that a user in line has deleted is presence in the queue.
 
-\mysubsubsection{Proprietary schema}
+\mysubsubsection{Triggers - Proprietary schema}
 \begin{tabular}[H]{p{4cm}|p{4cm}|p{4cm}}
 	\textbf{Trigger name} & \textbf{Table name} & \textbf{When} \\
 	\hline
@@ -223,6 +223,8 @@ Here we provide a deployment strategy for our system.
 	\includegraphics[scale=0.55]{Images/Diagrams/Deployment_view_EasyLib}
 	\caption{Deployment view EasyLib}
 \end{figure}
+
+\newpage
 \mysubsection{Non-Functional Requirements}
 Here we state some non functional requirements that our system must respect during the execution.
 
