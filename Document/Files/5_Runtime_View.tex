@@ -10,7 +10,7 @@ For the server-side we have taken into consideration the high-level Application 
 This Runtime View shows the different steps needed to retrieve book information through QR-code scan and reserve it.\par
 We have to make an assumption : in the following diagram we reported only the most meaningful calls needed to achieve the goal.\par
 So starting from the Main Activity the User has to tap the “QR scan” icon on the bottom NavBar and the EasyLib app will open the “QR Scan Activity”. Thanks to the camera of the smartphone or tablet the QR-image is captured and an identifier is returned. This one is the book identifier and is sent to the server (and so the DB) to get back the information. The “Book Activity” is started and book information are set in the layout.\par
-In order to let the user reserve the book, the app gets from the server (and so the DB) a list of libraries where it’s available. They are next passed to the BookActivityAdapter that creates the single items of the recyclerView placed under the book information.
+In order to let the user reserve the book, the app gets from the server (and so the DB) a list of libraries where is available. It is next passed to the BookActivityAdapter which creates the single items of the recyclerView placed under the book information.
 \newpage
 \vspace*{0cm}
 \begin{figure}[H]
@@ -22,15 +22,15 @@ In order to let the user reserve the book, the app gets from the server (and so 
 \newpage
 \vspace*{0cm}
 \mysubsubsection{Rate Book}
-This Runtime View shows the different steps needed to rate a book.
-We have to make some assumption :
+This Runtime View shows the steps performed to rate a book.
+We need to make some assumption :
 \begin{itemize}
 	\setlength{\leftskip}{0.5cm}
 	\item In the following diagram we reported only the most meaningful calls needed to achieve the goal.
-	\item The book can be rated only if it was previously reserved and read through EasyLib app.
+	\item The book can be rated only if it was previously reserved through EasyLib app and returned by the user.
 \end{itemize}
-So starting from the Main Activity the User has to tap the “Profile” icon on the bottom NavBar and the EasyLib app will ask the server for User information sending his user identifier. Once data are back, "Main Activity" sets the "Profile Fragment" in the Main Frame.\par
-Next the app asks the server for the read books and shows them in the "Read Books Activity" that contains a recyclerView. The user can select the wanted book and open it in the "Book Activity". When it starts the book information, passed with an Intent, are set in the layout and a check is made in order to see if the it's already rated by the user or not. In case it's not, an EditText is showed and the user can fill it with a rate from 0 to 10.
+Starting from the Main Activity, the User has to tap the “Profile” icon on the bottom NavBar and the EasyLib app will ask the server for User information sending his identifier. Once data are back, "Main Activity" sets the "Profile Fragment" in the Main Frame.\par
+Next the app asks the server for the read books and shows them in the "Read Books Activity" which contains a recyclerView. The user can select the wanted book and open it in the "Book Activity". When it starts the book information, passed with an Intent, are set in the layout and a check is excuted in order to see if it is already rated by the user or not. In case it is not, an EditText is showed and the user can fill it with a rate from 0 to 10.
 \newpage
 \vspace*{0cm}
 \begin{figure}[H]
@@ -43,10 +43,10 @@ Next the app asks the server for the read books and shows them in the "Read Book
 \vspace*{0cm}
 \mysubsubsection{Event - Reserve Seat}
 This Runtime View shows the different steps needed to reserve a seat. \par
-We have to make an assumption : in the following diagram we reported only the most meaningful calls needed to achieve the goal. \par
-So starting from the Main Activity the User can tap the “All Libraries” button and the EasyLib app will ask the server (and so the DB) to get the list of all of them. On return a new activity is started where thanks to a RecyclerView the list of all the libraries is displayed. \par
-The user can next select the Library that he wants and like the libraries list, the information about this one are asked to the server and next displayed in the Book Activity. In this activity are displayed also the “library contents” (news, events and books), so user can select an event and automatically the EventActivity is opened and shown.\par
-The app will check if there are available seats and if the user has already joined the event (in the diagram is called “checkEventStatus()”). So if there free seats and the event is not already joined then the “Reserve Seat” button is shown and the User can reserve a seat.
+We need to make an assumption : in the following diagram we reported only the most meaningful calls needed to achieve the goal. \par
+Starting from the Main Activity, the User can tap the “All Libraries” button and the EasyLib app will ask the server (and later to the DB) to get the list of all the libraries. When the return get back, a new activity is started where all the libraries is displayed by means of RecyclerView\par
+The user can next select the Library that he wants and the information about it are asked to the server and next displayed in the Book Activity. In this activity also the “library contents” are displayed (news, events and books), so the user can select an event and automatically the EventActivity is opened and shown.\par
+The app will check if there are available seats and if the user has already joined the event (in the diagram is called “checkEventStatus()”). If there are free seats and the event is not already joined the “Reserve Seat” button is shown and the User can reserve a seat.
 \newpage
 \vspace*{0cm}
 \begin{figure}[H]
@@ -61,10 +61,10 @@ The app will check if there are available seats and if the user has already join
 \vspace*{0.5cm}
 
 \mysubsubsection{QR-Code Scan + Book Returned}
-This Runtime View shows the different steps needed to find book information through QR-code scan and communicate to the serve (and so the DB) that the book is returned.\par
+This Runtime View shows the different steps needed to find book information through QR-code scan and communicate to the server (and then the DB) that the book is returned.\par
 We have to make an assumption : in the following diagram we reported only the most meaningful calls needed to achieve the goal.\par
-So starting from the "Library Activity" the librarian has to tap the Floating Button with the QR-code icon that allows the app to open the "QR Scan Activity". As in the previous runtime, the qr-code is analyzed and the identifier returned is used to get from the server (and so the DB) the information of that specific book. The "Book Activity" is then opened and data are set in the layout.\par
-The app has next to get all the reservations and pass the ArrayList to an Adapter that generates the single items of the recyclerView placed under the book layout.\par
+Starting from the "Library Activity" the librarian has to tap the Floating Button with the QR-code icon that allows the app to open the "QR Scan Activity". As in the previous runtime, the qr-code is analyzed and the identifier returned is used to get from the server (and so the DB) the information of that specific book. The "Book Activity" is then opened and the data are set in the layout.\par
+Then, the app has to retrieve all the reservations and pass the ArrayList to an Adapter that generates the single items of the recyclerView placed under the book layout.\par
 At the end the librarian as to find the reservation that has the user id and tap the "Returned" button.
 \newpage
 \vspace*{0cm}
