@@ -1,13 +1,13 @@
 \vspace*{-5mm}
 \mysection{Runtime View}
-In this section we will see some Runtime Views in order to see how the components interact according to specific requests.\par
-For the server-side we have taken into consideration the high-level Application Server only, without identifying the specific components of it. We also separate it from the DB, cause they are in 2 different machines.
+In this section we will show some Runtime Views in order to see how the components interact according to specific requests.\par
+For the server-side we have taken into consideration the high-level Application Server only, without identifying its fine grained components. We also separated it from the DB, cause they rely on 2 different machines.
 
 \mysubsection{EasyLib}
 \vspace*{0.5cm}
 
 \mysubsubsection{QR-Code Scan + Book Reservation}
-This Runtime View shows the different steps needed to find book information through QR-code scan and reserve it.\par
+This Runtime View shows the different steps needed to retrieve book information through QR-code scan and reserve it.\par
 We have to make an assumption : in the following diagram we reported only the most meaningful calls needed to achieve the goal.\par
 So starting from the Main Activity the User has to tap the “QR scan” icon on the bottom NavBar and the EasyLib app will open the “QR Scan Activity”. Thanks to the camera of the smartphone or tablet the QR-image is captured and an identifier is returned. This one is the book identifier and is sent to the server (and so the DB) to get back the information. The “Book Activity” is started and book information are set in the layout.\par
 In order to let the user reserve the book, the app gets from the server (and so the DB) a list of libraries where it’s available. They are next passed to the BookActivityAdapter that creates the single items of the recyclerView placed under the book information.

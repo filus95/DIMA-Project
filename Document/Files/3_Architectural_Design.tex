@@ -7,9 +7,9 @@ In this section we describe the architectural arrangement that we designed for E
 The proposed architecture is composed by three tiers:
 
 \begin{itemize}
-\item \emph{Presentation Tier:} it’s represented by the tablet and the Mobile Android App;  they constitutes the view part of our system.
-\item \emph{Business Tier:} it’s represented by the Socket Server, which responds to the user’s requests, and the Application Server, which contains all the Business Logic. The application server communicates with the DBMS of the MySQL Database contained in the Database Tier.
-\item \emph{Database Tier:} it’s represented by the DB Server, that contains and manages persistent data in an efficient way.
+\item \emph{Presentation Tier:}it’s represented by the tablet and the Mobile Android App. They constitute the view part of our system.
+\item \emph{Business Tier:}it’s represented by the Socket Server, which responds to the user’s requests, and the Application Server, which contains all the Business Logic. The application server communicates with the DBMS of the MySQL Database contained in the Database Tier.
+\item \emph{Database Tier:}it’s represented by the DB Server, that contains and manages persistent data in an efficient way.
 \end{itemize}
 
 \vspace*{0cm}
@@ -21,7 +21,7 @@ The proposed architecture is composed by three tiers:
 
 \newpage
 \mysubsection{High Level Component View}
-The system is divided in three main layers: Presentation Layer, Business Layer and Data Layer. The presentation layer is both mobile and tablet application. For both we have a very thin client with the main aim of performing requests to the application server in the Business layer and receives the demanded information to manage and show locally.
+The system is divided in three main layers: Presentation Layer, Business Layer and Data Layer. The presentation layer is represented by both mobile and tablet application.
 
 \vspace*{0.5cm}
 \begin{figure}[H]
@@ -31,16 +31,16 @@ The system is divided in three main layers: Presentation Layer, Business Layer a
 \end{figure}
 \vspace*{0cm}
 \mysubsubsection{Client-side Application}
-In this section we are going to illustrate the general architecture of our client application.EasyLib can be fairly considered in the middle between a thin and a fat client. The data are requested client side and correctly retrieved with the work performed by the application server and the DBMS. Nonetheless, on the client side the data are checked, filtered and formatted in order to give the most pleasant screen view.
+In this section we are going to illustrate the general architecture of our client application. EasyLib can be fairly considered in the middle between a thin and a fat client. The data are requested client side and correctly retrieved with the work performed by the application server and the DBMS. Nonetheless, on the client side the data are checked, filtered and formatted in order to give the most pleasant screen view.
 \\ 
 In order to accomplish efficiently the communication task, the client exploits two different android services: 
 
 \begin{itemize}
 \item \emph{Connection service:}it manages the communication with the server. It opens a socket connection and keep it alive in order to send and receive messages in any moment and in an asynchronous fashion.
-\item \emph{Check connection service:}It constantly checks if there is internet connection available and if is not the case makes the user aware of this forbidding any dangerous actions that could lead to a misbehaviour of the app.
+\item \emph{Check connection service:}It constantly checks if there is internet connection available and, if is not the case, makes the user aware of this forbidding any dangerous actions that could lead to a misbehaviour of the app.
 \end{itemize}
 
-As in the server side, we implemented a system to decode the messages received from the server. Here the task was heavier than the application server homologous due to some Android constraints. In fact the messages have to be passed through two different classes before reaching the application context and be manipulated to modify the view. The service thread is in charge of this massage handling. First of all the message received is used as key in a functional HashMap to trigger the correspondent method that receive the expected object from the input socket channel, wrap it in a bundle and pass it to the next class. Here another functional map allows to call the correct method and send the object along with its related message to current application context where a Broadcast receiver component is listening for incoming inputs.
+We implemented a system to decode the messages received from the server. The messages have to be passed through two different classes before reaching the application context and be manipulated to modify the view. The service thread is in charge of this massage handling. First of all the message received is used as key in a functional HashMap to trigger the correspondent method that receives the expected object from the input socket channel, wrap it in a bundle and pass it to the next class. Here another functional map allows to call the correct method and send the object along with its related message to current application context where a Broadcast receiver component is listening for incoming inputs.
 
 
 \mysubsubsection{Application Server}
@@ -49,7 +49,7 @@ Our application server is divided in three parts: socket connection layer, reque
 
 \begin{itemize}
 \item \emph{Socket connection layer:}this layer is always listening for new connection requests. When a new client claims to log in or register to EasyLib, the connection layer grab its request creating a new socket connection. After that the TCP connection has been established, all the communications pass through this one and the messages delivered to the subsequent component.
-\item \emph{Request decoding layerr:}this layer implemented in the Java class called ServerDataHandler, receives the request grabbed by the connection layer and decodes it in order to trigger the functions to produce the requested answer on the DatabaseManager class and take back their output. The decoding of the requests has been made using a functional Hash Map that has as key a string and as value a function reference that is triggered when the correspondent string is received from the client.
+\item \emph{Request decoding layer:}this layer implemented in the Java class called ServerDataHandler, receives the request grabbed by the connection layer and decodes it in order to trigger the functions to produce the requested answer on the DatabaseManager class and take back their output. The decoding of the requests has been made using a functional Hash Map that has as key a string and as value a function reference that is triggered when the correspondent string is received from the client.
 \item \emph{Database manager:}this final layer is the core of the system business logic. It receives the directive from the previous layer, produces SQL statement and send them to the DBMS to retrieve the requested data. Then, it manipulates and format the data before sending them back to the client through the Socket connection layer.
 \end{itemize}
 
@@ -226,14 +226,14 @@ Here we provide a deployment strategy for our system.
 
 \newpage
 \mysubsection{Non-Functional Requirements}
-Here we state some non functional requirements that our system must respect during the execution.
+Here we state some non-functional requirements that our system must respect during the execution.
 
 \begin{itemize}
-\item \emph{Performance:} The system must be able to respond to a consistent number of user requests simultaneously. All the data requested by the users and the needed computations must respectively retrieved and performed as soon as possible and as efficiently as possible.
+\item \emph{Performance:} The system must be able to respond to a consistent number of user requests simultaneously. All the data requested by the users and the needed computations must respectively be retrieved and performed as soon as possible and as efficiently as possible.
 
 \item \emph{Reliability:} The system must guarantee a 24/7 service. The information must be stored in proprietary Database in order to be always available to the user when required.
 \item \emph{Scalability:} The system must ensure a high level of scalability, since new libraries can join the system in any moment enlarging EasyLib supply.
-\item \emph{Security:} All users’ passwords are encrypted using a hash function with salt. In this way the attacker cannot see the plain text password and steal sensitive information.
+\item \emph{Security:} All users’ passwords are encrypted using a hash function with salt. In this way the attackers cannot see the plain text password and steal sensitive information.
 
 \item \emph{Accuracy:} The data retrieved by the application has to be accurate and up-to-date in a real-time fashion.
 \end{itemize}
