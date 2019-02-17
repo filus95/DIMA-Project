@@ -226,6 +226,13 @@ public class LoginActivity extends AppCompatActivity {
     };
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        startService(new Intent(LoginActivity.this, CheckConnectionService.class));
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         // Communication
@@ -245,15 +252,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause ();
         doUnbindService ();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        startService(new Intent(LoginActivity.this, CheckConnectionService.class));
-
-        startApp ();
     }
 
     private void startApp() {
