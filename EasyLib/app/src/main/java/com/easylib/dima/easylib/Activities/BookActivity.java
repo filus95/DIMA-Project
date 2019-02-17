@@ -185,15 +185,17 @@ public class BookActivity extends AppCompatActivity {
             if (key.equals (Constants.GET_WAITING_LIST_USER)) {
                 AnswerClasses.WaitingPerson waitingPerson = (AnswerClasses.WaitingPerson) intent.getSerializableExtra (Constants.GET_WAITING_LIST_USER);
                 Boolean isInWaitingList = false;
+                Book bookonWaiting = new Book ();
                 for (Book b : waitingPerson.getBooksInWaitingList ()) {
                     if (bookInfo.getIdentifier ().equals (b.getIdentifier ())) {
+                        bookonWaiting = b;
                         isInWaitingList = true;
                         break;
                     }
                 }
                 if (isInWaitingList) {
                     reservedLayout.setVisibility (View.VISIBLE);
-                    reservedText.setText ("On Waiting List");
+                    reservedText.setText ("On Waiting List - " + bookonWaiting.getLib_name ());
                     reservedText.setVisibility (View.VISIBLE);
                 } else {
                     AnswerClasses.Reservation reservation = new AnswerClasses.Reservation ();
@@ -220,11 +222,11 @@ public class BookActivity extends AppCompatActivity {
                 if (isInReservationList) {
                     if (res.isTaken ()) {
                         reservedLayout.setVisibility (View.VISIBLE);
-                        reservedText.setText ("Already Taken");
+                        reservedText.setText ("Already Taken - " + res.getBook ().getLib_name ());
                         reservedText.setVisibility (View.VISIBLE);
                     } else {
                         reservedLayout.setVisibility (View.VISIBLE);
-                        reservedText.setText ("On Reservation List");
+                        reservedText.setText ("On Reservation List - " + res.getBook ().getLib_name ());
                         reservedText.setVisibility (View.VISIBLE);
                         reservedButton.setVisibility (View.VISIBLE);
                     }
