@@ -536,8 +536,8 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByAuthor(String author, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where lower(author_1) like  '"+author+"%'" + " or lower(author_2) like'"+author+"%'"
-                +" or lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%'";
+                "from "+schema_lib+".books where lower(author_1) like  '%"+author+"%'" + " or lower(author_2) like'%"+author+"%'"
+                +" or lower(author_3) like '%"+author+"%' or lower(author_4) like '%"+author+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -575,7 +575,7 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByTitle(String title, String schema_lib, int lib_id) {
         String query = "select *" +
-                "from "+schema_lib+".books where lower(title) like '"+title+"%'";
+                "from "+schema_lib+".books where lower(title) like '%"+title+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -589,18 +589,18 @@ public class DatabaseManager {
      */
     public ArrayList<Book> queryBooksByCategory(String category, String schema_lib, int lib_id) {
         String query = "select * "+
-        "from "+schema_lib+".books where lower(category_1) like '"+category+"%' or lower(category_2) like '"+category+"%' or " +
-                "lower(category_3) like '"+category+"%'";
+        "from "+schema_lib+".books where lower(category_1) like '%"+category+"%' or lower(category_2) like '%"+category+"%' or " +
+                "lower(category_3) like '%"+category+"%'";
 
         return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> queryBooksByAuthorAndCategory(String category, String author, String schema_lib, int lib_id) {
         String query = "select *" +
-                "from "+schema_lib+".books where ( lower(category_1) like '" + category + "%' or lower(category_2) like '" + category + "%' " +
-                "or lower(category_3) like'"
-                + category + "%') and ( lower(author_1) like '"+author+"%'" + "or lower(author_2) like '"+author+"%'" +
-                "or lower(author_3) like '"+author+"%'or lower(author_4)like '"+author+"%')";
+                "from "+schema_lib+".books where ( lower(category_1) like '%" + category + "%' or lower(category_2) like '%" + category + "%' " +
+                "or lower(category_3) like'%"
+                + category + "%') and ( lower(author_1) like '%"+author+"%'" + "or lower(author_2) like '%"+author+"%'" +
+                "or lower(author_3) like '%"+author+"%'or lower(author_4)like '%"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }
@@ -608,17 +608,17 @@ public class DatabaseManager {
     public ArrayList<Book> queryBooksByAuthorAndTitle(String title, String author, String schema_lib, int lib_id) {
         String query = "select * " +
                 "from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(author_1) like '"+author+"%'" + " " +
-                "or lower(author_2) like '"+author+"%'" +
-                " or lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%')";
+                "or lower(author_2) like '%"+author+"%'" +
+                " or lower(author_3) like '%"+author+"%' or lower(author_4) like '%"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }
 
     public ArrayList<Book> queryBooksByTitleAndCategory(String title, String category, String schema_lib, int lib_id) {
         String query = "select * " +
-                " from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(category_1) like '"+category+"%'" + " " +
-                "or lower(category_2) like '"+category+"%'" +
-                " or lower(category_3) like '"+category+"%')";
+                " from "+schema_lib+".books where lower(title) like '%"+title+"%' and ( lower(category_1) like '%"+category+"%'" + " " +
+                "or lower(category_2) like '%"+category+"%'" +
+                " or lower(category_3) like '%"+category+"%')";
 
 
         return getQueryResultsBooks(query, lib_id);
@@ -626,10 +626,10 @@ public class DatabaseManager {
 
     public ArrayList<Book> queryBooksByAll(String title, String author, String category, String schema_lib, int lib_id) {
         String query = "select * " +
-                "from "+schema_lib+".books where lower(title) like '"+title+"%' and ( lower(category_1) like '"+category+"%'" + " or " +
-                "lower(category_2) like '"+category+"%'" +
-                " or lower(category_3) like '"+category+"%') and (lower(author_1) like '"+author+"%'" + " or lower(author_2) like '"+author+"%' or" +
-                " lower(author_3) like '"+author+"%' or lower(author_4) like '"+author+"%')";
+                "from "+schema_lib+".books where lower(title) like '%"+title+"%' and ( lower(category_1) like '%"+category+"%'" + " or " +
+                "lower(category_2) like '%"+category+"%'" +
+                " or lower(category_3) like '%"+category+"%') and (lower(author_1) like '%"+author+"%'" + " or lower(author_2) like '%"+author+"%' or" +
+                " lower(author_3) like '%"+author+"%' or lower(author_4) like '%"+author+"%')";
 
         return getQueryResultsBooks(query, lib_id);
     }

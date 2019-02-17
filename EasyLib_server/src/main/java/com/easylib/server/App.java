@@ -49,8 +49,8 @@ public class App {
         Connection conn = db.startConnection();
         DatabaseManager dbms = new DatabaseManager();
         Reservation reservation =  new Reservation();
-        reservation.setBook_idetifier("1626366543");
-        reservation.setUser_id(57);
+        reservation.setBook_idetifier("0385542690");
+        reservation.setUser_id(1);
         reservation.setIdLib(1);
         dbms.removeReservation(reservation,true);
 //
