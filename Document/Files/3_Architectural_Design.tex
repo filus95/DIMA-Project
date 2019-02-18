@@ -42,7 +42,7 @@ In order to accomplish efficiently the communication task, the client exploits t
 
 We implemented a system to decode the messages received from the server. The messages have to be passed through two different classes before reaching the application context and be manipulated to modify the view. The service thread is in charge of this massage handling. First of all the message received is used as key in a functional HashMap to trigger the correspondent method that receives the expected object from the input socket channel, wrap it in a bundle and pass it to the next class. Here another functional map allows to call the correct method and send the object along with its related message to current application context where a Broadcast receiver component is listening for incoming inputs.
 
-
+\newpage
 \mysubsubsection{Application Server}
 As said in the previous paragraphs, EasyLib is an application that allows the user to interface with several libraries. It does so by centralizing all the libraries data inside a server that can manage multiple clients with different access privileges, that is libraries’ users and librarians, simultaneously. The clients establish a socket connection with the server from their devices and, previous authentication, it manages many kinds of stateless requests. \\
 Our application server is divided in three parts: socket connection layer, request decoding layer and database manager.
