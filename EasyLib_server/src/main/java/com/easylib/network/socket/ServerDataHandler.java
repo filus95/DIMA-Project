@@ -600,9 +600,10 @@ public class ServerDataHandler implements ClientConnMethods, LibrarianConnMethod
 
 
             if ( res ) {
-                title =  dbms.queryBookByIdentifier(reservation.getBook_idetifier(),
-                        dbms.getSchemaNameLib(reservation.getIdLib()), reservation.getIdLib()).get(0).getTitle()+"Book delivering confirmed";
-                mess = " delivered. Have a good read!";
+                title =  "Book delivering confirmed";
+                mess = dbms.queryBookByIdentifier(reservation.getBook_idetifier(),
+                        dbms.getSchemaNameLib(reservation.getIdLib()), reservation.getIdLib()).get(0).getTitle()+
+                        " delivered. Have a good read!";
             }
             else{
 
