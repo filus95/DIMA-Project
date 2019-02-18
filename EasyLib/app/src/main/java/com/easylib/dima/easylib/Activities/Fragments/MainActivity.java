@@ -152,15 +152,17 @@ public class MainActivity extends AppCompatActivity {
                 librariesListIntent.putExtras(bundle);
                 startActivity(librariesListIntent);
             }
-            if (key.equals(Constants.GET_USER_PREFERENCES)) {
+            else if (key.equals(Constants.GET_USER_PREFERENCES)) {
                 prefLibraries = (ArrayList<LibraryDescriptor>) intent.getSerializableExtra(Constants.GET_USER_PREFERENCES);
                 if (prefLibCalledForProfile){
                     getReadBooks (true);
                     prefLibCalledForProfile = false;
                 } else if (prefLibCalledForHome) {
-                    prefLibCalledForHome = false;
-                    ((HomeFragment) fragment).setData (prefLibraries, userInfo);
-                    setFragment(fragment);
+                    if ( fragment instanceof HomeFragment ) {
+                        prefLibCalledForHome = false;
+                        ((HomeFragment) fragment).setData(prefLibraries, userInfo);
+                        setFragment(fragment);
+                    }
                 } else {
                     Intent prefLibsIntent = new Intent(context, LibraryListActivity.class);
                     Bundle bundle = new Bundle();
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(prefLibsIntent);
                 }
             }
-            if (key.equals(Constants.GET_READ_BOOKS)) {
+            else if (key.equals(Constants.GET_READ_BOOKS)) {
                 readBooks = (ArrayList<Book>) intent.getSerializableExtra(Constants.GET_READ_BOOKS);
                 if (readBooksCalledForProfile) {
                     readBooksCalledForProfile = false;
@@ -190,46 +192,52 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(readBooksIntent);
                 }
             }
-            if (key.equals(Constants.USER_LOGIN)) {
+            else if (key.equals(Constants.USER_LOGIN)) {
                 User user = (User) intent.getSerializableExtra(Constants.USER_LOGIN);
                 userInfo = user;
                 getJoinedEvents (true);
 
             }
-            if (key.equals(Constants.GET_EVENTS_PER_USER)) {
+            else if (key.equals(Constants.GET_EVENTS_PER_USER)) {
                 ArrayList<Event> events = (ArrayList<Event>) intent.getSerializableExtra (Constants.GET_EVENTS_PER_USER);
-                if(isJoinedEventsForProfile) {
-                    ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks, events);
-                    isJoinedEventsForProfile = false;
-                    setFragment(fragment);
-                } else {
-                    Intent eventListIntent = new Intent(context, JoinedEventsActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable(ALL_EVENTS, events);
-                    bundle.putSerializable(USER_INFO, userInfo);
-                    eventListIntent.putExtras(bundle);
-                    startActivity(eventListIntent);
+                if ( fragment instanceof ProfileFragment ) {
+                    if (isJoinedEventsForProfile) {
+                        ((ProfileFragment) fragment).setData(userInfo, prefLibraries, readBooks, events);
+                        isJoinedEventsForProfile = false;
+                        setFragment(fragment);
+                    } else {
+                        Intent eventListIntent = new Intent(context, JoinedEventsActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable(ALL_EVENTS, events);
+                        bundle.putSerializable(USER_INFO, userInfo);
+                        eventListIntent.putExtras(bundle);
+                        startActivity(eventListIntent);
+                    }
                 }
             }
-            if (key.equals (Constants.GET_WAITING_LIST_USER)) {
+            else if (key.equals (Constants.GET_WAITING_LIST_USER)) {
                 AnswerClasses.WaitingPerson waitingPerson = (WaitingPerson) intent.getSerializableExtra (Constants.GET_WAITING_LIST_USER);
-                ArrayList<Book> waitingListBooks = waitingPerson.getBooksInWaitingList ();
-                ((QueueFragment)fragment).setData (userInfo, waitingListBooks);
-                setFragment (fragment);
+                if ( fragment instanceof QueueFragment ) {
+                    ArrayList<Book> waitingListBooks = waitingPerson.getBooksInWaitingList();
+                    ((QueueFragment) fragment).setData(userInfo, waitingListBooks);
+                    setFragment(fragment);
+                }
             }
-            if (key.equals (Constants.REMOVE_WAITING_PERSON)) {
+            else if (key.equals (Constants.REMOVE_WAITING_PERSON)) {
                 Boolean bool = (Boolean) intent.getSerializableExtra (Constants.REMOVE_WAITING_PERSON);
                 if (bool)
                     Toast.makeText (context, "Removed", Toast.LENGTH_LONG).show ();
                 else
                     Toast.makeText (context, "ERROR..", Toast.LENGTH_LONG).show ();
             }
-            if (key.equals (Constants.GET_USER_RESERVATION)) {
+            else if (key.equals (Constants.GET_USER_RESERVATION)) {
                 ArrayList<Reservation> reservations = (ArrayList<Reservation>) intent.getSerializableExtra (Constants.GET_USER_RESERVATION);
-                ((CalendarFragment)fragment).setData (reservations, userInfo);
-                setFragment (fragment);
+                if ( fragment instanceof CalendarFragment) {
+                    ((CalendarFragment) fragment).setData(reservations, userInfo);
+                    setFragment(fragment);
+                }
             }
-            if (key.equals (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
+            else if (key.equals (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES)) {
                 ArrayList<Book> books = (ArrayList<Book>) intent.getSerializableExtra (Constants.QUERY_ON_BOOKS_ALL_LIBRARIES);
                 Book b = books.get (0);
                 Intent bookIntent = new Intent (context, BookActivity.class);
@@ -239,11 +247,11 @@ public class MainActivity extends AppCompatActivity {
                 bookIntent.putExtras(bundle);
                 context.startActivity(bookIntent);
             }
-            if (key.equals(Constants.NETWORK_STATE_DOWN)){
+            else if (key.equals(Constants.NETWORK_STATE_DOWN)){
                 Intent internetIntent = new Intent (context, NoInternetActivity.class);
                 startActivity (internetIntent);
             }
-            if (key.equals(Constants.NOTIFICATION)){
+            else if (key.equals(Constants.NOTIFICATION)){
                 checkNotifications ();
             }
         }
