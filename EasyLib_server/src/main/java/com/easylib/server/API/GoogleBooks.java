@@ -16,7 +16,7 @@ import java.util.Map;
 
 public class GoogleBooks {
 
-    private static final String KEY_ = "AIzaSyBTjCC4Lcz1SaIfEpLEhuUj6s9uKioINtA";
+    private static final String KEY_ = "INSERT YOUR GOOGLE KEY";
     private static final String ENDPOINT_ = "https://www.googleapis.com/books/v1/volumes?q=";
 
 
